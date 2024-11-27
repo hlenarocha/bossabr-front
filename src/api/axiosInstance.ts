@@ -6,10 +6,20 @@ const api = axios.create({
   baseURL: url,
 });
 
-const getTestMessage = async () => {
+export const getTestMessage = async () => {
   const response = await api.get("/hello");
   return response.data;
 }
 
-export default getTestMessage;
 
+
+export const getTestSelect = async () => {
+  const response = await api.get("/teste");
+  return response.data.servicosMarketing;
+}
+
+
+export const postNameInput = async (name: string) => {
+  const response = await api.post("/test-post", { name });
+  return response.data;
+}
