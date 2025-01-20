@@ -5,6 +5,9 @@ export default {
     extend: {
       colors: {
         customGray: "#ababab",
+      },
+      fontFamily: {
+        alatsi: ["Alatsi", "sans-serif"],
       }
     },
   },
