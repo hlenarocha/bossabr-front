@@ -11,15 +11,15 @@ const LoginCard: React.FC = () => {
       <div className="w-[368px] h-[46px] text-white text-[32px] font-normal font-alatsi " >Login</div>
       <LoginInput placeholder="E-mail"></LoginInput>
       <LoginInput placeholder="Senha"></LoginInput>
-      <div className="w-[368px] mt-[10px] h-[19px] text-right text-white text-base font-normal font-alatsi underline hover:cursor-pointer">Esqueci minha senha!</div>
+      <div className="w-[368px] mt-[10px] h-[19px] text-right text-white text-base font-normal font-alatsi underline hover:cursor-pointer hover:opacity-70">Esqueci minha senha!</div>
       <LoginButton></LoginButton>
       <div className="w-[371px] mt-[20px] h-[1px] bg-white"></div>
-      <div className="w-[371px] h-[38px] hover:border-[1px] hover:border-[#ffffff] hover:cursor-pointer flex flex-row items-center bg-[#f23768] rounded-[10px] shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)] mt-5 placeholder-gray-500 transform hover:scale-100">
+      <div className="w-[371px] h-[38px] hover:border-[2px] hover:border-[#F23768] hover:cursor-pointer flex flex-row items-center bg-[#ffffff] rounded-[10px] shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)] mt-5 placeholder-gray-500 transform hover:scale-100">
         <div className="bg-white w-[30px] mr-[10px] ml-[10px] flex h-[30px] rounded-full items-center justify-center">
         <img src={GoogleIcon}></img>
 
         </div>
-        <div className="text-white  font-alatsi mr-[10px] font-semibold">Continuar com o Google</div>
+        <div className="text-[#000000]  font-alatsi mr-[10px] font-semibold">Continuar com o Google</div>
       </div>
     </div>
   )
