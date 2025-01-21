@@ -1,14 +1,17 @@
 import React from "react";
-import Background3D from "./components/3D/Background3D";
-import LoginCard from "./components/login/LoginCard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./screens/LoginScreen";
+import Base from "./screens/BaseScreen";
 
 const App: React.FC = () => {
   return (
-    <div className="relative w-full h-screen flex justify-center items-center bg-customGray overflow-hidden">
-      <Background3D />
-      <LoginCard />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/base" element={<Base />}></Route>
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
