@@ -1,6 +1,6 @@
 import React from "react";
-import Background3D from "./components/3D/Background3D";
-import LoginCard from "./components/login/LoginCard";
+import Background3D from "../components/3D/Background3D";
+import LoginCard from "../components/login/LoginCard";
 
 const App: React.FC = () => {
   return (
