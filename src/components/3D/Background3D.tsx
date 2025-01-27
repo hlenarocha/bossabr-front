@@ -62,7 +62,7 @@ const Background3D: React.FC = () => {
 
   return (
       <div className="w-full h-screen">
-        <Canvas style={{ background: "#3C3C3C" }}>
+        <Canvas style={{ background: "radial-gradient(circle,#686868, #000000)" }}>
           {/* Luz ambiente para iluminação geral */}
           <ambientLight intensity={0.8} />
 

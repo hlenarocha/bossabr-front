@@ -15,7 +15,7 @@ const LoginCard: React.FC = () => {
     */
     <div className="w-[90%] max-w-[600px] flex absolute flex-col justify-center items-center h-auto sm:h-[600px] bg-black/10 rounded-lg sm:rounded-full p-10 shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)] backdrop-blur-[30px]">
       <img className="mx-auto mt-[-20px]" src={Logo} alt="Logo Bossa" />
-      <div className="w-full max-w-[368px] h-[46px] text-white text-[32px] font-normal font-alatsi text-left">
+      <div className="w-full cursor-default max-w-[368px] h-[46px] text-white text-[32px] font-normal font-alatsi text-left">
         Login
       </div>
         <LoginInput placeholder="E-mail"></LoginInput>
