@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../../assets/images/logo-bossa.svg";
-import GoogleIcon from "../../assets/images/google.png";
+import GoogleIcon from "../../assets/images/icon-google.png";
 import LoginInput from "./LoginInput";
 import LoginButton from "./LoginButton";
 
