@@ -1,15 +1,16 @@
 import React from "react";
-import BackgroundImage from "../assets/images/abstract-background.svg";
+import BackgroundImage from "../assets/images/dark-background.png";
 
 const BaseScreen: React.FC = () => {
   return (
     <div
-      className="bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-[#bbbbbb]"
+      className="bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-[#333333]"
       style={{ backgroundImage: `url(${BackgroundImage})` }} // Apenas a URL precisa ser aplicada inline
     >
 
       <div className="flex flex-col items-center justify-center min-h-screen text-center text-white">
-        <div className="text-[32px]">Aqui será a tela base</div>
+        <div className="w-[628px] h-100 p-10 bg-opacity-50 bg-[#474747] shadow-[5px_5px_10px_0px_rgba(17,17,17,0.15)] rounded-[20px] ">
+        <div className="text-[32px] ">Aqui será a tela base</div>
         <div className="text-[24px] text-pink-600">Teste de rotas</div>
         <div className="mt-4">
           <p>Icons para facilitar a procura dos Icons :)</p>
@@ -38,6 +39,9 @@ const BaseScreen: React.FC = () => {
               https://fontawesome.com/search?ic=free
             </a>
           </p>
+
+        </div>
+        
         </div>
         
       </div>
