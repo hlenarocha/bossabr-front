@@ -30,7 +30,12 @@ const MovingSphere = ({
   return (
     <mesh ref={ref} castShadow>
       <sphereGeometry args={[size, 32, 32]} />
-      <meshStandardMaterial color={color} roughness={0.4} metalness={0.2} />
+      <meshStandardMaterial
+          color={color}
+          roughness={0.5}
+          metalness={0.3}
+          emissive="#DD7D02"
+          emissiveIntensity={0.3}/>
     </mesh>
   );
 };
