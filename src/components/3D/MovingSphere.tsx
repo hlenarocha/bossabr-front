@@ -9,12 +9,12 @@ interface MovingSphereProps {
   movementFactors: [number, number, number];
 }
 
-const MovingSphere: React.FC<MovingSphereProps> = ({
+const MovingSphere = ({
   color,
   size,
   initialPosition,
   movementFactors,
-}) => {
+}: MovingSphereProps) => {
   const ref = React.useRef<THREE.Mesh>(null!);
 
   // Animação das esferas

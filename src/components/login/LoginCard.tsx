@@ -1,10 +1,9 @@
-import React from "react";
 import Logo from "../../assets/images/logo-bossa.svg";
 import GoogleIcon from "../../assets/images/icon-google.png";
 import LoginInput from "./LoginInput";
 import LoginButton from "./LoginButton";
 
-const LoginCard: React.FC = () => {
+const LoginCard = () => {
   return (
     /* Responsive Design in Tailwind occcurs through Breakpoints, which are defined in the tailwind.config.js file:
         sm (small): minimum width of 640px

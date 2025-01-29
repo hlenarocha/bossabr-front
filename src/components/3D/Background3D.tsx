@@ -1,9 +1,8 @@
-import React from "react";
 import { Canvas } from "@react-three/fiber"; // Canvas e animação
 import { OrbitControls } from "@react-three/drei"; // Controles de câmera
 import MovingSphere from "./MovingSphere";
 
-const Background3D: React.FC = () => {
+const Background3D = () => {
   const spheres: { color: string; size: number; initialPosition: [number, number, number]; factors: [number, number, number] }[] = [];
   const minDistance = 1.5; // Distância mínima entre as bolotas (menor para permitir proximidade)
   const spawnRadius = 17; // Reduzido para garantir que as bolotas fiquem mais próximas da câmera
@@ -41,23 +40,21 @@ const Background3D: React.FC = () => {
   // Adiciona as bolotas (ajuste automático para entre 8 e 10 bolotas)
   const numSpheres = Math.floor(Math.random() * 3) + 8; // Gera um número aleatório entre 8 e 10
   for (let i = 0; i < numSpheres; i++) {
-    generateSphere("#f23768", Math.random() * 1.5 + 0.5, [Math.random() + 0.5, Math.random() + 0.5, Math.random() + 0.5]);
+    generateSphere("#F6BC0A", Math.random() * 1.5 + 0.5, [Math.random() + 0.5, Math.random() + 0.5, Math.random() + 0.5]);
   }
 
   // Adiciona as bolotas
-  generateSphere("#F23768", 1, [1, 1, 1]);
-  generateSphere("#f23768", 1.5, [1.2, 1, 0.8]);
-  generateSphere("#f23768", 0.8, [0.8, 1.2, 1.1]);
-  generateSphere("#f23768", 1.2, [1.4, 0.9, 1]);
-  generateSphere("#f23768", 0.6, [1, 1.5, 1.3]);
-  generateSphere("#f23768", 1, [0.9, 1, 1.2]);
-
-  generateSphere("#f23768", 1, [1.2, 1.1, 1.4]);
-  generateSphere("#f23768", 1.3, [0.9, 1, 1.2]);
-
-  generateSphere("#f23768", 0.5, [1.2, 1.1, 1.4]);
-  generateSphere("#f23768", 0.9, [1.3, 1.2, 0.8]);
-  generateSphere("#f23768", 1.3, [0.8, 1.4, 1.1]);
+  generateSphere("#F6BC0A", 1, [1, 1, 1]);
+  generateSphere("#F6BC0A", 1.5, [1.2, 1, 0.8]);
+  generateSphere("#F6BC0A", 0.8, [0.8, 1.2, 1.1]);
+  generateSphere("#F6BC0A", 1.2, [1.4, 0.9, 1]);
+  generateSphere("#F6BC0A", 0.6, [1, 1.5, 1.3]);
+  generateSphere("#F6BC0A", 1, [0.9, 1, 1.2]);
+  generateSphere("#F6BC0A", 1, [1.2, 1.1, 1.4]);
+  generateSphere("#F6BC0A", 1.3, [0.9, 1, 1.2]);
+  generateSphere("#F6BC0A", 0.5, [1.2, 1.1, 1.4]);
+  generateSphere("#F6BC0A", 0.9, [1.3, 1.2, 0.8]);
+  generateSphere("#F6BC0A", 1.3, [0.8, 1.4, 1.1]);
 
 
   return (

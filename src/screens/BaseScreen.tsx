@@ -1,7 +1,6 @@
-import React from "react";
 import BackgroundImage from "../assets/images/dark-background.png";
 
-const BaseScreen: React.FC = () => {
+const BaseScreen = () => {
   return (
     <div
       className="bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-[#333333]"
