@@ -65,17 +65,20 @@ const Background3D = () => {
 
           {/* Luz direcional para criar sombras suaves */}
           <directionalLight
-              position={[10, 10, 10]}
-              intensity={1}
+              position={[8, 10, -10]}
+              intensity={2}
               castShadow
               shadow-mapSize-width={1024}
               shadow-mapSize-height={1024}
           />
-
-          {/* Luzes pontuais para destaque */}
-          <pointLight position={[-10, 10, -10]} intensity={0.7} />
-          <pointLight position={[10, -10, 10]} intensity={0.5} />
-          <pointLight position={[0, 15, 5]} intensity={1} color="#ffcc88" />
+          <directionalLight
+              position={[-8, -10, 10]}
+              intensity={0.2}
+              color = "#B26400"
+              castShadow
+              shadow-mapSize-width={1024}
+              shadow-mapSize-height={1024}
+          />
 
           {/* Controle de câmera */}
           <OrbitControls
