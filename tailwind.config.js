@@ -8,6 +8,7 @@ export default {
       },
       fontFamily: {
         alatsi: ["Alatsi", "sans-serif"],
+        sans: ["Albert Sans", "sans-serif"],
       }
     },
   },
