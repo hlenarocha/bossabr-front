@@ -24,7 +24,7 @@ const LoginCard = () => {
       </div>
       <LoginButton></LoginButton>
       <div className="w-full max-w-[371px] mt-[20px] h-[1px] bg-white"></div>
-      <div className="w-full max-w-[371px] h-[38px] hover:border-[2px] hover:border-[#F23768] hover:cursor-pointer flex items-center justify-center bg-[#ffffff] rounded-[10px] shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)] mt-5 placeholder-gray-500 transform hover:scale-100">
+      <div className="w-full max-w-[371px] h-[38px] hover:border-[4px] hover:border-[#F8BB49] hover:cursor-pointer flex items-center justify-center bg-[#ffffff] rounded-[10px] shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)] mt-5 placeholder-gray-500 transform hover:scale-100">
         <div className="bg-white w-[30px] h-[30px] rounded-full flex items-center justify-center mr-[10px]">
           <img src={GoogleIcon} alt="Google" />
         </div>
