@@ -1,5 +1,5 @@
 import BackgroundImage from "../assets/images/dark-background.png";
-import Header from "../components/header/Header";
+import HeaderFull from "../components/header/HeaderFull";
 
 const BaseScreen = () => {
   return (
@@ -7,7 +7,7 @@ const BaseScreen = () => {
       className="bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-[#333333]"
       style={{ backgroundImage: `url(${BackgroundImage})` }} // Apenas a URL precisa ser aplicada inline
     >
-      <Header></Header>
+      <HeaderFull></HeaderFull>
 
       <div className="flex flex-col items-center justify-center min-h-screen text-center text-white">
         <div className="w-[628px] h-100 p-10 bg-opacity-50 bg-[#474747] shadow-[5px_5px_10px_0px_rgba(17,17,17,0.15)] rounded-[20px] ">
