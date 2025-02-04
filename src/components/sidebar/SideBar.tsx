@@ -10,6 +10,8 @@ const SideBar = () => {
         <SideBarItems icon="fa-solid fa-list-check" title="Demandas"></SideBarItems>
         <SideBarItems icon="fa-solid fa-user-tie" title="Clientes"></SideBarItems>
         <SideBarItems icon="fa-solid fa-gear" title="Configurações"></SideBarItems>
+      
+      {/*-------------- EM OBRAS ---------- */}
       </div>  
     </div>
   
