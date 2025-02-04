@@ -9,7 +9,7 @@ const BaseScreen = () => {
       style={{ backgroundImage: `url(${BackgroundImage})` }} // Apenas a URL precisa ser aplicada inline
     >
       <HeaderFull></HeaderFull>
-      <div className="px-5 py-5">
+      <div className="p-5">
         <SideBar></SideBar>
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen text-center text-white">
