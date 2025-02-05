@@ -5,6 +5,7 @@ import Dashboard from "./screens/DashboardScreen";
 import Tasks from "./screens/TasksScreen";
 import Clients from "./screens/ClientsScreen";
 import Settings from "./screens/SettingsScreen";
+import Workspace from "./screens/WorkspaceScreen";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/base" element={<Base>Some children content</Base>}></Route>
+        <Route path="/workspace" element={<Workspace />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/tasks" element={<Tasks />}></Route>
         <Route path="/clients" element={<Clients />}></Route>
