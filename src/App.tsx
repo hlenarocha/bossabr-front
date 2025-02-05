@@ -1,26 +1,49 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./screens/LoginScreen";
-import Base from "./screens/BaseScreen";
 import Dashboard from "./screens/DashboardScreen";
 import Tasks from "./screens/TasksScreen";
 import Clients from "./screens/ClientsScreen";
 import Settings from "./screens/SettingsScreen";
 import Workspace from "./screens/WorkspaceScreen";
 
+// mudar para CREATE BROWSER ROUTER. Estudar Outlet
+
 const App = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="/base" element={<Base>Some children content</Base>}></Route>
-        <Route path="/workspace" element={<Workspace />}></Route>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
-        <Route path="/tasks" element={<Tasks />}></Route>
-        <Route path="/clients" element={<Clients />}></Route>
-        <Route path="/settings" element={<Settings />}></Route>
-      </Routes>
-    </Router>
-  );
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Login />,
+      // errorElement: <ErrorPage />
+    },
+    {
+      path: "/workspace",
+      element: <Workspace />,
+      /* children: [
+        { }
+      ] */
+    },
+    {
+      path: "/dashboard",
+      element: <Dashboard />,
+      /* children: [
+        { }
+      ] */
+    },
+    {
+      path: "/tasks",
+      element: <Tasks />,
+    },
+    {
+      path: "/clients",
+      element: <Clients />,
+    },
+    {
+      path: "/settings",
+      element: <Settings />,
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 };
 
 export default App;
