@@ -5,7 +5,8 @@ export default {
     extend: {
       colors: {
         customGray: "#ababab",
-        customYellow: "#F6BC0A"
+        customYellow: "#F6BC0A",
+        customBoxGray: "#484848"
       },
       fontFamily: {
         alatsi: ["Alatsi", "sans-serif"],

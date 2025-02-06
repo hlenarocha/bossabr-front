@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./screens/LoginScreen";
-import Dashboard from "./screens/DashboardScreen";
-import Tasks from "./screens/TasksScreen";
-import Clients from "./screens/ClientsScreen";
-import Settings from "./screens/SettingsScreen";
-import Workspace from "./screens/WorkspaceScreen";
+import Login from "../screens/LoginScreen";
+import Dashboard from "../screens/DashboardScreen";
+import Tasks from "../screens/TasksScreen";
+import Clients from "../screens/ClientsScreen";
+import Settings from "../screens/SettingsScreen";
+import Workspace from "../screens/WorkspaceScreen";
 
 // mudar para CREATE BROWSER ROUTER. Estudar Outlet
 
