@@ -20,7 +20,7 @@ const SideBar = () => {
   }
 
   return (
-    <div className="h-[calc(100vh-8rem)] fixed flex flex-col w-[250px] bg-black/10 rounded-[20px] shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25)] backdrop-blur-2xl py-5">
+    <div className="h-[calc(100vh-8rem)] w-[250px] bg-black/10 rounded-[20px] shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25)] backdrop-blur-2xl py-5">
       <div className="flex flex-col w-full">
         {menuItems.map((item) => (
           <SideBarItems

@@ -13,10 +13,16 @@ const BaseScreen = (prop: BaseScreenProps) => {
       className="bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-[#333333]"
       style={{ backgroundImage: `url(${BackgroundImage})` }} // Apenas a URL precisa ser aplicada inline
     >
-      <HeaderFull></HeaderFull>
-      <div className="p-5 flex flex-row">
-        <SideBar></SideBar>
-        <div>{prop.children}</div>
+      <div className="sticky top-0 z-50">
+        <HeaderFull />
+      </div>
+
+      <div className="flex flex-row p-5 overflow-hidden">
+        <div className="fixed">
+          <SideBar />
+        </div>
+
+        <div className="p-10 ml-[250px]">{prop.children}</div>
       </div>
     </div>
   );
