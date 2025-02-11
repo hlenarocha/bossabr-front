@@ -16,11 +16,11 @@ const Menu = (props: MenuProps) => {
 
           alt="Ícone do menu"
           onClick={() => props.onClick()}
-          className="w-16 cursor-pointer hover:opacity-80"
+          className="w-14 sm:w-16 cursor-pointer hover:opacity-80"
           src={`${props.isSideBarOpen ? IconClose : IconMenu}`}
         ></img>
         <div>
-          <img className="w-32 sm:w-full" src={Logo}></img>
+          <img className="w-32 sm:w-full mx-[70px] sm:mx-0"  src={Logo}></img>
         </div>
       </div>
     </>

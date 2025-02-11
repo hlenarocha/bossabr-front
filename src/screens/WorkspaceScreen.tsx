@@ -7,17 +7,17 @@ const WorkspaceScreen = () => {
     <>
       <BaseScreen>
       <PageTitle title="Área de Trabalho"></PageTitle>
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-col lg:flex-row gap-5 items-center">
           <Box
             title="Bom dia, [user]!"
             subtitle="Visualize os dados de pontuação, progresso das demandas e atividades dos últimos sete dias."
-            width="w-[500px]"
+            width="w-[450px] lg:w-[500px]"
             height="h-[378px]"
           ></Box>
           <Box
           title="Bom dia, [user]!"
           subtitle="Visualize os dados de pontuação, progresso das demandas e atividades dos últimos sete dias."
-          width="w-[500px]"
+          width="w-[450px] lg:w-[500px]"
           height="h-[378px]"
           
           >
