@@ -20,11 +20,11 @@ const BaseScreen = (prop: BaseScreenProps) => {
       </div>
 
       <div className="flex flex-row p-5 overflow-hidden">
-        <div className={`fixed transition-all duration-300 ${isSideBarOpen ? "w-[250px]" : "w-0 overflow-hidden"}`}>
+        <div className={`fixed transition-all duration-200 ease-in-out ${isSideBarOpen ? "w-[250px]" : "w-0 opacity-0"}`}>
           <SideBar />
         </div>
 
-        <div className={`p-10  transition-all duration-300 ${isSideBarOpen ? "ml-[250px]" : "ml-0"}`}>{prop.children}</div>
+        <div className={`p-10  transition-all duration-500 ease-in-out ${isSideBarOpen ? "ml-[250px]" : "ml-0"}`}>{prop.children}</div>
       </div>
     </div>
   );
