@@ -8,7 +8,7 @@ interface BaseScreenProps {
 }
 
 const BaseScreen = (prop: BaseScreenProps) => {
-  const [isSideBarOpen, setIsSideBarOpen] = useState(true);  
+  const [isSideBarOpen, setIsSideBarOpen] = useState(true);
 
   return (
     <div
@@ -16,15 +16,28 @@ const BaseScreen = (prop: BaseScreenProps) => {
       style={{ backgroundImage: `url(${BackgroundImage})` }} // Apenas a URL precisa ser aplicada inline
     >
       <div className="sticky top-0 z-50">
-        <HeaderFull isSideBarOpen = {isSideBarOpen} toggleSideBar = {() => setIsSideBarOpen(!isSideBarOpen)}/>
+        <HeaderFull
+          isSideBarOpen={isSideBarOpen}
+          toggleSideBar={() => setIsSideBarOpen(!isSideBarOpen)}
+        />
       </div>
 
       <div className="flex flex-row p-5 overflow-hidden">
-        <div className={`fixed transition-all duration-200 ease-in-out ${isSideBarOpen ? "w-[250px]" : "w-0 opacity-0"}`}>
+        <div
+          className={`fixed transition-all duration-200 ease-in-out ${
+            isSideBarOpen ? "w-[250px]" : "w-0 opacity-0"
+          }`}
+        >
           <SideBar />
         </div>
-
-        <div className={`p-10  transition-all duration-500 ease-in-out ${isSideBarOpen ? "ml-[250px]" : "ml-0"}`}>{prop.children}</div>
+        <div className="w-full flex justify-center">
+          <div
+            className={`p-5 transition-all duration-500 ease-in-out 
+            }`}
+          >
+            {prop.children}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ const HeaderDate = () => {
   const { day, monthName, dayOfWeek } = getDateInfo();
 
   return <>
-  <div className="flex justify-center items-center gap-3">
+  <div className="flex justify-center items-center gap-3 cursor-default">
     <div className="text-white text-[64px] font-black font-albert">
       {day}
 

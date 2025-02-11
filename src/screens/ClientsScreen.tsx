@@ -1,11 +1,12 @@
 import BaseScreen from "./BaseScreen";
 import Box from "../components/box/BoxContent";
+import PageTitle from "../components/title/PageTitle";
 
 const ClientsScreen = () => {
   return (
     <>
       <BaseScreen>
-        <h1 className="text-4xl text-white font-bold">Clientes</h1>
+      <PageTitle title="Clientes"></PageTitle>
         <div className="mt-4">
           <Box
             title="Lista de Clientes"

@@ -1,10 +1,11 @@
 import BaseScreen from "./BaseScreen";
 import Box from "../components/box/BoxContent";
+import PageTitle from "../components/title/PageTitle";
 
 const DashboardScreen = () => {
   return (
     <BaseScreen>
-      <h1 className="text-4xl text-white font-bold">Dashboard</h1>
+    <PageTitle title="Dashboard"></PageTitle>
       <div className="mt-4">
       <Box
             title="Peças Produzidas"
