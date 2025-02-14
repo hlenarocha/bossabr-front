@@ -20,7 +20,7 @@ const Menu = (props: MenuProps) => {
           src={`${props.isSideBarOpen ? IconClose : IconMenu}`}
         ></img>
         <div>
-          <img className="w-32 sm:w-full mx-[70px] sm:mx-0"  src={Logo}></img>
+          <img className="w-32 sm:flex hidden sm:w-full" src={Logo}></img>
         </div>
       </div>
     </>

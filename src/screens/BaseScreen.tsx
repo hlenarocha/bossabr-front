@@ -32,7 +32,7 @@ const BaseScreen = (prop: BaseScreenProps) => {
         </div>
         <div className="w-full flex justify-center">
           <div
-            className={`z-0 p-5 transition-all z-0 duration-500 ease-in-out 
+            className={`p-5 transition-all z-0 duration-500 ease-in-out 
             }`}
           >
             {prop.children}
