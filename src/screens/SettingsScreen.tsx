@@ -8,7 +8,9 @@ const SettingsScreen = () => {
       <BaseScreen>
       <PageTitle title="Configurações"></PageTitle>
         <div className="mt-4">
-          <Box title="Colaboradores" subtitle="Veja, altere ou exclua as informações pertinentes aos colaboradores." width="w-[500px]" height="h-[378px]"></Box>
+          <Box title="Colaboradores" subtitle="Veja, altere ou exclua as informações pertinentes aos colaboradores." width="w-[500px]" height="h-[378px]">
+            <div>TESTE</div>
+          </Box>
         </div>
       </BaseScreen>
     </>

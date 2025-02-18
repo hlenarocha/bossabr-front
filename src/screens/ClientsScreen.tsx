@@ -6,14 +6,16 @@ const ClientsScreen = () => {
   return (
     <>
       <BaseScreen>
-      <PageTitle title="Clientes"></PageTitle>
+        <PageTitle title="Clientes"></PageTitle>
         <div className="mt-4 ">
           <Box
             title="Lista de Clientes"
             subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
             width="w-[500px]"
             height="h-[378px]"
-          ></Box>
+          >
+            <div>TESTE</div>
+          </Box>
         </div>
       </BaseScreen>
     </>
