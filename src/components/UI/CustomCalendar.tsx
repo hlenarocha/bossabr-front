@@ -53,7 +53,7 @@ const CustomCalendar = () => {
                 ? "border-2 border-customYellow text-white font-bold"
                 : ""
             }
-            ${isCurrentMonth ? "text-white" : "text-gray-500"}
+            ${isCurrentMonth ? "text-white" : "text-gray-600"}
             hover:bg-customYellow transition`}
           onClick={() => toggleSelectDate(day)}
         >
