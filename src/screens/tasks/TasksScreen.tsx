@@ -1,10 +1,17 @@
-import BaseScreen from "./BaseScreen";
-import Box from "../components/box/BoxContent";
-import PageTitle from "../components/title/PageTitle";
-import ColoredButton from "../components/UI/ColoredButton";
-import CustomCalendar from "../components/UI/CustomCalendar";
+import BaseScreen from "../BaseScreen";
+import Box from "../../components/box/BoxContent";
+import PageTitle from "../../components/title/PageTitle";
+import ColoredButton from "../../components/UI/ColoredButton";
+import CustomCalendar from "../../components/UI/CustomCalendar";
+import { useNavigate, Outlet } from "react-router-dom";
 
 const TasksScreen = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  }
+
   return (
     <>
       <BaseScreen>
@@ -15,7 +22,7 @@ const TasksScreen = () => {
             title="LISTA DE DEMANDAS"
             icon="fa-solid fa-eye"
           ></ColoredButton>
-          <ColoredButton
+          <ColoredButton onClick={() => handleNavigate("/tasks/create-task")}
             color="customYellow"
             width="w-[250px]"
             title="ADICIONAR DEMANDA"
@@ -69,6 +76,8 @@ const TasksScreen = () => {
           </Box>
         </div>
       </BaseScreen>
+      <Outlet />
+
     </>
   );
 };
