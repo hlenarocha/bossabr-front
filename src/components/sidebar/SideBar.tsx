@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 const menuItems = [
   { icon: "fa-solid fa-desktop", title: "Área de Trabalho", path: "/workspace"},
   { icon: "fa-solid fa-chart-pie", title: "Dashboard", path: "/dashboard" },
-  { icon: "fa-solid fa-list-check", title: "Demandas", path: "/tasks" },
+  { icon: "fa-solid fa-list-check", title: "Demandas", path: "/tasks"},
   { icon: "fa-solid fa-user-tie", title: "Clientes", path: "/clients" },
   { icon: "fa-solid fa-gear", title: "Configurações", path: "/settings" },
 ];
@@ -27,7 +27,8 @@ const SideBar = () => {
             key={item.path}
             icon={item.icon}
             title={item.title}
-            isActive={location.pathname === item.path}
+            // Verifies if the current path starts with the item path, to set the active item for the children
+            isActive={location.pathname.startsWith(item.path)}
             onClick={() => handleClick(item.path)}
           />
         ))}
