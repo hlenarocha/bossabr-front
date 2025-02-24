@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@fontsource/albert-sans": "^5.1.1",
+    "@react-oauth/google": "^0.12.1",
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
     "axios": "^1.7.7",

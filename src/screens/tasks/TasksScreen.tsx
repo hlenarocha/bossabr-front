@@ -3,14 +3,14 @@ import Box from "../../components/box/BoxContent";
 import PageTitle from "../../components/title/PageTitle";
 import ColoredButton from "../../components/UI/ColoredButton";
 import CustomCalendar from "../../components/UI/CustomCalendar";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const TasksScreen = () => {
   const navigate = useNavigate();
 
   const handleNavigate = (path: string) => {
     navigate(path);
-  }
+  };
 
   return (
     <>
@@ -22,7 +22,8 @@ const TasksScreen = () => {
             title="LISTA DE DEMANDAS"
             icon="fa-solid fa-eye"
           ></ColoredButton>
-          <ColoredButton onClick={() => handleNavigate("/tasks/create-task")}
+          <ColoredButton
+            onClick={() => handleNavigate("/tasks/create-task")}
             color="customYellow"
             width="w-[250px]"
             title="ADICIONAR DEMANDA"
@@ -60,9 +61,13 @@ const TasksScreen = () => {
                   </div>
                 </div>
                 <div className="justify-center">
-                  <div className="text-center mt-5 text-[#9b9b9b] font-black">DEMANDAS COM PRAZO NO DIA</div>
-                  <div className="text-center mt-5 text-customYellow font-black">DD/MM/AAAA</div>
+                  <div className="text-center mt-5 text-[#9b9b9b] font-black">
+                    DEMANDAS COM PRAZO NO DIA
                   </div>
+                  <div className="text-center mt-5 text-customYellow font-black">
+                    DD/MM/AAAA
+                  </div>
+                </div>
               </div>
             </Box>
           </div>
@@ -76,8 +81,6 @@ const TasksScreen = () => {
           </Box>
         </div>
       </BaseScreen>
-      <Outlet />
-
     </>
   );
 };

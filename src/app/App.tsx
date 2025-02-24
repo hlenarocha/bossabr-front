@@ -7,8 +7,6 @@ import Settings from "../screens/SettingsScreen";
 import Workspace from "../screens/WorkspaceScreen";
 import CreateTask from "../screens/tasks/CreateTask";
 
-// Estudar Outlet
-
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -19,26 +17,18 @@ const App = () => {
     {
       path: "/workspace",
       element: <Workspace />,
-      /* children: [
-        { }
-      ] */
     },
     {
       path: "/dashboard",
       element: <Dashboard />,
-      children: [
-        { }
-      ]
     },
     {
       path: "/tasks",
       element: <Tasks />,
-      children: [
-        {
-          path: "create-task",
-          element: <CreateTask />
-        }
-      ]
+    },
+    {
+      path: "/tasks/create-task",
+      element: <CreateTask />,
     },
     {
       path: "/clients",
