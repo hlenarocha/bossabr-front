@@ -1,16 +1,15 @@
 import BaseScreen from "./BaseScreen";
 import Box from "../components/box/BoxContent";
 import PageTitle from "../components/title/PageTitle";
-import BackButton from "../components/UI/BackButton";
+// import BackButton from "../components/UI/BackButton";
 
 const DashboardScreen = () => {
   return (
     <BaseScreen>
     
-      <div className="mb-4">
-      {/* Botão teste */}
+      {/* <div className="mb-4">
         <BackButton></BackButton>
-      </div>
+      </div> */}
       <PageTitle title="Dashboard"></PageTitle>
       <div className="mt-4">
         <Box

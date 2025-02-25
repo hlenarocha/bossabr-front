@@ -3,9 +3,11 @@ import Login from "../screens/LoginScreen";
 import Dashboard from "../screens/DashboardScreen";
 import Tasks from "../screens/tasks/TasksScreen";
 import Clients from "../screens/ClientsScreen";
-import Settings from "../screens/SettingsScreen";
+import Settings from "../screens/settings/SettingsScreen";
 import Workspace from "../screens/WorkspaceScreen";
 import CreateTask from "../screens/tasks/CreateTask";
+import ConfigureWorker from "../screens/settings/ConfigureWorker";
+import CreateWorker from "../screens/settings/CreateWorker";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -37,6 +39,14 @@ const App = () => {
     {
       path: "/settings",
       element: <Settings />,
+    },
+    {
+      path: "/settings/configure-worker",
+      element: <ConfigureWorker />,
+    },
+    {
+      path: "/settings/configure-worker/create-worker",
+      element: <CreateWorker />,
     },
   ]);
 

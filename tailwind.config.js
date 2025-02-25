@@ -6,7 +6,8 @@ export default {
       colors: {
         customGray: "#ababab",
         customYellow: "#F6BC0A",
-        customBoxGray: "#484848"
+        customBoxGray: "#484848",
+        customInputGray: "#555555"
       },
       fontFamily: {
         alatsi: ["Alatsi", "sans-serif"],

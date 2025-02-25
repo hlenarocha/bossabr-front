@@ -17,15 +17,17 @@ const TasksScreen = () => {
       <BaseScreen>
         <div className="flex justify-end mb-4 flex-row gap-4">
           <ColoredButton
+            justify="justify-center"
             color="customYellow"
-            width="w-[250px]"
+            width="w-[280px]"
             title="LISTA DE DEMANDAS"
             icon="fa-solid fa-eye"
           ></ColoredButton>
           <ColoredButton
+            justify="justify-center"
             onClick={() => handleNavigate("/tasks/create-task")}
             color="customYellow"
-            width="w-[250px]"
+            width="w-[280px]"
             title="ADICIONAR DEMANDA"
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>

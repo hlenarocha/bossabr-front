@@ -3,14 +3,15 @@ interface ColoredButtonProps {
   width: string;
   icon: string;
   color: string;
+  justify: string;
   onClick?: () => void;
 }
 
 const ColoredButton = (props: ColoredButtonProps) => {
   return (
     <>
-      <div onClick={props.onClick} className={`${props.width} bg-${props.color} flex flex-row gap-4 font-black font-sans p-2 cursor-pointer items-center justify-center text-white rounded-[11px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.30)] hover:bg-opacity-90`}>
-        <div className="text-16px">{props.title}</div>
+      <div onClick={props.onClick} className={`${props.width} bg-${props.color} flex flex-row gap-10 font-black font-sans py-2 px-4 cursor-pointer items-center ${props.justify} text-white rounded-[11px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.30)] hover:bg-opacity-90`}>
+        <div className="text-xm font-black">{props.title}</div>
         <div>
         <i className={`${props.icon} text-2xl`} aria-hidden="true"></i>
 
