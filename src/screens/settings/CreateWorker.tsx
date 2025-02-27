@@ -4,7 +4,7 @@ import BaseScreen from "../BaseScreen";
 import Box from "../../components/box/BoxContent";
 import InputTitle from "../../components/title/InputTitle";
 import PageTitle from "../../components/title/PageTitle";
-import InputText from "../../components/UI/InputText";
+import InputString from "../../components/UI/InputString";
 import ColoredButton from "../../components/UI/ColoredButton";
 
 const CreateWorker = () => {
@@ -29,46 +29,52 @@ const CreateWorker = () => {
           height="h-[630px]"
         >
           <InputTitle title="Funcionário"></InputTitle>
-          <InputText
+          <InputString
             title="NOME DO COLABORADOR"
             width="w-[100%]"
             height="h-8"
             placeholder="Digite o nome..."
             isMandatory={true}
-          ></InputText>
+            stringType="text"
+            
+          ></InputString>
 
           <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
-            <InputText
+            <InputString
               title="E-MAIL"
               width="w-[50%]"
               height="h-8"
               placeholder="Digite o email..."
               isMandatory={true}
-            ></InputText>
-            <InputText
+              stringType="email"
+            ></InputString>
+            <InputString
               title="TELEFONE"
               width="w-[50%]"
               height="h-8"
-              placeholder="Digite o telefone..."
+              placeholder="(__) ____-____"
               isMandatory={true}
-            ></InputText>
+              mask="(99) 9999-9999"
+            ></InputString>
           </div>
 
           <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
-            <InputText
+            <InputString
               title="DATA DE ANIVERSÁRIO"
               width="w-[50%]"
               height="h-8"
-              placeholder="Digite o email..."
+              placeholder="__/__/____"
               isMandatory={false}
-            ></InputText>
-            <InputText
+              mask="99/99/9999"
+            ></InputString>
+            <InputString
               title="DATA DE ENTRADA"
               width="w-[50%]"
               height="h-8"
-              placeholder="Digite o telefone..."
+              placeholder="__/__/____"
               isMandatory={false}
-            ></InputText>
+              mask="99/99/9999"
+            ></InputString>
           </div>
 
           <div className="w-[100%] flex justify-center mt-4">
