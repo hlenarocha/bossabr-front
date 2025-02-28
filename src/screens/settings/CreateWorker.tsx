@@ -6,6 +6,7 @@ import InputTitle from "../../components/title/InputTitle";
 import PageTitle from "../../components/title/PageTitle";
 import InputString from "../../components/UI/InputString";
 import ColoredButton from "../../components/UI/ColoredButton";
+import Select from "../../components/UI/Select";
 
 const CreateWorker = () => {
   const navigate = useNavigate();
@@ -77,7 +78,10 @@ const CreateWorker = () => {
             ></InputString>
           </div>
 
-          <div className="w-[100%] flex justify-center mt-4">
+          <Select title="EQUIPE" isMandatory={true} ></Select>
+          
+
+          <div className="w-[100%] flex justify-center mt-8">
           <ColoredButton title="SALVAR" color="customYellow" width="w-[180px]" justify="justify-center" icon="fa-solid fa-floppy-disk" ></ColoredButton>
 
 
