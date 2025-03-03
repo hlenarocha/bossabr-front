@@ -9,32 +9,33 @@ interface InputTextProps {
   height: string;
   stringType?: string;
   mask?: string;
+  borderColor?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputText = (props: InputTextProps) => {
-  // const [value, setValue] = useState("");
-  const [error, setError] = useState(false);
+//  const [error, setError] = useState(false);
 
-  const handleValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (props.stringType === "email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // const handleValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (props.stringType === "email") {
+  //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!emailRegex.test(e.target.value)) {
-        setError(true);
-      } else {
-        setError(false);
-      } 
+  //     if (!emailRegex.test(e.target.value)) {
+  //       setError(true);
+  //     } else {
+  //       setError(false);
+  //     } 
 
-    } else if (props.stringType === "text") {
-      const textRegex = /^[A-Za-z\s]+$/;
+  //   } else if (props.stringType === "text") {
+  //     const textRegex = /^[A-Za-z\s]+$/;
       
-      if (!textRegex.test(e.target.value) || e.target.value.length === 0 || e.target.value.length > 50) {
-        setError(true);
-      } else {
-        setError(false);
-      }
-    }
-  };
+  //     if (!textRegex.test(e.target.value) || e.target.value.length === 0 || e.target.value.length > 50) {
+  //       setError(true);
+  //     } else {
+  //       setError(false);
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -51,12 +52,15 @@ const InputText = (props: InputTextProps) => {
           </span>
         </div>
         <InputMask
-          onChange={handleValidation}
+          onChange={(e) => {
+            // handleValidation(e);
+            if (props.onChange) {
+              props.onChange(e);
+            }
+          }}
           className={` ${
             props.height
-          } bg-customInputGray py-2 px-4 border outline-none  rounded-[400px] ${
-            error ? "border-red-500" : "border-customYellow"
-          }`}
+          } bg-customInputGray py-2 px-4 border outline-none  rounded-[400px] ${props.borderColor} `}
           placeholder={props.placeholder}
           type="text"
           mask={props.mask || ""}

@@ -8,7 +8,6 @@ import {
   endOfWeek,
   addDays,
   isSameMonth,
-  isToday,
   isSameDay,
 } from "date-fns";
 import { useState } from "react";
