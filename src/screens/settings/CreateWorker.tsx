@@ -10,23 +10,29 @@ import Select from "../../components/UI/Select";
 import PlainButton from "../../components/UI/PlainButton";
 import { useState } from "react";
 import { validateInput } from "../../utils/validateInput";
+import InputDate from "../../components/UI/InputDate";
 
 const CreateWorker = () => {
   const navigate = useNavigate();
+
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState("");
   const [birthday, setBirthday] = useState("");
   const [entryDate, setEntryDate] = useState("");
+
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const [isBirthdayValid, setIsBirthdayValid] = useState(true);
+  const [isEntryDateValid, setIsEntryDateValid] = useState(true);
 
-  console.log(isNameValid);
-
+  // console.log(isNameValid);
   // console.log(name);
   // console.log(email);
   // console.log(phone);
-  console.log(name.length);
+  // console.log(name.length);
+  console.log(birthday);
 
   const handleSubmit = () => {
     if (name.length === 0 || email.length === 0) {
@@ -34,13 +40,11 @@ const CreateWorker = () => {
       return;
     }
 
-    if (!isNameValid || !isEmailValid && email.length > 0) {
+    if (!isNameValid || (!isEmailValid && email.length > 0)) {
       alert("Campos inválidos!");
       return;
     }
-
-  }
-
+  };
 
   function handleNavigate(path: string) {
     navigate(path);
@@ -76,9 +80,7 @@ const CreateWorker = () => {
           ></InputString>
 
           <div className="flex gap-4 flex-row justify-normal items-center w-[100%]">
-            <Select title="EQUIPE" isMandatory={true}
-            width="w-[70%]"
-            ></Select>
+            <Select title="EQUIPE" isMandatory={true} width="w-[70%]"></Select>
             <PlainButton
               title="NOVA EQUIPE"
               color="customYellow"
@@ -90,35 +92,48 @@ const CreateWorker = () => {
             <InputString
               onChange={(e) => {
                 setEmail(e.target.value);
-                setIsEmailValid(validateInput(e.target.value, "email") ?? false);
+                setIsEmailValid(
+                  validateInput(e.target.value, "email") ?? false
+                );
               }}
               title="E-MAIL"
               width="w-[50%]"
               height="h-8"
               placeholder="Digite o email..."
               isMandatory={true}
-              borderColor={isEmailValid ? 'border-customYellow' : 'border-red-500'}
+              borderColor={
+                isEmailValid ? "border-customYellow" : "border-red-500"
+              }
               stringType="email"
             ></InputString>
             <InputString
-            onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value)}
               title="TELEFONE"
               width="w-[50%]"
               height="h-8"
               placeholder="(__) ____-____"
               isMandatory={true}
               mask="(99) 9999-9999"
+              borderColor={
+                isPhoneValid ? "border-customYellow" : "border-red-500"
+              }
             ></InputString>
           </div>
 
           <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
-            <InputString
+            {/* <InputString
+              onChange={(e) => {
+                setBirthday(e.target.value);
+              }}
               title="DATA DE ANIVERSÁRIO"
               width="w-[50%]"
               height="h-8"
               placeholder="__/__/____"
               isMandatory={false}
               mask="99/99/9999"
+              borderColor={
+                isBirthdayValid ? "border-customYellow" : "border-red-500"
+              }
             ></InputString>
             <InputString
               title="DATA DE ENTRADA"
@@ -127,10 +142,23 @@ const CreateWorker = () => {
               placeholder="__/__/____"
               isMandatory={false}
               mask="99/99/9999"
-            ></InputString>
+              borderColor={
+                isEntryDateValid ? "border-customYellow" : "border-red-500"
+              }
+            ></InputString> */}
+            <InputDate
+              title="DATA DE NASCIMENTO"
+              isMandatory={false}
+              width="w-[50%]"
+            ></InputDate>
+            <InputDate
+              title="DATA DE ENTRADA"
+              isMandatory={false}
+              width="w-[50%]"
+            ></InputDate>
           </div>
 
-          <div className="w-[100%] flex justify-center mt-8">
+          <div className="w-[100%] flex justify-center mt-6">
             <ColoredButton
               onClick={handleSubmit}
               title="SALVAR"

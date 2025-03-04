@@ -14,7 +14,7 @@ interface InputTextProps {
 }
 
 const InputText = (props: InputTextProps) => {
-//  const [error, setError] = useState(false);
+  const [error, setError] = useState(false);
 
   // const handleValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   if (props.stringType === "email") {
