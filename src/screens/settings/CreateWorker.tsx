@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import BackButton from "../../components/UI/BackButton";
 import BaseScreen from "../BaseScreen";
 import Box from "../../components/box/BoxContent";
@@ -8,18 +8,23 @@ import InputString from "../../components/UI/InputString";
 import ColoredButton from "../../components/UI/ColoredButton";
 import Select from "../../components/UI/Select";
 import PlainButton from "../../components/UI/PlainButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { validateInput } from "../../utils/validateInput";
 import InputDate from "../../components/UI/InputDate";
+import getEquipes from "../../api/equipeRoutes";
+import { EquipeInterface } from "../../api/equipeRoutes";
+import createFuncionario from "../../api/funcionarioRoutes";
 
 const CreateWorker = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [equipes, setEquipes] = useState<EquipeInterface[]>([]);
   const [phone, setPhone] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [entryDate, setEntryDate] = useState("");
+  const [birthday, setBirthday] = useState<string>();
+  const [entryDate, setEntryDate] = useState<string>();
+  const [selectedEquipe, setSelectedEquipe] = useState<number>(0);
 
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -33,8 +38,9 @@ const CreateWorker = () => {
   // console.log(phone);
   // console.log(name.length);
   console.log(birthday);
+  console.log(entryDate);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (name.length === 0 || email.length === 0) {
       alert("Preencha todos os campos!");
       return;
@@ -44,11 +50,49 @@ const CreateWorker = () => {
       alert("Campos inválidos!");
       return;
     }
+
+    try {
+      if (!birthday || !entryDate) {
+        alert("Preencha todas as datas!");
+        return;
+      }
+
+      const response = await createFuncionario({
+        nome: name,
+        email: email,
+        telefone: phone,
+        data_nascimento: birthday,
+        data_entrada: entryDate,
+        role: "funcionario",
+        id_equipe: selectedEquipe,
+      });
+      console.log(response);
+      alert("Funcionário criado com sucesso!");
+    } catch (error) {
+      console.log(error);
+      alert("Erro ao criar funcionário!");
+    }
   };
 
   function handleNavigate(path: string) {
     navigate(path);
   }
+
+  useEffect(() => {
+    const fetchEquipes = async () => {
+      try {
+        const response = await getEquipes();
+        if (response) {
+          setEquipes(response.data);
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar equipes", error);
+      }
+    };
+
+    fetchEquipes();
+  }, []);
 
   return (
     <>
@@ -80,7 +124,20 @@ const CreateWorker = () => {
           ></InputString>
 
           <div className="flex gap-4 flex-row justify-normal items-center w-[100%]">
-            <Select title="EQUIPE" isMandatory={true} width="w-[70%]"></Select>
+            <Select
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setSelectedEquipe(Number(e.target.value));
+              }}
+              options={equipes.map((equipe) => {
+                return {
+                  id: equipe.id_equipe,
+                  name: equipe.nome_equipe,
+                };
+              })}
+              title="EQUIPE"
+              isMandatory={true}
+              width="w-[70%]"
+            ></Select>
             <PlainButton
               title="NOVA EQUIPE"
               color="customYellow"
@@ -121,37 +178,14 @@ const CreateWorker = () => {
           </div>
 
           <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
-            {/* <InputString
-              onChange={(e) => {
-                setBirthday(e.target.value);
-              }}
-              title="DATA DE ANIVERSÁRIO"
-              width="w-[50%]"
-              height="h-8"
-              placeholder="__/__/____"
-              isMandatory={false}
-              mask="99/99/9999"
-              borderColor={
-                isBirthdayValid ? "border-customYellow" : "border-red-500"
-              }
-            ></InputString>
-            <InputString
-              title="DATA DE ENTRADA"
-              width="w-[50%]"
-              height="h-8"
-              placeholder="__/__/____"
-              isMandatory={false}
-              mask="99/99/9999"
-              borderColor={
-                isEntryDateValid ? "border-customYellow" : "border-red-500"
-              }
-            ></InputString> */}
             <InputDate
+              onChange={(value: string) => setBirthday(value)}
               title="DATA DE NASCIMENTO"
               isMandatory={false}
               width="w-[50%]"
             ></InputDate>
             <InputDate
+              onChange={(value: string) => setEntryDate(value)}
               title="DATA DE ENTRADA"
               isMandatory={false}
               width="w-[50%]"

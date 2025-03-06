@@ -7,7 +7,8 @@ const App = () => {
     <div className="relative w-full h-screen flex justify-center items-center bg-customGray overflow-hidden">
       <Background3D />
 
-      <GoogleOAuthProvider clientId="695943838408-tl69kga1kmuot0u0jhmbgduos3d4gtnj.apps.googleusercontent.com">
+    {/* Cliente id do google */}
+      <GoogleOAuthProvider clientId="1021397316105-8bhmiu5d8ela5dsaoomf7rgued8hc6do.apps.googleusercontent.com">
         <LoginCard />
       </GoogleOAuthProvider>
     </div>

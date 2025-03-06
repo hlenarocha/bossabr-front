@@ -1,12 +1,14 @@
 import api from "./axiosInstance";
 
 interface FuncionarioData {
-  // define the properties of FuncionarioData here for more security
+  // defines the properties of FuncionarioData here for more security
   nome: string;
   email: string;
   telefone: string;
-  data_entrada: Date;
-  data_nascimento: Date;
+  data_entrada: string;
+  data_nascimento: string;
+  role: string;
+  id_equipe: number;
 }
 
 const createFuncionario = async (data: FuncionarioData) => {

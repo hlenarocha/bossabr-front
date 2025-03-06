@@ -1,6 +1,16 @@
 import api from "./axiosInstance";
 
-export const getEquipes = async () => {
+export interface EquipeInterface {
+  id_equipe: number;
+  nome_equipe: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  data: EquipeInterface[];
+}
+
+export const getEquipes = async (): Promise<ApiResponse | undefined> => {
   try {
     const response = await api.get("/equipe");
     return response.data;
@@ -8,3 +18,5 @@ export const getEquipes = async () => {
     console.error(error);
   }
 };
+
+export default getEquipes;

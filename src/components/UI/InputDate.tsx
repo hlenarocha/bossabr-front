@@ -6,7 +6,6 @@ import dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
 import "dayjs/locale/pt-br";
 
-
 // Para formatação correta dos dias da semana
 dayjs.extend(updateLocale);
 
@@ -20,7 +19,7 @@ interface InputDateProps {
   width?: string;
   height?: string;
   borderColor?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: string) => void;
 }
 
 const InputDate = (props: InputDateProps) => {
@@ -44,19 +43,18 @@ const InputDate = (props: InputDateProps) => {
           adapterLocale="pt-br" // Localização em português
         >
           <DatePicker
-          
             value={null}
-            onChange={(newValue) => console.log(newValue)}
+            onChange={(date) => date && props.onChange(dayjs(date).format('YYYY-MM-DD'))}
             slotProps={{
               yearButton: {
                 sx: {
                   color: "white",
                   "&.Mui-selected": {
-                    backgroundColor: "#555555", 
+                    backgroundColor: "#555555",
                     color: "white",
                   },
                   "&:hover": {
-                    backgroundColor: "#444444", 
+                    backgroundColor: "#444444",
                   },
                 },
               },
@@ -76,12 +74,12 @@ const InputDate = (props: InputDateProps) => {
                   "& .MuiOutlinedInput-root": {
                     backgroundColor: "#555555",
                     borderRadius: "400px",
-                    "& fieldset": { borderColor: "#F6BC0A" }, 
+                    "& fieldset": { borderColor: "#F6BC0A" },
                     "&:hover fieldset": { borderColor: "#F6BC0A" }, // Outline ao passar o mouse
                     "&.Mui-focused fieldset": { borderColor: "#F6BC0A" }, // Outline quando focado
                   },
                   input: { color: "white" },
-                  svg: { color: "white" }, 
+                  svg: { color: "white" },
                 },
               },
               desktopPaper: {
@@ -90,10 +88,10 @@ const InputDate = (props: InputDateProps) => {
                   backgroundColor: "#1f1f1f",
                   color: "white",
                   "& .MuiSvgIcon-root": {
-                    color: "white", 
+                    color: "white",
                   },
                   "& .MuiDayCalendar-weekDayLabel": {
-                    color: "white", 
+                    color: "white",
                     fontSize: "0.875rem",
                   },
                   "& .Mui-selected": {
@@ -101,7 +99,7 @@ const InputDate = (props: InputDateProps) => {
                     color: "black !important",
                   },
                   "& .MuiPickersYear-yearButton.Mui-selected": {
-                    backgroundColor: "#555555 !important", 
+                    backgroundColor: "#555555 !important",
                     color: "white !important", // !important sobrepõe o estilo padrão
                   },
                 },
@@ -116,7 +114,7 @@ const InputDate = (props: InputDateProps) => {
                 sx: {
                   color: "white",
                   "&.Mui-selected": {
-                    backgroundColor: "#F6BC0A", 
+                    backgroundColor: "#F6BC0A",
                     color: "black",
                     "&:hover": { backgroundColor: "#d9a309" },
                   },

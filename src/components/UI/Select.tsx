@@ -3,7 +3,8 @@ interface SelectProps {
   isMandatory: boolean;
   width?: string;
   height?: string;
-  //options: string[];
+  options: { id: number; name: string }[];
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const Select = (props: SelectProps) => {
@@ -21,11 +22,15 @@ const Select = (props: SelectProps) => {
         </span>
       </div>
       <select
+        onChange={props.onChange}
         className={` ${props.height} bg-customInputGray py-2 px-4 border outline-none  rounded-[400px] border-customYellow`}
       >
-        <option>Equipe 1</option>
-        <option>Equipe 2</option>
-        <option>Equipe 3</option>
+        {props.options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.name}
+          </option>
+
+        ))}
       </select>
     </div>
   );
