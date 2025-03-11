@@ -1,4 +1,4 @@
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/UI/BackButton";
 import BaseScreen from "../BaseScreen";
 import Box from "../../components/box/BoxContent";
@@ -33,12 +33,13 @@ const CreateWorker = () => {
   const [isEntryDateValid, setIsEntryDateValid] = useState(true);
 
   // console.log(isNameValid);
-  // console.log(name);
-  // console.log(email);
-  // console.log(phone);
+  console.log(name);
+  console.log(email);
+  console.log(phone);
   // console.log(name.length);
   console.log(birthday);
   console.log(entryDate);
+  console.log(selectedEquipe)
 
   const handleSubmit = async () => {
     if (!name || !email || !birthday || !entryDate) {
@@ -54,7 +55,7 @@ const CreateWorker = () => {
     try {
       const response = await createFuncionario({
         first_name: name,
-        last_name: "",
+        //last_name: "",
         email: email,
         telefone: phone || "",
         data_aniversario: birthday,
@@ -65,7 +66,6 @@ const CreateWorker = () => {
 
       console.log(response);
       alert("Funcionário criado com sucesso!");
-      navigate("/alguma-rota-aqui"); // Redireciona após criar
     } catch (error) {
       console.log(error);
       alert("Erro ao criar funcionário!");
