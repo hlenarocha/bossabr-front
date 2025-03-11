@@ -41,38 +41,37 @@ const CreateWorker = () => {
   console.log(entryDate);
 
   const handleSubmit = async () => {
-    if (name.length === 0 || email.length === 0) {
-      alert("Preencha todos os campos!");
+    if (!name || !email || !birthday || !entryDate) {
+      alert("Preencha todos os campos obrigatórios!");
       return;
     }
 
-    if (!isNameValid || (!isEmailValid && email.length > 0)) {
+    if (!isNameValid || !isEmailValid) {
       alert("Campos inválidos!");
       return;
     }
 
     try {
-      if (!birthday || !entryDate) {
-        alert("Preencha todas as datas!");
-        return;
-      }
-
       const response = await createFuncionario({
-        nome: name,
+        first_name: name,
+        last_name: "",
         email: email,
-        telefone: phone,
-        data_nascimento: birthday,
+        telefone: phone || "",
+        data_aniversario: birthday,
         data_entrada: entryDate,
         role: "funcionario",
         id_equipe: selectedEquipe,
       });
+
       console.log(response);
       alert("Funcionário criado com sucesso!");
+      navigate("/alguma-rota-aqui"); // Redireciona após criar
     } catch (error) {
       console.log(error);
       alert("Erro ao criar funcionário!");
     }
   };
+
 
   function handleNavigate(path: string) {
     navigate(path);
