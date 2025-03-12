@@ -4,6 +4,7 @@ import BaseScreen from "../BaseScreen";
 import Box from "../../components/box/BoxContent";
 import ColoredButton from "../../components/UI/ColoredButton";
 import { useNavigate } from "react-router-dom";
+import TableItem from "../../components/table/TableItem";
 
 const ConfigureWorker = () => {
   const navigate = useNavigate();
@@ -37,7 +38,17 @@ const ConfigureWorker = () => {
           title="Lista de Colaboradores"
           subtitle="Visualização da lista de colaboradores para configuração."
         >
-          <div>TESTE</div>
+          <TableItem itemWidth="w-full " itemHeight="h-16" 
+          columns={
+            [
+              { width: "w-[33%]", content: "Nome" },
+              { width: "w-[33%]", content: "Equipe" },
+              { width: "w-[33%]", content: "Setor" },
+            ]
+          }
+          icon="fa-eye"
+          ></TableItem>
+      
         </Box>
       </BaseScreen>
     </>

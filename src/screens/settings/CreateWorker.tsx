@@ -29,17 +29,15 @@ const CreateWorker = () => {
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-  const [isBirthdayValid, setIsBirthdayValid] = useState(true);
-  const [isEntryDateValid, setIsEntryDateValid] = useState(true);
 
   // console.log(isNameValid);
-  console.log(name);
-  console.log(email);
-  console.log(phone);
+  // console.log(name);
+  // console.log(email);
+  // console.log(phone);
   // console.log(name.length);
-  console.log(birthday);
-  console.log(entryDate);
-  console.log(selectedEquipe)
+  // console.log(birthday);
+  // console.log(entryDate);
+  // console.log(selectedEquipe)
 
   const handleSubmit = async () => {
     if (!name || !email || !birthday || !entryDate) {
@@ -71,7 +69,6 @@ const CreateWorker = () => {
       alert("Erro ao criar funcionário!");
     }
   };
-
 
   function handleNavigate(path: string) {
     navigate(path);
@@ -163,7 +160,10 @@ const CreateWorker = () => {
               stringType="email"
             ></InputString>
             <InputString
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => {
+                setPhone(e.target.value);
+                setIsPhoneValid(validateInput(e.target.value, "phone") ?? false);
+              }}
               title="TELEFONE"
               width="w-[50%]"
               height="h-8"
