@@ -13,7 +13,7 @@ import { validateInput } from "../../utils/validateInput";
 import InputDate from "../../components/UI/InputDate";
 import getEquipes from "../../api/equipeRoutes";
 import { EquipeInterface } from "../../api/equipeRoutes";
-import createFuncionario from "../../api/funcionarioRoutes";
+import { createFuncionario } from "../../api/funcionarioRoutes";
 
 const CreateWorker = () => {
   const navigate = useNavigate();
@@ -90,6 +90,8 @@ const CreateWorker = () => {
     fetchEquipes();
   }, []);
 
+  
+
   return (
     <>
       <BaseScreen>
@@ -162,7 +164,9 @@ const CreateWorker = () => {
             <InputString
               onChange={(e) => {
                 setPhone(e.target.value);
-                setIsPhoneValid(validateInput(e.target.value, "phone") ?? false);
+                setIsPhoneValid(
+                  validateInput(e.target.value, "phone") ?? false
+                );
               }}
               title="TELEFONE"
               width="w-[50%]"

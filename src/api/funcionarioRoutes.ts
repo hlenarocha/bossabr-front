@@ -23,5 +23,14 @@ const createFuncionario = async (data: FuncionarioData) => {
   }
 };
 
-export default createFuncionario;
+const readFuncionario = async () => {
+  try {
+    const response = await api.get("/funcionario");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    }
+}
+
+export { createFuncionario, readFuncionario };
 
