@@ -14,6 +14,7 @@ import InputDate from "../../components/UI/InputDate";
 import getEquipes from "../../api/equipeRoutes";
 import { EquipeInterface } from "../../api/equipeRoutes";
 import { createFuncionario } from "../../api/funcionarioRoutes";
+import Modal from "../../components/modal/Modal";
 
 const CreateWorker = () => {
   const navigate = useNavigate();
@@ -93,6 +94,7 @@ const CreateWorker = () => {
 
   return (
     <>
+    <Modal buttonTile="Sucesso!" description="A operação de cadastro do (a) colaborador (a) foi concluída."></Modal>
       <BaseScreen>
         <BackButton
           onClick={() => handleNavigate("/settings/configure-worker")}
