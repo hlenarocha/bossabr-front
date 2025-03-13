@@ -23,21 +23,20 @@ const CreateWorker = () => {
   const [equipes, setEquipes] = useState<EquipeInterface[]>([]);
   const [phone, setPhone] = useState("");
   const [birthday, setBirthday] = useState<string>();
+
+  // adicionar verificacoes
+  // datas devem ser menores que data atual
+  // data de entrada deve ser maior que data de nascimento
+  // data de nascimento deve ter ano mínimo
   const [entryDate, setEntryDate] = useState<string>();
   const [selectedEquipe, setSelectedEquipe] = useState<number>(0);
 
+
+  const [isBirthdayValid, setIsBirthdayValid] = useState(true);
+  const [isEntryDateValid, setIsEntryDateValid] = useState(true);
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-
-  // console.log(isNameValid);
-  // console.log(name);
-  // console.log(email);
-  // console.log(phone);
-  // console.log(name.length);
-  // console.log(birthday);
-  // console.log(entryDate);
-  // console.log(selectedEquipe)
 
   const handleSubmit = async () => {
     if (!name || !email || !birthday || !entryDate) {
@@ -182,16 +181,24 @@ const CreateWorker = () => {
 
           <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
             <InputDate
-              onChange={(value: string) => setBirthday(value)}
+              onChange={(value: string) => {
+                setBirthday(value);
+                setIsBirthdayValid(validateInput(value, "birthdayDate") ?? false);
+              }}
               title="DATA DE NASCIMENTO"
               isMandatory={false}
               width="w-[50%]"
+              borderColor={isBirthdayValid ? "#F6BC0A" : "#EF4444"}
             ></InputDate>
             <InputDate
-              onChange={(value: string) => setEntryDate(value)}
+              onChange={(value: string) => {
+                setEntryDate(value);
+                setIsEntryDateValid(validateInput(value, "entryDate") ?? false);
+              }}
               title="DATA DE ENTRADA"
               isMandatory={false}
               width="w-[50%]"
+              borderColor={isEntryDateValid ? "#F6BC0A" : "#EF4444"}
             ></InputDate>
           </div>
 

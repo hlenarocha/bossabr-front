@@ -1,4 +1,3 @@
-import { useState } from "react";
 import InputMask from "react-input-mask";
 
 interface InputTextProps {
@@ -14,28 +13,6 @@ interface InputTextProps {
 }
 
 const InputText = (props: InputTextProps) => {
-  const [error, setError] = useState(false);
-
-  // const handleValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (props.stringType === "email") {
-  //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  //     if (!emailRegex.test(e.target.value)) {
-  //       setError(true);
-  //     } else {
-  //       setError(false);
-  //     } 
-
-  //   } else if (props.stringType === "text") {
-  //     const textRegex = /^[A-Za-z\s]+$/;
-      
-  //     if (!textRegex.test(e.target.value) || e.target.value.length === 0 || e.target.value.length > 50) {
-  //       setError(true);
-  //     } else {
-  //       setError(false);
-  //     }
-  //   }
-  // };
 
   return (
     <>

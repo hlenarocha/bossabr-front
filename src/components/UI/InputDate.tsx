@@ -74,9 +74,9 @@ const InputDate = (props: InputDateProps) => {
                   "& .MuiOutlinedInput-root": {
                     backgroundColor: "#555555",
                     borderRadius: "400px",
-                    "& fieldset": { borderColor: "#F6BC0A" },
-                    "&:hover fieldset": { borderColor: "#F6BC0A" }, // Outline ao passar o mouse
-                    "&.Mui-focused fieldset": { borderColor: "#F6BC0A" }, // Outline quando focado
+                    "& fieldset": { borderColor: props.borderColor },
+                    "&:hover fieldset": { borderColor: props.borderColor }, // Outline ao passar o mouse
+                    "&.Mui-focused fieldset": { borderColor: props.borderColor }, // Outline quando focado
                   },
                   input: { color: "white" },
                   svg: { color: "white" },
