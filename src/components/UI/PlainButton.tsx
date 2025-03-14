@@ -4,11 +4,12 @@ interface PlainButtonProps {
   height?: string;
   color: string;
   titleStyle?: string;
+  onClick?: () => void;
 }
 
 const PlainButton = (props: PlainButtonProps) => {
   return (
-    <button
+    <button onClick={props.onClick}
       className={`px-4 py-2 mt-5 rounded-[400px] bg-${props.color} ${props.width} ${props.height}`}
     >
       <span className={`${props.titleStyle}`}>{props.title}</span>

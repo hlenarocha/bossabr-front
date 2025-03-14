@@ -15,6 +15,9 @@ import getEquipes from "../../api/equipeRoutes";
 import { EquipeInterface } from "../../api/equipeRoutes";
 import { createFuncionario } from "../../api/funcionarioRoutes";
 import Modal from "../../components/modal/Modal";
+import IconHappy from "../../assets/images/famicons_happy.png";
+import IconSad from "../../assets/images/famicons_sad.png";
+
 
 const CreateWorker = () => {
   const navigate = useNavigate();
@@ -24,20 +27,14 @@ const CreateWorker = () => {
   const [equipes, setEquipes] = useState<EquipeInterface[]>([]);
   const [phone, setPhone] = useState("");
   const [birthday, setBirthday] = useState<string>();
-
-  // adicionar verificacoes
-  // datas devem ser menores que data atual
-  // data de entrada deve ser maior que data de nascimento
-  // data de nascimento deve ter ano mínimo
   const [entryDate, setEntryDate] = useState<string>();
   const [selectedEquipe, setSelectedEquipe] = useState<number>(0);
-
-
   const [isBirthdayValid, setIsBirthdayValid] = useState(true);
   const [isEntryDateValid, setIsEntryDateValid] = useState(true);
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSubmit = async () => {
     if (!name || !email || !birthday || !entryDate) {
@@ -63,12 +60,17 @@ const CreateWorker = () => {
       });
 
       console.log(response);
-      alert("Funcionário criado com sucesso!");
+      setIsModalVisible(true);
+      //alert("Funcionário criado com sucesso!");
     } catch (error) {
       console.log(error);
       alert("Erro ao criar funcionário!");
     }
   };
+
+  function handleClose() {
+    setIsModalVisible(false);
+  }
 
   function handleNavigate(path: string) {
     navigate(path);
@@ -90,11 +92,23 @@ const CreateWorker = () => {
     fetchEquipes();
   }, []);
 
-  
-
   return (
     <>
-    <Modal buttonTile="Sucesso!" description="A operação de cadastro do (a) colaborador (a) foi concluída."></Modal>
+      <Modal
+        buttonTile="Sucesso!"
+        description="A operação de cadastro do (a) colaborador (a) foi concluída."
+        onClick={handleClose}
+        isModalVisible={isModalVisible}
+        buttonTitle="OK"
+        iconImage={IconHappy}
+      ></Modal>
+      {/* <Modal
+        buttonTile="Erro!"
+        description="A operação de cadastro do (a) colaborador (a) NÃO foi concluída."
+        isModalVisible={true}
+        buttonTitle="FECHAR"
+        iconImage={IconSad}
+      ></Modal> */}
       <BaseScreen>
         <BackButton
           onClick={() => handleNavigate("/settings/configure-worker")}
@@ -185,7 +199,9 @@ const CreateWorker = () => {
             <InputDate
               onChange={(value: string) => {
                 setBirthday(value);
-                setIsBirthdayValid(validateInput(value, "birthdayDate") ?? false);
+                setIsBirthdayValid(
+                  validateInput(value, "birthdayDate") ?? false
+                );
               }}
               title="DATA DE NASCIMENTO"
               isMandatory={false}
