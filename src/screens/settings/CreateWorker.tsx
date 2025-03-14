@@ -18,7 +18,6 @@ import Modal from "../../components/modal/Modal";
 import IconHappy from "../../assets/images/famicons_happy.png";
 import IconSad from "../../assets/images/famicons_sad.png";
 
-
 const CreateWorker = () => {
   const navigate = useNavigate();
 
@@ -34,43 +33,45 @@ const CreateWorker = () => {
   const [isNameValid, setIsNameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalSuccessVisible, setIsModalSucessVisible] = useState(false);
+  const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
+  const [isModalFailedVisible, setIsModalFailedVisible] = useState(false);
 
   const handleSubmit = async () => {
-    if (!name || !email || !birthday || !entryDate) {
-      alert("Preencha todos os campos obrigatórios!");
+    if (!isNameValid || !isEmailValid || !isPhoneValid || !selectedEquipe) {
+      setIsModalFailedVisible(true);
       return;
     }
 
-    if (!isNameValid || !isEmailValid) {
-      alert("Campos inválidos!");
+    if (birthday && !isBirthdayValid || entryDate && !isEntryDateValid) {
+      setIsModalFailedVisible(true);
       return;
     }
 
+  
     try {
       const response = await createFuncionario({
         first_name: name,
         //last_name: "",
         email: email,
         telefone: phone || "",
-        data_aniversario: birthday,
-        data_entrada: entryDate,
+        data_aniversario: isBirthdayValid ? birthday ?? "" : "",
+        data_entrada: isEntryDateValid ? entryDate ?? "" : "",
         role: "funcionario",
         id_equipe: selectedEquipe,
       });
 
+      if (response?.status === 200 || response?.status === 201) {
+        setIsModalSucessVisible(true);
+      } else {
+        setIsModalErrorVisible(true);
+      }
       console.log(response);
-      setIsModalVisible(true);
-      //alert("Funcionário criado com sucesso!");
     } catch (error) {
       console.log(error);
-      alert("Erro ao criar funcionário!");
+      setIsModalErrorVisible(true);
     }
   };
-
-  function handleClose() {
-    setIsModalVisible(false);
-  }
 
   function handleNavigate(path: string) {
     navigate(path);
@@ -97,18 +98,27 @@ const CreateWorker = () => {
       <Modal
         buttonTile="Sucesso!"
         description="A operação de cadastro do (a) colaborador (a) foi concluída."
-        onClick={handleClose}
-        isModalVisible={isModalVisible}
+        onClick={() => setIsModalSucessVisible(false)}
+        isModalVisible={isModalSuccessVisible}
         buttonTitle="OK"
         iconImage={IconHappy}
       ></Modal>
-      {/* <Modal
+      <Modal
         buttonTile="Erro!"
         description="A operação de cadastro do (a) colaborador (a) NÃO foi concluída."
-        isModalVisible={true}
+        onClick={() => setIsModalErrorVisible(false)}
+        isModalVisible={isModalErrorVisible}
         buttonTitle="FECHAR"
         iconImage={IconSad}
-      ></Modal> */}
+      ></Modal>
+      <Modal
+        buttonTile="Reveja os campos!"
+        description="Preencha todos os campos obrigatórios (*) corretamente."
+        onClick={() => setIsModalFailedVisible(false)}
+        isModalVisible={isModalFailedVisible}
+        buttonTitle="FECHAR"
+        iconImage={IconSad}
+      ></Modal>
       <BaseScreen>
         <BackButton
           onClick={() => handleNavigate("/settings/configure-worker")}
