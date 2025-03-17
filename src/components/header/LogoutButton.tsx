@@ -1,14 +1,20 @@
+import { greetingFunction } from "../../utils/greetingFunction";
+
 interface LogoutButtonProps {
   onClick?: () => void;
 
 }
 
+
+
 const LogoutButton = (props: LogoutButtonProps ) => {
+  const greeting = greetingFunction();
+
   return (
     <>
-    <div className="sm:w-[247px] hidden w-[200px] cursor-pointer hover:bg-[#757575] sm:flex items-center justify-between flex-row bg-[#636363] px-2 sm:px-6 py-2 rounded-[400px]">
+    <div  onClick={props.onClick} className="sm:w-[247px] hidden w-[200px] cursor-pointer hover:bg-[#757575] sm:flex items-center justify-between flex-row bg-[#636363] px-2 sm:px-6 py-2 rounded-[400px]">
       <div className=" text-white  text-left font-bold text-[12px] sm:text-[16px]">
-        Bem-vindo, [user]!
+        {greeting}, [user]!
       </div>
 
       <div className="w-[37px] h-[37px] bg-[#e6e6e6] items-center justify-center rounded-full flex cursor-pointer hover:bg-[#F6BC0A] ">

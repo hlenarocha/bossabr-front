@@ -96,27 +96,27 @@ const CreateWorker = () => {
   return (
     <>
       <Modal
-        buttonTile="Sucesso!"
+        title="Sucesso!"
         description="A operação de cadastro do (a) colaborador (a) foi concluída."
-        onClick={() => setIsModalSucessVisible(false)}
+        onClick1={() => setIsModalSucessVisible(false)}
         isModalVisible={isModalSuccessVisible}
-        buttonTitle="OK"
+        buttonTitle1="OK"
         iconImage={IconHappy}
       ></Modal>
       <Modal
-        buttonTile="Erro!"
+        title="Erro!"
         description="A operação de cadastro do (a) colaborador (a) NÃO foi concluída."
-        onClick={() => setIsModalErrorVisible(false)}
+        onClick1={() => setIsModalErrorVisible(false)}
         isModalVisible={isModalErrorVisible}
-        buttonTitle="FECHAR"
+        buttonTitle1="FECHAR"
         iconImage={IconSad}
       ></Modal>
       <Modal
-        buttonTile="Reveja os campos!"
+        title="Reveja os campos!"
         description="Preencha todos os campos obrigatórios (*) corretamente."
-        onClick={() => setIsModalFailedVisible(false)}
+        onClick1={() => setIsModalFailedVisible(false)}
         isModalVisible={isModalFailedVisible}
-        buttonTitle="FECHAR"
+        buttonTitle1="FECHAR"
         iconImage={IconSad}
       ></Modal>
       <BaseScreen>
