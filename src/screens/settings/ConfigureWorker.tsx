@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import TableItem from "../../components/table/TableItem";
 import { useEffect, useState } from "react";
 import { readFuncionario } from "../../api/funcionarioRoutes";
+import TableHeader from "../../components/table/TableHeader";
 
 const ConfigureWorker = () => {
   interface Funcionario {
@@ -62,24 +63,30 @@ const ConfigureWorker = () => {
           title="Lista de Colaboradores"
           subtitle="Visualização da lista de colaboradores para configuração."
         >
-          <div className="h-[80%] overflow-y-auto">
-          {funcionarios.map((funcionario, index) => (
-          <TableItem
-            key={index}
-            itemWidth="w-full "
-            itemHeight="h-16"
+          <TableHeader
             columns={[
-              {
-                width: "w-[33%]",
-                content: funcionario.first_name,
-              },
-              { width: "w-[33%]", content: "Equipe" },
-              { width: "w-[33%]", content: "Setor" },
+              { width: "w-[33%]", content: "NOME" },
+              { width: "w-[33%]", content: "EQUIPE" },
+              { width: "w-[33%]", content: "SETOR" },
             ]}
-            icon="fa-eye"
-          ></TableItem>
-          
-          ))}
+          ></TableHeader>
+          <div className="h-[80%] overflow-y-auto">
+            {funcionarios.map((funcionario, index) => (
+              <TableItem
+                key={index}
+                itemWidth="w-full "
+                itemHeight="h-16"
+                columns={[
+                  {
+                    width: "w-[33%]",
+                    content: funcionario.first_name,
+                  },
+                  { width: "w-[33%]", content: "Equipe" },
+                  { width: "w-[33%]", content: "Setor" },
+                ]}
+                icon="fa-eye"
+              ></TableItem>
+            ))}
           </div>
         </Box>
       </BaseScreen>

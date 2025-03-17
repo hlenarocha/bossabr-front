@@ -10,6 +10,7 @@ export default {
         customInputGray: "#555555",
         customRed: "#E43131",
         customItemBackgroundGray: "#646464"
+        
 
       },
       fontFamily: {
