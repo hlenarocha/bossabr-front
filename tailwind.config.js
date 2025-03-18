@@ -8,7 +8,7 @@ export default {
         customYellow: "#F6BC0A",
         customBoxGray: "#484848",
         customInputGray: "#555555",
-        customRed: "#E43131",
+        customRedAlert: "#E43131",
         customItemBackgroundGray: "#646464"
         
 
