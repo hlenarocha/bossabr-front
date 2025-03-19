@@ -36,6 +36,8 @@ const CreateWorker = () => {
   const [isModalSuccessVisible, setIsModalSucessVisible] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
   const [isModalFailedVisible, setIsModalFailedVisible] = useState(false);
+  const [isModalFailedDatesVisible, setIsModalFailedDatesVisible] = useState(false);
+
 
   const handleSubmit = async () => {
     if (!isNameValid || !isEmailValid || !isPhoneValid || !selectedEquipe) {
@@ -44,7 +46,7 @@ const CreateWorker = () => {
     }
 
     if (birthday && !isBirthdayValid || entryDate && !isEntryDateValid) {
-      setIsModalFailedVisible(true);
+      setIsModalFailedDatesVisible(true);
       return;
     }
 
@@ -61,7 +63,7 @@ const CreateWorker = () => {
         id_equipe: selectedEquipe,
       });
 
-      if (response?.status === 200 || response?.status === 201) {
+      if (response?.status === 200 || response?.success === true || response?.status === 201) {
         setIsModalSucessVisible(true);
       } else {
         setIsModalErrorVisible(true);
@@ -102,6 +104,7 @@ const CreateWorker = () => {
         isModalVisible={isModalSuccessVisible}
         buttonTitle1="OK"
         iconImage={IconHappy}
+
       ></Modal>
       <Modal
         title="Erro!"
@@ -112,10 +115,18 @@ const CreateWorker = () => {
         iconImage={IconSad}
       ></Modal>
       <Modal
-        title="Reveja os campos!"
+        title="Reveja os campos obrigatórios!"
         description="Preencha todos os campos obrigatórios (*) corretamente."
         onClick1={() => setIsModalFailedVisible(false)}
         isModalVisible={isModalFailedVisible}
+        buttonTitle1="FECHAR"
+        iconImage={IconSad}
+      ></Modal>
+       <Modal
+        title="Reveja os campos de data!"
+        description="Preencha os campos de data com datas válidas."
+        onClick1={() => setIsModalFailedDatesVisible(false)}
+        isModalVisible={isModalFailedDatesVisible}
         buttonTitle1="FECHAR"
         iconImage={IconSad}
       ></Modal>

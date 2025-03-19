@@ -6,7 +6,7 @@ interface PropsModal {
   buttonTitle1?: string;
   buttonTitle2?: string;
   buttonColor1?: string;
-  buttonColor2: string;
+  buttonColor2?: string;
   onClick1?: () => void;
   onClick2?: () => void;
   isModalVisible: boolean;
@@ -38,7 +38,7 @@ const Modal = (props: PropsModal) => {
               onClick={props.onClick1}
               titleStyle="text-lg font-bold"
               title={props.buttonTitle1 || ""}
-              color={props.buttonColor1 || "customYellow"}
+              color={props.buttonColor1 || "bg-customYellow"}
               width="w-[50%]"
             ></PlainButton>
             {props.buttonTitle2 && props.onClick2 && props.buttonColor2 && (
@@ -46,7 +46,7 @@ const Modal = (props: PropsModal) => {
                 onClick={props.onClick2}
                 titleStyle="text-lg font-bold"
                 title={props.buttonTitle2}
-                color={props.buttonColor2}
+                color={props.buttonColor2 || "bg-customRedAlert"}
                 width="w-[50%]"
               ></PlainButton>
             )}

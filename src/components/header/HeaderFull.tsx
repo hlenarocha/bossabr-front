@@ -24,7 +24,7 @@ const HeaderFull = (props: HeaderFullProps) => {
         isModalVisible={isModalLogoutVisible}
         buttonTitle1="CANCELAR"
         buttonTitle2="SAIR"
-        buttonColor2="customRedAlert"
+        buttonColor2="bg-customRedAlert"
         onClick1={() => setIsModalLogoutVisible(false)}
         onClick2={() => {
           setIsModalLogoutVisible(false);

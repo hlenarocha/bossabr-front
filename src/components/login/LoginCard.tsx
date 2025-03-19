@@ -3,10 +3,20 @@ import GoogleIcon from "../../assets/images/icon-google.png";
 import LoginInput from "./LoginInput";
 import LoginButton from "./LoginButton";
 import { useGoogleLogin } from '@react-oauth/google';
+import { sendJWTTOken } from "../../api/oAuthRoutes";
 
 const LoginCard = () => {
+
+  // mandando JWT Token da conta Google para o back-end
   const login = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
+    onSuccess: async (tokenResponse) => {
+      console.log(tokenResponse.access_token);
+      const jwtToken = tokenResponse.access_token;
+      if (jwtToken) {
+        const response = await sendJWTTOken(jwtToken);
+        console.log(response);
+      }
+    },
   });
 
   return (
