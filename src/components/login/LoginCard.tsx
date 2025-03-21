@@ -10,12 +10,24 @@ const LoginCard = () => {
   // mandando JWT Token da conta Google para o back-end
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      try {
       console.log(tokenResponse.access_token);
-      const jwtToken = tokenResponse.access_token;
-      if (jwtToken) {
-        const response = await sendJWTTOken(jwtToken);
-        console.log(response);
+      const token = tokenResponse.access_token;
+      if (token) {
+        const response = await sendJWTTOken(token);
+        localStorage.setItem("authToken", response.token);
+        const tokenBack = localStorage.getItem("authToken");
+        console.log(tokenBack);
+        localStorage.setItem('userData', JSON.stringify(response.user));
+
+        const userDataString = localStorage.getItem('userData');
+        const userData = userDataString ? JSON.parse(userDataString) : null;
+        console.log(userData);
+
       }
+    } catch (error) {
+      console.error(error);
+    }
     },
   });
 

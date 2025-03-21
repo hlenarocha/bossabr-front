@@ -174,7 +174,7 @@ const CreateWorker = () => {
             ></Select>
             <PlainButton
               title="NOVA EQUIPE"
-              color="customYellow"
+              color="bg-customYellow"
               width="w-[30%]"
             ></PlainButton>
           </div>
