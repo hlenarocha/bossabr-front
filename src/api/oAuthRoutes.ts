@@ -1,11 +1,18 @@
 import api from "./axiosInstance";
+import UserData from "../interfaces/UserInterface";
 
-const sendJWTTOken = async (token: string) => {
+interface AuthResponse {
+  token: string;
+  user: UserData;
+}
+
+const sendJwt = async (accessToken: string): Promise<AuthResponse | undefined> => {
   try {
-    const response = await api.post("/auth/callback", { token });
+    const response = await api.post<AuthResponse>("/auth/callback", { token: accessToken });
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao enviar token para o back-end: ", error);
+    return undefined;
   }
 }
 
@@ -19,4 +26,4 @@ const sendJWTTOken = async (token: string) => {
 //   }
 // }
 
-export { sendJWTTOken };
+export { sendJwt, type AuthResponse };

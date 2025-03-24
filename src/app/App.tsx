@@ -8,6 +8,7 @@ import Workspace from "../screens/WorkspaceScreen";
 import CreateTask from "../screens/tasks/CreateTask";
 import ConfigureWorker from "../screens/settings/ConfigureWorker";
 import CreateWorker from "../screens/settings/CreateWorker";
+import { UserProvider } from "../contexts/UserContext";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -50,7 +51,12 @@ const App = () => {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    // contexto configurado, evolvendo todo o App
+    <UserProvider>
+      <RouterProvider router={router} />;
+    </UserProvider>
+  );
 };
 
 export default App;

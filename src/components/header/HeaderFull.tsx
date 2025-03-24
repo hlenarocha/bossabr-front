@@ -5,6 +5,9 @@ import Logo from "../../assets/images/logo-bossa.svg";
 import Modal from "../modal/Modal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import Cookies from "js-cookie";
 
 interface HeaderFullProps {
   toggleSideBar: () => void;
@@ -15,6 +18,15 @@ interface HeaderFullProps {
 const HeaderFull = (props: HeaderFullProps) => {
   const [isModalLogoutVisible, setIsModalLogoutVisible] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
+
+  const handleLogout = () => {
+    Cookies.remove("auth_token");
+    Cookies.remove("user_data");
+    setUser(null);
+    navigate("/");
+    console.log("Dados removidos!")
+  }
 
   return (
     <>
@@ -28,7 +40,7 @@ const HeaderFull = (props: HeaderFullProps) => {
         onClick1={() => setIsModalLogoutVisible(false)}
         onClick2={() => {
           setIsModalLogoutVisible(false);
-          navigate("/");
+          handleLogout();
         }}
       ></Modal>
       <div className="flex px-10 flex-row justify-between items-center bg-[#F6BC0A] w-full h-24 shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)]">

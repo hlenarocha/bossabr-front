@@ -1,20 +1,20 @@
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 import { greetingFunction } from "../../utils/greetingFunction";
 
 interface LogoutButtonProps {
   onClick?: () => void;
-
 }
-
-
 
 const LogoutButton = (props: LogoutButtonProps ) => {
   const greeting = greetingFunction();
+  const { user } = useContext(UserContext);
 
   return (
     <>
     <div  onClick={props.onClick} className="sm:w-[247px] hidden w-[200px] cursor-pointer hover:bg-[#757575] sm:flex items-center justify-between flex-row bg-[#636363] px-2 sm:px-6 py-2 rounded-[400px]">
       <div className=" text-white  text-left font-bold text-[12px] sm:text-[16px]">
-        {greeting}, [user]!
+        {greeting}, {user?.first_name || "Usuário"}!
       </div>
 
       <div className="w-[37px] h-[37px] bg-[#e6e6e6] items-center justify-center rounded-full flex cursor-pointer hover:bg-[#F6BC0A] ">
