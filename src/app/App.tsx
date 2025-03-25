@@ -9,6 +9,7 @@ import CreateTask from "../screens/tasks/CreateTask";
 import ConfigureWorker from "../screens/settings/ConfigureWorker";
 import CreateWorker from "../screens/settings/CreateWorker";
 import { UserProvider } from "../contexts/UserContext";
+import { SideBarProvider } from "../contexts/SideBarContext";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -54,7 +55,9 @@ const App = () => {
   return (
     // contexto configurado, evolvendo todo o App
     <UserProvider>
+      <SideBarProvider>
       <RouterProvider router={router} />;
+      </SideBarProvider>
     </UserProvider>
   );
 };
