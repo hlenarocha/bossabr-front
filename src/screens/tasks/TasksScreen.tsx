@@ -32,14 +32,14 @@ const TasksScreen = () => {
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
         </div>
-        <PageTitle title="Demandas"></PageTitle>
+        <PageTitle marginTop="mt-4" title="Demandas"></PageTitle>
         <div className="flex flex-col">
           <div className="flex flex-col lg:flex-row gap-4 items-center">
             <Box
               title="Para esta semana"
               subtitle="Tarefas não finalizadas com prazos definidos para os próximos sete dias."
-              width="w-[300px]"
-              height="h-[700px]"
+              width="w-full lg:w-[270px] "
+              height="h-[1000px] xl:h-[700px]"
             >
               <div>TESTE</div>
             </Box>
@@ -47,12 +47,16 @@ const TasksScreen = () => {
             <Box
               title="Calendário"
               subtitle="Visão mensal dos prazos das tarefas. Clique em uma data para verificar as tarefas com prazos naquele dia."
-              width="w-[760px]"
-              height="h-[700px]"
+              width="w-full lg:w-[500px] xl:w-[730px]"
+              height="h-[1000px] xl:h-[700px]"
             >
-              <div className="grid grid-cols-2 gap-24">
-                <div>
+              <div className="xl:grid xl:grid-cols-2 xl:gap-28 flex flex-col">
+                <div> 
+                  <div className="w-full flex flex-col items-center xl:items-start">
                   <CustomCalendar></CustomCalendar>
+
+
+                  </div>
                   <div className="mt-5 flex flex-row items-center gap-2 text-sm">
                     <div className="w-[32px] h-[32px] bg-customYellow rounded-[3px]"></div>
                     <p>Data selecionada.</p>

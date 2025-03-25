@@ -56,9 +56,9 @@ const ConfigureWorker = () => {
           ></ColoredButton>
         </div>
 
-        <PageTitle title="Configurar Colaboradores"></PageTitle>
+        <PageTitle marginTop="mt-4" title="Configurar Colaboradores"></PageTitle>
         <Box
-          width="w-[1070px]"
+          width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-[640px]"
           title="Lista de Colaboradores"
           subtitle="Visualização da lista de colaboradores para configuração."

@@ -134,12 +134,12 @@ const CreateWorker = () => {
         <BackButton
           onClick={() => handleNavigate("/settings/configure-worker")}
         ></BackButton>
-        <PageTitle title="Cadastrar Colaborador"></PageTitle>
+        <PageTitle marginTop="mt-4" title="Cadastrar Colaborador"></PageTitle>
 
         <Box
           title="Cadastrar"
           subtitle="Cadastre um colaborador aqui."
-          width="w-[1030px]"
+          width="xl:w-[1000px] w-[600px] lg:w-[800px]"
           height="h-[630px]"
         >
           <InputTitle title="Funcionário"></InputTitle>
