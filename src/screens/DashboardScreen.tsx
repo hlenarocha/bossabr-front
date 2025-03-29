@@ -10,7 +10,7 @@ const DashboardScreen = () => {
       {/* <div className="mb-4">
         <BackButton></BackButton>
       </div> */}
-      <PageTitle title="Dashboard"></PageTitle>
+      <PageTitle marginTop="mt-4" title="Dashboard"></PageTitle>
       <div className="mt-4">
         <Box
           title="Peças Produzidas"

@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from 'react';
-import UserInterface from '../interfaces/UserInterface';
+import UserInterface from '@/interfaces/UserInterface';
 
 interface UserContextInterface { // interface para o contexto
   user: UserInterface | null;

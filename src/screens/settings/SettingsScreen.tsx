@@ -1,7 +1,7 @@
-import BaseScreen from "../BaseScreen";
-import Box from "../../components/box/BoxContent";
-import PageTitle from "../../components/title/PageTitle";
-import ColoredButton from "../../components/UI/ColoredButton";
+import BaseScreen from "@/screens/BaseScreen";
+import Box from "@/components/box/BoxContent";
+import PageTitle from "@/components/title/PageTitle";
+import ColoredButton from "@/components/UI/ColoredButton";
 import { useNavigate } from "react-router-dom";
 
 const SettingsScreen = () => {
@@ -14,7 +14,7 @@ const SettingsScreen = () => {
   return (
     <>
       <BaseScreen>
-      <PageTitle title="Configurações"></PageTitle>
+      <PageTitle marginTop="mt-4" title="Configurações"></PageTitle>
         <div className="mt-4">
           <Box title="Colaboradores" subtitle="Veja, altere ou exclua as informações pertinentes aos colaboradores." width="w-[500px]" height="h-[378px]">
             <div className="flex items-center">

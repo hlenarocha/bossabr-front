@@ -1,15 +1,15 @@
-import BaseScreen from "./BaseScreen";
-import Box from "../components/box/BoxContent";
-import PageTitle from "../components/title/PageTitle";
+import BaseScreen from "@/screens/BaseScreen";
+import Box from "@/components/box/BoxContent";
+import PageTitle from "@/components/title/PageTitle";
 
 const ClientsScreen = () => {
   return (
     <>
       <BaseScreen>
-        <PageTitle title="Clientes"></PageTitle>
+        <PageTitle marginTop="mt-4" title="Clientes"></PageTitle>
         <div className="mt-4 ">
           <Box
-            title="Lista de Clientes"
+            title="Lsta de Clientes"
             subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
             width="w-[500px]"
             height="h-[378px]"

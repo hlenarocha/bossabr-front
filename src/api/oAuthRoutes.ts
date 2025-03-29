@@ -1,5 +1,5 @@
-import api from "./axiosInstance";
-import UserData from "../interfaces/UserInterface";
+import api from "@/api//axiosInstance";
+import UserData from "@/interfaces/UserInterface";
 
 interface AuthResponse {
   token: string;

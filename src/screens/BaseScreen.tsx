@@ -1,8 +1,8 @@
-import { ReactNode, useContext, useState } from "react";
-import BackgroundImage from "../assets/images/dark-background.png";
-import HeaderFull from "../components/header/HeaderFull";
-import SideBar from "../components/sidebar/SideBar";
-import { SideBarContext } from "../contexts/SideBarContext";
+import { ReactNode, useContext } from "react";
+import BackgroundImage from "@/assets/images/dark-background.png";
+import HeaderFull from "@/components/header/HeaderFull";
+import SideBar from "@/components/sidebar/SideBar";
+import { SideBarContext } from "@/contexts/SideBarContext";
 
 interface BaseScreenProps {
   children: ReactNode;

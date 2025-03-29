@@ -1,9 +1,9 @@
-import BaseScreen from "./BaseScreen";
-import Box from "../components/box/BoxContent";
-import PageTitle from "../components/title/PageTitle";
-import { greetingFunction } from "../utils/greetingFunction";
+import BaseScreen from "@/screens/BaseScreen";
+import Box from "@/components/box/BoxContent";
+import PageTitle from "@/components/title/PageTitle";
+import { greetingFunction } from "@/utils/greetingFunction";
 import { useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "@/contexts/UserContext";
 
 
 const WorkspaceScreen = () => {
@@ -13,7 +13,7 @@ const WorkspaceScreen = () => {
   return (
     <>
       <BaseScreen>
-        <PageTitle title="Área de Trabalho"></PageTitle>
+        <PageTitle marginTop="mt-4" title="Área de Trabalho"></PageTitle>
           <Box
             title={`${greeting}, ${user?.first_name}!`}
             subtitle="Visualize os dados de pontuação, progresso das demandas e atividades dos últimos sete dias."

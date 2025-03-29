@@ -1,14 +1,14 @@
 
 import { useGoogleLogin } from "@react-oauth/google";
-import { sendJwt } from "../../api/oAuthRoutes";
+import { sendJwt } from "@/api/oAuthRoutes";
 import { useContext, useEffect } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import LoginInput from "./LoginInput";
-import LoginButton from "./LoginButton";
-import Logo from "../../assets/images/logo-bossa.svg";
-import GoogleIcon from "../../assets/images/icon-google.png";
+import LoginInput from "@/components/login/LoginInput";
+import LoginButton from "@/components/login/LoginButton";
+import Logo from "@/assets/images/logo-bossa.svg";
+import GoogleIcon from "@/assets/images/icon-google.png";
 
 const LoginCard = () => {
   const navigate = useNavigate();

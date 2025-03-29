@@ -1,4 +1,4 @@
-import PlainButton from "../UI/PlainButton";
+import PlainButton from "@/components/UI/PlainButton";
 
 interface PropsModal {
   description?: string;

@@ -1,12 +1,12 @@
-import HeaderDate from "./HeaderDate";
-import LogoutButton from "./LogoutButton";
-import SideMenu from "./SideMenu";
-import Logo from "../../assets/images/logo-bossa.svg";
-import Modal from "../modal/Modal";
+import HeaderDate from "@/components/header/HeaderDate";
+import LogoutButton from "@/components/header/LogoutButton";
+import SideMenu from "@/components/header/SideMenu";
+import Logo from "@/assets/images/logo-bossa.svg";
+import Modal from "@/components/modal/Modal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
 
 interface HeaderFullProps {

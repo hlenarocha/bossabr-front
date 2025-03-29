@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber"; // Canvas e animação
 import { OrbitControls } from "@react-three/drei"; // Controles de câmera
-import MovingSphere from "./MovingSphere";
+import MovingSphere from "@/components/3D/MovingSphere";
 
 const Background3D = () => {
   const spheres: { color: string; size: number; initialPosition: [number, number, number]; factors: [number, number, number] }[] = [];

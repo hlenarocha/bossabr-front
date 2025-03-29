@@ -1,13 +1,13 @@
-import PageTitle from "../../components/title/PageTitle";
-import BackButton from "../../components/UI/BackButton";
-import BaseScreen from "../BaseScreen";
-import Box from "../../components/box/BoxContent";
-import ColoredButton from "../../components/UI/ColoredButton";
+import BackButton from "@/components/UI/BackButton";
+import BaseScreen from "@/screens/BaseScreen";
+import Box from "@/components/box/BoxContent";
+import ColoredButton from "@/components/UI/ColoredButton";
 import { useNavigate } from "react-router-dom";
-import TableItem from "../../components/table/TableItem";
+import TableItem from "@/components/table/TableItem";
 import { useEffect, useState } from "react";
-import { readFuncionario } from "../../api/funcionarioRoutes";
-import TableHeader from "../../components/table/TableHeader";
+import { readFuncionario } from "@/api/funcionarioRoutes";
+import TableHeader from "@/components/table/TableHeader";
+import PageTitle from "@/components/title/PageTitle";
 
 const ConfigureWorker = () => {
   interface Funcionario {

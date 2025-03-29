@@ -6,8 +6,8 @@ import Clients from "../screens/ClientsScreen";
 import Settings from "../screens/settings/SettingsScreen";
 import Workspace from "../screens/WorkspaceScreen";
 import CreateTask from "../screens/tasks/CreateTask";
-import ConfigureWorker from "../screens/settings/ConfigureWorker";
-import CreateWorker from "../screens/settings/CreateWorker";
+import ConfigureWorker from "../screens/settings/worker/ConfigureWorker";
+import CreateWorker from "../screens/settings/worker/CreateWorker";
 import { UserProvider } from "../contexts/UserContext";
 import { SideBarProvider } from "../contexts/SideBarContext";
 

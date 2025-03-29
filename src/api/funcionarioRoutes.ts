@@ -1,4 +1,4 @@
-import api from "./axiosInstance";
+import api from "@/api/axiosInstance";
 
 interface FuncionarioData {
   // defines the properties of FuncionarioData here for more security
