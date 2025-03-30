@@ -1,7 +1,6 @@
-
 import { useGoogleLogin } from "@react-oauth/google";
 import { sendJwt } from "@/api/oAuthRoutes";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -9,17 +8,19 @@ import LoginInput from "@/components/login/LoginInput";
 import LoginButton from "@/components/login/LoginButton";
 import Logo from "@/assets/images/logo-bossa.svg";
 import GoogleIcon from "@/assets/images/icon-google.png";
+import LoadingScreen from "@/screens/loading/LoadingScreen";
 
 const LoginCard = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
-
+  const [loading, setLoading] = useState(false);
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
+        setLoading(true);
         const { access_token } = tokenResponse;
-        
+
         if (!access_token) {
           throw new Error("Access token não encontrado");
         }
@@ -29,10 +30,10 @@ const LoginCard = () => {
 
         if (response?.token && response.user) {
           // 2. Armazena o token JWT em cookie (mais seguro que no contexto contra ataques CSRF/XSS)
-          Cookies.set("auth_token", response.token, { 
-            expires: 1, 
-            secure: true, 
-            sameSite: "strict" 
+          Cookies.set("auth_token", response.token, {
+            expires: 1,
+            secure: true,
+            sameSite: "strict",
           });
 
           // 3. Armazena dados não sensíveis no contexto do usuário
@@ -42,11 +43,11 @@ const LoginCard = () => {
             email: response.user.email,
             role: response.user.role,
             avatar: response.user.avatar,
-            tema: response.user.tema || false 
+            tema: response.user.tema || false,
           });
 
           // 4. Redireciona
-          navigate("/workspace");
+          setTimeout(() => navigate("/workspace"), 2000);
         }
       } catch (error) {
         console.error("Erro no login:", error);
@@ -60,7 +61,7 @@ const LoginCard = () => {
   useEffect(() => {
     const token = Cookies.get("auth_token");
     const userDataCookie = Cookies.get("user_data");
-    
+
     if (token && userDataCookie) {
       // Se existir um token E dados em cookies, restaura o contexto
       try {
@@ -74,8 +75,10 @@ const LoginCard = () => {
     }
   }, [setUser]);
 
-return (
-  /* Responsive Design in Tailwind occurs through Breakpoints, which are defined in the tailwind.config.js file:
+  return loading ? (
+    <LoadingScreen></LoadingScreen>
+  ) : (
+    /* Responsive Design in Tailwind occurs through Breakpoints, which are defined in the tailwind.config.js file:
       sm (small): minimum width of 640px
       md (medium): minimum width of 768px
       lg (large): minimum width of 1024px
