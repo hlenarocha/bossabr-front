@@ -13,8 +13,8 @@ const sendJwt = async (accessToken: string): Promise<AuthResponse | undefined> =
     return response.data;
   } catch (error: any) {
     if (error.response) {
-      if (error.response.status === 403) {
-        return { status: 403, token: "", user: {} as UserData };
+      if (error.response.status === 401) {
+        return { status: 401, token: "", user: {} as UserData };
       }
       console.error("Erro no login ao enviar JWT:", error.response.data);
     } else {

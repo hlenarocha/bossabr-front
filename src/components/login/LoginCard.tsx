@@ -33,7 +33,7 @@ const LoginCard = () => {
         console.log(response);
         console.log(response?.status);
 
-        if (response?.status === 403) {
+        if (response?.status === 401) {
           setIsModalErrorVisible(true);
           return;
         }
