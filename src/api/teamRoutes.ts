@@ -1,16 +1,16 @@
 import api from "@/api/axiosInstance";
 
-export interface EquipeInterface {
+export interface TeamInterface {
   id_equipe: number;
   nome_equipe: string;
 }
 
 interface ApiResponse {
   success: boolean;
-  data: EquipeInterface[];
+  data: TeamInterface[];
 }
 
-export const getEquipes = async (): Promise<ApiResponse | undefined> => {
+export const getTeam = async (): Promise<ApiResponse | undefined> => {
   try {
     const response = await api.get("/equipe");
     return response.data;
@@ -19,4 +19,4 @@ export const getEquipes = async (): Promise<ApiResponse | undefined> => {
   }
 };
 
-export default getEquipes;
+export default getTeam;

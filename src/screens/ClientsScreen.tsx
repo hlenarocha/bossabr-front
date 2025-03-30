@@ -9,7 +9,7 @@ const ClientsScreen = () => {
         <PageTitle marginTop="mt-4" title="Clientes"></PageTitle>
         <div className="mt-4 ">
           <Box
-            title="Lsta de Clientes"
+            title="Lista de Clientes"
             subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
             width="w-[500px]"
             height="h-[378px]"

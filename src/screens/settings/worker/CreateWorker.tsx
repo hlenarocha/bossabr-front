@@ -11,59 +11,72 @@ import PlainButton from "@/components/UI/PlainButton";
 import { useEffect, useState } from "react";
 import { validateInput } from "@/utils/validateInput";
 import InputDate from "@/components/UI/InputDate";
-import getEquipes from "@/api/equipeRoutes";
-import { EquipeInterface } from "@/api/equipeRoutes";
-import { createFuncionario } from "@/api/funcionarioRoutes";
+import getTeam from "@/api/teamRoutes";
+import { TeamInterface } from "@/api/teamRoutes";
 import Modal from "@/components/modal/Modal";
 import IconHappy from "@/assets/images/famicons_happy.png";
 import IconSad from "@/assets/images/famicons_sad.png";
+import { createWorker } from "@/api/workerRoutes";
 
 const CreateWorker = () => {
   const navigate = useNavigate();
 
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [equipes, setEquipes] = useState<EquipeInterface[]>([]);
-  const [phone, setPhone] = useState("");
-  const [birthday, setBirthday] = useState<string>();
-  const [entryDate, setEntryDate] = useState<string>();
-  const [selectedEquipe, setSelectedEquipe] = useState<number>(0);
-  const [isBirthdayValid, setIsBirthdayValid] = useState(true);
-  const [isEntryDateValid, setIsEntryDateValid] = useState(true);
-  const [isNameValid, setIsNameValid] = useState(true);
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const [team, setTeam] = useState<TeamInterface[]>([]);
+ 
   const [isModalSuccessVisible, setIsModalSucessVisible] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
   const [isModalFailedVisible, setIsModalFailedVisible] = useState(false);
   const [isModalFailedDatesVisible, setIsModalFailedDatesVisible] = useState(false);
 
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    selectedTeam: 0, // sem seleção
+    birthday: "",
+    entryDate: "",
+  });
+
+  const [validInputs, setValidInputs] = useState<boolean[]>([
+    true, // name
+    true, // email
+    true, // phone
+    true, // birthday
+    true, // entryDate
+  ]);
 
   const handleSubmit = async () => {
-    if (!isNameValid || !isEmailValid || !isPhoneValid || !selectedEquipe) {
+    const validTexts = [...validInputs.slice(0, 3)]; // não inclui o quarto elemento (índice 3)
+
+    // se algum campo de texto não for válido ou equipe não selecionada. indexOf retorna -1 se não encontrar false
+    if (validTexts.indexOf(false) !== -1 || form.selectedTeam === 0) {
       setIsModalFailedVisible(true);
-      return;
+      return; // return impede que o outro modal apareça
     }
 
-    if (birthday && !isBirthdayValid || entryDate && !isEntryDateValid) {
+    if (validInputs[3] === false || validInputs[4] === false) {
       setIsModalFailedDatesVisible(true);
       return;
     }
 
-  
     try {
-      const response = await createFuncionario({
-        first_name: name,
+      const response = await createWorker({
+        first_name: form.name,
         //last_name: "",
-        email: email,
-        telefone: phone || "",
-        data_aniversario: isBirthdayValid ? birthday ?? "" : "",
-        data_entrada: isEntryDateValid ? entryDate ?? "" : "",
+        email: form.email,
+        telefone: form.phone,
+        data_aniversario: form.birthday ?? "",
+        data_entrada: form.entryDate ?? "",
         role: "funcionario",
-        id_equipe: selectedEquipe,
+        id_equipe: form.selectedTeam,
       });
 
-      if (response?.status === 200 || response?.success === true || response?.status === 201) {
+      if (
+        // verificar documentação da API para saber se o status é 200 ou 201
+        response?.status === 200 ||
+        response?.success === true ||
+        response?.status === 201
+      ) {
         setIsModalSucessVisible(true);
       } else {
         setIsModalErrorVisible(true);
@@ -80,11 +93,11 @@ const CreateWorker = () => {
   }
 
   useEffect(() => {
-    const fetchEquipes = async () => {
+    const fetchTeam = async () => {
       try {
-        const response = await getEquipes();
+        const response = await getTeam();
         if (response) {
-          setEquipes(response.data);
+          setTeam(response.data);
           console.log(response.data);
         }
       } catch (error) {
@@ -92,7 +105,7 @@ const CreateWorker = () => {
       }
     };
 
-    fetchEquipes();
+    fetchTeam();
   }, []);
 
   return (
@@ -104,7 +117,6 @@ const CreateWorker = () => {
         isModalVisible={isModalSuccessVisible}
         buttonTitle1="OK"
         iconImage={IconHappy}
-
       ></Modal>
       <Modal
         title="Erro!"
@@ -122,7 +134,7 @@ const CreateWorker = () => {
         buttonTitle1="FECHAR"
         iconImage={IconSad}
       ></Modal>
-       <Modal
+      <Modal
         title="Reveja os campos de data!"
         description="Preencha os campos de data com datas válidas."
         onClick1={() => setIsModalFailedDatesVisible(false)}
@@ -145,8 +157,11 @@ const CreateWorker = () => {
           <InputTitle title="Funcionário"></InputTitle>
           <InputString
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setName(e.target.value);
-              setIsNameValid(validateInput(e.target.value, "text") ?? false);
+              setForm({ ...form, name: e.target.value });
+              const newValidInputs = [...validInputs]; // cópia do array para não bugar renderização
+              newValidInputs[0] =
+                validateInput(e.target.value, "text") ?? false;
+              setValidInputs(newValidInputs);
             }}
             title="NOME DO COLABORADOR"
             width="w-[100%]"
@@ -154,18 +169,20 @@ const CreateWorker = () => {
             placeholder="Digite o nome..."
             isMandatory={true}
             stringType="text"
-            borderColor={isNameValid ? "border-customYellow" : "border-red-500"}
+            borderColor={
+              validInputs[0] ? "border-customYellow" : "border-red-500"
+            }
           ></InputString>
 
           <div className="flex gap-4 flex-row justify-normal items-center w-[100%]">
             <Select
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setSelectedEquipe(Number(e.target.value));
+                setForm({ ...form, selectedTeam: parseInt(e.target.value) });
               }}
-              options={equipes.map((equipe) => {
+              options={team.map((t) => {
                 return {
-                  id: equipe.id_equipe,
-                  name: equipe.nome_equipe,
+                  id: t.id_equipe,
+                  name: t.nome_equipe,
                 };
               })}
               title="EQUIPE"
@@ -182,10 +199,11 @@ const CreateWorker = () => {
           <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
             <InputString
               onChange={(e) => {
-                setEmail(e.target.value);
-                setIsEmailValid(
-                  validateInput(e.target.value, "email") ?? false
-                );
+                setForm({ ...form, email: e.target.value });
+                const newValidInputs = [...validInputs];
+                newValidInputs[1] =
+                  validateInput(e.target.value, "email") ?? false;
+                setValidInputs(newValidInputs);
               }}
               title="E-MAIL"
               width="w-[50%]"
@@ -193,16 +211,17 @@ const CreateWorker = () => {
               placeholder="Digite o email..."
               isMandatory={true}
               borderColor={
-                isEmailValid ? "border-customYellow" : "border-red-500"
+                validInputs[1] ? "border-customYellow" : "border-red-500"
               }
               stringType="email"
             ></InputString>
             <InputString
               onChange={(e) => {
-                setPhone(e.target.value);
-                setIsPhoneValid(
-                  validateInput(e.target.value, "phone") ?? false
-                );
+                setForm({ ...form, phone: e.target.value });
+                const newValidInputs = [...validInputs];
+                newValidInputs[2] =
+                  validateInput(e.target.value, "phone") ?? false;
+                setValidInputs(newValidInputs);
               }}
               title="TELEFONE"
               width="w-[50%]"
@@ -211,7 +230,7 @@ const CreateWorker = () => {
               isMandatory={true}
               mask="(99) 9999-9999"
               borderColor={
-                isPhoneValid ? "border-customYellow" : "border-red-500"
+                validInputs[2] ? "border-customYellow" : "border-red-500"
               }
             ></InputString>
           </div>
@@ -219,25 +238,27 @@ const CreateWorker = () => {
           <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
             <InputDate
               onChange={(value: string) => {
-                setBirthday(value);
-                setIsBirthdayValid(
-                  validateInput(value, "birthdayDate") ?? false
-                );
+                setForm({ ...form, birthday: value });
+                const newValidInputs = [...validInputs];
+                newValidInputs[3] = validateInput(value, "birthdayDate") ?? false;
+                setValidInputs(newValidInputs);
               }}
               title="DATA DE NASCIMENTO"
               isMandatory={false}
               width="w-[50%]"
-              borderColor={isBirthdayValid ? "#F6BC0A" : "#EF4444"}
+              borderColor={validInputs[3] ? "#F6BC0A" : "#EF4444"}
             ></InputDate>
             <InputDate
               onChange={(value: string) => {
-                setEntryDate(value);
-                setIsEntryDateValid(validateInput(value, "entryDate") ?? false);
+                setForm({ ...form, entryDate: value });
+                const newValidInputs = [...validInputs];
+                newValidInputs[4] = validateInput(value, "entryDate") ?? false;
+                setValidInputs(newValidInputs);
               }}
               title="DATA DE ENTRADA"
               isMandatory={false}
               width="w-[50%]"
-              borderColor={isEntryDateValid ? "#F6BC0A" : "#EF4444"}
+              borderColor={validInputs[4] ? "#F6BC0A" : "#EF4444"}
             ></InputDate>
           </div>
 

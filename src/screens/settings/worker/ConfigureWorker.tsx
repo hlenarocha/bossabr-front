@@ -5,7 +5,7 @@ import ColoredButton from "@/components/UI/ColoredButton";
 import { useNavigate } from "react-router-dom";
 import TableItem from "@/components/table/TableItem";
 import { useEffect, useState } from "react";
-import { readFuncionario } from "@/api/funcionarioRoutes";
+import { readWorker } from "@/api/workerRoutes";
 import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 
@@ -26,7 +26,7 @@ const ConfigureWorker = () => {
   useEffect(() => {
     const fetchFuncionarios = async () => {
       try {
-        const response = await readFuncionario();
+        const response = await readWorker();
         if (response) {
           setFuncionarios(response.data);
           console.log(response.data);

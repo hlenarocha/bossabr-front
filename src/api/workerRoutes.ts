@@ -1,6 +1,6 @@
 import api from "@/api/axiosInstance";
 
-interface FuncionarioData {
+interface WorkerData {
   // defines the properties of FuncionarioData here for more security
   first_name: string;
   last_name?: string;
@@ -14,7 +14,7 @@ interface FuncionarioData {
   id_equipe: number;
 }
 
-const createFuncionario = async (data: FuncionarioData) => {
+const createWorker = async (data: WorkerData) => {
   try {
     const response = await api.post("/funcionario", data);
     return response.data;
@@ -23,7 +23,7 @@ const createFuncionario = async (data: FuncionarioData) => {
   }
 };
 
-const readFuncionario = async () => {
+const readWorker = async () => {
   try {
     const response = await api.get("/funcionario");
     return response.data;
@@ -32,5 +32,5 @@ const readFuncionario = async () => {
     }
 }
 
-export { createFuncionario, readFuncionario };
+export { createWorker, readWorker };
 

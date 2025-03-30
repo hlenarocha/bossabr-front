@@ -12,7 +12,7 @@ export const validateInput = (value: string, type: string) => {
 
   if (type === 'email') {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return emailRegex.test(value);
+    return emailRegex.test(value) && value.length > 0 && value.length <= 50;
   }
 
   if (type === 'text') {
@@ -22,15 +22,12 @@ export const validateInput = (value: string, type: string) => {
 
   if (type === 'phone') {
     const phoneRegex = /\(\d{2}\) \d{4,5}-\d{4}/;
-    return phoneRegex.test(value);
+    return phoneRegex.test(value) && value.length > 0 && value.length <= 15;
   }
 
   if (type === "birthdayDate") {
     const inputDate = new Date(value);
 
-    console.log(inputDate);
-    console.log(minBirthDate);
-    console.log(maxBirthDate);
 
     // - data de nascimento não pode ser em anos anteriores a 100 anos atrás do atual
     // - data de nascimento não pode ser há menos de 14 anos atrás (jovem aprendiz)
@@ -40,7 +37,7 @@ export const validateInput = (value: string, type: string) => {
       return false;
     }
 
-    return dateRegex.test(value);
+    return dateRegex.test(value) && value.length > 0;
   }
 
   if (type === "entryDate") {
@@ -51,7 +48,7 @@ export const validateInput = (value: string, type: string) => {
       return false;
     }
 
-    return dateRegex.test(value);
+    return dateRegex.test(value) && value.length > 0;
   }
 
 }
