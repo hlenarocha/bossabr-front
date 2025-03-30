@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext";
-import { greetingFunction } from "../../utils/greetingFunction";
+import { UserContext } from "@/contexts/UserContext";
+import { greetingFunction } from "@/utils/greetingFunction";
 
 interface LogoutButtonProps {
   onClick?: () => void;
