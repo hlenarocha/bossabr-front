@@ -18,7 +18,6 @@ const LoginCard = () => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        setLoading(true);
         const { access_token } = tokenResponse;
 
         if (!access_token) {
@@ -28,7 +27,18 @@ const LoginCard = () => {
         // 1. Envia o access_token para o backend e recebe JWT + dados do usuário
         const response = await sendJwt(access_token);
 
+        console.log(response);
+        console.log(response?.status);
+
+        if (response?.status === 403) {
+          alert("Usuário não autorizado");
+          return;
+        }
+
+
         if (response?.token && response.user) {
+          setLoading(true);
+
           // 2. Armazena o token JWT em cookie (mais seguro que no contexto contra ataques CSRF/XSS)
           Cookies.set("auth_token", response.token, {
             expires: 1,
@@ -46,9 +56,12 @@ const LoginCard = () => {
             tema: response.user.tema || false,
           });
 
-          // 4. Redireciona
-          setTimeout(() => navigate("/workspace"), 2000);
-        }
+          // 4. Redireciona e exibe tela de carregamento
+          setTimeout(() => {
+          setLoading(false); // Reseta loading state
+          navigate("/workspace");
+        }, 2000);
+      }
       } catch (error) {
         console.error("Erro no login:", error);
         // Mostrar feedback para o usuário (ex.: toast.error)
