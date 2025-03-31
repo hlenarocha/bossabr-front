@@ -17,7 +17,7 @@ const LogoutButton = (props: LogoutButtonProps ) => {
         {greeting}, {user?.first_name || "Usuário"}!
       </div>
 
-      <div className="w-[37px] h-[37px] bg-[#e6e6e6] items-center justify-center rounded-full flex cursor-pointer hover:bg-[#F6BC0A] ">
+      <div className="w-[40px] h-[37px] bg-[#e6e6e6] items-center justify-center rounded-full flex cursor-pointer hover:bg-[#F6BC0A] ">
         <div className="w-[27px] h-[27px] bg-[#e6e6e6] rounded-full flex items-center justify-center shadow-[10px_10px_25px_0px_rgba(0,0,0,1.00)]">
           <div>
           <i className="fa-solid fa-power-off"></i>

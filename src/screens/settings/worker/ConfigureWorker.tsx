@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { readWorker } from "@/api/workerRoutes";
 import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
+import LoadingSpinner from "@/components/UI/LoadingSpinner";
 
 const ConfigureWorker = () => {
   interface Funcionario {
@@ -18,6 +19,7 @@ const ConfigureWorker = () => {
 
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
   const navigate = useNavigate();
+  const [loading, setIsLoading] = useState(false);
 
   function handleNavigate(path: string) {
     navigate(path);
@@ -26,9 +28,12 @@ const ConfigureWorker = () => {
   useEffect(() => {
     const fetchFuncionarios = async () => {
       try {
+        setIsLoading(true);
         const response = await readWorker();
         if (response) {
           setFuncionarios(response.data);
+          setTimeout(() => setIsLoading(false), 1500
+        )
           console.log(response.data);
         }
       } catch (error) {
@@ -63,31 +68,35 @@ const ConfigureWorker = () => {
           title="Lista de Colaboradores"
           subtitle="Visualização da lista de colaboradores para configuração."
         >
-          <TableHeader
-            columns={[
-              { width: "w-[33%]", content: "NOME" },
-              { width: "w-[33%]", content: "EQUIPE" },
-              { width: "w-[33%]", content: "SETOR" },
-            ]}
-          ></TableHeader>
-          <div className="h-[80%] overflow-y-auto">
-            {funcionarios.map((funcionario, index) => (
-              <TableItem
-                key={index}
-                itemWidth="w-full "
-                itemHeight="h-16"
-                columns={[
-                  {
-                    width: "w-[33%]",
-                    content: funcionario.first_name,
-                  },
-                  { width: "w-[33%]", content: "Equipe" },
-                  { width: "w-[33%]", content: "Setor" },
-                ]}
-                icon="fa-eye"
-              ></TableItem>
-            ))}
-          </div>
+          {loading ? <LoadingSpinner></LoadingSpinner> : (
+          <>
+            <TableHeader
+              columns={[
+                { width: "w-[33%]", content: "NOME" },
+                { width: "w-[33%]", content: "EQUIPE" },
+                { width: "w-[33%]", content: "SETOR" },
+              ]}
+            ></TableHeader>
+            <div className="h-[80%] overflow-y-auto">
+              {funcionarios.map((funcionario, index) => (
+                <TableItem
+                  key={index}
+                  itemWidth="w-full "
+                  itemHeight="h-16"
+                  columns={[
+                    {
+                      width: "w-[33%]",
+                      content: funcionario.first_name,
+                    },
+                    { width: "w-[33%]", content: "Equipe" },
+                    { width: "w-[33%]", content: "Setor" },
+                  ]}
+                  icon="fa-eye"
+                ></TableItem>
+              ))}
+            </div>
+          </>
+          )}
         </Box>
       </BaseScreen>
     </>

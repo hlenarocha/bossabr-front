@@ -1,5 +1,5 @@
 
-import { getDateInfo } from "@/helpers/getDateInfo";
+import { getDateInfo } from "@/utils/getDateInfo";
 
 const HeaderDate = () => {
   const { day, monthName, dayOfWeek } = getDateInfo();
