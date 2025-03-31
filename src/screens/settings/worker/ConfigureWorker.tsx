@@ -9,6 +9,7 @@ import { readWorker } from "@/api/workerRoutes";
 import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
+import SearchBar from "@/components/UI/SearchBar";
 
 const ConfigureWorker = () => {
   interface Funcionario {
@@ -61,7 +62,12 @@ const ConfigureWorker = () => {
           ></ColoredButton>
         </div>
 
-        <PageTitle marginTop="mt-4" title="Configurar Colaboradores"></PageTitle>
+        <div className="flex flex-col lg:justify-between lg:flex-row">
+        <PageTitle marginTop="mt-6" title="Configurar Colaboradores"></PageTitle>
+        <SearchBar marginTop="mt-6" placeholder="Pesquise um colaborador aqui..."></SearchBar>
+
+        </div>
+        
         <Box
           width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-[640px]"
