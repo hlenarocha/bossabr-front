@@ -4,6 +4,9 @@ import PageTitle from "@/components/title/PageTitle";
 import { greetingFunction } from "@/utils/greetingFunction";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/UserContext";
+import InputTitle from "@/components/title/InputTitle";
+import InputText from "@/components/UI/InputString";
+import SectorTag from "@/components/tags/SectorTag";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
@@ -26,7 +29,31 @@ const WorkspaceScreen = () => {
           width="w-[500px] md:w-[700px] lg:w-[900px]"
           height="h-[700px]"
         >
-          <div>TESTE</div>
+          <div className="flex flex-col">
+            <InputTitle title="Informações básicas"></InputTitle>
+            <div className="flex flex-row gap-4">
+              <InputText
+                title="NOME"
+                placeholder={user?.first_name || ""}
+                isMandatory={false}
+                width="w-[35%]"
+                height="h-8"
+                isReadOnly={true}
+              ></InputText>
+              <InputText
+                title="EQUIPE"
+                placeholder={user?.first_name || ""} // colocar equipe
+                isMandatory={false}
+                width="w-[30%]"
+                height="h-8"
+                isReadOnly={true}
+              ></InputText>
+              <div className="flex flex-col">
+                <p className="mt-4 mb-1">SETOR</p>
+                <SectorTag></SectorTag>
+              </div>
+            </div>
+          </div>
         </Box>
       </BaseScreen>
     </>

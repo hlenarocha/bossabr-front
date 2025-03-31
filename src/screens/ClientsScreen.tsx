@@ -11,7 +11,7 @@ const ClientsScreen = () => {
           <Box
             title="Lista de Clientes"
             subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
-            width="w-[500px]"
+            width="w-[100%]"
             height="h-[378px]"
           >
             <div>TESTE</div>

@@ -68,8 +68,6 @@ const ConfigureWorker = () => {
           title="Lista de Colaboradores"
           subtitle="Visualização da lista de colaboradores para configuração."
         >
-          {loading ? <LoadingSpinner></LoadingSpinner> : (
-          <>
             <TableHeader
               columns={[
                 { width: "w-[33%]", content: "NOME" },
@@ -77,8 +75,10 @@ const ConfigureWorker = () => {
                 { width: "w-[33%]", content: "SETOR" },
               ]}
             ></TableHeader>
-            <div className="h-[80%] overflow-y-auto">
-              {funcionarios.map((funcionario, index) => (
+          <>
+              <div className="h-[80%] overflow-y-auto">
+            {loading ? <LoadingSpinner></LoadingSpinner> : (
+              funcionarios.map((funcionario, index) => (
                 <TableItem
                   key={index}
                   itemWidth="w-full "
@@ -93,10 +93,10 @@ const ConfigureWorker = () => {
                   ]}
                   icon="fa-eye"
                 ></TableItem>
-              ))}
+              ))
+            )}
             </div>
           </>
-          )}
         </Box>
       </BaseScreen>
     </>

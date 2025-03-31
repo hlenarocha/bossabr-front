@@ -8,6 +8,7 @@ interface InputTextProps {
   height: string;
   stringType?: string;
   mask?: string;
+  isReadOnly?: boolean;
   borderColor?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -17,7 +18,7 @@ const InputText = (props: InputTextProps) => {
   return (
     <>
       <div className={`flex flex-col mb-4 ${props.width}`}>
-        <div className="text-sm mt-2 font-black mb-1 text-white">
+        <div className="text-sm mt-4 font-black mb-1 text-white">
           {props.title}
           <span
             className={` ${
@@ -37,10 +38,11 @@ const InputText = (props: InputTextProps) => {
           }}
           className={` ${
             props.height
-          } bg-customInputGray py-2 px-4 border outline-none  rounded-[400px] ${props.borderColor} `}
+          } ${props.isReadOnly ? "pointer-events-none caret-transparent" : ""} bg-customInputGray py-2 px-4 border outline-none  rounded-[400px] ${props.borderColor} `}
           placeholder={props.placeholder}
           type="text"
           mask={props.mask || ""}
+          readOnly={props.isReadOnly || false} // atribui somente leitura ao input
         ></InputMask>
       </div>
     </>
