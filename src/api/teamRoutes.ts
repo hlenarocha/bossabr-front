@@ -10,7 +10,7 @@ interface ApiResponse {
   data: TeamInterface[];
 }
 
-export const getTeam = async (): Promise<ApiResponse | undefined> => {
+export const getTeams = async (): Promise<ApiResponse | undefined> => {
   try {
     const response = await api.get("/equipe");
     return response.data;
@@ -19,4 +19,11 @@ export const getTeam = async (): Promise<ApiResponse | undefined> => {
   }
 };
 
-export default getTeam;
+// export const getTeamByWorkerId = async (id: number) => {
+//   try {
+//     const response = await api.get("/equipe");
+
+// }
+
+
+export default getTeams;

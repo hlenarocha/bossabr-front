@@ -1,6 +1,7 @@
 import BaseScreen from "@/screens/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
+import TableHeader from "@/components/table/TableHeader";
 
 const ClientsScreen = () => {
   return (
@@ -14,7 +15,15 @@ const ClientsScreen = () => {
             width="w-[100%]"
             height="h-[378px]"
           >
-            <div>TESTE</div>
+            <TableHeader
+              columns={[
+                { width: "w-[25%]", content: "NOME" },
+                { width: "w-[25%]", content: "TIPOS DE SERVIÇO" },
+                { width: "w-[25%]", content: "SETORES RESPONSÁVEIS" },
+                { width: "w-[25%]", content: "PROGRESSO GERAL" },
+
+              ]}
+            ></TableHeader>
           </Box>
         </div>
       </BaseScreen>

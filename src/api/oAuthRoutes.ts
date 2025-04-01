@@ -1,5 +1,6 @@
 import api from "@/api//axiosInstance";
 import UserData from "@/interfaces/UserInterface";
+import Cookies from "js-cookie";
 
 interface AuthResponse {
   status?: number;
@@ -23,14 +24,28 @@ const sendJwt = async (accessToken: string): Promise<AuthResponse | undefined> =
   }
 }
 
-// const getJWTToken = async (token: string) => {
-//   try {
-//     const response = await api.get("/auth/callback", { params: { token } });
-//     return response.data;
-//   }
-//   catch (error) {
-//     console.error(error);
-//   }
-// }
+const getUserByAuthToken = async (authToken: string, setUser: (user: UserData | null) => void) => {
 
-export { sendJwt, type AuthResponse };
+  try {
+    const response = await api.get<UserData>("/user", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+
+    if (!response) throw new Error("Não foi possível obter o usuário");
+
+    const userData = response.data;
+    console.log(userData);
+    setUser(userData);
+
+
+  } catch (error) {
+    console.error("Erro ao buscar usuário:", error);
+    // Removendo dados do usuário caso haja erro 
+    Cookies.remove("auth_token")
+    setUser(null);
+  }
+}
+
+export { sendJwt, type AuthResponse, getUserByAuthToken };

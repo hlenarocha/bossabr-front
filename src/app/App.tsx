@@ -12,6 +12,7 @@ import { UserProvider } from "../contexts/UserContext";
 import { SideBarProvider } from "../contexts/SideBarContext";
 
 const App = () => {
+
   const router = createBrowserRouter([
     {
       path: "/",

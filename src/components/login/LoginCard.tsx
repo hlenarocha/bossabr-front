@@ -1,5 +1,5 @@
 import { useGoogleLogin } from "@react-oauth/google";
-import { sendJwt } from "@/api/oAuthRoutes";
+import { getUserByAuthToken, sendJwt } from "@/api/oAuthRoutes";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
@@ -43,7 +43,7 @@ const LoginCard = () => {
 
           // 2. Armazena o token JWT em cookie (mais seguro que no contexto contra ataques CSRF/XSS)
           Cookies.set("auth_token", response.token, {
-            expires: 1,
+            expires: 5, // dias
             secure: true,
             sameSite: "strict",
           });
@@ -72,20 +72,26 @@ const LoginCard = () => {
     scope: "openid email profile",
   });
 
-  // Restauração de sessãO
+  // Restauração de sessão na página de login
   useEffect(() => {
     const token = Cookies.get("auth_token");
-    const userDataCookie = Cookies.get("user_data");
+    // const userDataCookie = Cookies.get("user_data");
 
-    if (token && userDataCookie) {
+    if (token) {
       // Se existir um token E dados em cookies, restaura o contexto
       try {
-        const userData = JSON.parse(userDataCookie);
-        setUser(userData);
+        // const userData = JSON.parse(userDataCookie);
+        // setUser(userData);
+        getUserByAuthToken(token, setUser);
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false); // Reseta loading state
+          navigate("/workspace");
+        }, 2000);
       } catch (e) {
         console.error("Erro ao analisar user_data:", e);
         Cookies.remove("auth_token");
-        Cookies.remove("user_data");
+        // Cookies.remove("user_data");
       }
     }
   }, [setUser]);

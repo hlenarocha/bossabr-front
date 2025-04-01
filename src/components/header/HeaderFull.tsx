@@ -3,11 +3,12 @@ import LogoutButton from "@/components/header/LogoutButton";
 import SideMenu from "@/components/header/SideMenu";
 import Logo from "@/assets/images/logo-bossa.svg";
 import Modal from "@/components/modal/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
+import { getUserByAuthToken } from "@/api/oAuthRoutes";
 
 interface HeaderFullProps {
   toggleSideBar: () => void;
@@ -20,13 +21,21 @@ const HeaderFull = (props: HeaderFullProps) => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
+  useEffect(() => {
+    const authToken = Cookies.get("auth_token");
+
+    if (authToken) {
+      getUserByAuthToken(authToken, setUser);
+    }
+  }, []);
+
   const handleLogout = () => {
     Cookies.remove("auth_token");
     Cookies.remove("user_data");
     setUser(null);
     navigate("/");
-    console.log("Dados removidos!")
-  }
+    console.log("Dados removidos!");
+  };
 
   return (
     <>
