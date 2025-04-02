@@ -7,6 +7,7 @@ import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
 import InputText from "@/components/UI/InputString";
 import SectorTag from "@/components/tags/SectorTag";
+import TableHeader from "@/components/table/TableHeader";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
@@ -26,7 +27,7 @@ const WorkspaceScreen = () => {
         <Box
           title={`${greeting}, ${user?.first_name}!`}
           subtitle="Visualize os dados de pontuação, progresso das demandas e atividades dos últimos sete dias."
-          width="w-[500px] md:w-[700px] lg:w-[900px]"
+          width="w-full md:w-[700px] lg:w-[900px]"
           height="h-[700px]"
         >
           <div className="flex flex-col">
@@ -54,6 +55,16 @@ const WorkspaceScreen = () => {
               </div>
             </div>
           </div>
+          <TableHeader
+              columns={[
+                { width: "w-[25%]", content: "NÃO INICIADAS" },
+                { width: "w-[25%]", content: "EM ANDAMENTO" },
+                { width: "w-[25%]", content: "CONCLUÍDAS" },
+                { width: "w-[25%]", content: "ATRASADAS" },
+              ]}
+            ></TableHeader>
+
+        
         </Box>
       </BaseScreen>
     </>

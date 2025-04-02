@@ -4,9 +4,18 @@ import PageTitle from "../../components/title/PageTitle";
 import ColoredButton from "../../components/UI/ColoredButton";
 import CustomCalendar from "../../components/UI/CustomCalendar";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import TaskColumn from "@/components/task/TaskColumn";
 
 const TasksScreen = () => {
   const navigate = useNavigate();
+  const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
+  const tasks = [
+    { title: "Demanda X", status: "não iniciada", index: 0, setActiveCard, activeCard },
+    { title: "Demanda Y", status: "em andamento", index: 1, setActiveCard, activeCard },
+    { title: "Demanda Z", status: "concluída", index: 2, setActiveCard, activeCard },
+    { title: "Demanda W", status: "atrasada", index: 3, setActiveCard, activeCard },
+  ];
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -51,11 +60,9 @@ const TasksScreen = () => {
               height="h-[1000px] xl:h-[700px]"
             >
               <div className="xl:grid xl:grid-cols-2 xl:gap-28 flex flex-col">
-                <div> 
+                <div>
                   <div className="w-full flex flex-col items-center xl:items-start">
-                  <CustomCalendar></CustomCalendar>
-
-
+                    <CustomCalendar></CustomCalendar>
                   </div>
                   <div className="mt-5 flex flex-row items-center gap-2 text-sm">
                     <div className="w-[32px] h-[32px] bg-customYellow rounded-[3px]"></div>
@@ -83,7 +90,41 @@ const TasksScreen = () => {
             width="w-full"
             height="h-[600px]"
           >
-            <div>TESTE</div>
+            <div className="flex w-[100%] flex-row justify-center gap-4">
+            <TaskColumn
+              title="NÃO INICIADAS"
+              tasks={tasks}
+              status="não iniciada"
+              setActiveCard={setActiveCard}
+              activeCard={activeCard}
+
+            />
+            <TaskColumn
+              title="EM ANDAMENTO"
+              tasks={tasks}
+              status="em andamento"
+              setActiveCard={setActiveCard}
+              activeCard={activeCard}
+
+            />
+            <TaskColumn 
+            title="CONCLUÍDAS" 
+            tasks={tasks}
+            status="concluída"
+            setActiveCard={setActiveCard} 
+            activeCard={activeCard}
+
+            />
+            <TaskColumn 
+            title="ATRASADAS" 
+            tasks={tasks} 
+            status="atrasada"
+            setActiveCard={setActiveCard}
+            activeCard={activeCard}
+            />
+            </div>
+           
+            <h1 className="text-4xl mt-4">Active card - {activeCard}</h1>
           </Box>
         </div>
       </BaseScreen>
