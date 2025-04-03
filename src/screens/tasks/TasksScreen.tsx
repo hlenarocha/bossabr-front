@@ -90,7 +90,7 @@ const TasksScreen = () => {
             width="w-full"
             height="h-[600px]"
           >
-            <div className="flex w-[100%] flex-row justify-center gap-4">
+            <div className="flex flex-row justify-between w-full gap-4">
             <TaskColumn
               title="NÃO INICIADAS"
               tasks={tasks}

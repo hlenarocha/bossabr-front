@@ -12,12 +12,14 @@ interface TaskColumnProps {
 const TaskColumn = (props: TaskColumnProps) => {
   return (
     <>
-      <div className="flex flex-col gap-4 w-full justify-center items-center">
-        <div className="font-bold text-md">{props.title}</div>
+      <div className="flex flex-col justify-center w-full">
+        <div className="font-bold text-md text-center mb-4">{props.title}</div>
 
         {props.tasks.map((task, index) =>
           task.status === props.status ? (
-            <div key={index}>
+            <div key={index} className="flex flex-col ">
+              <DropArea />
+
               <TaskCard
                 title={task.title}
                 status={task.status}

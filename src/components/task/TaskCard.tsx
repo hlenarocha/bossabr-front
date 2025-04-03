@@ -23,7 +23,7 @@ const TaskCard = (props: TaskCardProps) => {
             ? "bg-customRedTask"
             : ""
         }  ${props.activeCard === props.index ? "border-4 border-white" : ""}
-          flex cursor-grab items-center px-4 w-full h-11 rounded-[400px] shadow-[inset_5px_5px_20px_0px_rgba(82,82,82,0.16)]`}
+          flex cursor-grab items-center mt-4 mb-4 px-4 h-11 rounded-[400px] shadow-[inset_5px_5px_20px_0px_rgba(82,82,82,0.16)]`}
       >
         <p>{props.title}</p>
       </div>
