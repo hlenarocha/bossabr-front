@@ -9,6 +9,7 @@ import TaskColumn from "@/components/task/TaskColumn";
 
 const TasksScreen = () => {
   const navigate = useNavigate();
+  const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
   const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
   const tasks = [
     { title: "Demanda X", status: "não iniciada", index: 0, setActiveCard, activeCard },
@@ -92,14 +93,18 @@ const TasksScreen = () => {
           >
             <div className="flex flex-row justify-between w-full gap-4">
             <TaskColumn
+              setDragOver={setDragOver}
               title="NÃO INICIADAS"
               tasks={tasks}
               status="não iniciada"
               setActiveCard={setActiveCard}
               activeCard={activeCard}
+              dragOver={dragOver}
 
             />
             <TaskColumn
+              setDragOver={setDragOver}
+              dragOver={dragOver}
               title="EM ANDAMENTO"
               tasks={tasks}
               status="em andamento"
@@ -108,6 +113,8 @@ const TasksScreen = () => {
 
             />
             <TaskColumn 
+            setDragOver={setDragOver}
+            dragOver={dragOver}
             title="CONCLUÍDAS" 
             tasks={tasks}
             status="concluída"
@@ -116,6 +123,8 @@ const TasksScreen = () => {
 
             />
             <TaskColumn 
+            setDragOver={setDragOver}
+            dragOver={dragOver}
             title="ATRASADAS" 
             tasks={tasks} 
             status="atrasada"
@@ -124,7 +133,6 @@ const TasksScreen = () => {
             />
             </div>
            
-            <h1 className="text-4xl mt-4">Active card - {activeCard}</h1>
           </Box>
         </div>
       </BaseScreen>
