@@ -12,6 +12,7 @@ const TaskCard = (props: TaskCardProps) => {
         draggable
         onDragStart={() => props.setActiveCard(props.indexCard)}
         onDragEnd={() => props.setActiveCard(null)}
+
         className={`${
           props.status === "não iniciada"
             ? "bg-customYellowTask"

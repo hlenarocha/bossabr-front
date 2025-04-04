@@ -11,23 +11,37 @@ const TasksScreen = () => {
   const navigate = useNavigate();
   const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
   const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
-  const tasks = [
-    { title: "Demanda X", status: "não iniciada", indexCard: 0, setActiveCard, activeCard },
-    { title: "Demanda Y", status: "em andamento", indexCard: 1, setActiveCard, activeCard },
-    { title: "Demanda Z", status: "concluída", indexCard: 2, setActiveCard, activeCard },
-    { title: "Demanda W", status: "atrasada", indexCard: 3, setActiveCard, activeCard },
-    { title: "Demanda C", status: "não iniciada", indexCard: 4, setActiveCard, activeCard },
-    { title: "Demanda V", status: "em andamento", indexCard: 5, setActiveCard, activeCard },
-    { title: "Demanda H", status: "concluída", indexCard: 6, setActiveCard, activeCard },
-    { title: "Demanda J", status: "atrasada", indexCard: 7, setActiveCard, activeCard },
-    { title: "Demanda K", status: "não iniciada", indexCard: 8, setActiveCard, activeCard },
-    { title: "Demanda L", status: "em andamento", indexCard: 9, setActiveCard, activeCard },
-    { title: "Demanda M", status: "concluída", indexCard: 10, setActiveCard, activeCard },
-    { title: "Demanda N", status: "atrasada", indexCard: 11, setActiveCard, activeCard },
+  const tasksTest = [
+    { title: "Banner", status: "não iniciada", indexCard: 0, setActiveCard, activeCard },
+    { title: "Post Rosa", status: "em andamento", indexCard: 1, setActiveCard, activeCard },
+    { title: "Post Azul", status: "concluída", indexCard: 2, setActiveCard, activeCard },
+    { title: "Vídeo Legal", status: "atrasada", indexCard: 3, setActiveCard, activeCard },
+    { title: "Cartão", status: "não iniciada", indexCard: 4, setActiveCard, activeCard },
+    { title: "Cartão Rosa", status: "em andamento", indexCard: 5, setActiveCard, activeCard },
+    { title: "Post Lilás", status: "concluída", indexCard: 6, setActiveCard, activeCard },
+    { title: "Post Legal", status: "atrasada", indexCard: 7, setActiveCard, activeCard },
+    // { title: "Post Marrom", status: "não iniciada", indexCard: 8, setActiveCard, activeCard },
+    // { title: "Banner Legal", status: "em andamento", indexCard: 9, setActiveCard, activeCard },
+    // { title: "Outdoor Arte", status: "concluída", indexCard: 10, setActiveCard, activeCard },
+    // { title: "Post De Novo", status: "atrasada", indexCard: 11, setActiveCard, activeCard },
   ];
 
+  const [tasks, setTasks] = useState(tasksTest); // estado para armazenar as tarefas
+
   const onDrop = (status: string, position: number) => {
-    console.log(`${activeCard} is going to place into ${status} at ${position}`);
+    console.log(`Card ${activeCard} is going to place into "${status}" at ${position}`);
+    
+    if (activeCard == null || activeCard == undefined) return;
+
+    const taksToMove = tasks[activeCard];
+    const updatedTasks = tasks.filter((task, index) => index !== activeCard)
+
+    updatedTasks.splice(position, 0, {
+      ...taksToMove,
+      status: status,
+    });
+
+    setTasks(updatedTasks);
 
   }
 
@@ -106,7 +120,6 @@ const TasksScreen = () => {
           >
             <div className="flex flex-row justify-between w-full gap-4">
             <TaskColumn
-              indexColumn={0}
               setDragOver={setDragOver}
               title="NÃO INICIADAS"
               tasks={tasks}
@@ -119,7 +132,6 @@ const TasksScreen = () => {
 
             />
             <TaskColumn
-            indexColumn={1}
               setDragOver={setDragOver}
               dragOver={dragOver}
               title="EM ANDAMENTO"
@@ -131,7 +143,6 @@ const TasksScreen = () => {
 
             />
             <TaskColumn 
-            indexColumn={2}
             setDragOver={setDragOver}
             dragOver={dragOver}
             title="CONCLUÍDAS" 
@@ -144,7 +155,6 @@ const TasksScreen = () => {
 
             />
             <TaskColumn 
-            indexColumn={3}
             setDragOver={setDragOver}
             dragOver={dragOver}
             title="ATRASADAS" 

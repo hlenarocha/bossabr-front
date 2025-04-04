@@ -8,7 +8,6 @@ interface TaskColumnProps {
   setActiveCard: React.Dispatch<React.SetStateAction<number | null>>;
   activeCard: number | null;
   dragOver: boolean;
-  indexColumn: number;
   setDragOver: React.Dispatch<React.SetStateAction<boolean>>;
   onDrop: (status: string, position: number) => void;
 }
@@ -24,13 +23,13 @@ const TaskColumn = (props: TaskColumnProps) => {
         }}
         onDragEnd={() => {
           props.setDragOver(false);
+          props.setActiveCard(null);
         }}
-        key={props.indexColumn}
       >
         <div className="font-bold text-md text-center mb-4">{props.title}</div>
         {/* DropArea não aparece na mesma coluna que activeCard está OnDrag */}
         {props.activeCard !== null && props.tasks[props.activeCard].status !== props.status && (
-          <DropArea showDrop={props.dragOver} />
+          <DropArea onDrop={() => props.onDrop(props.status, 0)} setDragOver={props.setDragOver} dragOver={props.dragOver} />
         )}
 
         {props.tasks.map((task, index) =>
