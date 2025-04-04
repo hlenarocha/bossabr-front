@@ -29,21 +29,25 @@ const TasksScreen = () => {
   const [tasks, setTasks] = useState(tasksTest); // estado para armazenar as tarefas
 
   const onDrop = (status: string, position: number) => {
-    console.log(`Card ${activeCard} is going to place into "${status}" at ${position}`);
-    
-    if (activeCard == null || activeCard == undefined) return;
-
-    const taksToMove = tasks[activeCard];
-    const updatedTasks = tasks.filter((task, index) => index !== activeCard)
-
-    updatedTasks.splice(position, 0, {
-      ...taksToMove,
-      status: status,
+    if (activeCard === null) return;
+  
+    setTasks(prevTasks => {
+      const taskToMove = prevTasks.find(task => task.indexCard === activeCard);
+      if (!taskToMove) return prevTasks;
+  
+      // Filtra a task que está sendo movida
+      const filteredTasks = prevTasks.filter(task => task.indexCard !== taskToMove.indexCard);
+      
+      // Insere na nova posição com o novo status
+      const updatedTasks = [
+        ...filteredTasks.slice(0, position),
+        { ...taskToMove, status },
+        ...filteredTasks.slice(position)
+      ];
+  
+      return updatedTasks;
     });
-
-    setTasks(updatedTasks);
-
-  }
+  };
 
   const handleNavigate = (path: string) => {
     navigate(path);

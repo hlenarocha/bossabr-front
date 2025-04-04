@@ -4,6 +4,7 @@ interface DropAreaProps {
   dragOver: boolean;
   setDragOver: React.Dispatch<React.SetStateAction<boolean>>;
   onDrop: () => void;
+  status: string;
 }
 
 const DropArea = (props: DropAreaProps) => {
@@ -22,7 +23,18 @@ const DropArea = (props: DropAreaProps) => {
               props.setDragOver(false);
             }}
             onDragOver={(e) => {e.preventDefault()}}
-            className="w-full flex justify-center items-center text-customYellow bg-white bg-opacity-10 mb-2 px-4 h-11 rounded-[400px] border-dashed border-2 border-customYellow"
+            className={`${
+              props.status === "não iniciada"
+              ? "border-customYellowTask text-customYellowTask"
+              : props.status === "em andamento"
+              ? "border-customBlueTask text-customBlueTask"
+              : props.status === "concluída"
+              ? "border-customGreenTask text-customGreenTask"
+              : props.status === "atrasada"
+              ? "border-customRedTask text-customRedTask"
+              : ""
+              
+            } w-full flex justify-center items-center bg-white bg-opacity-5 mb-2 px-4 h-11 rounded-[400px] border-dashed border-2 `}
           >
             SOLTE AQUI
           </motion.section>

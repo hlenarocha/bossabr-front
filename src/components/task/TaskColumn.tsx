@@ -13,7 +13,10 @@ interface TaskColumnProps {
 }
 
 const TaskColumn = (props: TaskColumnProps) => {
-  
+  // const activeTask = props.tasks.find(
+  //   (task) => task.indexCard === props.activeCard
+  // );
+
   return (
     <>
       <div
@@ -26,25 +29,41 @@ const TaskColumn = (props: TaskColumnProps) => {
           props.setActiveCard(null);
         }}
       >
-        <div className="font-bold text-md text-center mb-4">{props.title}</div>
+        <div className="font-bold text-md text-center mb-4 ">{props.title}</div>
         {/* DropArea não aparece na mesma coluna que activeCard está OnDrag */}
-        {props.activeCard !== null && props.tasks[props.activeCard].status !== props.status && (
-          <DropArea onDrop={() => props.onDrop(props.status, 0)} setDragOver={props.setDragOver} dragOver={props.dragOver} />
-        )}
+        <div className="overflow-y-auto h-full">
+          {/* {props.activeCard !== null && activeTask?.status !== props.status && ( */}
+            <DropArea
+              status={props.status}
+              onDrop={() => props.onDrop(props.status, 0)}
+              setDragOver={props.setDragOver}
+              dragOver={props.dragOver}
+            />
+          {/* )} */}
 
-        {props.tasks.map((task, index) =>
-          task.status === props.status ? (
-            <div key={index} className="flex flex-col">
-              <TaskCard
-                title={task.title}
-                status={task.status}
-                setActiveCard={props.setActiveCard}
-                indexCard={task.indexCard}
-                activeCard={props.activeCard}
-              />
-            </div>
-          ) : null
-        )}
+          {props.tasks.map((task, index) =>
+            task.status === props.status ? (
+              <div key={index} className="flex flex-col">
+                <TaskCard
+                  title={task.title}
+                  status={task.status}
+                  setActiveCard={props.setActiveCard}
+                  indexCard={task.indexCard}
+                  activeCard={props.activeCard}
+                />
+                {/* {props.activeCard !== null &&
+                  activeTask?.status !== props.status && ( */}
+                    <DropArea
+                    status={props.status}
+                      onDrop={() => props.onDrop(props.status, index + 1)}
+                      setDragOver={props.setDragOver}
+                      dragOver={props.dragOver}
+                    />
+                  {/* )} */}
+              </div>
+            ) : null
+          )}
+        </div>
       </div>
     </>
   );
