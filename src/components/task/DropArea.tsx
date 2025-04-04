@@ -1,24 +1,26 @@
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface DropAreaProps {
-  // setShowDrop: React.Dispatch<React.SetStateAction<boolean>>;
   showDrop: boolean;
 }
 
 const DropArea = (props: DropAreaProps) => {
-
-
-  // mudar lógica para que apareçam os DropArea na coluna em que está OnDrag
   return (
     <>
-      <div
-      // onDragEnter={() => props.setShowDrop(true)}
-      className={`${props.showDrop ? "hidden" : "block"} w-full h-2`} ></div>
-
-        <section
-          // onDragEnd={() => setShowDrop(false)}
-          className={`${props.showDrop ? "block" : "hidden"} w-full justify-center items-center flex text-customYellow bg-white bg-opacity-10 mt-4 mb-4 px-4 transition-all ease-in-out h-11 rounded-[400px] border-dashed border-2 border-customYellow`}
-        >SOLTE AQUI</section>
+      <AnimatePresence>
+        {props.showDrop && (
+          <motion.section
+            layout
+            initial={{ opacity: 0, scale: 0.8, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -10 }}
+            transition={{ duration: 0.5, ease: "backInOut" }}
+            className="w-full flex justify-center items-center text-customYellow bg-white bg-opacity-10 mb-2 px-4 h-11 rounded-[400px] border-dashed border-2 border-customYellow"
+          >
+            SOLTE AQUI
+          </motion.section>
+        )}
+      </AnimatePresence>
     </>
   );
 };
