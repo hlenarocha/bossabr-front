@@ -7,7 +7,8 @@ import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
 import InputText from "@/components/UI/InputString";
 import SectorTag from "@/components/tags/SectorTag";
-import TableHeader from "@/components/table/TableHeader";
+import ActivityCard from "@/components/activity/ActivityCard";
+import ColoredButton from "@/components/UI/ColoredButton";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
@@ -30,41 +31,61 @@ const WorkspaceScreen = () => {
           width="w-full md:w-[700px] lg:w-[900px]"
           height="h-[700px]"
         >
-          <div className="flex flex-col">
-            <InputTitle title="Informações básicas"></InputTitle>
-            <div className="flex flex-row gap-4">
-              <InputText
-                title="NOME"
-                placeholder={user?.first_name || ""}
-                isMandatory={false}
-                width="w-[35%]"
-                height="h-8"
-                isReadOnly={true}
-              ></InputText>
-              <InputText
-                title="EQUIPE"
-                placeholder={user?.first_name || ""} // colocar equipe
-                isMandatory={false}
-                width="w-[30%]"
-                height="h-8"
-                isReadOnly={true}
-              ></InputText>
-              <div className="flex flex-col">
-                <p className="mt-4 mb-1">SETOR</p>
-                <SectorTag></SectorTag>
+          <div className="flex flex-row gap-12 w-full">
+            <div className="flex flex-col w-[55%]">
+              <InputTitle title="Informações básicas"></InputTitle>
+              <div className="flex flex-row gap-4">
+                <InputText
+                  title="NOME"
+                  placeholder={user?.first_name || ""}
+                  isMandatory={false}
+                  width="w-[40%]"
+                  height="h-8"
+                  isReadOnly={true}
+                ></InputText>
+                <InputText
+                  title="EQUIPE"
+                  placeholder={user?.first_name || ""} // colocar equipe
+                  isMandatory={false}
+                  width="w-[30%]"
+                  height="h-8"
+                  isReadOnly={true}
+                ></InputText>
+                <div className="flex flex-col">
+                  <p className="mt-4 mb-1">SETOR</p>
+                  <SectorTag></SectorTag>
+                </div>
               </div>
             </div>
+            <div className="flex flex-col w-[50%]">
+            <InputTitle title="Atividades"></InputTitle>
+            <div className="text-sm mt-2 mb-2">Auditoria da Equipe - Hoje</div>
+            <ActivityCard
+              width="w-full"
+              title="Pessoa X conclui atividade Y"
+              details="Atividades realizadas nos últimos sete dias."
+            />
+
+            </div>
+           
           </div>
-          <TableHeader
+          {/* <TableHeader
               columns={[
                 { width: "w-[25%]", content: "NÃO INICIADAS" },
                 { width: "w-[25%]", content: "EM ANDAMENTO" },
                 { width: "w-[25%]", content: "CONCLUÍDAS" },
                 { width: "w-[25%]", content: "ATRASADAS" },
               ]}
-            ></TableHeader>
-
-        
+            ></TableHeader> */}
+          <div className="flex mt-80 w-full justify-center bottom-10">
+            <ColoredButton
+              title="VISUALIZAR RELATÓRIO DIÁRIO"
+              width="w-[60%]"
+              icon="fa-solid fa-eye"
+              color="customYellow"
+              justify="justify-center"
+            ></ColoredButton>
+          </div>
         </Box>
       </BaseScreen>
     </>

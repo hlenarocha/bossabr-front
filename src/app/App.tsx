@@ -4,6 +4,7 @@ import Dashboard from "../screens/DashboardScreen";
 import Tasks from "../screens/tasks/TasksScreen";
 import Clients from "../screens/ClientsScreen";
 import Settings from "../screens/settings/SettingsScreen";
+import Reports from "../screens/ReportsScreen";
 import Workspace from "../screens/WorkspaceScreen";
 import CreateTask from "../screens/tasks/CreateTask";
 import ConfigureWorker from "../screens/settings/worker/ConfigureWorker";
@@ -12,7 +13,6 @@ import { UserProvider } from "../contexts/UserContext";
 import { SideBarProvider } from "../contexts/SideBarContext";
 
 const App = () => {
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -40,6 +40,10 @@ const App = () => {
       element: <Clients />,
     },
     {
+      path: "/reports",
+      element: <Reports />,
+    },
+    {
       path: "/settings",
       element: <Settings />,
     },
@@ -57,7 +61,7 @@ const App = () => {
     // contexto configurado, evolvendo todo o App
     <UserProvider>
       <SideBarProvider>
-      <RouterProvider router={router} />;
+        <RouterProvider router={router} />;
       </SideBarProvider>
     </UserProvider>
   );
