@@ -8,7 +8,7 @@ const menuItems = [
     title: "Área de Trabalho",
     path: "/workspace",
   },
-  // { icon: "fa-solid fa-chart-pie", title: "Dashboard", path: "/dashboard" },
+  { icon: "fa-solid fa-chart-pie", title: "Dashboard", path: "/dashboard" },
   { icon: "fa-solid fa-list-check", title: "Demandas", path: "/tasks" },
   { icon: "fa-solid fa-user-tie", title: "Clientes", path: "/clients" },
   { icon: "fa-solid fa-file", title: "Relatórios", path: "/reports" },

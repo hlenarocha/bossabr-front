@@ -20,7 +20,7 @@ const TaskColumn = (props: TaskColumnProps) => {
   return (
     <>
       <div
-        className="flex flex-col w-full h-[400px]"
+        className="flex flex-col w-full h-[250px]"
         onDragOver={() => {
           props.setDragOver(true);
         }}
@@ -31,7 +31,7 @@ const TaskColumn = (props: TaskColumnProps) => {
       >
         <div className="font-bold text-md text-center mb-4 ">{props.title}</div>
         {/* DropArea não aparece na mesma coluna que activeCard está OnDrag */}
-        <div className="overflow-y-auto h-full">
+        <div className="overflow-y-auto">
           {/* {props.activeCard !== null && activeTask?.status !== props.status && ( */}
             <DropArea
               status={props.status}

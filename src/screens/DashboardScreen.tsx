@@ -6,19 +6,16 @@ import PageTitle from "../components/title/PageTitle";
 const DashboardScreen = () => {
   return (
     <BaseScreen>
-    
-      {/* <div className="mb-4">
-        <BackButton></BackButton>
-      </div> */}
       <PageTitle marginTop="mt-4" title="Dashboard"></PageTitle>
       <div className="mt-4">
         <Box
           title="Peças Produzidas"
           subtitle="Visão geral de produtividade semanal e mensal."
-          width="w-[500px]"
-          height="h-[378px]"
+          width="w-full md:w-[700px] lg:w-[900px]"
+
+          height="h-[700px]"
         >
-          <div>TESTE</div>
+          <div>DASHBOARD SERÁ AQUI</div>
         </Box>
       </div>
     </BaseScreen>

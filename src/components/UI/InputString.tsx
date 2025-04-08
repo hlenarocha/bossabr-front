@@ -4,7 +4,7 @@ interface InputTextProps {
   title: string;
   placeholder: string;
   isMandatory: boolean;
-  width: string;
+  width?: string;
   height: string;
   stringType?: string;
   mask?: string;
