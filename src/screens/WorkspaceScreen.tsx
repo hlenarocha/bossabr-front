@@ -5,7 +5,7 @@ import { greetingFunction } from "@/utils/greetingFunction";
 import { useContext, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
-import InputText from "@/components/UI/InputString";
+import InputString from "@/components/UI/InputString";
 import SectorTag from "@/components/tags/SectorTag";
 import ActivityCard from "@/components/activity/ActivityCard";
 import ColoredButton from "@/components/UI/ColoredButton";
@@ -130,24 +130,24 @@ const WorkspaceScreen = () => {
             <div className="flex flex-col w-2/3 gap-2">
               <InputTitle title="Informações básicas"></InputTitle>
               <div className="flex flex-row gap-2 w-full flex-wrap">
-                <InputText
+                <InputString
                   title="NOME"
                   placeholder={user?.first_name || ""}
                   isMandatory={false}
                   height="h-8"
                   width="w-[50%]"
                   isReadOnly={true}
-                ></InputText>
-                <InputText
+                ></InputString>
+                <InputString
                   title="EQUIPE"
                   placeholder={user?.first_name || ""} // colocar equipe no lugar de user?.first_name
                   isMandatory={false}
                   height="h-8"
                   width="w-[25%]"
                   isReadOnly={true}
-                ></InputText>
-                <div className="flex flex-col w-[20%]">
-                  <p className="mt-3 mb-1">SETOR</p>
+                ></InputString>
+                <div className="flex flex-col w-fit">
+                  <p className="mt-4 text-sm font-black text-white mb-1">SETOR</p>
                   <SectorTag></SectorTag>
                 </div>
               </div>

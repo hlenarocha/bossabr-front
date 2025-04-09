@@ -63,16 +63,16 @@ const CustomCalendar = () => {
   };
 
   return (
-    <div className="flex flex-col p-4 justify-center items-center w-[380px] h-[380px] bg-[#1f1f1f] rounded-xl shadow-lg border-2 border-customYellow">
+    <div className="flex flex-col p-6 text-xm justify-center items-center w-[400px] xl:w-[290px] h-fit bg-[#1f1f1f] rounded-xl shadow-lg border-2 border-customYellow">
       {/* Cabeçalho */}
       <div className="flex w-full justify-around items-center mb-4">
         <button onClick={handlePrevMonth} className="text-black text-2xl bg-customYellow w-[32px] h-[32px] rounded-full">
           {"<"}
         </button>
-        <h2 className="text-lg font-bold text-customYellow">
+        <h2 className="text-md font-bold text-customYellow">
           {format(currentMonth, "MMMM yyyy", { locale: ptBR }).toUpperCase()}
         </h2>
-        <button onClick={handleNextMonth} className="text-black text-2xl bg-customYellow w-[32px] h-[32px] rounded-full">
+        <button onClick={handleNextMonth} className="text-black bg-customYellow w-[32px] h-[32px] rounded-full">
           {">"}
         </button>
       </div>

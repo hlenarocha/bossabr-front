@@ -13,9 +13,7 @@ interface TaskColumnProps {
 }
 
 const TaskColumn = (props: TaskColumnProps) => {
-  // const activeTask = props.tasks.find(
-  //   (task) => task.indexCard === props.activeCard
-  // );
+ 
 
   return (
     <>
@@ -30,7 +28,6 @@ const TaskColumn = (props: TaskColumnProps) => {
         }}
       >
         <div className="font-bold text-md text-center mb-4 ">{props.title}</div>
-        {/* DropArea não aparece na mesma coluna que activeCard está OnDrag */}
         <div className="overflow-y-auto">
           {/* {props.activeCard !== null && activeTask?.status !== props.status && ( */}
             <DropArea

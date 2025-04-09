@@ -1,6 +1,6 @@
 import InputMask from "react-input-mask";
 
-interface InputTextProps {
+interface InputStringProps {
   title: string;
   placeholder: string;
   isMandatory: boolean;
@@ -13,7 +13,7 @@ interface InputTextProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputText = (props: InputTextProps) => {
+const InputString = (props: InputStringProps) => {
 
   return (
     <>
@@ -49,4 +49,4 @@ const InputText = (props: InputTextProps) => {
   );
 };
 
-export default InputText;
+export default InputString;
