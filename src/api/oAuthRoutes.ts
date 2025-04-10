@@ -36,7 +36,7 @@ const getUserByAuthToken = async (authToken: string, setUser: (user: UserData | 
     if (!response) throw new Error("Não foi possível obter o usuário");
 
     const userData = response.data;
-    console.log(userData);
+    // console.log(userData);
     setUser(userData);
 
 

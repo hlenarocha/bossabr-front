@@ -2,7 +2,7 @@ import BaseScreen from "@/screens/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import { greetingFunction } from "@/utils/greetingFunction";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/UI/InputString";
@@ -12,6 +12,8 @@ import ColoredButton from "@/components/UI/ColoredButton";
 import ScoreBar from "@/components/UI/ScoreBar";
 import TaskColumn from "@/components/task/TaskColumn";
 import { useNavigate } from "react-router-dom";
+import readWorkspace from "@/api/workspaceRoutes";
+import Cookies from "js-cookie";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
@@ -19,6 +21,40 @@ const WorkspaceScreen = () => {
   const navigate = useNavigate();
   const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
   const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
+  const auth_token = Cookies.get("auth_token");
+  const [equipe, setEquipe] = useState<string>(""); // estado para armazenar a equipe
+
+  console.log(equipe);
+  console.log(user?.id_funcionario); // id_funcionario do usuário logado
+  // console.debug(user);
+
+  useEffect(() => {
+    if (user?.id_funcionario) {
+      const fetchWorkspaceData = async () => {
+        try {
+          if (!auth_token) {
+            throw new Error("Authentication token is missing");
+          }
+          const data = await readWorkspace(user?.id_funcionario, auth_token);
+          console.log(data);
+          // console.log(data.dadosEssenciais);
+          // console.log(data.demandas);
+          
+          // se não tiver id_funcionario
+          if (data) {
+            console.log(data.dadosEssenciais[0].first_name);
+            setEquipe(data.dadosEssenciais[0].nome_equipe);
+          } else {
+            console.log("Sem resposta")
+          }
+        } catch (error) {
+          console.error("Erro ao buscar dados do workspace", error);
+        }
+      };
+      fetchWorkspaceData();
+    }
+  }, [user]); // roda sempre que user mudar, evitando que rode apenas uma vez (quando componente monte)
+
   const tasksTest = [
     {
       title: "Banner",
@@ -140,14 +176,16 @@ const WorkspaceScreen = () => {
                 ></InputString>
                 <InputString
                   title="EQUIPE"
-                  placeholder={user?.first_name || ""} // colocar equipe no lugar de user?.first_name
+                  placeholder={equipe || ""} // colocar equipe no lugar de user?.first_name
                   isMandatory={false}
                   height="h-8"
                   width="w-[25%]"
                   isReadOnly={true}
                 ></InputString>
                 <div className="flex flex-col w-fit">
-                  <p className="mt-4 text-sm font-black text-white mb-1">SETOR</p>
+                  <p className="mt-4 text-sm font-black text-white mb-1">
+                    SETOR
+                  </p>
                   <SectorTag></SectorTag>
                 </div>
               </div>
@@ -238,7 +276,9 @@ const WorkspaceScreen = () => {
           </div>
           <div className="flex w-full mt-10 justify-center">
             <ColoredButton
-            onClick={() => {navigate("/reports")}}
+              onClick={() => {
+                navigate("/reports");
+              }}
               title="VISUALIZAR RELATÓRIO DIÁRIO"
               width="w-[60%]"
               icon="fa-solid fa-eye"

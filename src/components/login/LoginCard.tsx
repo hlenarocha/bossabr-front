@@ -30,8 +30,8 @@ const LoginCard = () => {
         // 1. Envia o access_token para o backend e recebe JWT + dados do usuário
         const response = await sendJwt(access_token);
 
-        console.log(response);
-        console.log(response?.status);
+        // console.log(response);
+        // console.log(response?.status);
 
         if (response?.status === 401) {
           setIsModalErrorVisible(true);
@@ -50,7 +50,7 @@ const LoginCard = () => {
 
           // 3. Armazena dados não sensíveis no contexto do usuário
           setUser({
-            id: response.user.id_funcionario,
+            id_funcionario: response.user.id_funcionario,
             first_name: response.user.first_name,
             email: response.user.email,
             role: response.user.role,
