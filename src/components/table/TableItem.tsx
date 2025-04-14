@@ -24,9 +24,9 @@ const TableItem = (props: TableItemProps) => {
             {col.content}
           </div>
         ))}
-        <div className="w-24 justify-center flex">
+        <div className="w-12 justify-center flex">
           <i
-            className={`${props.icon} fa-solid text-2xl cursor-pointer hover:opacity-80`}
+            className={`${props.icon} fa-solid text-md cursor-pointer hover:opacity-80`}
           ></i>
         </div>
       </div>

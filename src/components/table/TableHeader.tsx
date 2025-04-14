@@ -6,7 +6,7 @@ const TableHeader = (props: TableHeaderProps) => {
   return (
     <>
       <div
-        className="w-full  justify-center text-white font-black font-sans flex flex-row px-2 py-0 items-center mt-4 mb-4"
+        className="w-full justify-center text-white font-black font-sans flex flex-row py-0 items-center mt-4 mb-4"
         style={{
           width: "calc(100% - 86px)",
           display: "grid grid-row-1",
@@ -16,7 +16,7 @@ const TableHeader = (props: TableHeaderProps) => {
         {props.columns.map((col, index) => (
           <span
           key={index}
-          className={`${col.width} text-center font-bold`}
+          className={`${col.width} items-center justify-center flex font-bold`}
           
           >
             {col.content}
