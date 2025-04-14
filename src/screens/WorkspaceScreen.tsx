@@ -14,13 +14,14 @@ import TaskColumn from "@/components/task/TaskColumn";
 import { useNavigate } from "react-router-dom";
 import readWorkspace from "@/api/workspaceRoutes";
 import Cookies from "js-cookie";
+import { useDragDrop } from "@/hooks/useDragDrop";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
   const { user } = useContext(UserContext); // desconstruindo objeto {}
   const navigate = useNavigate();
-  const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
-  const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
+  // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
+  // const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
   const auth_token = Cookies.get("auth_token");
   const [equipe, setEquipe] = useState<string>(""); // estado para armazenar a equipe
 
@@ -55,95 +56,37 @@ const WorkspaceScreen = () => {
     }
   }, [user]); // roda sempre que user mudar, evitando que rode apenas uma vez (quando componente monte)
 
-  const tasksTest = [
-    {
-      title: "Banner",
-      status: "não iniciada",
-      indexCard: 0,
-      setActiveCard,
-      activeCard,
-    },
-    {
-      title: "Post Rosa",
-      status: "em andamento",
-      indexCard: 1,
-      setActiveCard,
-      activeCard,
-    },
-    {
-      title: "Post Azul",
-      status: "concluída",
-      indexCard: 2,
-      setActiveCard,
-      activeCard,
-    },
-    {
-      title: "Vídeo Legal",
-      status: "atrasada",
-      indexCard: 3,
-      setActiveCard,
-      activeCard,
-    },
-    {
-      title: "Cartão",
-      status: "não iniciada",
-      indexCard: 4,
-      setActiveCard,
-      activeCard,
-    },
-    {
-      title: "Cartão Rosa",
-      status: "em andamento",
-      indexCard: 5,
-      setActiveCard,
-      activeCard,
-    },
-    {
-      title: "Post Lilás",
-      status: "concluída",
-      indexCard: 6,
-      setActiveCard,
-      activeCard,
-    },
-    {
-      title: "Post Legal",
-      status: "atrasada",
-      indexCard: 7,
-      setActiveCard,
-      activeCard,
-    },
-    // { title: "Post Marrom", status: "não iniciada", indexCard: 8, setActiveCard, activeCard },
-    // { title: "Banner Legal", status: "em andamento", indexCard: 9, setActiveCard, activeCard },
-    // { title: "Outdoor Arte", status: "concluída", indexCard: 10, setActiveCard, activeCard },
-    // { title: "Post De Novo", status: "atrasada", indexCard: 11, setActiveCard, activeCard },
+  const initialTasks = [
+    { title: "Banner", status: "não iniciada" },
+    { title: "Post Rosa", status: "em andamento" },
+    { title: "Post Azul", status: "concluída" },
+    { title: "Vídeo Legal", status: "atrasada" },
+    { title: "Cartão", status: "não iniciada" },
+    { title: "Cartão Rosa", status: "em andamento" },
+    { title: "Post Lilás", status: "concluída" },
+    { title: "Post Legal", status: "atrasada" },
+    { title: "Post Marrom", status: "não iniciada" },
+    { title: "Banner Legal", status: "em andamento" },
+    { title: "Outdoor Arte", status: "concluída" },
+    { title: "Post De Novo", status: "atrasada" },
+    { title: "Banner De Novo", status: "não iniciada" },
+    { title: "Banner Legal", status: "em andamento" },
+    { title: "Banner Legal", status: "em andamento" },
+    { title: "Banner Legal", status: "em andamento" },
+    { title: "Banner Legal", status: "em andamento" }
   ];
 
-  const [tasks, setTasks] = useState(tasksTest); // estado para armazenar as tarefas
+  // Use o hook que gerencia todo o estado de drag and drop
+  const {
+    tasks,
+    // setTasks,
+    activeCard,
+    setActiveCard,
+    dragOver,
+    setDragOver,
+    onDrop,
+  } = useDragDrop(initialTasks);
 
-  const onDrop = (status: string, position: number) => {
-    if (activeCard === null) return;
-
-    setTasks((prevTasks) => {
-      const taskToMove = prevTasks.find(
-        (task) => task.indexCard === activeCard
-      );
-      if (!taskToMove) return prevTasks;
-
-      // Filtra a task que está sendo movida
-      const filteredTasks = prevTasks.filter(
-        (task) => task.indexCard !== taskToMove.indexCard
-      );
-
-      // Insere na nova posição com o novo status
-      const updatedTasks = [
-        ...filteredTasks.slice(0, position),
-        { ...taskToMove, status },
-        ...filteredTasks.slice(position),
-      ];
-
-      return updatedTasks;
-    });
-  };
 
   return (
     <>
@@ -171,7 +114,7 @@ const WorkspaceScreen = () => {
                   placeholder={user?.first_name || ""}
                   isMandatory={false}
                   height="h-8"
-                  width="w-[50%]"
+                  width="w-[40%]"
                   isReadOnly={true}
                 ></InputString>
                 <InputString
@@ -179,7 +122,7 @@ const WorkspaceScreen = () => {
                   placeholder={equipe || ""} // colocar equipe no lugar de user?.first_name
                   isMandatory={false}
                   height="h-8"
-                  width="w-[25%]"
+                  width="w-[40%]"
                   isReadOnly={true}
                 ></InputString>
                 <div className="flex flex-col w-fit">

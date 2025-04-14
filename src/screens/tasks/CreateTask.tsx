@@ -1,12 +1,38 @@
+import PageTitle from "@/components/title/PageTitle";
 import BaseScreen from "../BaseScreen";
+import BackButton from "@/components/UI/BackButton";
+import Box from "@/components/box/BoxContent";
+import InputTitle from "@/components/title/InputTitle";
+import InputString from "@/components/UI/InputString";
 
 const CreateTask = () => {
+  return (
+    <>
+      <BaseScreen>
+        <BackButton></BackButton>
+        <PageTitle marginTop="mt-4" title="Adicionar Demanda"></PageTitle>
+        <Box
+          title="Cadastrar"
+          subtitle="Cadastre uma nova demanda aqui."
+          width="xl:w-[1000px] w-[600px] lg:w-[800px]"
+          height="h-[630px]"
+        >
+          <InputTitle title="Cliente"></InputTitle>
+          <InputString
+          
+            title="NOME DO CLIENTE"
+            width="w-full"
+            isMandatory={true}
+            placeholder="Pesquise o cliente..."
+
+            height="h-[40px]"></InputString>
 
 
-  return(<>
-  <BaseScreen><div>Oi</div></BaseScreen>
-  </>);
 
-}
+        </Box>
+      </BaseScreen>
+    </>
+  );
+};
 
 export default CreateTask;
