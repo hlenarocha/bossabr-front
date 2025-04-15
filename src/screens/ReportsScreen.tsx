@@ -45,7 +45,7 @@ const ReportScreen = () => {
         </div>
 
         <InputTitle title="Registros do dia" />
-        {/* <TableHeader
+        <TableHeader
           columns={[
             {
               width: "w-[16%]",
@@ -56,7 +56,8 @@ const ReportScreen = () => {
             { width: "w-[30%]", content: "OBSERVAÇÃO" },
             { width: "w-[20%]", content: "STATUS" },
           ]}
-        ></TableHeader> */}
+        ></TableHeader>
+
         <div className="h-[350px] overflow-y-auto">
           <TableItem
             itemWidth="w-full "
