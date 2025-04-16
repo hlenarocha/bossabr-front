@@ -2,12 +2,13 @@ import BaseScreen from "@/screens/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import ColoredButton from "@/components/UI/ColoredButton";
-import CustomCalendar from "@/components/UI/CustomCalendar";
+// import CustomCalendar from "@/components/UI/CustomCalendar";
 import { useNavigate } from "react-router-dom";
 // import { useState } from "react";
 import TaskColumn from "@/components/task/TaskColumn";
 import TaskCard from "@/components/task/TaskCard";
 import { useDragDrop } from "@/hooks/useDragDrop";
+import { Calendar } from "@/components/shadcn/calendar";
 
 const TasksScreen = () => {
   const navigate = useNavigate();
@@ -130,7 +131,8 @@ const TasksScreen = () => {
               <div className="xl:grid xl:grid-cols-2 xl:gap-10 flex flex-col">
                 <div>
                   <div className="w-full flex flex-col items-center xl:items-start">
-                    <CustomCalendar></CustomCalendar>
+                    {/* <CustomCalendar></CustomCalendar> */}
+                    <Calendar></Calendar>
                   </div>
                   <div className="mt-5 flex flex-row items-center gap-2 text-sm">
                     <div className="w-[32px] h-[32px] bg-customYellow rounded-[3px]"></div>

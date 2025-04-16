@@ -11,9 +11,9 @@ const Menu = (props: MenuProps) => {
   return (
     <>
       <div className="flex flex-row">
+
+        {/* shadcn */}
         <img
-
-
           alt="Ícone do menu"
           onClick={() => props.onClick()}
           className="w-14 sm:w-8 cursor-pointer hover:opacity-80"
