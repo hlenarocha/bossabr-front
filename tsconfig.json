@@ -1,4 +1,5 @@
 {
+  // configuração para o CLI Do shadcn ui
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
