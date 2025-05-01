@@ -176,18 +176,14 @@ const TasksScreen = () => {
           >
             <div className="flex flex-row justify-between w-full gap-4">
               <TaskColumn
-                setDragOver={setDragOver}
                 title="NÃO INICIADAS"
                 tasks={tasks}
                 status="não iniciada"
                 setActiveCard={setActiveCard}
                 activeCard={activeCard}
-                dragOver={dragOver}
                 onDrop={onDrop}
               />
               <TaskColumn
-                setDragOver={setDragOver}
-                dragOver={dragOver}
                 title="EM ANDAMENTO"
                 tasks={tasks}
                 status="em andamento"
@@ -196,8 +192,6 @@ const TasksScreen = () => {
                 onDrop={onDrop}
               />
               <TaskColumn
-                setDragOver={setDragOver}
-                dragOver={dragOver}
                 title="CONCLUÍDAS"
                 tasks={tasks}
                 status="concluída"
@@ -206,8 +200,6 @@ const TasksScreen = () => {
                 onDrop={onDrop}
               />
               <TaskColumn
-                setDragOver={setDragOver}
-                dragOver={dragOver}
                 title="ATRASADAS"
                 tasks={tasks}
                 status="atrasada"
