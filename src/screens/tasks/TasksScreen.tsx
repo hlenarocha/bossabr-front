@@ -43,35 +43,9 @@ const TasksScreen = () => {
     // setTasks,
     activeCard,
     setActiveCard,
-    dragOver,
-    setDragOver,
+    
     onDrop,
   } = useDragDrop(initialTasks);
-
-  // const onDrop = (status: string, position: number) => {
-  //   if (activeCard === null) return;
-
-  //   setTasks((prevTasks) => {
-  //     const taskToMove = prevTasks.find(
-  //       (task) => task.indexCard === activeCard
-  //     );
-  //     if (!taskToMove) return prevTasks;
-
-  //     // Filtra a task que está sendo movida
-  //     const filteredTasks = prevTasks.filter(
-  //       (task) => task.indexCard !== taskToMove.indexCard
-  //     );
-
-  //     // Insere na nova posição com o novo status
-  //     const updatedTasks = [
-  //       ...filteredTasks.slice(0, position),
-  //       { ...taskToMove, status },
-  //       ...filteredTasks.slice(position),
-  //     ];
-
-  //     return updatedTasks;
-  //   });
-  // };
 
   const handleNavigate = (path: string) => {
     navigate(path);

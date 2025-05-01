@@ -8,7 +8,7 @@ import InputString from "@/components/UI/InputString";
 import ColoredButton from "@/components/UI/ColoredButton";
 import Select from "@/components/UI/Select";
 import PlainButton from "@/components/UI/PlainButton";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { validateInput } from "@/utils/validateInput";
 import InputDate from "@/components/UI/InputDate";
 import getTeam from "@/api/teamRoutes";
@@ -17,58 +17,110 @@ import Modal from "@/components/modal/Modal";
 import IconHappy from "@/assets/images/famicons_happy.png";
 import IconSad from "@/assets/images/famicons_sad.png";
 import { createWorker } from "@/api/workerRoutes";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+// schema de validação com Zod
+const workerSchema = z.object({
+  name: z
+    .string()
+    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .max(100, "Nome não pode exceder 100 caracteres"),
+  email: z
+    .string()
+    .email("E-mail inválido")
+    .max(100, "E-mail não pode exceder 100 caracteres"),
+  phone: z
+    .string()
+    .refine((val) => !val || validateInput(val, "phone"), "Telefone inválido"),
+  selectedTeam: z.number().min(1, "Selecione uma equipe"),
+  birthday: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || validateInput(val, "birthdayDate"),
+      "Data de nascimento inválida"
+    ),
+  entryDate: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || validateInput(val, "entryDate"),
+      "Data de entrada inválida"
+    ),
+});
+
+type WorkerFormData = z.infer<typeof workerSchema>;
 
 const CreateWorker = () => {
   const navigate = useNavigate();
 
   const [team, setTeam] = useState<TeamInterface[]>([]);
- 
+
   const [isModalSuccessVisible, setIsModalSucessVisible] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
   const [isModalFailedVisible, setIsModalFailedVisible] = useState(false);
-  const [isModalFailedDatesVisible, setIsModalFailedDatesVisible] = useState(false);
+  const [isModalFailedDatesVisible, setIsModalFailedDatesVisible] =
+    useState(false);
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    selectedTeam: 0, // sem seleção
-    birthday: "",
-    entryDate: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, touchedFields },
+    watch,
+    setValue,
+    trigger,
+  } = useForm<WorkerFormData>({
+    resolver: zodResolver(workerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      selectedTeam: 0,
+      birthday: "",
+      entryDate: "",
+    },
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
-  const [validInputs, setValidInputs] = useState<boolean[]>([
-    true, // name
-    true, // email
-    true, // phone
-    true, // birthday
-    true, // entryDate
-  ]);
+  const getBorderColor = (fieldName: keyof WorkerFormData) => {
+    if (fieldName === "entryDate" || fieldName === "birthday") {
+      if (errors[fieldName]) {
+        return "#EF4444";
+      }
 
-  const handleSubmit = async () => {
-    const validTexts = [...validInputs.slice(0, 3)]; // não inclui o quarto elemento (índice 3)
-
-    // se algum campo de texto não for válido ou equipe não selecionada. indexOf retorna -1 se não encontrar false
-    if (validTexts.indexOf(false) !== -1 || form.selectedTeam === 0) {
-      setIsModalFailedVisible(true);
-      return; // return impede que o outro modal apareça
+      return "#F6BC0A";
+    
     }
 
-    if (validInputs[3] === false || validInputs[4] === false) {
-      setIsModalFailedDatesVisible(true);
-      return;
+    if (touchedFields[fieldName] && errors[fieldName]) {
+      return "border-customRedAlert";
     }
 
+    return "border-customYellow";
+  };
+
+  const handleInputChange = async (
+    fieldName: keyof WorkerFormData,
+    value: string | number
+  ) => {
+    setValue(fieldName, value, { shouldTouch: true, shouldValidate: true });
+    await trigger(fieldName);
+  };
+
+  const onSubmit = async (data: WorkerFormData) => {
     try {
       const response = await createWorker({
-        first_name: form.name,
+        first_name: data.name,
         //last_name: "",
-        email: form.email,
-        telefone: form.phone,
-        data_aniversario: form.birthday ?? "",
-        data_entrada: form.entryDate ?? "",
+        email: data.email,
+        telefone: data.phone,
+        data_aniversario: data.birthday ?? "",
+        data_entrada: data.entryDate ?? "",
         role: "funcionario",
-        id_equipe: form.selectedTeam,
+        id_equipe: data.selectedTeam,
       });
 
       if (
@@ -87,6 +139,11 @@ const CreateWorker = () => {
       setIsModalErrorVisible(true);
     }
   };
+
+  const handleFormSubmit = handleSubmit(onSubmit, (errors) => {
+    console.log(errors);
+    setIsModalErrorVisible(true);
+  });
 
   function handleNavigate(path: string) {
     navigate(path);
@@ -142,6 +199,7 @@ const CreateWorker = () => {
         buttonTitle1="FECHAR"
         iconImage={IconSad}
       ></Modal>
+
       <BaseScreen>
         <BackButton
           onClick={() => handleNavigate("/settings/configure-worker")}
@@ -152,126 +210,118 @@ const CreateWorker = () => {
           title="Cadastrar"
           subtitle="Cadastre um colaborador aqui."
           width="xl:w-[1000px] w-[600px] lg:w-[800px]"
-          height="h-[630px]"
+          height="h-[700px]"
         >
-          <InputTitle title="Funcionário"></InputTitle>
-          <InputString
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setForm({ ...form, name: e.target.value });
-              const newValidInputs = [...validInputs]; // cópia do array para não bugar renderização
-              newValidInputs[0] =
-                validateInput(e.target.value, "text") ?? false;
-              setValidInputs(newValidInputs);
-            }}
-            title="NOME DO COLABORADOR"
-            width="w-[100%]"
-            height="h-8"
-            placeholder="Digite o nome..."
-            isMandatory={true}
-            stringType="text"
-            borderColor={
-              validInputs[0] ? "border-customYellow" : "border-red-500"
-            }
-          ></InputString>
-
-          <div className="flex gap-4 flex-row justify-normal items-center w-[100%]">
-            <Select
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setForm({ ...form, selectedTeam: parseInt(e.target.value) });
-              }}
-              options={team.map((t) => {
-                return {
-                  id: t.id_equipe,
-                  name: t.nome_equipe,
-                };
-              })}
-              title="EQUIPE"
-              isMandatory={true}
-              width="w-[70%]"
-            ></Select>
-            <PlainButton
-              title="NOVA EQUIPE"
-              color="bg-customYellow"
-              width="w-[30%]"
-            ></PlainButton>
-          </div>
-
-          <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
+          <form onSubmit={handleFormSubmit}>
+            <InputTitle title="Colaborador" />
             <InputString
-              onChange={(e) => {
-                setForm({ ...form, email: e.target.value });
-                const newValidInputs = [...validInputs];
-                newValidInputs[1] =
-                  validateInput(e.target.value, "email") ?? false;
-                setValidInputs(newValidInputs);
+              {...register("name")}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                handleInputChange("name", e.target.value);
               }}
-              title="E-MAIL"
-              width="w-[50%]"
+              title="NOME DO COLABORADOR"
+              width="w-[100%]"
               height="h-8"
-              placeholder="Digite o email..."
+              placeholder="Digite o nome..."
               isMandatory={true}
-              borderColor={
-                validInputs[1] ? "border-customYellow" : "border-red-500"
-              }
-              stringType="email"
+              stringType="text"
+              borderColor={getBorderColor("name")}
+              errorMessage={errors.name?.message}
             ></InputString>
-            <InputString
-              onChange={(e) => {
-                setForm({ ...form, phone: e.target.value });
-                const newValidInputs = [...validInputs];
-                newValidInputs[2] =
-                  validateInput(e.target.value, "phone") ?? false;
-                setValidInputs(newValidInputs);
-              }}
-              title="TELEFONE"
-              width="w-[50%]"
-              height="h-8"
-              placeholder="(__) ____-____"
-              isMandatory={true}
-              mask="(99) 9999-9999"
-              borderColor={
-                validInputs[2] ? "border-customYellow" : "border-red-500"
-              }
-            ></InputString>
-          </div>
 
-          <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
-            <InputDate
-              onChange={(value: string) => {
-                setForm({ ...form, birthday: value });
-                const newValidInputs = [...validInputs];
-                newValidInputs[3] = validateInput(value, "birthdayDate") ?? false;
-                setValidInputs(newValidInputs);
-              }}
-              title="DATA DE NASCIMENTO"
-              isMandatory={false}
-              width="w-[50%]"
-              borderColor={validInputs[3] ? "#F6BC0A" : "#EF4444"}
-            ></InputDate>
-            <InputDate
-              onChange={(value: string) => {
-                setForm({ ...form, entryDate: value });
-                const newValidInputs = [...validInputs];
-                newValidInputs[4] = validateInput(value, "entryDate") ?? false;
-                setValidInputs(newValidInputs);
-              }}
-              title="DATA DE ENTRADA"
-              isMandatory={false}
-              width="w-[50%]"
-              borderColor={validInputs[4] ? "#F6BC0A" : "#EF4444"}
-            ></InputDate>
-          </div>
+            <div className="flex gap-4 flex-row justify-normal items-center w-[100%]">
+              <Select
+                {...register("selectedTeam", { valueAsNumber: true })}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  handleInputChange("selectedTeam", e.target.value);
+                }}
+                options={team.map((t) => {
+                  return {
+                    id: t.id_equipe,
+                    name: t.nome_equipe,
+                  };
+                })}
+                title="EQUIPE"
+                isMandatory={true}
+                width="w-[70%]"
+                errorMessage={errors.selectedTeam?.message}
+              ></Select>
+              <PlainButton
+                title="NOVA EQUIPE"
+                color="bg-customYellow"
+                width="w-[30%]"
+              ></PlainButton>
+            </div>
 
-          <div className="w-[100%] flex justify-center mt-6">
-            <ColoredButton
-              onClick={handleSubmit}
-              title="SALVAR"
-              color="customYellow"
-              width="w-[180px]"
-              justify="justify-center"
-              icon="fa-solid fa-floppy-disk"
-            ></ColoredButton>
-          </div>
+            <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
+              <InputString
+                {...register("email")}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  handleInputChange("email", e.target.value);
+                }}
+                title="E-MAIL"
+                width="w-[50%]"
+                height="h-8"
+                placeholder="Digite o email..."
+                isMandatory={true}
+                borderColor={getBorderColor("email")}
+                stringType="email"
+                errorMessage={errors.email?.message}
+              ></InputString>
+              <InputString
+                {...register("phone")}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  handleInputChange("phone", e.target.value);
+                }}
+                title="TELEFONE"
+                width="w-[50%]"
+                height="h-8"
+                placeholder="(__) ____-____"
+                isMandatory={true}
+                mask="(99) 9999-9999"
+                borderColor={getBorderColor("phone")}
+                errorMessage={errors.phone?.message}
+              ></InputString>
+            </div>
+
+            <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
+              <InputDate
+                {...register("birthday")}
+                onChange={(value: string) => {
+                  setValue("birthday", value, {shouldValidate: true})
+                }}
+                title="DATA DE NASCIMENTO"
+                isMandatory={false}
+                width="w-[50%]"
+                borderColor={getBorderColor("birthday")}
+                errorMessage={errors.birthday?.message}
+                value={watch("birthday")}
+              ></InputDate>
+              <InputDate
+                {...register("entryDate")}
+                onChange={(value: string) => {
+                  setValue("entryDate", value, {shouldValidate: true})
+                }}
+                title="DATA DE ENTRADA"
+                isMandatory={false}
+                width="w-[50%]"
+                borderColor={getBorderColor("entryDate")}
+                errorMessage={errors.entryDate?.message}
+                value={watch("entryDate")}
+              ></InputDate>
+            </div>
+
+            <div className="w-[100%] flex justify-center mt-6">
+              <ColoredButton
+                type="submit"
+                title="SALVAR"
+                color="customYellow"
+                width="w-[180px]"
+                justify="justify-center"
+                icon="fa-solid fa-floppy-disk"
+              ></ColoredButton>
+            </div>
+          </form>
         </Box>
       </BaseScreen>
     </>

@@ -20,9 +20,13 @@ interface InputDateProps {
   height?: string;
   borderColor?: string;
   onChange: (e: string) => void;
+  errorMessage?: string;
+  value?: string | null;
 }
 
 const InputDate = (props: InputDateProps) => {
+  const dateValue = props.value ? dayjs(props.value) : null;
+
   return (
     <>
       <div className={`flex flex-col mb-4 ${props.width}`}>
@@ -43,7 +47,7 @@ const InputDate = (props: InputDateProps) => {
           adapterLocale="pt-br" // Localização em português
         >
           <DatePicker
-            value={null}
+            value={dateValue}
             onChange={(date) => date && props.onChange(dayjs(date).format('YYYY-MM-DD'))}
             slotProps={{
               yearButton: {
@@ -73,8 +77,8 @@ const InputDate = (props: InputDateProps) => {
                 sx: {
                   "& .MuiOutlinedInput-root": {
                     backgroundColor: "#555555",
-                    borderRadius: "400px",
-                    "& fieldset": { borderColor: props.borderColor },
+                    borderRadius: "100px",
+                    "& fieldset": { borderColor: props.borderColor }, // Cor do contorno
                     "&:hover fieldset": { borderColor: props.borderColor }, // Outline ao passar o mouse
                     "&.Mui-focused fieldset": { borderColor: props.borderColor }, // Outline quando focado
                   },
@@ -124,6 +128,9 @@ const InputDate = (props: InputDateProps) => {
           />
         </LocalizationProvider>
       </div>
+      <div className="text-xs text-customRedAlert mt-1">
+          {props.errorMessage}
+        </div>
     </>
   );
 };

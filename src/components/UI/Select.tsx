@@ -4,6 +4,7 @@ interface SelectProps {
   width?: string;
   height?: string;
   options: { id: number; name: string }[];
+  errorMessage?: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
@@ -32,6 +33,9 @@ const Select = (props: SelectProps) => {
 
         ))}
       </select>
+      <div className="text-xs text-customRedAlert mt-1">
+          {props.errorMessage}
+        </div>
     </div>
   );
 };
