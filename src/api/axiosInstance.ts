@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const url = import.meta.env.VITE_BACK_END_URL; // Sintaxe do Vite
 
@@ -9,5 +10,20 @@ const api = axios.create({
     Accept: "application/json",
   },
 });
+
+// requisições vão executar o código abaixo antes de serem enviadas
+api.interceptors.request.use(
+  (config) => {
+    const authToken = Cookies.get("auth_token");
+    if (authToken) {
+      config.headers.Authorization = `Bearer ${authToken}`
+    }
+
+    return config;
+  },
+
+  (error) => { Promise.reject(error); }
+
+);
 
 export default api;

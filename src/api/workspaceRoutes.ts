@@ -5,14 +5,14 @@ type FuncionarioWorkspace = {
   demandas: any[];
 }
 
-const readWorkspace = async (id_funcionario: number | undefined, 
-  authToken: string): Promise<FuncionarioWorkspace> => {
+const readWorkspace = async (id_funcionario: number | undefined): Promise<FuncionarioWorkspace> => {
   try {
-    const response = await api.get(`/funcionario/${id_funcionario}/workspace`, {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
+    const response = await api.get(`/funcionario/${id_funcionario}/workspace`);
+    //   , {
+    //   headers: {
+    //     Authorization: `Bearer ${authToken}`,
+    //   },
+    // });
     console.log(response.data);
 
     return response.data;

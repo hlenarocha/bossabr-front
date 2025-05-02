@@ -13,7 +13,6 @@ import ScoreBar from "@/components/UI/ScoreBar";
 import TaskColumn from "@/components/task/TaskColumn";
 import { useNavigate } from "react-router-dom";
 import readWorkspace from "@/api/workspaceRoutes";
-import Cookies from "js-cookie";
 import { useDragDrop } from "@/hooks/useDragDrop";
 
 const WorkspaceScreen = () => {
@@ -22,7 +21,7 @@ const WorkspaceScreen = () => {
   const navigate = useNavigate();
   // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
   // const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
-  const auth_token = Cookies.get("auth_token");
+  // const auth_token = Cookies.get("auth_token");
   const [equipe, setEquipe] = useState<string>(""); // estado para armazenar a equipe
 
   console.log(equipe);
@@ -33,10 +32,10 @@ const WorkspaceScreen = () => {
     if (user?.id_funcionario) {
       const fetchWorkspaceData = async () => {
         try {
-          if (!auth_token) {
-            throw new Error("Authentication token is missing");
-          }
-          const data = await readWorkspace(user?.id_funcionario, auth_token);
+          // if (!auth_token) {
+          //   throw new Error("Authentication token is missing");
+          // }
+          const data = await readWorkspace(user?.id_funcionario);
           console.log(data);
           // console.log(data.dadosEssenciais);
           // console.log(data.demandas);

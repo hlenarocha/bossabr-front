@@ -5,11 +5,6 @@ export interface TeamInterface {
   nome_equipe: string;
 }
 
-// interface ApiResponse {
-//   success: boolean;
-//   data: TeamInterface[];
-// }
-
 export const getTeams = async (): Promise<TeamInterface[] | undefined> => {
   try {
     const response = await api.get("/equipe");
@@ -18,12 +13,5 @@ export const getTeams = async (): Promise<TeamInterface[] | undefined> => {
     console.error(error);
   }
 };
-
-// export const getTeamByWorkerId = async (id: number) => {
-//   try {
-//     const response = await api.get("/equipe");
-
-// }
-
 
 export default getTeams;
