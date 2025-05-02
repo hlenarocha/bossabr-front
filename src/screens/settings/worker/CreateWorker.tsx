@@ -8,11 +8,10 @@ import InputString from "@/components/UI/InputString";
 import ColoredButton from "@/components/UI/ColoredButton";
 import Select from "@/components/UI/Select";
 import PlainButton from "@/components/UI/PlainButton";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { validateInput } from "@/utils/validateInput";
 import InputDate from "@/components/UI/InputDate";
 import getTeam from "@/api/teamRoutes";
-import { TeamInterface } from "@/api/teamRoutes";
 import Modal from "@/components/modal/Modal";
 import IconHappy from "@/assets/images/famicons_happy.png";
 import IconSad from "@/assets/images/famicons_sad.png";
@@ -20,6 +19,7 @@ import { createWorker } from "@/api/workerRoutes";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
 
 // schema de validação com Zod e react hook form
 // para o formulário de cadastro de colaborador
@@ -57,7 +57,17 @@ type WorkerFormData = z.infer<typeof workerSchema>;
 const CreateWorker = () => {
   const navigate = useNavigate();
 
-  const [team, setTeam] = useState<TeamInterface[]>([]);
+  const {
+    data: teamsResponse,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryFn: () => getTeam(),
+    staleTime: 1000 * 60 * 5, // dados "fresh" por 5 min
+    queryKey: ["teams"], // chave única para a query
+    // cria cache de dados, otimizando a necessidade de requisições
+    // o useMutation é utilizado qnd há updates -> quando há sucesso, queryKey deve dar refetch nos dados
+  });
 
   const [isModalSuccessVisible, setIsModalSucessVisible] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
@@ -93,7 +103,6 @@ const CreateWorker = () => {
       }
 
       return "#F6BC0A";
-    
     }
 
     if (touchedFields[fieldName] && errors[fieldName]) {
@@ -149,22 +158,6 @@ const CreateWorker = () => {
   function handleNavigate(path: string) {
     navigate(path);
   }
-
-  useEffect(() => {
-    const fetchTeam = async () => {
-      try {
-        const response = await getTeam();
-        if (response) {
-          setTeam(response.data);
-          console.log(response.data);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar equipes", error);
-      }
-    };
-
-    fetchTeam();
-  }, []);
 
   return (
     <>
@@ -236,17 +229,40 @@ const CreateWorker = () => {
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   handleInputChange("selectedTeam", e.target.value);
                 }}
-                options={team.map((t) => {
-                  return {
-                    id: t.id_equipe,
-                    name: t.nome_equipe,
-                  };
-                })}
+                options={
+                  isLoading
+                    ? [
+                        {
+                          id: 0,
+                          name: "Carregando...",
+                          className: "text-customYellow",
+                        },
+                      ]
+                    : isError
+                    ? [
+                        {
+                          id: 0,
+                          name: "Erro.",
+                          className: "text-customRedAlert",
+                        },
+                      ]
+                    : teamsResponse?.map((t) => {
+                        return {
+                          id: t.id_equipe,
+                          name: t.nome_equipe,
+                        };
+                      }) || []
+                }
                 title="EQUIPE"
                 isMandatory={true}
                 width="w-[70%]"
                 errorMessage={errors.selectedTeam?.message}
               ></Select>
+             
+              {isError && (
+                <span className="text-customRedAlert text-xs mt-4">Erro ao carregar equipes.</span>
+              )}
+              
               <PlainButton
                 title="NOVA EQUIPE"
                 color="bg-customYellow"
@@ -289,7 +305,7 @@ const CreateWorker = () => {
               <InputDate
                 {...register("birthday")}
                 onChange={(value: string) => {
-                  setValue("birthday", value, {shouldValidate: true})
+                  setValue("birthday", value, { shouldValidate: true });
                 }}
                 title="DATA DE NASCIMENTO"
                 isMandatory={false}
@@ -301,7 +317,7 @@ const CreateWorker = () => {
               <InputDate
                 {...register("entryDate")}
                 onChange={(value: string) => {
-                  setValue("entryDate", value, {shouldValidate: true})
+                  setValue("entryDate", value, { shouldValidate: true });
                 }}
                 title="DATA DE ENTRADA"
                 isMandatory={false}

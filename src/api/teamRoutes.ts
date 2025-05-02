@@ -5,15 +5,15 @@ export interface TeamInterface {
   nome_equipe: string;
 }
 
-interface ApiResponse {
-  success: boolean;
-  data: TeamInterface[];
-}
+// interface ApiResponse {
+//   success: boolean;
+//   data: TeamInterface[];
+// }
 
-export const getTeams = async (): Promise<ApiResponse | undefined> => {
+export const getTeams = async (): Promise<TeamInterface[] | undefined> => {
   try {
     const response = await api.get("/equipe");
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error(error);
   }
