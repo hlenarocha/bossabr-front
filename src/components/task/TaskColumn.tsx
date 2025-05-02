@@ -14,6 +14,7 @@ interface TaskColumnProps {
 const TaskColumn = (props: TaskColumnProps) => {
   const [activeDropIndex, setActiveDropIndex] = useState<number | null>(null);
 
+
   const handleDragOver = (index: number) => {
     setActiveDropIndex(index);
   };
@@ -66,6 +67,7 @@ const TaskColumn = (props: TaskColumnProps) => {
                 indexCard={task.indexCard}
                 activeCard={props.activeCard}
               />
+
 
               {/* Drop area abaixo de cada item */}
               <DropArea

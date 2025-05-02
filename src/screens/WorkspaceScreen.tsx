@@ -86,9 +86,12 @@ const WorkspaceScreen = () => {
   } = useDragDrop(initialTasks);
 
 
+  console.log(activeCard)
+
   return (
     <>
       <BaseScreen>
+      
         <div className="flex items-center cursor-default  mt-4 gap-4">
           <div className="w-12 h-12  flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255, 255, 255, 0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
             <img className="rounded-full w-10 h-10" src={user?.avatar}></img>

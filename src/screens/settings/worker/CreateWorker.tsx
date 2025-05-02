@@ -21,7 +21,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-// schema de validação com Zod
+// schema de validação com Zod e react hook form
+// para o formulário de cadastro de colaborador
 const workerSchema = z.object({
   name: z
     .string()

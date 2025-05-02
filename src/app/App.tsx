@@ -11,8 +11,13 @@ import ConfigureWorker from "../screens/settings/worker/ConfigureWorker";
 import CreateWorker from "../screens/settings/worker/CreateWorker";
 import { UserProvider } from "../contexts/UserContext";
 import { SideBarProvider } from "../contexts/SideBarContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+
 
 const App = () => {
+  
   const router = createBrowserRouter([
     {
       path: "/",
@@ -58,13 +63,15 @@ const App = () => {
   ]);
 
   return (
-    // contexto configurado, evolvendo todo o App
+    // contexto e QueryClientProvider configurado, envolvendo todo o App
+    // possível acessar esse contexto definido (Query, User, SideBar) em toda a aplicação
+    <QueryClientProvider client={queryClient}>
     <UserProvider>
       <SideBarProvider>
-        <RouterProvider router={router} />;
+        <RouterProvider router={router} />
       </SideBarProvider>
     </UserProvider>
-  );
+    </QueryClientProvider>  );
 };
 
 export default App;
