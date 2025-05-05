@@ -26,4 +26,7 @@ api.interceptors.request.use(
 
 );
 
+
+// pode ser configurado para response também, para tratar respostas de erro com base nos status
+
 export default api;

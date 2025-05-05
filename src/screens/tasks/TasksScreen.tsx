@@ -1,14 +1,14 @@
 import BaseScreen from "@/screens/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
-import ColoredButton from "@/components/UI/ColoredButton";
+import ColoredButton from "@/components/shared/ColoredButton";
 // import CustomCalendar from "@/components/UI/CustomCalendar";
 import { useNavigate } from "react-router-dom";
 // import { useState } from "react";
 import TaskColumn from "@/components/task/TaskColumn";
 import TaskCard from "@/components/task/TaskCard";
 import { useDragDrop } from "@/hooks/useDragDrop";
-import { Calendar } from "@/components/shadcn/calendar";
+import { Calendar } from "@/components/ui/calendar";
 
 const TasksScreen = () => {
   const navigate = useNavigate();

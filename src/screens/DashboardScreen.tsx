@@ -1,7 +1,7 @@
 import BaseScreen from "./BaseScreen";
-import Box from "../components/box/BoxContent";
-import PageTitle from "../components/title/PageTitle";
-// import BackButton from "../components/UI/BackButton";
+import Box from "@/components/box/BoxContent";
+import PageTitle from "@/components/title/PageTitle";
+import { Component } from "@/components/charts/PieChart";
 
 const DashboardScreen = () => {
   return (
@@ -15,7 +15,7 @@ const DashboardScreen = () => {
 
           height="h-[700px]"
         >
-          <div>DASHBOARD SERÁ AQUI</div>
+          <Component />
         </Box>
       </div>
     </BaseScreen>

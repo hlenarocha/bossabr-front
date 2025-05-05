@@ -1,15 +1,15 @@
-import BackButton from "@/components/UI/BackButton";
+import BackButton from "@/components/shared/BackButton";
 import BaseScreen from "@/screens/BaseScreen";
 import Box from "@/components/box/BoxContent";
-import ColoredButton from "@/components/UI/ColoredButton";
+import ColoredButton from "@/components/shared/ColoredButton";
 import { useNavigate } from "react-router-dom";
 import TableItem from "@/components/table/TableItem";
 import { useEffect, useState } from "react";
 import { readWorker } from "@/api/workerRoutes";
 import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
-import LoadingSpinner from "@/components/UI/LoadingSpinner";
-import SearchBar from "@/components/UI/SearchBar";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import SearchBar from "@/components/shared/SearchBar";
 
 const ConfigureWorker = () => {
   interface Funcionario {

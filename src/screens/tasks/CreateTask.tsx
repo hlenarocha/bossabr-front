@@ -1,9 +1,9 @@
 import PageTitle from "@/components/title/PageTitle";
 import BaseScreen from "../BaseScreen";
-import BackButton from "@/components/UI/BackButton";
+import BackButton from "@/components/shared/BackButton";
 import Box from "@/components/box/BoxContent";
 import InputTitle from "@/components/title/InputTitle";
-import InputString from "@/components/UI/InputString";
+import InputString from "@/components/shared/InputString";
 
 const CreateTask = () => {
   return (

@@ -1,7 +1,7 @@
 import BaseScreen from "@/screens/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
-import ColoredButton from "@/components/UI/ColoredButton";
+import ColoredButton from "@/components/shared/ColoredButton";
 import { useNavigate } from "react-router-dom";
 
 const SettingsScreen = () => {
