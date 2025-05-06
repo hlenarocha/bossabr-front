@@ -7,8 +7,8 @@ import Settings from "../screens/settings/SettingsScreen";
 import Reports from "../screens/ReportsScreen";
 import Workspace from "../screens/WorkspaceScreen";
 import CreateTask from "../screens/tasks/CreateTask";
-import ConfigureWorker from "../screens/settings/worker/ConfigureWorker";
-import CreateWorker from "../screens/settings/worker/CreateWorker";
+import ConfigureWorker from "../screens/settings/worker/ListWorker";
+import ListWorker from "../screens/settings/worker/ListWorker";
 import { UserProvider } from "../contexts/UserContext";
 import { SideBarProvider } from "../contexts/SideBarContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -57,8 +57,8 @@ const App = () => {
       element: <ConfigureWorker />,
     },
     {
-      path: "/settings/configure-worker/create-worker",
-      element: <CreateWorker />,
+      path: "/settings/configure-worker/list-worker",
+      element: <ListWorker />,
     },
   ]);
 

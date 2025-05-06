@@ -56,15 +56,15 @@ export function Component() {
   }, [])
 
   return (
-    <Card className="flex flex-col ">
+    <Card className="flex flex-col bg-customBoxGray text-white">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Peças produzidas</CardTitle>
+        <CardDescription className="text-white">Maio 2025</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[250px] text-white"
         >
           <PieChart>
             <ChartTooltip
@@ -100,7 +100,7 @@ export function Component() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                        Peças
                         </tspan>
                       </text>
                     )

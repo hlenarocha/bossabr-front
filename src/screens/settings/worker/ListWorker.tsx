@@ -11,7 +11,7 @@ import PageTitle from "@/components/title/PageTitle";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import SearchBar from "@/components/shared/SearchBar";
 
-const ConfigureWorker = () => {
+const ListWorker = () => {
   interface Funcionario {
     first_name: string;
     // equipe: string;
@@ -109,4 +109,4 @@ const ConfigureWorker = () => {
   );
 };
 
-export default ConfigureWorker;
+export default ListWorker;
