@@ -4,12 +4,14 @@ import BackButton from "@/components/shared/BackButton";
 import Box from "@/components/box/BoxContent";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
+import { useNavigate } from "react-router-dom";
 
 const CreateTask = () => {
+  const navigate = useNavigate();
   return (
     <>
       <BaseScreen>
-        <BackButton></BackButton>
+        <BackButton onClick={() => navigate("/tasks")}></BackButton>
         <PageTitle marginTop="mt-4" title="Adicionar Demanda"></PageTitle>
         <Box
           title="Cadastrar"
