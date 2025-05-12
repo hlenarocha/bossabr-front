@@ -12,6 +12,7 @@ import ListWorker from "../screens/settings/worker/ListWorker";
 import { UserProvider } from "../contexts/UserContext";
 import { SideBarProvider } from "../contexts/SideBarContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ListTask from "@/screens/tasks/ListTask";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,10 @@ const App = () => {
     {
       path: "/tasks/create-task",
       element: <CreateTask />,
+    },
+    {
+      path: "/tasks/list-task",
+      element: <ListTask />
     },
     {
       path: "/clients",

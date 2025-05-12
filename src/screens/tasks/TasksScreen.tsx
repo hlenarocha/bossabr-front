@@ -61,6 +61,7 @@ const TasksScreen = () => {
             width="w-[280px]"
             title="LISTA DE DEMANDAS"
             icon="fa-solid fa-eye"
+            onClick={() => handleNavigate("/tasks/list-task")}
           ></ColoredButton>
           <ColoredButton
             justify="justify-center"
