@@ -43,7 +43,7 @@ export const validateInput = (value: string, type: string) => {
   if (type === "entryDate") {
     const inputDate = new Date(value);
 
-    // - data de entrada não pode ser em data futura
+    // - data de entrada não pode ser em data futura REVER
     if (inputDate > currentDate) {
       return false;
     }

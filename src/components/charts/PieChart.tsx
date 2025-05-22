@@ -26,26 +26,26 @@ const chartData = [
 
 const chartConfig = {
   visitors: {
-    label: "Visitors",
+    label: "Peças",
   },
   chrome: {
-    label: "Chrome",
+    label: "Banner",
     color: "hsl(var(--chart-1))",
   },
   safari: {
-    label: "Safari",
+    label: "Post",
     color: "hsl(var(--chart-2))",
   },
   firefox: {
-    label: "Firefox",
+    label: "Logo",
     color: "hsl(var(--chart-3))",
   },
   edge: {
-    label: "Edge",
+    label: "Panfleto",
     color: "hsl(var(--chart-4))",
   },
   other: {
-    label: "Other",
+    label: "Outro",
     color: "hsl(var(--chart-5))",
   },
 } satisfies ChartConfig
@@ -78,27 +78,27 @@ export function Component() {
               innerRadius={60}
               strokeWidth={5}
             >
-              <Label
+              <Label 
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
                       <text
                         x={viewBox.cx}
                         y={viewBox.cy}
+                        fill="white"
                         textAnchor="middle"
                         dominantBaseline="middle"
                       >
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="text-white text-3xl font-bold"
                         >
                           {totalVisitors.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
                         >
                         Peças
                         </tspan>
@@ -113,10 +113,10 @@ export function Component() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Aumento de 5.3% neste mês <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+        <div className="leading-none text-muted-foreground text-white">
+          (comparado ao mês passado)
         </div>
       </CardFooter>
     </Card>

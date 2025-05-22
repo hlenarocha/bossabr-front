@@ -8,17 +8,17 @@ import Reports from "../screens/ReportsScreen";
 import Workspace from "../screens/WorkspaceScreen";
 import CreateTask from "../screens/tasks/CreateTask";
 import ConfigureWorker from "../screens/settings/worker/ListWorker";
+import CreateWorker from "@/screens/settings/worker/CreateWorker";
 import ListWorker from "../screens/settings/worker/ListWorker";
 import { UserProvider } from "../contexts/UserContext";
 import { SideBarProvider } from "../contexts/SideBarContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ListTask from "@/screens/tasks/ListTask";
 
+
 const queryClient = new QueryClient();
 
-
 const App = () => {
-  
   const router = createBrowserRouter([
     {
       path: "/",
@@ -43,7 +43,7 @@ const App = () => {
     },
     {
       path: "/tasks/list-task",
-      element: <ListTask />
+      element: <ListTask />,
     },
     {
       path: "/clients",
@@ -61,6 +61,9 @@ const App = () => {
       path: "/settings/configure-worker",
       element: <ConfigureWorker />,
     },
+    { 
+      path: "/settings/configure-worker/create-worker", 
+      element: <CreateWorker /> },
     {
       path: "/settings/configure-worker/list-worker",
       element: <ListWorker />,
@@ -71,12 +74,13 @@ const App = () => {
     // contexto e QueryClientProvider configurado, envolvendo todo o App
     // possível acessar esse contexto definido (Query, User, SideBar) em toda a aplicação
     <QueryClientProvider client={queryClient}>
-    <UserProvider>
-      <SideBarProvider>
-        <RouterProvider router={router} />
-      </SideBarProvider>
-    </UserProvider>
-    </QueryClientProvider>  );
+      <UserProvider>
+        <SideBarProvider>
+          <RouterProvider router={router} />
+        </SideBarProvider>
+      </UserProvider>
+    </QueryClientProvider>
+  );
 };
 
 export default App;
