@@ -21,7 +21,7 @@ export const validateInput = (value: string, type: string) => {
   }
 
   if (type === 'phone') {
-    const phoneRegex = /\(\d{2}\) \d{4,5}-\d{4}/;
+    const phoneRegex = /\(\d{2}\) \d{5}-\d{4}/;
     return phoneRegex.test(value) && value.length > 0 && value.length <= 15;
   }
 

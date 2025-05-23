@@ -293,9 +293,9 @@ const CreateWorker = () => {
                 title="TELEFONE"
                 width="w-[50%]"
                 height="h-8"
-                placeholder="(__) ____-____"
+                placeholder="(__) _____-____"
                 isMandatory={true}
-                mask="(99) 9999-9999"
+                mask="(99) 99999-9999"
                 borderColor={getBorderColor("phone")}
                 errorMessage={errors.phone?.message}
               ></InputString>
