@@ -10,6 +10,7 @@ export default {
   			customBoxGray: '#484848',
   			customInputGray: '#555555',
   			customRedAlert: '#E43131',
+				customTextGray: '#484848',
   			customYellowTask: '#EEBD4A',
   			customBlueTask: '#4D95E8',
   			customGreenTask: '#48B472',

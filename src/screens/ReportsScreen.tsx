@@ -6,18 +6,35 @@ import SectorTag from "@/components/tags/SectorTag";
 import InputTitle from "@/components/title/InputTitle";
 import TableItem from "@/components/table/TableItem";
 import TableHeader from "@/components/table/TableHeader";
+import ColoredButton from "@/components/shared/ColoredButton";
+import { useNavigate } from "react-router-dom";
 
 const ReportScreen = () => {
+  const navigate = useNavigate();
+
   return (
     <BaseScreen>
-      <PageTitle
-        marginTop="mt-4"
-        title="Relatório Diário de {user}"
-      ></PageTitle>
+      <div className="flex flex-col items-center lg:justify-between lg:flex-row">
+        <PageTitle
+          marginTop="mt-4"
+          title="Relatório Diário de {user}"
+        ></PageTitle>
+        <ColoredButton
+          onClick={() => {
+            navigate("/reports");
+          }}
+          width="w-fit"
+          title="BAIXAR RELATÓRIO DIÁRIO"
+          icon="fa-solid fa-download"
+          marginTop="mt-6"
+          color="customYellow"
+          justify="justify-center"
+        ></ColoredButton>
+      </div>
       <Box
         title="Relatório Diário"
         subtitle="Visualize as demandas realizadas no dia {dd / mm / YY}"
-        width="w-full md:w-[700px] lg:w-[900px]"
+        width="w-[600px] lg:w-[800px] xl:w-[1000px]"
         height="h-fit"
       >
         <div className="flex flex-row gap-2 w-full mb-4">
@@ -135,6 +152,7 @@ const ReportScreen = () => {
             icon="fa-eye"
           ></TableItem>
         </div>
+        <div className="flex w-full mt-10 justify-center"></div>
       </Box>
     </BaseScreen>
   );

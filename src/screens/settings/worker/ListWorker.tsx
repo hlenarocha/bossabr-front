@@ -33,8 +33,7 @@ const ListWorker = () => {
         const response = await readWorker();
         if (response) {
           setFuncionarios(response.data);
-          setTimeout(() => setIsLoading(false), 1500
-        )
+          setTimeout(() => setIsLoading(false), 1500);
           console.log(response.data);
         }
       } catch (error) {
@@ -63,44 +62,51 @@ const ListWorker = () => {
         </div>
 
         <div className="flex flex-col lg:justify-between lg:flex-row">
-        <PageTitle marginTop="mt-6" title="Configurar Colaboradores"></PageTitle>
-        <SearchBar marginTop="mt-6" placeholder="Pesquise um colaborador aqui..."></SearchBar>
-
+          <PageTitle
+            marginTop="mt-6"
+            title="Configurar Colaboradores"
+          ></PageTitle>
+          <SearchBar
+            marginTop="mt-6"
+            placeholder="Pesquise um colaborador aqui..."
+          ></SearchBar>
         </div>
-        
+
         <Box
           width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-[640px]"
           title="Lista de Colaboradores"
           subtitle="Visualização da lista de colaboradores para configuração."
         >
-            <TableHeader
-              columns={[
-                { width: "w-[33%]", content: "NOME" },
-                { width: "w-[33%]", content: "EQUIPE" },
-                { width: "w-[33%]", content: "SETOR" },
-              ]}
-            ></TableHeader>
+          <TableHeader
+            columns={[
+              { width: "w-[33%]", content: "NOME" },
+              { width: "w-[33%]", content: "EQUIPE" },
+              { width: "w-[33%]", content: "SETOR" },
+            ]}
+          ></TableHeader>
           <>
-              <div className="h-[80%] overflow-y-auto">
-            {loading ? <LoadingSpinner></LoadingSpinner> : (
-              funcionarios.map((funcionario, index) => (
-                <TableItem
-                  key={index}
-                  itemWidth="w-full "
-                  itemHeight="h-16"
-                  columns={[
-                    {
-                      width: "w-[33%]",
-                      content: funcionario.first_name,
-                    },
-                    { width: "w-[33%]", content: "Equipe" },
-                    { width: "w-[33%]", content: "Setor" },
-                  ]}
-                  icon="fa-eye"
-                ></TableItem>
-              ))
-            )}
+            <div className="h-[80%] overflow-y-auto">
+              {loading ? (
+                <LoadingSpinner></LoadingSpinner>
+              ) : (
+                funcionarios.map((funcionario, index) => (
+                  <TableItem
+                    key={index}
+                    itemWidth="w-full "
+                    itemHeight="h-16"
+                    columns={[
+                      {
+                        width: "w-[33%]",
+                        content: funcionario.first_name,
+                      },
+                      { width: "w-[33%]", content: "Equipe" },
+                      { width: "w-[33%]", content: "Setor" },
+                    ]}
+                    icon="fa-eye"
+                  ></TableItem>
+                ))
+              )}
             </div>
           </>
         </Box>

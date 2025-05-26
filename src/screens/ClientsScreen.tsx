@@ -3,17 +3,39 @@ import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import TableHeader from "@/components/table/TableHeader";
 import TableItem from "@/components/table/TableItem";
+import SearchBar from "@/components/shared/SearchBar";
+import ColoredButton from "@/components/shared/ColoredButton";
 
 const ClientsScreen = () => {
   return (
     <>
       <BaseScreen>
-        <PageTitle marginTop="mt-4" title="Clientes"></PageTitle>
+      <div className="flex w-[100%] justify-end">
+
+      <ColoredButton
+            justify="justify-center"
+            // onClick={() =>
+            //   navigate("/settings/configure-worker/create-worker")
+            // }
+            color="customYellow"
+            width="w-[330px]"
+            title="ADICIONAR COLABORADOR"
+            icon="fa-solid fa-circle-plus"
+          ></ColoredButton>
+                </div>
+
+        <div className="flex flex-col lg:justify-between lg:flex-row">
+          <PageTitle marginTop="mt-4" title="Clientes"></PageTitle>
+          <SearchBar
+            marginTop="mt-6"
+            placeholder="Pesquise um colaborador aqui..."
+          ></SearchBar>
+        </div>
         <div className="mt-4 ">
           <Box
             title="Lista de Clientes"
             subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
-            width="w-[100%]"
+            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
             height="h-[640px]"
           >
             <TableHeader
@@ -25,7 +47,7 @@ const ClientsScreen = () => {
               ]}
             />
 
-            <div className="h-[65%] overflow-y-auto">
+            <div className="h-[70%] overflow-y-auto">
               <TableItem
                 itemWidth="w-full "
                 itemHeight="h-16"

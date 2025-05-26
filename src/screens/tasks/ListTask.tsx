@@ -3,21 +3,36 @@ import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import TableHeader from "@/components/table/TableHeader";
 import TableItem from "@/components/table/TableItem";
+import BackButton from "@/components/shared/BackButton";
+import { useNavigate } from "react-router-dom";
+import SearchBar from "@/components/shared/SearchBar";
 
 const ListTask = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <BaseScreen>
-        <PageTitle marginTop="mt-4" title="Demandas"></PageTitle>
+      <BackButton
+          onClick={() => navigate("/tasks")}
+        ></BackButton>
+         <div className="flex flex-col lg:justify-between lg:flex-row">
+          <PageTitle
+            marginTop="mt-6"
+            title="Configurar Colaboradores"
+          ></PageTitle>
+          <SearchBar
+            marginTop="mt-6"
+            placeholder="Pesquise um colaborador aqui..."
+          ></SearchBar>
+        </div>
         <div className="mt-4 ">
           <Box
-            title="Lista de Demandas"
-            subtitle="Visualização da lista de demandas."
-            // LEMBRETE HELENA: Arrumar largura
-            width="w-[800px]"
+            title="Lista de demandas"
+            subtitle="Visualização de todas as demandas de forma geral ou de forma filtrada por equipe, setor, prazo ou cliente."
+            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
             height="h-[640px]"
           >
-
             <TableHeader
               columns={[
                 { width: "w-[25%]", content: "NOME" },
@@ -27,7 +42,7 @@ const ListTask = () => {
               ]}
             />
 
-            <div className="h-[65%] overflow-y-auto">
+            <div className="h-[70%] overflow-y-auto">
               <TableItem
                 itemWidth="w-full "
                 itemHeight="h-16"
