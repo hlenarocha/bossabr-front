@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import LoginInput from "@/components/login/LoginInput";
 import LoginButton from "@/components/login/LoginButton";
-import Logo from "@/assets/images/logo-bossa.svg";
+import Logo from "@/assets/images/MKTFlowLogo.png";
 import GoogleIcon from "@/assets/images/icon-google.png";
 import LoadingScreen from "@/views/loading/LoadingScreen";
 import Modal from "@/components/modal/Modal";
@@ -118,17 +118,18 @@ const LoginCard = () => {
       ></Modal>
 
       <div className="w-[90%] max-w-[600px] flex absolute flex-col justify-center items-center h-auto sm:h-[600px] bg-black/10 rounded-lg sm:rounded-full p-10 shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)] backdrop-blur-[30px]">
-        <img className="mx-auto mt-[-20px]" src={Logo} alt="Logo Bossa" />
+        <img className="mx-auto mb-8" src={Logo} alt="Logo MKTFlow" />
         <div className="w-full cursor-default max-w-[368px] h-[46px] text-white text-[32px] font-normal font-alatsi text-left">
           Login
         </div>
-        <LoginInput placeholder="E-mail"></LoginInput>
+        <LoginButton></LoginButton> 
+
+        {/* <LoginInput placeholder="E-mail"></LoginInput>
         <LoginInput placeholder="Senha"></LoginInput>
         <div className="w-full max-w-[368px] mt-[10px] h-[19px] text-right text-white text-base font-normal font-alatsi underline hover:cursor-pointer hover:opacity-70">
           Esqueci minha senha!
         </div>
-        <LoginButton></LoginButton>
-        <div className="w-full max-w-[371px] mt-[20px] h-[1px] bg-white"></div>
+        {/* <div className="w-full max-w-[371px] mt-[20px] h-[1px] bg-white"></div> */}
         <div
           onClick={() => login()}
           className="w-full max-w-[371px] h-[38px] hover:border-[4px] hover:border-[#F8BB49] hover:cursor-pointer flex items-center justify-center bg-[#ffffff] rounded-[10px] shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)] mt-5 placeholder-gray-500 transform hover:scale-100"
@@ -139,6 +140,9 @@ const LoginCard = () => {
           <div className="text-[#000000] font-alatsi font-[500]">
             Continuar com o Google
           </div>
+        </div>
+        <div className="w-full max-w-[368px] mt-8 h-[19px] text-right text-white text-base font-normal font-alatsi underline hover:cursor-pointer hover:opacity-70">
+          Ainda não tenho acesso ao sistema!
         </div>
       </div>
     </>

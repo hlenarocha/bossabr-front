@@ -1,6 +1,6 @@
-# Bossa Front-End
+# MKTFLow Front-End
 
-Este é o repositório do front-end da aplicação Bossa, desenvolvido em React com TypeScript e Tailwind para estilização de componentes.
+Este é o repositório do front-end da aplicação MKTFlow, desenvolvido em React com TypeScript e Tailwind para estilização de componentes.
 
 ## Instalação
 

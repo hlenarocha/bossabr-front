@@ -1,7 +1,7 @@
 import HeaderDate from "@/components/header/HeaderDate";
 import LogoutButton from "@/components/header/LogoutButton";
 import SideMenu from "@/components/header/SideMenu";
-import Logo from "@/assets/images/logo-bossa.svg";
+import Logo from "@/assets/images/MKTFlowLogo.png";
 import Modal from "@/components/modal/Modal";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -58,7 +58,7 @@ const HeaderFull = (props: HeaderFullProps) => {
           onClick={() => props.toggleSideBar()}
         ></SideMenu>
         <HeaderDate></HeaderDate>
-        <img src={Logo} className="sm:hidden flex w-[128px]" />
+        <img src={Logo} className="sm:hidden flex w-32 mr-6" /> 
         <LogoutButton
           onClick={() => setIsModalLogoutVisible(true)}
         ></LogoutButton>
