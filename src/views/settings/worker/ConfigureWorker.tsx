@@ -1,5 +1,5 @@
 import BackButton from "@/components/shared/BackButton";
-import BaseScreen from "@/screens/BaseScreen";
+import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import ColoredButton from "@/components/shared/ColoredButton";
 import { useNavigate } from "react-router-dom";

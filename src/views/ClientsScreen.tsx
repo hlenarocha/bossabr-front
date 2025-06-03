@@ -1,4 +1,4 @@
-import BaseScreen from "@/screens/BaseScreen";
+import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import TableHeader from "@/components/table/TableHeader";
@@ -18,8 +18,8 @@ const ClientsScreen = () => {
             //   navigate("/settings/configure-worker/create-worker")
             // }
             color="customYellow"
-            width="w-[330px]"
-            title="ADICIONAR COLABORADOR"
+            width="w-[300px]"
+            title="ADICIONAR CLIENTE"
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
                 </div>
@@ -28,7 +28,7 @@ const ClientsScreen = () => {
           <PageTitle marginTop="mt-4" title="Clientes"></PageTitle>
           <SearchBar
             marginTop="mt-6"
-            placeholder="Pesquise um colaborador aqui..."
+            placeholder="Pesquise um cliente aqui..."
           ></SearchBar>
         </div>
         <div className="mt-4 ">

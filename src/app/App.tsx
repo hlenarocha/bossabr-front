@@ -1,19 +1,22 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "../screens/LoginScreen";
-import Dashboard from "../screens/DashboardScreen";
-import Tasks from "../screens/tasks/TasksScreen";
-import Clients from "../screens/ClientsScreen";
-import Settings from "../screens/settings/SettingsScreen";
-import Reports from "../screens/ReportsScreen";
-import Workspace from "../screens/WorkspaceScreen";
-import CreateTask from "../screens/tasks/CreateTask";
-import ConfigureWorker from "../screens/settings/worker/ListWorker";
-import CreateWorker from "@/screens/settings/worker/CreateWorker";
-import ListWorker from "../screens/settings/worker/ListWorker";
-import { UserProvider } from "../contexts/UserContext";
-import { SideBarProvider } from "../contexts/SideBarContext";
+import Login from "@/views/LoginScreen";
+import Dashboard from "@/views/DashboardScreen";
+import Tasks from "@/views/tasks/TasksScreen";
+import Clients from "@/views/ClientsScreen";
+import Settings from "@/views/settings/SettingsScreen";
+import Reports from "@/views/ReportsScreen";
+import Workspace from "@/views/workers/WorkspaceScreen";
+import CreateTask from "@/views/tasks/CreateTask";
+import ConfigureWorker from "@/views/settings/worker/ConfigureWorker";
+import CreateWorker from "@/views/settings/worker/CreateWorker";
+// import ListWorker from "@/views/settings/worker/ConfigureWorker";
+import { UserProvider } from "@/contexts/UserContext";
+import { SideBarProvider } from "@/contexts/SideBarContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ListTask from "@/screens/tasks/ListTask";
+import ListTask from "@/views/tasks/ListTask";
+import ConfigureTeam from "@/views/settings/team/ConfigureTeam";
+import ConfigureSector from "@/views/settings/sector/ConfigureSector";
+import ConfigureClient from "@/views/settings/client/ConfigureClient"
 
 
 const queryClient = new QueryClient();
@@ -65,8 +68,16 @@ const App = () => {
       path: "/settings/configure-worker/create-worker", 
       element: <CreateWorker /> },
     {
-      path: "/settings/configure-worker/list-worker",
-      element: <ListWorker />,
+      path: "/settings/configure-team", 
+      element: <ConfigureTeam />
+    },
+    {
+      path: "/settings/configure-sector", 
+      element: <ConfigureSector />
+    },
+    {
+      path: "/settings/configure-client", 
+      element: <ConfigureClient />
     },
   ]);
 

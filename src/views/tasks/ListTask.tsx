@@ -1,6 +1,5 @@
-import BaseScreen from "@/screens/BaseScreen";
+import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
-import PageTitle from "@/components/title/PageTitle";
 import TableHeader from "@/components/table/TableHeader";
 import TableItem from "@/components/table/TableItem";
 import BackButton from "@/components/shared/BackButton";
@@ -17,13 +16,10 @@ const ListTask = () => {
           onClick={() => navigate("/tasks")}
         ></BackButton>
          <div className="flex flex-col lg:justify-between lg:flex-row">
-          <PageTitle
-            marginTop="mt-6"
-            title="Configurar Colaboradores"
-          ></PageTitle>
+        
           <SearchBar
             marginTop="mt-6"
-            placeholder="Pesquise um colaborador aqui..."
+            placeholder="Pesquise uma demanda aqui..."
           ></SearchBar>
         </div>
         <div className="mt-4 ">

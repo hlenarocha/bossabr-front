@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import BackButton from "@/components/shared/BackButton";
-import BaseScreen from "@/screens/BaseScreen";
+import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import InputTitle from "@/components/title/InputTitle";
 import PageTitle from "@/components/title/PageTitle";

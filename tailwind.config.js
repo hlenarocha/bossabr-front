@@ -7,7 +7,7 @@ export default {
   		colors: {
   			customGray: '#ababab',
   			customYellow: '#F6BC0A',
-  			customBoxGray: '#484848',
+  			customBoxGray: '#6D6D6D',
   			customInputGray: '#555555',
   			customRedAlert: '#E43131',
 				customTextGray: '#484848',

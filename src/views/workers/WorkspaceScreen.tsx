@@ -1,4 +1,4 @@
-import BaseScreen from "@/screens/BaseScreen";
+import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import { greetingFunction } from "@/utils/greetingFunction";

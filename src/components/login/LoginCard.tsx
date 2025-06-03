@@ -8,7 +8,7 @@ import LoginInput from "@/components/login/LoginInput";
 import LoginButton from "@/components/login/LoginButton";
 import Logo from "@/assets/images/logo-bossa.svg";
 import GoogleIcon from "@/assets/images/icon-google.png";
-import LoadingScreen from "@/screens/loading/LoadingScreen";
+import LoadingScreen from "@/views/loading/LoadingScreen";
 import Modal from "@/components/modal/Modal";
 import IconSad from "@/assets/images/famicons_sad.png";
 
