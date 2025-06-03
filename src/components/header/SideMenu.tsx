@@ -1,6 +1,6 @@
-import Logo from "../../assets/images/MKTFlowLogo.png";
-import IconMenu from "../../assets/images/icon-menu.svg";
-import IconClose from "../../assets/images/icon-close.svg";
+import Logo from "@/assets/images/mktflow_logo.png";
+import IconMenu from "@/assets/images/icon-menu.svg";
+import IconClose from "@/assets/images/icon-close.svg";
 
 interface MenuProps {
   onClick: () => void;
