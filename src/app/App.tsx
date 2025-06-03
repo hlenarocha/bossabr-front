@@ -17,7 +17,9 @@ import ListTask from "@/views/tasks/ListTask";
 import ConfigureTeam from "@/views/settings/team/ConfigureTeam";
 import ConfigureSector from "@/views/settings/sector/ConfigureSector";
 import ConfigureClient from "@/views/settings/client/ConfigureClient"
-
+import ConfigureBusiness from "@/views/settings/client/ConfigureBusiness";
+import ConfigureTask from "@/views/settings/tasks/ConfigureTask";
+import ConfigureService from "@/views/settings/service/ConfigureService";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +81,21 @@ const App = () => {
       path: "/settings/configure-client", 
       element: <ConfigureClient />
     },
+    {
+      path: "/settings/configure-business", 
+      element: <ConfigureBusiness />
+    },
+    {
+      path: "/settings/configure-task", 
+      element: <ConfigureTask />
+
+    },
+    {
+      path: "/settings/configure-service", 
+      element: <ConfigureService />
+
+    }
+    
   ]);
 
   return (
