@@ -13,13 +13,28 @@ interface TaskColumnProps {
 
 const TaskColumn = (props: TaskColumnProps) => {
   const [activeDropIndex, setActiveDropIndex] = useState<number | null>(null);
+  const [isDraggingOverColumn, setIsDraggingOverColumn] = useState(false);
 
+  const filteredTasks = props.tasks.filter(task => task.status === props.status);
+  const isEmpty = filteredTasks.length === 0;
 
-  const handleDragOver = (index: number) => {
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
     setActiveDropIndex(index);
   };
 
+  const handleColumnDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOverColumn(true);
+    if (isEmpty) {
+      setActiveDropIndex(0); // Força mostrar o drop area em colunas vazias
+    } else if (activeDropIndex === null) {
+      setActiveDropIndex(-1); // Mostra área no topo
+    }
+  };
+
   const handleDragLeave = () => {
+    setIsDraggingOverColumn(false);
     setActiveDropIndex(null);
   };
 
@@ -30,57 +45,66 @@ const TaskColumn = (props: TaskColumnProps) => {
     >
       <div className="font-bold text-md text-center mb-4">{props.title}</div>
       <div 
-        className="overflow-y-auto"
-        onDragOver={(e) => {
-          e.preventDefault();
-          // Ativa o drop area do topo quando entra na coluna
-          if (activeDropIndex === null) {
-            setActiveDropIndex(-1);
-          }
-        }}
+        className="overflow-y-auto relative min-h-[100px]"
+        onDragOver={handleColumnDragOver}
       >
-        {/* Drop area no topo da coluna */}
-        <DropArea
-          status={props.status}
-          onDrop={() => {
-            props.onDrop(props.status, 0);
-            setActiveDropIndex(null);
-          }}
-          isActive={activeDropIndex === -1}
-        />
-
-        {props.tasks.map((task, index) =>
-          task.status === props.status ? (
-            <div 
-              key={index} 
-              className="relative"
-              onDragOver={(e) => {
-                e.preventDefault();
-                handleDragOver(index);
+        {/* Área de drop permanente para colunas vazias */}
+        {isEmpty && (
+          <div 
+            className="absolute inset-0"
+            onDragOver={(e) => {
+              e.preventDefault();
+              setActiveDropIndex(0);
+            }}
+          >
+            <DropArea
+              status={props.status}
+              onDrop={() => {
+                props.onDrop(props.status, 0);
+                setActiveDropIndex(null);
+                setIsDraggingOverColumn(false);
               }}
-            >
-              {/* Task card */}
-              <TaskCard
-                title={task.title}
-                status={task.status}
-                setActiveCard={props.setActiveCard}
-                indexCard={task.indexCard}
-                activeCard={props.activeCard}
-              />
-
-
-              {/* Drop area abaixo de cada item */}
-              <DropArea
-                status={props.status}
-                onDrop={() => {
-                  props.onDrop(props.status, index + 1);
-                  setActiveDropIndex(null);
-                }}
-                isActive={activeDropIndex === index}
-              />
-            </div>
-          ) : null
+              isActive={isDraggingOverColumn}
+            />
+          </div>
         )}
+
+        {/* Área no topo para colunas não vazias */}
+        {!isEmpty && (
+          <DropArea
+            status={props.status}
+            onDrop={() => {
+              props.onDrop(props.status, 0);
+              setActiveDropIndex(null);
+            }}
+            isActive={activeDropIndex === -1}
+          />
+        )}
+
+        {filteredTasks.map((task, index) => (
+          <div 
+            key={task.indexCard}
+            className="relative"
+            onDragOver={(e) => handleDragOver(e, index)}
+          >
+            <TaskCard
+              title={task.title}
+              status={task.status}
+              setActiveCard={props.setActiveCard}
+              indexCard={task.indexCard}
+              activeCard={props.activeCard}
+            />
+
+            <DropArea
+              status={props.status}
+              onDrop={() => {
+                props.onDrop(props.status, index + 1);
+                setActiveDropIndex(null);
+              }}
+              isActive={activeDropIndex === index}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

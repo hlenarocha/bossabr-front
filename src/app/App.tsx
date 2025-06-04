@@ -9,7 +9,6 @@ import Workspace from "@/views/workers/WorkspaceScreen";
 import CreateTask from "@/views/tasks/CreateTask";
 import ConfigureWorker from "@/views/settings/worker/ConfigureWorker";
 import CreateWorker from "@/views/settings/worker/CreateWorker";
-// import ListWorker from "@/views/settings/worker/ConfigureWorker";
 import { UserProvider } from "@/contexts/UserContext";
 import { SideBarProvider } from "@/contexts/SideBarContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

@@ -116,12 +116,12 @@ const LoginCard = () => {
       
       ></Modal>
 
-      <div className="w-[90%] max-w-[600px] flex absolute flex-col justify-center items-center h-auto sm:h-[600px] bg-black/10 rounded-lg sm:rounded-full p-10 shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)] backdrop-blur-[30px]">
+      <div className="w-[90%] max-w-[600px] flex  absolute flex-col justify-center items-center h-auto sm:h-[600px] bg-black/10 rounded-lg sm:rounded-full p-10 shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)] backdrop-blur-[30px]">
         <img className="mx-auto mb-8" src={Logo} alt="Logo MKTFlow" />
         <div className="w-full cursor-default max-w-[368px] h-[46px] text-white text-[32px] font-normal font-alatsi text-left">
           Login
         </div>
-        <LoginButton></LoginButton> 
+        {/* <LoginButton></LoginButton>  */}
 
         {/* <LoginInput placeholder="E-mail"></LoginInput>
         <LoginInput placeholder="Senha"></LoginInput>
@@ -140,7 +140,7 @@ const LoginCard = () => {
             Continuar com o Google
           </div>
         </div>
-        <div className="w-full max-w-[368px] mt-8 h-[19px] text-right text-white text-base font-normal font-alatsi underline hover:cursor-pointer hover:opacity-70">
+        <div className="w-full max-w-[368px] mt-8 h-[19px] text-center text-white text-base font-normal font-alatsi underline hover:cursor-pointer hover:opacity-70">
           Ainda não tenho acesso ao sistema!
         </div>
       </div>
