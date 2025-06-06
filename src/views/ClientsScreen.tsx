@@ -5,14 +5,14 @@ import TableHeader from "@/components/table/TableHeader";
 import TableItem from "@/components/table/TableItem";
 import SearchBar from "@/components/shared/SearchBar";
 import ColoredButton from "@/components/shared/ColoredButton";
+import { Motion } from "@/components/animation/Motion";
 
 const ClientsScreen = () => {
   return (
     <>
       <BaseScreen>
-      <div className="flex w-[100%] justify-end">
-
-      <ColoredButton
+        <div className="flex w-[100%] justify-end">
+          <ColoredButton
             justify="justify-center"
             // onClick={() =>
             //   navigate("/settings/configure-worker/create-worker")
@@ -22,7 +22,7 @@ const ClientsScreen = () => {
             title="ADICIONAR CLIENTE"
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
-                </div>
+        </div>
 
         <div className="flex flex-col lg:justify-between lg:flex-row">
           <PageTitle marginTop="mt-4" title="Clientes"></PageTitle>
@@ -32,108 +32,110 @@ const ClientsScreen = () => {
           ></SearchBar>
         </div>
         <div className="mt-4 ">
-          <Box
-            title="Lista de Clientes"
-            subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
-            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
-            height="h-[640px]"
-          >
-            <TableHeader
-              columns={[
-                { width: "w-[25%]", content: "NOME" },
-                { width: "w-[25%]", content: "TIPOS DE SERVIÇO" },
-                { width: "w-[25%]", content: "SETORES RESPONSÁVEIS" },
-                { width: "w-[25%]", content: "PROGRESSO GERAL" },
-              ]}
-            />
+          <Motion>
+            <Box
+              title="Lista de Clientes"
+              subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
+              width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+              height="h-[640px]"
+            >
+              <TableHeader
+                columns={[
+                  { width: "w-[25%]", content: "NOME" },
+                  { width: "w-[25%]", content: "TIPOS DE SERVIÇO" },
+                  { width: "w-[25%]", content: "SETORES RESPONSÁVEIS" },
+                  { width: "w-[25%]", content: "PROGRESSO GERAL" },
+                ]}
+              />
 
-            <div className="h-[70%] overflow-y-auto">
-              <TableItem
-                itemWidth="w-full "
-                itemHeight="h-16"
-                columns={[
-                  {
-                    width: "w-[25%]",
-                    content: "Nome",
-                  },
-                  { width: "w-[25%]", content: "Tipos" },
-                  { width: "w-[25%]", content: "Setores" },
-                  { width: "w-[25%]", content: "Progresso" },
-                ]}
-                icon="fa-eye"
-              ></TableItem>
-              <TableItem
-                itemWidth="w-full "
-                itemHeight="h-16"
-                columns={[
-                  {
-                    width: "w-[25%]",
-                    content: "Nome",
-                  },
-                  { width: "w-[25%]", content: "Tipos" },
-                  { width: "w-[25%]", content: "Setores" },
-                  { width: "w-[25%]", content: "Progresso" },
-                ]}
-                icon="fa-eye"
-              ></TableItem>
-              <TableItem
-                itemWidth="w-full "
-                itemHeight="h-16"
-                columns={[
-                  {
-                    width: "w-[25%]",
-                    content: "Nome",
-                  },
-                  { width: "w-[25%]", content: "Tipos" },
-                  { width: "w-[25%]", content: "Setores" },
-                  { width: "w-[25%]", content: "Progresso" },
-                ]}
-                icon="fa-eye"
-              ></TableItem>
-              <TableItem
-                itemWidth="w-full "
-                itemHeight="h-16"
-                columns={[
-                  {
-                    width: "w-[25%]",
-                    content: "Nome",
-                  },
-                  { width: "w-[25%]", content: "Tipos" },
-                  { width: "w-[25%]", content: "Setores" },
-                  { width: "w-[25%]", content: "Progresso" },
-                ]}
-                icon="fa-eye"
-              ></TableItem>
-              <TableItem
-                itemWidth="w-full "
-                itemHeight="h-16"
-                columns={[
-                  {
-                    width: "w-[25%]",
-                    content: "Nome",
-                  },
-                  { width: "w-[25%]", content: "Tipos" },
-                  { width: "w-[25%]", content: "Setores" },
-                  { width: "w-[25%]", content: "Progresso" },
-                ]}
-                icon="fa-eye"
-              ></TableItem>
-              <TableItem
-                itemWidth="w-full "
-                itemHeight="h-16"
-                columns={[
-                  {
-                    width: "w-[25%]",
-                    content: "Nome",
-                  },
-                  { width: "w-[25%]", content: "Tipos" },
-                  { width: "w-[25%]", content: "Setores" },
-                  { width: "w-[25%]", content: "Progresso" },
-                ]}
-                icon="fa-eye"
-              ></TableItem>
-            </div>
-          </Box>
+              <div className="h-[70%] overflow-y-auto">
+                <TableItem
+                  itemWidth="w-full "
+                  itemHeight="h-16"
+                  columns={[
+                    {
+                      width: "w-[25%]",
+                      content: "Nome",
+                    },
+                    { width: "w-[25%]", content: "Tipos" },
+                    { width: "w-[25%]", content: "Setores" },
+                    { width: "w-[25%]", content: "Progresso" },
+                  ]}
+                  icon="fa-eye"
+                ></TableItem>
+                <TableItem
+                  itemWidth="w-full "
+                  itemHeight="h-16"
+                  columns={[
+                    {
+                      width: "w-[25%]",
+                      content: "Nome",
+                    },
+                    { width: "w-[25%]", content: "Tipos" },
+                    { width: "w-[25%]", content: "Setores" },
+                    { width: "w-[25%]", content: "Progresso" },
+                  ]}
+                  icon="fa-eye"
+                ></TableItem>
+                <TableItem
+                  itemWidth="w-full "
+                  itemHeight="h-16"
+                  columns={[
+                    {
+                      width: "w-[25%]",
+                      content: "Nome",
+                    },
+                    { width: "w-[25%]", content: "Tipos" },
+                    { width: "w-[25%]", content: "Setores" },
+                    { width: "w-[25%]", content: "Progresso" },
+                  ]}
+                  icon="fa-eye"
+                ></TableItem>
+                <TableItem
+                  itemWidth="w-full "
+                  itemHeight="h-16"
+                  columns={[
+                    {
+                      width: "w-[25%]",
+                      content: "Nome",
+                    },
+                    { width: "w-[25%]", content: "Tipos" },
+                    { width: "w-[25%]", content: "Setores" },
+                    { width: "w-[25%]", content: "Progresso" },
+                  ]}
+                  icon="fa-eye"
+                ></TableItem>
+                <TableItem
+                  itemWidth="w-full "
+                  itemHeight="h-16"
+                  columns={[
+                    {
+                      width: "w-[25%]",
+                      content: "Nome",
+                    },
+                    { width: "w-[25%]", content: "Tipos" },
+                    { width: "w-[25%]", content: "Setores" },
+                    { width: "w-[25%]", content: "Progresso" },
+                  ]}
+                  icon="fa-eye"
+                ></TableItem>
+                <TableItem
+                  itemWidth="w-full "
+                  itemHeight="h-16"
+                  columns={[
+                    {
+                      width: "w-[25%]",
+                      content: "Nome",
+                    },
+                    { width: "w-[25%]", content: "Tipos" },
+                    { width: "w-[25%]", content: "Setores" },
+                    { width: "w-[25%]", content: "Progresso" },
+                  ]}
+                  icon="fa-eye"
+                ></TableItem>
+              </div>
+            </Box>
+          </Motion>
         </div>
       </BaseScreen>
     </>

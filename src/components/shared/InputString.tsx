@@ -17,8 +17,8 @@ interface InputStringProps {
 const InputString = (props: InputStringProps) => {
   return (
     <>
-      <div className={`flex flex-col mb-4 ${props.width}`}>
-        <div className="text-sm mt-4 font-black mb-1 text-white">
+      <div className={`flex flex-col mb-2 ${props.width}`}>
+        <div className="text-sm mt-2 font-black mb-1 text-white">
           {props.title}
           <span
             className={` ${

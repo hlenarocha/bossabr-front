@@ -54,7 +54,7 @@ const WorkspaceScreen = () => {
       };
       fetchWorkspaceData();
     }
-  }, [user]); // roda sempre que user mudar, evitando que rode apenas uma vez (quando componente monte)
+  }, [user]); // roda sempre que {user} mudar, evitando que rode apenas uma vez (quando componente monte)
 
   const initialTasks = [
     { title: "Banner", status: "não iniciada" },
@@ -76,7 +76,7 @@ const WorkspaceScreen = () => {
     { title: "Banner Legal", status: "em andamento" },
   ];
 
-  // Use o hook que gerencia todo o estado de drag and drop
+  // Usando o hook que gerencia todo o estado de drag and drop
   const {
     tasks,
     // setTasks,

@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
 
 interface BoxProps {
-  width: string;
+  width?: string;
   height: string;    
   title: string;
-  subtitle: string;
+  subtitle?: string;
   children: ReactNode;
 }
 

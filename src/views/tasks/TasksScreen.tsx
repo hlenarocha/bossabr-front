@@ -9,10 +9,10 @@ import TaskColumn from "@/components/task/TaskColumn";
 import TaskCard from "@/components/task/TaskCard";
 import { useDragDrop } from "@/hooks/useDragDrop";
 import { Calendar } from "@/components/ui/calendar";
+import { Motion } from "@/components/animation/Motion";
 
 const TasksScreen = () => {
   const navigate = useNavigate();
-
 
   // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
   // const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
@@ -34,7 +34,7 @@ const TasksScreen = () => {
     { title: "Banner Legal", status: "em andamento" },
     { title: "Banner Legal", status: "em andamento" },
     { title: "Banner Legal", status: "em andamento" },
-    { title: "Banner Legal", status: "em andamento" }
+    { title: "Banner Legal", status: "em andamento" },
   ];
 
   // Use o hook que gerencia todo o estado de drag and drop
@@ -43,7 +43,7 @@ const TasksScreen = () => {
     // setTasks,
     activeCard,
     setActiveCard,
-    
+
     onDrop,
   } = useDragDrop(initialTasks);
 
@@ -74,116 +74,120 @@ const TasksScreen = () => {
         </div>
         <PageTitle marginTop="mt-4" title="Demandas"></PageTitle>
         <div className="flex flex-col w-full xl:w-[1000px]">
-          <div className="flex flex-col xl:flex-row gap-4 items-center ">
-            <Box
-              title="Para esta semana"
-              subtitle="Tarefas não finalizadas com prazos definidos para os próximos sete dias."
-              width="w-full xl:w-1/3"
-              height="h-[700px]"
-            >
-              <div className="max-h-[490px] overflow-y-auto">
-                {tasks.map((task, index) => {
-                  return (
-                    // adicionar lógica para aparecer tarefas com prazo para os próximos sete dias
+          <Motion>
+            <div className="flex flex-col xl:flex-row gap-4 items-center ">
+              <Box
+                title="Para esta semana"
+                subtitle="Tarefas não finalizadas com prazos definidos para os próximos sete dias."
+                width="w-full xl:w-1/3"
+                height="h-[700px]"
+              >
+                <div className="max-h-[490px] overflow-y-auto">
+                  {tasks.map((task, index) => {
+                    return (
+                      // adicionar lógica para aparecer tarefas com prazo para os próximos sete dias
 
-                    <TaskCard
-                      key={index}
-                      title={task.title}
-                      status={task.status}
-                      indexCard={task.indexCard}
-                    />
-                  );
-                })}
-              </div>
-            </Box>
+                      <TaskCard
+                        key={index}
+                        title={task.title}
+                        status={task.status}
+                        indexCard={task.indexCard}
+                      />
+                    );
+                  })}
+                </div>
+              </Box>
 
-            <Box
-              title="Calendário"
-              subtitle="Visão mensal dos prazos das tarefas. Clique em uma data para verificar as tarefas com prazos naquele dia."
-              width="w-full xl:w-2/3"
-              height="h-[1000px] xl:h-[700px]"
-            >
-              <div className="xl:grid xl:grid-cols-2 xl:gap-10 flex flex-col">
-                <div>
-                  <div className="w-full flex flex-col items-center xl:items-start">
-                    {/* <CustomCalendar></CustomCalendar> */}
-                    <Calendar></Calendar>
+              <Box
+                title="Calendário"
+                subtitle="Visão mensal dos prazos das tarefas. Clique em uma data para verificar as tarefas com prazos naquele dia."
+                width="w-full xl:w-2/3"
+                height="h-[1000px] xl:h-[700px]"
+              >
+                <div className="xl:grid xl:grid-cols-2 xl:gap-10 flex flex-col">
+                  <div>
+                    <div className="w-full flex flex-col items-center xl:items-start">
+                      {/* <CustomCalendar></CustomCalendar> */}
+                      <Calendar></Calendar>
+                    </div>
+                    <div className="mt-5 flex flex-row items-center gap-2 text-sm">
+                      <div className="w-[32px] h-[32px] bg-customYellow rounded-[3px]"></div>
+                      <p>Data selecionada.</p>
+                    </div>
+                    <div className="mt-5 flex flex-row items-center gap-2 text-sm">
+                      <div className="w-[32px] h-[32px] bg-[#1F1F1F] border border-customYellow rounded-[3px]"></div>
+                      <p>Há demandas com prazo neste dia.</p>
+                    </div>
                   </div>
-                  <div className="mt-5 flex flex-row items-center gap-2 text-sm">
-                    <div className="w-[32px] h-[32px] bg-customYellow rounded-[3px]"></div>
-                    <p>Data selecionada.</p>
-                  </div>
-                  <div className="mt-5 flex flex-row items-center gap-2 text-sm">
-                    <div className="w-[32px] h-[32px] bg-[#1F1F1F] border border-customYellow rounded-[3px]"></div>
-                    <p>Há demandas com prazo neste dia.</p>
+                  <div className="justify-center">
+                    <div className="text-center mt-2 text-[#9b9b9b] font-black">
+                      DEMANDAS COM PRAZO NO DIA
+                    </div>
+                    <div className="text-center mt-2 mb-2 text-customYellow font-black">
+                      DD/MM/AAAA
+                    </div>
+                    <div className="max-h-[200px] xl:max-h-[390px]  overflow-y-auto">
+                      {tasks.map((task, index) => {
+                        return (
+                          // adicionar lógica para aparecer tarefas com prazo para os próximos sete dias
+
+                          <TaskCard
+                            key={index}
+                            title={task.title}
+                            status={task.status}
+                            indexCard={task.indexCard}
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-                <div className="justify-center">
-                  <div className="text-center mt-2 text-[#9b9b9b] font-black">
-                    DEMANDAS COM PRAZO NO DIA
-                  </div>
-                  <div className="text-center mt-2 mb-2 text-customYellow font-black">
-                    DD/MM/AAAA
-                  </div>
-                  <div className="max-h-[200px] xl:max-h-[390px]  overflow-y-auto">
-                {tasks.map((task, index) => {
-                  return (
-                    // adicionar lógica para aparecer tarefas com prazo para os próximos sete dias
-
-                    <TaskCard
-                      key={index}
-                      title={task.title}
-                      status={task.status}
-                      indexCard={task.indexCard}
-                    />
-                  );
-                })}
-              </div>
-                </div>
-              </div>
-            </Box>
-          </div>
-          <Box
-            title="Progresso das Demandas"
-            subtitle="Visualização do andamento das tarefas com prazo no período selecionado. Arraste uma demanda para outra coluna para alterar seu status."
-            width="w-full"
-            height="h-[500px]"
-          >
-            <div className="flex flex-row justify-between w-full gap-4">
-              <TaskColumn
-                title="NÃO INICIADAS"
-                tasks={tasks}
-                status="não iniciada"
-                setActiveCard={setActiveCard}
-                activeCard={activeCard}
-                onDrop={onDrop}
-              />
-              <TaskColumn
-                title="EM ANDAMENTO"
-                tasks={tasks}
-                status="em andamento"
-                setActiveCard={setActiveCard}
-                activeCard={activeCard}
-                onDrop={onDrop}
-              />
-              <TaskColumn
-                title="CONCLUÍDAS"
-                tasks={tasks}
-                status="concluída"
-                setActiveCard={setActiveCard}
-                activeCard={activeCard}
-                onDrop={onDrop}
-              />
-              <TaskColumn
-                title="ATRASADAS"
-                tasks={tasks}
-                status="atrasada"
-                setActiveCard={setActiveCard}
-                activeCard={activeCard}
-                onDrop={onDrop}
-              />
+              </Box>
             </div>
-          </Box>
+          </Motion>
+          <Motion>
+            <Box
+              title="Progresso das Demandas"
+              subtitle="Visualização do andamento das tarefas com prazo no período selecionado. Arraste uma demanda para outra coluna para alterar seu status."
+              width="w-full"
+              height="h-[500px]"
+            >
+              <div className="flex flex-row justify-between w-full gap-4">
+                <TaskColumn
+                  title="NÃO INICIADAS"
+                  tasks={tasks}
+                  status="não iniciada"
+                  setActiveCard={setActiveCard}
+                  activeCard={activeCard}
+                  onDrop={onDrop}
+                />
+                <TaskColumn
+                  title="EM ANDAMENTO"
+                  tasks={tasks}
+                  status="em andamento"
+                  setActiveCard={setActiveCard}
+                  activeCard={activeCard}
+                  onDrop={onDrop}
+                />
+                <TaskColumn
+                  title="CONCLUÍDAS"
+                  tasks={tasks}
+                  status="concluída"
+                  setActiveCard={setActiveCard}
+                  activeCard={activeCard}
+                  onDrop={onDrop}
+                />
+                <TaskColumn
+                  title="ATRASADAS"
+                  tasks={tasks}
+                  status="atrasada"
+                  setActiveCard={setActiveCard}
+                  activeCard={activeCard}
+                  onDrop={onDrop}
+                />
+              </div>
+            </Box>
+          </Motion>
         </div>
       </BaseScreen>
     </>
