@@ -29,7 +29,7 @@ const InputDate = (props: InputDateProps) => {
 
   return (
     <>
-      <div className={`flex flex-col mb-4 ${props.width}`}>
+      <div className={`flex flex-col ${props.width}`}>
         <div className="text-sm mt-2 font-black mb-1 text-white">
           {props.title}
           <span

@@ -11,6 +11,7 @@ interface InputStringProps {
   isReadOnly?: boolean;
   borderColor?: string;
   errorMessage?: string;
+  rounded?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -38,7 +39,7 @@ const InputString = (props: InputStringProps) => {
           }}
           className={` ${props.height} ${
             props.isReadOnly ? "pointer-events-none caret-transparent" : ""
-          } bg-customInputGray py-2 px-4 border outline-none  rounded-[400px] ${
+          } bg-customInputGray py-2 px-4 border outline-none  rounded-[20px] ${
             props.borderColor
           } `}
           placeholder={props.placeholder}
