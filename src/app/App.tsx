@@ -19,6 +19,7 @@ import ConfigureClient from "@/views/settings/client/ConfigureClient"
 import ConfigureBusiness from "@/views/settings/client/ConfigureBusiness";
 import ConfigureTask from "@/views/settings/tasks/ConfigureTask";
 import ConfigureService from "@/views/settings/service/ConfigureService";
+import DisplayTask from "@/views/display/DisplayTask";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,10 @@ const App = () => {
     {
       path: "/tasks/list-task",
       element: <ListTask />,
+    },
+    {
+      path: "/display/task-details",
+      element: <DisplayTask />,
     },
     {
       path: "/clients",
