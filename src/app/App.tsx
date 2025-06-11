@@ -15,14 +15,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ListTask from "@/views/tasks/ListTask";
 import ConfigureTeam from "@/views/settings/team/ConfigureTeam";
 import ConfigureSector from "@/views/settings/sector/ConfigureSector";
-import ConfigureClient from "@/views/settings/client/ConfigureClient"
+import ConfigureClient from "@/views/settings/client/ConfigureClient";
 import ConfigureBusiness from "@/views/settings/client/ConfigureBusiness";
 import ConfigureTask from "@/views/settings/tasks/ConfigureTask";
 import ConfigureService from "@/views/settings/service/ConfigureService";
 import DisplayTask from "@/views/display/DisplayTask";
+import CreateClient from "@/views/settings/client/CreateClient";
 
 const queryClient = new QueryClient();
 
+
+// MONTAR MAPA DE ROTAS
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -70,36 +73,38 @@ const App = () => {
       path: "/settings/configure-worker",
       element: <ConfigureWorker />,
     },
-    { 
-      path: "/settings/configure-worker/create-worker", 
-      element: <CreateWorker /> },
     {
-      path: "/settings/configure-team", 
-      element: <ConfigureTeam />
+      path: "/settings/configure-worker/create-worker",
+      element: <CreateWorker />,
     },
     {
-      path: "/settings/configure-sector", 
-      element: <ConfigureSector />
+      path: "/settings/configure-team",
+      element: <ConfigureTeam />,
     },
     {
-      path: "/settings/configure-client", 
-      element: <ConfigureClient />
+      path: "/settings/configure-sector",
+      element: <ConfigureSector />,
     },
     {
-      path: "/settings/configure-business", 
-      element: <ConfigureBusiness />
+      path: "/settings/configure-client",
+      element: <ConfigureClient />,
     },
     {
-      path: "/settings/configure-task", 
-      element: <ConfigureTask />
-
+      path: "/settings/configure-business",
+      element: <ConfigureBusiness />,
     },
     {
-      path: "/settings/configure-service", 
-      element: <ConfigureService />
-
-    }
-    
+      path: "/settings/configure-task",
+      element: <ConfigureTask />,
+    },
+    {
+      path: "/settings/configure-service",
+      element: <ConfigureService />,
+    },
+    {
+      path: "/settings/create-client",
+      element: <CreateClient />,
+    },
   ]);
 
   return (

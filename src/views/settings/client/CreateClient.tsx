@@ -1,5 +1,5 @@
 import PageTitle from "@/components/title/PageTitle";
-import BaseScreen from "../BaseScreen";
+import BaseScreen from "@/views/BaseScreen";
 import BackButton from "@/components/shared/BackButton";
 import Box from "@/components/box/BoxContent";
 import InputTitle from "@/components/title/InputTitle";
@@ -14,26 +14,27 @@ import ColoredButton from "@/components/shared/ColoredButton";
 
 
 
-const CreateTask = () => {
+const CreateClient = () => {
   const navigate = useNavigate();
   return (
     <>
       <BaseScreen>
-        <BackButton onClick={() => navigate("/tasks")}></BackButton>
+        <BackButton onClick={() => navigate("/clients")} />
         <PageTitle
-          icon="fa-solid fa-circle-plus"
-          marginTop="mt-4"
-          title={`Cadastrar Demanda`}
+        // icon client
+          icon="fa-solid fa-user-tie"
+          marginTop="mt-"
+          title={`Cadastrar Cliente`}
         ></PageTitle>
         <Box
-          title="Nova Demanda"
+          title="Novo Cliente"
           subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
           width="xl:w-[1000px] w-[600px] lg:w-[800px]"
           height="h-fit"
         >
           <InputTitle title="Cliente"></InputTitle>
-          <div className="flex gap-6 flex-row w-full">
-            <InputString
+          {/* <div className="flex gap-6 flex-row w-full"> */}
+            {/* <InputString
               title="NOME DO CLIENTE"
               width="w-2/3"
               isMandatory={true}
@@ -126,11 +127,11 @@ const CreateTask = () => {
               color="customYellow"
               justify="justify-center"
             ></ColoredButton>
-          </div>
+          </div> */}
         </Box>
       </BaseScreen>
     </>
   );
 };
 
-export default CreateTask;
+export default CreateClient;

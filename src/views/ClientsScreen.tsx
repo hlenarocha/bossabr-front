@@ -6,17 +6,21 @@ import TableItem from "@/components/table/TableItem";
 import SearchBar from "@/components/shared/SearchBar";
 import ColoredButton from "@/components/shared/ColoredButton";
 import { Motion } from "@/components/animation/Motion";
+import { useNavigate } from "react-router-dom";
+
 
 const ClientsScreen = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <BaseScreen>
         <div className="flex w-[100%] justify-end">
           <ColoredButton
             justify="justify-center"
-            // onClick={() =>
-            //   navigate("/settings/configure-worker/create-worker")
-            // }
+            onClick={() =>
+             navigate("/settings/create-client")
+            }
             color="customYellow"
             width="w-[300px]"
             title="ADICIONAR CLIENTE"
