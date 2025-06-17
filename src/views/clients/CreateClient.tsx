@@ -25,7 +25,7 @@ const CreateClient = () => {
         <Motion>
           <Box
             title="Novo Cliente"
-            subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
+            subtitle="Preencha os dados do formulário e cadastre um novo cliente."
             width="xl:w-[1000px] w-[600px] lg:w-[800px]"
             height="h-fit"
           >
