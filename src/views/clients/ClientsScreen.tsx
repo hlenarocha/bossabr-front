@@ -19,7 +19,7 @@ const ClientsScreen = () => {
           <ColoredButton
             justify="justify-center"
             onClick={() =>
-             navigate("/settings/create-client")
+             navigate("/clientes/novo")
             }
             color="customYellow"
             width="w-[300px]"

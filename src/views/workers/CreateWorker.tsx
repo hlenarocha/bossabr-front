@@ -196,7 +196,7 @@ const CreateWorker = () => {
 
       <BaseScreen>
         <BackButton
-          onClick={() => handleNavigate("/settings/configure-worker")}
+          onClick={() => handleNavigate("/configuracoes/colaboradores")}
         ></BackButton>
         <PageTitle marginTop="mt-4" title="Cadastrar Colaborador"></PageTitle>
 

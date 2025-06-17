@@ -19,7 +19,7 @@ const CreateClient = () => {
   return (
     <>
       <BaseScreen>
-        <BackButton onClick={() => navigate("/clients")} />
+        <BackButton onClick={() => navigate("/clientes")} />
         <PageTitle
         // icon client
           icon="fa-solid fa-user-tie"

@@ -83,7 +83,7 @@ const SettingsScreen = () => {
             >
               <div className="flex flex-col gap-4 items-center">
                 <ColoredButton
-                  onClick={() => navigate("/settings/configure-worker")}
+                  onClick={() => navigate("/configuracoes/colaboradores")}
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
@@ -91,7 +91,7 @@ const SettingsScreen = () => {
                   title="CONFIGURAR COLABORADORES"
                 ></ColoredButton>
                 <ColoredButton
-                  onClick={() => navigate("/settings/configure-team")}
+                  onClick={() => navigate("/configuracoes/equipes")}
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
@@ -99,7 +99,7 @@ const SettingsScreen = () => {
                   title="CONFIGURAR EQUIPES"
                 ></ColoredButton>
                 <ColoredButton
-                  onClick={() => navigate("/settings/configure-sector")}
+                  onClick={() => navigate("/configuracoes/setores")}
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
@@ -117,7 +117,7 @@ const SettingsScreen = () => {
             >
               <div className="flex flex-col gap-4 items-center">
                 <ColoredButton
-                  onClick={() => navigate("/settings/configure-client")}
+                  onClick={() => navigate("/configuracoes/clientes")}
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
@@ -125,7 +125,7 @@ const SettingsScreen = () => {
                   title="CONFIGURAR CLIENTES"
                 ></ColoredButton>
                 <ColoredButton
-                  onClick={() => navigate("/settings/configure-business")}
+                  onClick={() => navigate("/configuracoes/negocios")}
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
@@ -145,7 +145,7 @@ const SettingsScreen = () => {
           >
             <div className="flex flex-col gap-4 items-center">
               <ColoredButton
-                onClick={() => navigate("/settings/configure-task")}
+                onClick={() => navigate("/configuracoes/demandas")}
                 justify="justify-between"
                 width="w-full"
                 icon="fa solid fa-arrow-right"
@@ -153,7 +153,7 @@ const SettingsScreen = () => {
                 title="CONFIGURAR DEMANDAS"
               ></ColoredButton>
               <ColoredButton
-                onClick={() => navigate("/settings/configure-service")}
+                onClick={() => navigate("/configuracoes/servicos")}
                 justify="justify-between"
                 width="w-full"
                 icon="fa solid fa-arrow-right"

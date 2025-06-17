@@ -11,7 +11,7 @@ import PageTitle from "@/components/title/PageTitle";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import SearchBar from "@/components/shared/SearchBar";
 
-const ListWorker = () => {
+const ManageWorkers = () => {
   interface Funcionario {
     first_name: string;
     // equipe: string;
@@ -47,12 +47,12 @@ const ListWorker = () => {
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/settings")}></BackButton>
+          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
             onClick={() =>
-              handleNavigate("/settings/configure-worker/create-worker")
+              handleNavigate("/configuracoes/colaboradores/novo")
             }
             color="customYellow"
             width="w-[330px]"
@@ -115,4 +115,4 @@ const ListWorker = () => {
   );
 };
 
-export default ListWorker;
+export default ManageWorkers;

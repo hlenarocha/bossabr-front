@@ -6,14 +6,14 @@ import BackButton from "@/components/shared/BackButton";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "@/components/shared/SearchBar";
 
-const ListTask = () => {
+const ListDemands = () => {
   const navigate = useNavigate();
 
   return (
     <>
       <BaseScreen>
       <BackButton
-          onClick={() => navigate("/tasks")}
+          onClick={() => navigate("/demandas")}
         ></BackButton>
          <div className="flex flex-col lg:justify-between lg:flex-row">
         
@@ -131,4 +131,4 @@ const ListTask = () => {
   );
 };
 
-export default ListTask;
+export default ListDemands;

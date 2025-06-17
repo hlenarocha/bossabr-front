@@ -14,12 +14,12 @@ import ColoredButton from "@/components/shared/ColoredButton";
 
 
 
-const CreateTask = () => {
+const CreateDemand = () => {
   const navigate = useNavigate();
   return (
     <>
       <BaseScreen>
-        <BackButton onClick={() => navigate("/tasks")}></BackButton>
+        <BackButton onClick={() => navigate("/demandas")}></BackButton>
         <PageTitle
           icon="fa-solid fa-circle-plus"
           marginTop="mt-4"
@@ -133,4 +133,4 @@ const CreateTask = () => {
   );
 };
 
-export default CreateTask;
+export default CreateDemand;

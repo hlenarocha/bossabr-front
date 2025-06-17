@@ -12,8 +12,8 @@ import TextArea from "@/components/shared/TextArea";
 import InputQuantity from "@/components/shared/InputQuantity";
 import ColoredButton from "@/components/shared/ColoredButton";
 
-// EDITAR ESSA BASE PARA O DISPLAY DE DETALHES DA DEMANDA
-const DisplayTask = () => {
+// EDITAR ESSA BASE PARA O DISPLAY DE DETALHES DO CLIENTE
+const ClientDetails = () => {
   const navigate = useNavigate();
   return (
     <>
@@ -135,4 +135,4 @@ const DisplayTask = () => {
   );
 };
 
-export default DisplayTask;
+export default ClientDetails;

@@ -7,7 +7,7 @@ import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
 
-const ConfigureBusiness = () => {
+const ManageServices = () => {
   const navigate = useNavigate();
 
   function handleNavigate(path: string) {
@@ -18,14 +18,14 @@ const ConfigureBusiness = () => {
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/settings")}></BackButton>
+          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/settings/configure-business/create-business")}
+            onClick={() => handleNavigate("/configuracoes/servicos/novo")}
             color="customYellow"
             width="w-[330px]"
-            title="ADICIONAR SETOR DE NEGÓCIO"
+            title="ADICIONAR TIPO DE SERVIÇO"
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
         </div>
@@ -33,29 +33,29 @@ const ConfigureBusiness = () => {
         <div className="flex flex-col lg:justify-between lg:flex-row">
           <PageTitle
             marginTop="mt-6"
-            title="Configurar Setores de Negócio"
+            title="Configurar Tipos de Serviço"
           ></PageTitle>
           <SearchBar
             marginTop="mt-6"
-            placeholder="Pesquise um setor de negócio aqui..."
+            placeholder="Pesquise um tipo de serviço aqui..."
           ></SearchBar>
         </div>
 
         <Box
           width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-[640px]"
-          title="Lista de Setores de Negócio"
-          subtitle="Visualização da lista de setores de negócio para configuração."
+          title="Lista de Tipos de Serviço"
+          subtitle="Visualização da lista de tipos de serviço para configuração."
         >
           <TableHeader
             columns={[
-              { width: "w-[40%]", content: "NOME" },
-              { width: "w-[60%]", content: "DESCRIÇÃO" },
+              { width: "w-[50%]", content: "NOME" },
+              { width: "w-[50%]", content: "DESCRIÇÃO" },
             ]}
           ></TableHeader>
 
           <div className="h-[80%] overflow-y-auto">
-            {/* Aqui você irá adicionar os itens da tabela futuramente */}
+            {/* Lista de serviços será exibida aqui futuramente */}
           </div>
         </Box>
       </BaseScreen>
@@ -63,4 +63,4 @@ const ConfigureBusiness = () => {
   );
 };
 
-export default ConfigureBusiness;
+export default ManageServices;

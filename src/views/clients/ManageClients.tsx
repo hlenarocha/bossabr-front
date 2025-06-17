@@ -7,7 +7,7 @@ import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
 
-const ConfigureClient = () => {
+const ManageClients = () => {
   const navigate = useNavigate();
 
   function handleNavigate(path: string) {
@@ -18,11 +18,11 @@ const ConfigureClient = () => {
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/settings")}></BackButton>
+          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/settings/configure-client/create-client")}
+            onClick={() => handleNavigate("/configuracoes/clientes/novo")}
             color="customYellow"
             width="w-[330px]"
             title="ADICIONAR CLIENTE"
@@ -64,4 +64,4 @@ const ConfigureClient = () => {
   );
 };
 
-export default ConfigureClient;
+export default ManageClients;

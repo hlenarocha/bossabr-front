@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import LoginButton from "@/components/login/LoginButton";
 import Logo from "@/assets/images/mktflow_logo.png";
 import GoogleIcon from "@/assets/images/icon-google.png";
-import LoadingScreen from "@/views/loading/LoadingScreen";
+import LoadingScreen from "@/views/auth/LoadingScreen";
 import Modal from "@/components/modal/Modal";
 import IconSad from "@/assets/images/famicons_sad.png";
 

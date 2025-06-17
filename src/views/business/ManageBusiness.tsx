@@ -7,7 +7,7 @@ import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
 
-const ConfigureTask = () => {
+const ManageBusiness = () => {
   const navigate = useNavigate();
 
   function handleNavigate(path: string) {
@@ -18,14 +18,14 @@ const ConfigureTask = () => {
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/settings")}></BackButton>
+          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/settings/configure-task/create-task")}
+            onClick={() => handleNavigate("/configuracoes/negocios/novo")}
             color="customYellow"
             width="w-[330px]"
-            title="ADICIONAR DEMANDA"
+            title="ADICIONAR SETOR DE NEGÓCIO"
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
         </div>
@@ -33,30 +33,29 @@ const ConfigureTask = () => {
         <div className="flex flex-col lg:justify-between lg:flex-row">
           <PageTitle
             marginTop="mt-6"
-            title="Configurar Demandas"
+            title="Configurar Setores de Negócio"
           ></PageTitle>
           <SearchBar
             marginTop="mt-6"
-            placeholder="Pesquise uma demanda aqui..."
+            placeholder="Pesquise um setor de negócio aqui..."
           ></SearchBar>
         </div>
 
         <Box
           width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-[640px]"
-          title="Lista de Demandas"
-          subtitle="Visualização da lista de demandas para configuração."
+          title="Lista de Setores de Negócio"
+          subtitle="Visualização da lista de setores de negócio para configuração."
         >
           <TableHeader
             columns={[
-              { width: "w-[40%]", content: "TÍTULO" },
-              { width: "w-[30%]", content: "PRIORIDADE" },
-              { width: "w-[30%]", content: "STATUS" },
+              { width: "w-[40%]", content: "NOME" },
+              { width: "w-[60%]", content: "DESCRIÇÃO" },
             ]}
           ></TableHeader>
 
           <div className="h-[80%] overflow-y-auto">
-            {/* Aqui você vai colocar os itens da tabela */}
+            {/* Aqui você irá adicionar os itens da tabela futuramente */}
           </div>
         </Box>
       </BaseScreen>
@@ -64,4 +63,4 @@ const ConfigureTask = () => {
   );
 };
 
-export default ConfigureTask;
+export default ManageBusiness;

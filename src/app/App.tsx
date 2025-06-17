@@ -1,115 +1,100 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "@/views/LoginScreen";
-import Dashboard from "@/views/DashboardScreen";
-import Tasks from "@/views/tasks/TasksScreen";
-import Clients from "@/views/ClientsScreen";
-import Settings from "@/views/settings/SettingsScreen";
-import Reports from "@/views/ReportsScreen";
-import Workspace from "@/views/workers/WorkspaceScreen";
-import CreateTask from "@/views/tasks/CreateTask";
-import ConfigureWorker from "@/views/settings/worker/ConfigureWorker";
-import CreateWorker from "@/views/settings/worker/CreateWorker";
+
+import Login from "@/views/auth/LoginScreen";
+import Dashboard from "@/views/dashboard/DashboardScreen";
+import AreaTrabalho from "@/views/workspace/WorkspaceScreen";
+
+// Demandas
+import Demandas from "@/views/demands/DemandsScreen";
+import DetalhesDemanda from "@/views/demands/DemandDetails";
+import CriarDemanda from "@/views/demands/CreateDemand";
+import ListarDemandas from "@/views/demands/ListDemands";
+import GerenciarDemandas from "@/views/demands/ManageDemands";
+
+// Clientes
+import Clientes from "@/views/clients/ClientsScreen";
+import DetalhesCliente from "@/views/clients/ClientDetails";
+import CriarCliente from "@/views/clients/CreateClient";
+import GerenciarClientes from "@/views/clients/ManageClients";
+
+// Colaboradores
+import GerenciarColaboradores from "@/views/workers/ManageWorkers";
+import CriarColaborador from "@/views/workers/CreateWorker";
+
+// Equipes
+import GerenciarEquipes from "@/views/teams/ManageTeams";
+//import CriarEquipe from "@/views/teams/CreateTeam";
+
+// Setores
+import GerenciarSetores from "@/views/sectors/ManageSectors";
+//import CriarSetor from "@/views/sectors/CreateSector";
+
+// Setores de Negócio
+import GerenciarNegocios from "@/views/business/ManageBusiness";
+//import CriarNegocio from "@/views/business/CreateBusiness";
+
+// Serviços
+import GerenciarServicos from "@/views/services/ManageServices";
+//import CriarServico from "@/views/services/CreateService";
+
+// Relatórios e Configurações gerais
+import Relatorios from "@/views/reports/ReportsScreen";
+import Configuracoes from "@/views/settings/SettingsScreen";
+
 import { UserProvider } from "@/contexts/UserContext";
 import { SideBarProvider } from "@/contexts/SideBarContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ListTask from "@/views/tasks/ListTask";
-import ConfigureTeam from "@/views/settings/team/ConfigureTeam";
-import ConfigureSector from "@/views/settings/sector/ConfigureSector";
-import ConfigureClient from "@/views/settings/client/ConfigureClient";
-import ConfigureBusiness from "@/views/settings/client/ConfigureBusiness";
-import ConfigureTask from "@/views/settings/tasks/ConfigureTask";
-import ConfigureService from "@/views/settings/service/ConfigureService";
-import DisplayTask from "@/views/display/DisplayTask";
-import CreateClient from "@/views/settings/client/CreateClient";
 
 const queryClient = new QueryClient();
 
-
-// MONTAR MAPA DE ROTAS
 const App = () => {
   const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Login />,
-      // errorElement: <ErrorPage />
-    },
-    {
-      path: "/workspace",
-      element: <Workspace />,
-    },
-    {
-      path: "/dashboard",
-      element: <Dashboard />,
-    },
-    {
-      path: "/tasks",
-      element: <Tasks />,
-    },
-    {
-      path: "/tasks/create-task",
-      element: <CreateTask />,
-    },
-    {
-      path: "/tasks/list-task",
-      element: <ListTask />,
-    },
-    {
-      path: "/display/task-details",
-      element: <DisplayTask />,
-    },
-    {
-      path: "/clients",
-      element: <Clients />,
-    },
-    {
-      path: "/reports",
-      element: <Reports />,
-    },
-    {
-      path: "/settings",
-      element: <Settings />,
-    },
-    {
-      path: "/settings/configure-worker",
-      element: <ConfigureWorker />,
-    },
-    {
-      path: "/settings/configure-worker/create-worker",
-      element: <CreateWorker />,
-    },
-    {
-      path: "/settings/configure-team",
-      element: <ConfigureTeam />,
-    },
-    {
-      path: "/settings/configure-sector",
-      element: <ConfigureSector />,
-    },
-    {
-      path: "/settings/configure-client",
-      element: <ConfigureClient />,
-    },
-    {
-      path: "/settings/configure-business",
-      element: <ConfigureBusiness />,
-    },
-    {
-      path: "/settings/configure-task",
-      element: <ConfigureTask />,
-    },
-    {
-      path: "/settings/configure-service",
-      element: <ConfigureService />,
-    },
-    {
-      path: "/settings/create-client",
-      element: <CreateClient />,
-    },
+    { path: "/", element: <Login /> },
+    { path: "/area-trabalho", element: <AreaTrabalho /> },
+    { path: "/dashboard", element: <Dashboard /> },
+
+    // Demandas
+    { path: "/demandas", element: <Demandas /> },
+    { path: "/demandas/nova", element: <CriarDemanda /> },
+    { path: "/demandas/:id", element: <DetalhesDemanda /> },
+    { path: "/demandas/lista", element: <ListarDemandas /> },
+    { path: "/configuracoes/demandas", element: <GerenciarDemandas /> },
+
+    // Clientes
+    { path: "/clientes", element: <Clientes /> },
+    { path: "/clientes/novo", element: <CriarCliente /> },
+    //{ path: "/configuracoes/clientes/novo", element: <CriarCliente /> },
+
+    { path: "/clientes/:id", element: <DetalhesCliente /> },
+    { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
+
+
+    // Colaboradores
+    { path: "/configuracoes/colaboradores", element: <GerenciarColaboradores /> },
+    { path: "/configuracoes/colaboradores/novo", element: <CriarColaborador /> },
+
+    // Equipes
+    { path: "/configuracoes/equipes", element: <GerenciarEquipes /> },
+    //{ path: "/configuracoes/equipes/novo", element: <CriarEquipe /> },
+
+    // Setores
+    { path: "/configuracoes/setores", element: <GerenciarSetores /> },
+    //{ path: "/configuracoes/setores/novo", element: <CriarSetor /> },
+
+    // Setores de Negócio
+    { path: "/configuracoes/negocios", element: <GerenciarNegocios /> },
+    //{ path: "/configuracoes/setores-de-negocio/novo", element: <CriarNegocio /> },
+
+    // Serviços
+    { path: "/configuracoes/servicos", element: <GerenciarServicos /> },
+    //{ path: "/configuracoes/servicos/novo", element: <CriarServico /> },
+
+    // Relatórios e Configurações gerais
+    { path: "/relatorios", element: <Relatorios /> },
+    { path: "/configuracoes", element: <Configuracoes /> },
   ]);
 
   return (
-    // contexto e QueryClientProvider configurado, envolvendo todo o App
-    // possível acessar esse contexto definido (Query, User, SideBar) em toda a aplicação
     <QueryClientProvider client={queryClient}>
       <UserProvider>
         <SideBarProvider>

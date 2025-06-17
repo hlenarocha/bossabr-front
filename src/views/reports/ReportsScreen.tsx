@@ -1,5 +1,5 @@
 import PageTitle from "@/components/title/PageTitle";
-import BaseScreen from "./BaseScreen";
+import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import InputString from "@/components/shared/InputString";
 import SectorTag from "@/components/tags/SectorTag";

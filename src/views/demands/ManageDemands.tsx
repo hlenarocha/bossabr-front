@@ -7,7 +7,7 @@ import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
 
-const ConfigureService = () => {
+const ManageDemands = () => {
   const navigate = useNavigate();
 
   function handleNavigate(path: string) {
@@ -18,14 +18,14 @@ const ConfigureService = () => {
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/settings")}></BackButton>
+          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/settings/configure-service/create-service")}
+            onClick={() => handleNavigate("/configuracoes/demandas/nova")}
             color="customYellow"
             width="w-[330px]"
-            title="ADICIONAR TIPO DE SERVIÇO"
+            title="ADICIONAR DEMANDA"
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
         </div>
@@ -33,29 +33,30 @@ const ConfigureService = () => {
         <div className="flex flex-col lg:justify-between lg:flex-row">
           <PageTitle
             marginTop="mt-6"
-            title="Configurar Tipos de Serviço"
+            title="Configurar Demandas"
           ></PageTitle>
           <SearchBar
             marginTop="mt-6"
-            placeholder="Pesquise um tipo de serviço aqui..."
+            placeholder="Pesquise uma demanda aqui..."
           ></SearchBar>
         </div>
 
         <Box
           width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-[640px]"
-          title="Lista de Tipos de Serviço"
-          subtitle="Visualização da lista de tipos de serviço para configuração."
+          title="Lista de Demandas"
+          subtitle="Visualização da lista de demandas para configuração."
         >
           <TableHeader
             columns={[
-              { width: "w-[50%]", content: "NOME" },
-              { width: "w-[50%]", content: "DESCRIÇÃO" },
+              { width: "w-[40%]", content: "TÍTULO" },
+              { width: "w-[30%]", content: "PRIORIDADE" },
+              { width: "w-[30%]", content: "STATUS" },
             ]}
           ></TableHeader>
 
           <div className="h-[80%] overflow-y-auto">
-            {/* Lista de serviços será exibida aqui futuramente */}
+            {/* Aqui você vai colocar os itens da tabela */}
           </div>
         </Box>
       </BaseScreen>
@@ -63,4 +64,4 @@ const ConfigureService = () => {
   );
 };
 
-export default ConfigureService;
+export default ManageDemands;

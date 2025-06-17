@@ -11,7 +11,7 @@ import { useDragDrop } from "@/hooks/useDragDrop";
 import { Calendar } from "@/components/ui/calendar";
 import { Motion } from "@/components/animation/Motion";
 
-const TasksScreen = () => {
+const DemandsScreen = () => {
   const navigate = useNavigate();
 
   // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
@@ -61,11 +61,11 @@ const TasksScreen = () => {
             width="w-[280px]"
             title="LISTA DE DEMANDAS"
             icon="fa-solid fa-eye"
-            onClick={() => handleNavigate("/tasks/list-task")}
+            onClick={() => handleNavigate("/demandas/lista")}
           ></ColoredButton>
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/tasks/create-task")}
+            onClick={() => handleNavigate("/demandas/nova")}
             color="customYellow"
             width="w-[280px]"
             title="ADICIONAR DEMANDA"
@@ -194,4 +194,4 @@ const TasksScreen = () => {
   );
 };
 
-export default TasksScreen;
+export default DemandsScreen;

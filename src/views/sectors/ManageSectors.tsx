@@ -7,7 +7,7 @@ import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
 
-const ConfigureTeam = () => {
+const ManageSectors = () => {
   const navigate = useNavigate();
 
   function handleNavigate(path: string) {
@@ -18,14 +18,14 @@ const ConfigureTeam = () => {
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/settings")}></BackButton>
+          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/settings/configure-team/create-team")}
+            onClick={() => handleNavigate("/configuracoes/setores/novo")}
             color="customYellow"
             width="w-[330px]"
-            title="ADICIONAR EQUIPE"
+            title="ADICIONAR SETOR"
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
         </div>
@@ -33,25 +33,24 @@ const ConfigureTeam = () => {
         <div className="flex flex-col lg:justify-between lg:flex-row">
           <PageTitle
             marginTop="mt-6"
-            title="Configurar Equipes"
+            title="Configurar Setores"
           ></PageTitle>
           <SearchBar
             marginTop="mt-6"
-            placeholder="Pesquise uma equipe aqui..."
+            placeholder="Pesquise um setor aqui..."
           ></SearchBar>
         </div>
 
         <Box
           width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-[640px]"
-          title="Lista de Equipes"
-          subtitle="Visualização da lista de equipes para configuração."
+          title="Lista de Setores"
+          subtitle="Visualização da lista de setores para configuração."
         >
           <TableHeader
             columns={[
-              { width: "w-[33%]", content: "NOME" },
-              { width: "w-[33%]", content: "RESPONSÁVEL" },
-              { width: "w-[33%]", content: "SETOR" },
+              { width: "w-[50%]", content: "NOME" },
+              { width: "w-[50%]", content: "DESCRIÇÃO" },
             ]}
           ></TableHeader>
 
@@ -64,4 +63,4 @@ const ConfigureTeam = () => {
   );
 };
 
-export default ConfigureTeam;
+export default ManageSectors;

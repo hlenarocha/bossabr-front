@@ -1,4 +1,4 @@
-import BaseScreen from "./BaseScreen";
+import BaseScreen from "../BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import { Component } from "@/components/charts/PieChart";
