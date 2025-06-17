@@ -3,37 +3,34 @@ import BaseScreen from "@/views/BaseScreen";
 import BackButton from "@/components/shared/BackButton";
 import Box from "@/components/box/BoxContent";
 import InputTitle from "@/components/title/InputTitle";
-import InputString from "@/components/shared/InputString";
-import { useNavigate } from "react-router-dom";
-import PlainButton from "@/components/shared/PlainButton";
-import Select from "@/components/shared/Select";
-import InputDate from "@/components/shared/InputDate";
-import TextArea from "@/components/shared/TextArea";
-import InputQuantity from "@/components/shared/InputQuantity";
-import ColoredButton from "@/components/shared/ColoredButton";
-
-
+import { useNavigate, useLocation } from "react-router-dom";
+import { Motion } from "@/components/animation/Motion";
 
 const CreateClient = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const previousRoute = location.state?.previousRoute;
+
   return (
     <>
       <BaseScreen>
-        <BackButton onClick={() => navigate("/clientes")} />
+        <BackButton onClick={() => navigate(previousRoute)} />
         <PageTitle
-        // icon client
+          // icon client
           icon="fa-solid fa-user-tie"
-          marginTop="mt-"
+          marginTop="mt-4"
           title={`Cadastrar Cliente`}
         ></PageTitle>
-        <Box
-          title="Novo Cliente"
-          subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
-          width="xl:w-[1000px] w-[600px] lg:w-[800px]"
-          height="h-fit"
-        >
-          <InputTitle title="Cliente"></InputTitle>
-          {/* <div className="flex gap-6 flex-row w-full"> */}
+        <Motion>
+          <Box
+            title="Novo Cliente"
+            subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
+            width="xl:w-[1000px] w-[600px] lg:w-[800px]"
+            height="h-fit"
+          >
+            <InputTitle title="Cliente"></InputTitle>
+            {/* <div className="flex gap-6 flex-row w-full"> */}
             {/* <InputString
               title="NOME DO CLIENTE"
               width="w-2/3"
@@ -128,7 +125,8 @@ const CreateClient = () => {
               justify="justify-center"
             ></ColoredButton>
           </div> */}
-        </Box>
+          </Box>
+        </Motion>
       </BaseScreen>
     </>
   );

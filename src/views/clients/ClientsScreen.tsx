@@ -19,7 +19,7 @@ const ClientsScreen = () => {
           <ColoredButton
             justify="justify-center"
             onClick={() =>
-             navigate("/clientes/novo")
+             navigate("/clientes/novo", { state: { previousRoute: "/clientes" } })
             }
             color="customYellow"
             width="w-[300px]"

@@ -23,7 +23,7 @@ import CriarColaborador from "@/views/workers/CreateWorker";
 
 // Equipes
 import GerenciarEquipes from "@/views/teams/ManageTeams";
-//import CriarEquipe from "@/views/teams/CreateTeam";
+import CriarEquipe from "@/views/teams/CreateTeam";
 
 // Setores
 import GerenciarSetores from "@/views/sectors/ManageSectors";
@@ -63,7 +63,7 @@ const App = () => {
     // Clientes
     { path: "/clientes", element: <Clientes /> },
     { path: "/clientes/novo", element: <CriarCliente /> },
-    //{ path: "/configuracoes/clientes/novo", element: <CriarCliente /> },
+    { path: "/configuracoes/clientes/novo", element: <CriarCliente /> },
 
     { path: "/clientes/:id", element: <DetalhesCliente /> },
     { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
@@ -75,7 +75,7 @@ const App = () => {
 
     // Equipes
     { path: "/configuracoes/equipes", element: <GerenciarEquipes /> },
-    //{ path: "/configuracoes/equipes/novo", element: <CriarEquipe /> },
+    { path: "/configuracoes/equipes/novo", element: <CriarEquipe /> },
 
     // Setores
     { path: "/configuracoes/setores", element: <GerenciarSetores /> },

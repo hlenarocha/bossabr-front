@@ -10,19 +10,15 @@ import SearchBar from "@/components/shared/SearchBar";
 const ManageTeams = () => {
   const navigate = useNavigate();
 
-  function handleNavigate(path: string) {
-    navigate(path);
-  }
-
   return (
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
+          <BackButton onClick={() => navigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/configuracoes/equipes/novo")}
+            onClick={() => navigate("/configuracoes/equipes/novo", { state: { previousRoute: "/configuracoes/equipes" } })}
             color="customYellow"
             width="w-[330px]"
             title="ADICIONAR EQUIPE"

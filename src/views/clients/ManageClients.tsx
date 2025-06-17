@@ -10,19 +10,19 @@ import SearchBar from "@/components/shared/SearchBar";
 const ManageClients = () => {
   const navigate = useNavigate();
 
-  function handleNavigate(path: string) {
-    navigate(path);
-  }
-
   return (
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
+          <BackButton onClick={() => navigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/configuracoes/clientes/novo")}
+            onClick={() =>
+              navigate("/configuracoes/clientes/novo", {
+                state: { previousRoute: "/configuracoes/clientes" },
+              })
+            }
             color="customYellow"
             width="w-[330px]"
             title="ADICIONAR CLIENTE"
@@ -31,10 +31,7 @@ const ManageClients = () => {
         </div>
 
         <div className="flex flex-col lg:justify-between lg:flex-row">
-          <PageTitle
-            marginTop="mt-6"
-            title="Configurar Clientes"
-          ></PageTitle>
+          <PageTitle marginTop="mt-6" title="Configurar Clientes"></PageTitle>
           <SearchBar
             marginTop="mt-6"
             placeholder="Pesquise um cliente aqui..."

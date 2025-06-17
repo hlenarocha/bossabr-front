@@ -20,6 +20,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
+import { Motion } from "@/components/animation/Motion";
 
 // schema de validação com Zod e react hook form
 // para o formulário de cadastro de colaborador
@@ -200,146 +201,150 @@ const CreateWorker = () => {
         ></BackButton>
         <PageTitle marginTop="mt-4" title="Cadastrar Colaborador"></PageTitle>
 
-        <Box
-          title="Cadastrar"
-          subtitle="Cadastre um colaborador aqui."
-          width="xl:w-[1000px] w-[600px] lg:w-[800px]"
-          height="h-[700px]"
-        >
-          <form onSubmit={handleFormSubmit}>
-            <InputTitle title="Colaborador" />
-            <InputString
-              {...register("name")}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleInputChange("name", e.target.value);
-              }}
-              title="NOME DO COLABORADOR"
-              width="w-[100%]"
-              height="h-8"
-              placeholder="Digite o nome..."
-              isMandatory={true}
-              stringType="text"
-              borderColor={getBorderColor("name")}
-              errorMessage={errors.name?.message}
-            ></InputString>
-
-            <div className="flex gap-4 flex-row justify-normal items-center w-[100%]">
-              <Select
-                {...register("selectedTeam", { valueAsNumber: true })}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  handleInputChange("selectedTeam", e.target.value);
-                }}
-                options={
-                  isLoading
-                    ? [
-                        {
-                          id: 0,
-                          name: "Carregando...",
-                          className: "text-customYellow",
-                        },
-                      ]
-                    : isError
-                    ? [
-                        {
-                          id: 0,
-                          name: "Erro.",
-                          className: "text-customRedAlert",
-                        },
-                      ]
-                    : teamsResponse?.map((t) => {
-                        return {
-                          id: t.id_equipe,
-                          name: t.nome_equipe,
-                        };
-                      }) || []
-                }
-                title="EQUIPE"
-                isMandatory={true}
-                width="w-[70%]"
-                errorMessage={errors.selectedTeam?.message}
-              ></Select>
-             
-              {isError && (
-                <span className="text-customRedAlert text-xs mt-4">Erro ao carregar equipes.</span>
-              )}
-              
-              <PlainButton
-                title="NOVA EQUIPE"
-                color="bg-customYellow"
-                width="w-[30%]"
-              ></PlainButton>
-            </div>
-
-            <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
+        <Motion>
+          <Box
+            title="Cadastrar"
+            subtitle="Cadastre um colaborador aqui."
+            width="xl:w-[1000px] w-[600px] lg:w-[800px]"
+            height="h-[700px]"
+          >
+            <form onSubmit={handleFormSubmit}>
+              <InputTitle title="Colaborador" />
               <InputString
-                {...register("email")}
+                {...register("name")}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  handleInputChange("email", e.target.value);
+                  handleInputChange("name", e.target.value);
                 }}
-                title="E-MAIL"
-                width="w-[50%]"
+                title="NOME DO COLABORADOR"
+                width="w-[100%]"
                 height="h-8"
-                placeholder="Digite o email..."
+                placeholder="Digite o nome..."
                 isMandatory={true}
-                borderColor={getBorderColor("email")}
-                stringType="email"
-                errorMessage={errors.email?.message}
+                stringType="text"
+                borderColor={getBorderColor("name")}
+                errorMessage={errors.name?.message}
               ></InputString>
-              <InputString
-                {...register("phone")}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  handleInputChange("phone", e.target.value);
-                }}
-                title="TELEFONE"
-                width="w-[50%]"
-                height="h-8"
-                placeholder="(__) _____-____"
-                isMandatory={true}
-                mask="(99) 99999-9999"
-                borderColor={getBorderColor("phone")}
-                errorMessage={errors.phone?.message}
-              ></InputString>
-            </div>
 
-            <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
-              <InputDate
-                {...register("birthday")}
-                onChange={(value: string) => {
-                  setValue("birthday", value, { shouldValidate: true });
-                }}
-                title="DATA DE NASCIMENTO"
-                isMandatory={false}
-                width="w-[50%]"
-                borderColor={getBorderColor("birthday")}
-                errorMessage={errors.birthday?.message}
-                value={watch("birthday")}
-              ></InputDate>
-              <InputDate
-                {...register("entryDate")}
-                onChange={(value: string) => {
-                  setValue("entryDate", value, { shouldValidate: true });
-                }}
-                title="DATA DE ENTRADA"
-                isMandatory={false}
-                width="w-[50%]"
-                borderColor={getBorderColor("entryDate")}
-                errorMessage={errors.entryDate?.message}
-                value={watch("entryDate")}
-              ></InputDate>
-            </div>
+              <div className="flex gap-4 flex-row justify-normal items-center w-[100%]">
+                <Select
+                  {...register("selectedTeam", { valueAsNumber: true })}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    handleInputChange("selectedTeam", e.target.value);
+                  }}
+                  options={
+                    isLoading
+                      ? [
+                          {
+                            id: 0,
+                            name: "Carregando...",
+                            className: "text-customYellow",
+                          },
+                        ]
+                      : isError
+                      ? [
+                          {
+                            id: 0,
+                            name: "Erro.",
+                            className: "text-customRedAlert",
+                          },
+                        ]
+                      : teamsResponse?.map((t) => {
+                          return {
+                            id: t.id_equipe,
+                            name: t.nome_equipe,
+                          };
+                        }) || []
+                  }
+                  title="EQUIPE"
+                  isMandatory={true}
+                  width="w-[70%]"
+                  errorMessage={errors.selectedTeam?.message}
+                ></Select>
 
-            <div className="w-[100%] flex justify-center mt-6">
-              <ColoredButton
-                type="submit"
-                title="SALVAR"
-                color="customYellow"
-                width="w-[180px]"
-                justify="justify-center"
-                icon="fa-solid fa-floppy-disk"
-              ></ColoredButton>
-            </div>
-          </form>
-        </Box>
+                {isError && (
+                  <span className="text-customRedAlert text-xs mt-4">
+                    Erro ao carregar equipes.
+                  </span>
+                )}
+
+                <PlainButton
+                  title="NOVA EQUIPE"
+                  color="bg-customYellow"
+                  width="w-[30%]"
+                ></PlainButton>
+              </div>
+
+              <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
+                <InputString
+                  {...register("email")}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    handleInputChange("email", e.target.value);
+                  }}
+                  title="E-MAIL"
+                  width="w-[50%]"
+                  height="h-8"
+                  placeholder="Digite o email..."
+                  isMandatory={true}
+                  borderColor={getBorderColor("email")}
+                  stringType="email"
+                  errorMessage={errors.email?.message}
+                ></InputString>
+                <InputString
+                  {...register("phone")}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    handleInputChange("phone", e.target.value);
+                  }}
+                  title="TELEFONE"
+                  width="w-[50%]"
+                  height="h-8"
+                  placeholder="(__) _____-____"
+                  isMandatory={true}
+                  mask="(99) 99999-9999"
+                  borderColor={getBorderColor("phone")}
+                  errorMessage={errors.phone?.message}
+                ></InputString>
+              </div>
+
+              <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
+                <InputDate
+                  {...register("birthday")}
+                  onChange={(value: string) => {
+                    setValue("birthday", value, { shouldValidate: true });
+                  }}
+                  title="DATA DE NASCIMENTO"
+                  isMandatory={false}
+                  width="w-[50%]"
+                  borderColor={getBorderColor("birthday")}
+                  errorMessage={errors.birthday?.message}
+                  value={watch("birthday")}
+                ></InputDate>
+                <InputDate
+                  {...register("entryDate")}
+                  onChange={(value: string) => {
+                    setValue("entryDate", value, { shouldValidate: true });
+                  }}
+                  title="DATA DE ENTRADA"
+                  isMandatory={false}
+                  width="w-[50%]"
+                  borderColor={getBorderColor("entryDate")}
+                  errorMessage={errors.entryDate?.message}
+                  value={watch("entryDate")}
+                ></InputDate>
+              </div>
+
+              <div className="w-[100%] flex justify-center mt-6">
+                <ColoredButton
+                  type="submit"
+                  title="SALVAR"
+                  color="customYellow"
+                  width="w-[180px]"
+                  justify="justify-center"
+                  icon="fa-solid fa-floppy-disk"
+                ></ColoredButton>
+              </div>
+            </form>
+          </Box>
+        </Motion>
       </BaseScreen>
     </>
   );
