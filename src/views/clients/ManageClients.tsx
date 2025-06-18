@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
+import { Motion } from "@/components/animation/Motion";
 
 const ManageClients = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const ManageClients = () => {
           ></SearchBar>
         </div>
 
+        <Motion>
         <Box
           width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-[640px]"
@@ -56,6 +58,7 @@ const ManageClients = () => {
             {/* Aqui você irá adicionar os itens da tabela futuramente */}
           </div>
         </Box>
+        </Motion>
       </BaseScreen>
     </>
   );

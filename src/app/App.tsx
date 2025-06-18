@@ -44,6 +44,7 @@ import Configuracoes from "@/views/settings/SettingsScreen";
 import { UserProvider } from "@/contexts/UserContext";
 import { SideBarProvider } from "@/contexts/SideBarContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import NotFound from "@/views/errors/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -68,10 +69,15 @@ const App = () => {
     { path: "/clientes/:id", element: <DetalhesCliente /> },
     { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
 
-
     // Colaboradores
-    { path: "/configuracoes/colaboradores", element: <GerenciarColaboradores /> },
-    { path: "/configuracoes/colaboradores/novo", element: <CriarColaborador /> },
+    {
+      path: "/configuracoes/colaboradores",
+      element: <GerenciarColaboradores />,
+    },
+    {
+      path: "/configuracoes/colaboradores/novo",
+      element: <CriarColaborador />,
+    },
 
     // Equipes
     { path: "/configuracoes/equipes", element: <GerenciarEquipes /> },
@@ -92,6 +98,11 @@ const App = () => {
     // Relatórios e Configurações gerais
     { path: "/relatorios", element: <Relatorios /> },
     { path: "/configuracoes", element: <Configuracoes /> },
+
+    // Erro 404
+    {
+      path: "*",element: <NotFound />,
+    },
   ]);
 
   return (
