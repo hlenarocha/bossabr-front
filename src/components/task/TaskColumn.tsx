@@ -18,6 +18,13 @@ const TaskColumn = (props: TaskColumnProps) => {
   const filteredTasks = props.tasks.filter(task => task.status === props.status);
   const isEmpty = filteredTasks.length === 0;
 
+  const statusColor = {
+    "não iniciada": "bg-gray-500",
+    "em andamento": "bg-blue-500",
+    "concluída": "bg-green-500",
+    "atrasada": "bg-red-500",
+  };
+
   const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     setActiveDropIndex(index);
@@ -39,18 +46,21 @@ const TaskColumn = (props: TaskColumnProps) => {
   };
 
   return (
-    <div 
+    <div
       className="flex flex-col w-full h-[250px]"
       onDragLeave={handleDragLeave}
     >
-      <div className="font-bold text-md text-center mb-4">{props.title}</div>
-      <div 
+      <div className="flex items-center just gap-2 mb-4 px-4">
+        <span className={`w-3 h-3 rounded-full ${statusColor[props.status as keyof typeof statusColor]}`} />
+        <h2 className="font-bold text-md text-white">{props.title}</h2>
+      </div>
+      <div
         className="overflow-y-auto relative min-h-[100px]"
         onDragOver={handleColumnDragOver}
       >
         {/* Área de drop permanente para colunas vazias */}
         {isEmpty && (
-          <div 
+          <div
             className="absolute inset-0"
             onDragOver={(e) => {
               e.preventDefault();
@@ -82,7 +92,7 @@ const TaskColumn = (props: TaskColumnProps) => {
         )}
 
         {filteredTasks.map((task, index) => (
-          <div 
+          <div
             key={task.indexCard}
             className="relative"
             onDragOver={(e) => handleDragOver(e, index)}

@@ -5,30 +5,35 @@ export interface TaskCardProps {
   indexCard: number;
   activeCard?: number | null;
 }
+
+const statusColor = {
+  "não iniciada": "bg-gray-500",
+  "em andamento": "bg-blue-500",
+  "concluída": "bg-green-500",
+  "atrasada": "bg-red-500",
+};
+
 const TaskCard = (props: TaskCardProps) => {
   return (
-    <>
-      <div
-        draggable={props.setActiveCard ? true : false}
-        onDragStart={() => props.setActiveCard?.(props.indexCard)}
-        onDragEnd={() => props.setActiveCard?.(null)}
+    <div
+      draggable={!!props.setActiveCard}
+      onDragStart={() => props.setActiveCard?.(props.indexCard)}
+      onDragEnd={() => props.setActiveCard?.(null)}
+      className={`
+        ${props.activeCard === props.indexCard ? "border-2 border-[#F6BC0A]" : "border border-[#2d2d2d]"}
+        bg-[#1f1f1f] rounded-xl px-4 py-3 mb-3 shadow-md flex items-center gap-4 transition-transform
+        ${props.setActiveCard ? "cursor-grab" : "cursor-default"}
+      `}
+    >
+      {/* Bolinha de status */}
+      <div className={`w-3 h-3 rounded-full ${statusColor[props.status as keyof typeof statusColor]}`}></div>
 
-        className={`${
-          props.status === "não iniciada"
-            ? "bg-customYellowTask"
-            : props.status === "em andamento"
-            ? "bg-customBlueTask"
-            : props.status === "concluída"
-            ? "bg-customGreenTask"
-            : props.status === "atrasada"
-            ? "bg-customRedTask"
-            : ""
-        }  ${props.activeCard === props.indexCard ? "border-4 border-white" : ""}
-          flex ${props.setActiveCard? "cursor-grab": "cursor-default"} items-center px-4 mb-2 h-11 rounded-[400px] shadow-[inset_5px_5px_20px_0px_rgba(82,82,82,0.16)]`}
-      >
-        <p>{props.title}</p>
+      {/* Conteúdo principal */}
+      <div className="flex-1">
+        <p className="text-white font-medium text-sm">{props.title}</p>
+        <p className="text-xs text-gray-400 mt-1">Prazo: 15/08/2025</p> 
       </div>
-    </>
+    </div>
   );
 };
 
