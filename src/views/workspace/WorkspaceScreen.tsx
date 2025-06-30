@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import readWorkspace from "@/api/workspaceRoutes";
 import { useDragDrop } from "@/hooks/useDragDrop";
 import { Motion } from "@/components/animation/Motion";
+import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
@@ -96,7 +97,7 @@ const WorkspaceScreen = () => {
           </div>
           <p className="text-white font-bold text-xl">{user?.first_name}</p>
         </div>
-        <PageTitle marginTop="mt-6" title="Área de Trabalho"></PageTitle>
+        <PageTitle marginTop="mt-6" title="Área de Trabalho" icon="fa-solid fa-desktop"></PageTitle>
 
         <Motion>
           <Box
@@ -223,6 +224,7 @@ const WorkspaceScreen = () => {
             </div>
           </Box>
         </Motion>
+        <ScrollToEndArrow/>
       </BaseScreen>
     </>
   );

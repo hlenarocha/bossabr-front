@@ -29,7 +29,7 @@ const ClientsScreen = () => {
         </div>
 
         <div className="flex flex-col lg:justify-between lg:flex-row">
-          <PageTitle marginTop="mt-4" title="Clientes"></PageTitle>
+          <PageTitle icon="fa-solid fa-user-tie" marginTop="mt-4" title="Clientes"></PageTitle>
           <SearchBar
             marginTop="mt-6"
             placeholder="Pesquise um cliente aqui..."

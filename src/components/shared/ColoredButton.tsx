@@ -1,7 +1,7 @@
 interface ColoredButtonProps {
   title: string;
   width: string;
-  icon: string;
+  icon?: string;
   color: string;
   justify: string;
   marginTop?: string;

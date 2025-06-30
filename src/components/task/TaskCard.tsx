@@ -21,7 +21,7 @@ const TaskCard = (props: TaskCardProps) => {
       onDragEnd={() => props.setActiveCard?.(null)}
       className={`
         ${props.activeCard === props.indexCard ? "border-2 border-[#F6BC0A]" : "border border-[#2d2d2d]"}
-        bg-[#1f1f1f] rounded-xl px-4 py-3 mb-3 shadow-md flex items-center gap-4 transition-transform
+        bg-customBlackBackground rounded-xl px-4 py-3 mb-3 shadow-md flex items-center gap-4 transition-transform
         ${props.setActiveCard ? "cursor-grab" : "cursor-default"}
       `}
     >

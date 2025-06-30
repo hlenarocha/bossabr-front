@@ -52,7 +52,12 @@ const HeaderFull = (props: HeaderFullProps) => {
           handleLogout();
         }}
       ></Modal>
-      <div className="flex px-10 flex-row justify-between items-center bg-customYellow w-full h-24 shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)]">
+            {/*   Estilo anterior:
+            <div className="flex px-10 flex-row justify-between items-center bg-customBlackBackground w-full h-24 shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)]"> */}
+
+
+      <div className="flex px-10 flex-row justify-between items-center w-full h-24 bg-black/10 shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25)] backdrop-blur-2xl
+">
         <SideMenu
           isSideBarOpen={props.isSideBarOpen}
           onClick={() => props.toggleSideBar()}

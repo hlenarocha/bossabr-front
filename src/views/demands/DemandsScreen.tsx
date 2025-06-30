@@ -10,6 +10,7 @@ import TaskCard from "@/components/task/TaskCard";
 import { useDragDrop } from "@/hooks/useDragDrop";
 import { Calendar } from "@/components/ui/calendar";
 import { Motion } from "@/components/animation/Motion";
+import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 
 const DemandsScreen = () => {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ const DemandsScreen = () => {
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
         </div>
-        <PageTitle marginTop="mt-4" title="Demandas"></PageTitle>
+        <PageTitle icon="fa-solid fa-list-check" marginTop="mt-4" title="Demandas"></PageTitle>
         <div className="flex flex-col w-full xl:w-[1000px]">
           <Motion>
             <div className="flex flex-col xl:flex-row gap-4 items-center ">
@@ -189,6 +190,8 @@ const DemandsScreen = () => {
             </Box>
           </Motion>
         </div>
+        <ScrollToEndArrow />
+
       </BaseScreen>
     </>
   );

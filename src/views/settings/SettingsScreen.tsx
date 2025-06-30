@@ -16,7 +16,7 @@ const SettingsScreen = () => {
   return (
     <>
       <BaseScreen>
-        <PageTitle marginTop="mt-4" title="Configurações"></PageTitle>
+        <PageTitle icon="fa-solid fa-gear" marginTop="mt-4" title="Configurações"></PageTitle>
         <Motion>
           <Box title={`Olá, {user}`} height="h-fit">
             <div className="flex flex-row gap-6">
@@ -160,7 +160,6 @@ const SettingsScreen = () => {
                 color="customYellow"
                 title="CONFIGURAR TIPOS DE SERVIÇO"
               ></ColoredButton>
-              {/* <ColoredButton justify="justify-between" width="w-full" icon="fa solid fa-arrow-right" color="customYellow" title="CONFIGURAR STATUS"></ColoredButton> */}
             </div>
           </Box>
         </Motion>

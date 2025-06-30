@@ -17,6 +17,7 @@ const ReportScreen = () => {
     <BaseScreen>
       <div className="flex flex-col items-center lg:justify-between lg:flex-row">
         <PageTitle
+          icon="fa-solid fa-file"
           marginTop="mt-4"
           title="Relatório Diário de {user}"
         ></PageTitle>
@@ -35,7 +36,7 @@ const ReportScreen = () => {
       <Motion>
         <Box
           title="Relatório Diário"
-          subtitle="Visualize as demandas realizadas no dia {dd / mm / YY}"
+          subtitle="Visualize as suas atividades realizadas no dia {dd / mm / YY}"
           width="w-[600px] lg:w-[800px] xl:w-[1000px]"
           height="h-fit"
         >
@@ -63,7 +64,7 @@ const ReportScreen = () => {
             </div>
           </div>
 
-          <InputTitle title="Registros do dia" />
+          <InputTitle title="Atividades do dia" />
           <TableHeader
             columns={[
               {

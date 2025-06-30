@@ -9,6 +9,7 @@ export default {
   			customYellow: '#F6BC0A',
   			customBoxGray: '#6D6D6D',
   			customInputGray: '#555555', 
+				customBlackBackground: '#1f1f1f',
   			customRedAlert: '#E43131',
 				customTextGray: '#484848',
   			customYellowTask: '#EEBD4A',
@@ -67,6 +68,10 @@ export default {
   				'sans-serif'
   			]
   		},
+			animation: {
+				bounceSlow: 'bounce 5s infinite'
+
+			},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
