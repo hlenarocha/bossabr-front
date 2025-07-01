@@ -4,7 +4,7 @@ import BackButton from "@/components/shared/BackButton";
 import Box from "@/components/box/BoxContent";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PlainButton from "@/components/shared/PlainButton";
 import Select from "@/components/shared/Select";
 import InputDate from "@/components/shared/InputDate";
@@ -13,13 +13,20 @@ import InputQuantity from "@/components/shared/InputQuantity";
 import ColoredButton from "@/components/shared/ColoredButton";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
+import { useState } from "react";
 
 const CreateDemand = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [quantity, setQuantity] = useState(1);
+
+  const previousRoute = location.state?.previousRoute;
+
+
   return (
     <>
       <BaseScreen>
-        <BackButton onClick={() => navigate("/demandas")}></BackButton>
+        <BackButton onClick={() => navigate(previousRoute)}></BackButton>
         <PageTitle
           icon="fa-solid fa-circle-plus"
           marginTop="mt-4"
@@ -98,10 +105,10 @@ const CreateDemand = () => {
                   height="h-[40px]"
                   width="w-1/3"
                   isMandatory={true}
-                  value={1}
+                  value={quantity}
                   min={1}
-                  max={100}
-                  onChange={(value) => console.log(value)}
+                  max={10}
+                  onChange={(e) => setQuantity(e)}
                 />
               </div>
             </div>

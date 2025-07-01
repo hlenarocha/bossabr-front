@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
+import { Motion } from "@/components/animation/Motion";
 
 const ManageTeams = () => {
   const navigate = useNavigate();
@@ -36,25 +37,26 @@ const ManageTeams = () => {
             placeholder="Pesquise uma equipe aqui..."
           ></SearchBar>
         </div>
+        <Motion>
+          <Box
+            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+            height="h-[640px]"
+            title="Lista de Equipes"
+            subtitle="Visualização da lista de equipes para configuração."
+          >
+            <TableHeader
+              columns={[
+                { width: "w-[33%]", content: "NOME" },
+                { width: "w-[33%]", content: "RESPONSÁVEL" },
+                { width: "w-[33%]", content: "SETOR" },
+              ]}
+            ></TableHeader>
 
-        <Box
-          width="w-[600px] lg:w-[800px] xl:w-[1000px]"
-          height="h-[640px]"
-          title="Lista de Equipes"
-          subtitle="Visualização da lista de equipes para configuração."
-        >
-          <TableHeader
-            columns={[
-              { width: "w-[33%]", content: "NOME" },
-              { width: "w-[33%]", content: "RESPONSÁVEL" },
-              { width: "w-[33%]", content: "SETOR" },
-            ]}
-          ></TableHeader>
-
-          <div className="h-[80%] overflow-y-auto">
-            {/* Aqui você irá adicionar os itens da tabela futuramente */}
-          </div>
-        </Box>
+            <div className="h-[80%] overflow-y-auto">
+              {/* Aqui você irá adicionar os itens da tabela futuramente */}
+            </div>
+          </Box>
+        </Motion>
       </BaseScreen>
     </>
   );

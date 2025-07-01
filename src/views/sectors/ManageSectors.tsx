@@ -6,23 +6,20 @@ import { useNavigate } from "react-router-dom";
 import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
+import { Motion } from "@/components/animation/Motion";
 
 const ManageSectors = () => {
   const navigate = useNavigate();
-
-  function handleNavigate(path: string) {
-    navigate(path);
-  }
 
   return (
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
+          <BackButton onClick={() => navigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/configuracoes/setores/novo")}
+            onClick={() => navigate("/configuracoes/setores/novo", { state: { previousRoute: "/configuracoes/equipes" } })}
             color="customYellow"
             width="w-[330px]"
             title="ADICIONAR SETOR"
@@ -41,23 +38,27 @@ const ManageSectors = () => {
           ></SearchBar>
         </div>
 
-        <Box
-          width="w-[600px] lg:w-[800px] xl:w-[1000px]"
-          height="h-[640px]"
-          title="Lista de Setores"
-          subtitle="Visualização da lista de setores para configuração."
-        >
-          <TableHeader
-            columns={[
-              { width: "w-[50%]", content: "NOME" },
-              { width: "w-[50%]", content: "DESCRIÇÃO" },
-            ]}
-          ></TableHeader>
 
-          <div className="h-[80%] overflow-y-auto">
-            {/* Aqui você irá adicionar os itens da tabela futuramente */}
-          </div>
-        </Box>
+        <Motion>
+          <Box
+            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+            height="h-[640px]"
+            title="Lista de Setores"
+            subtitle="Visualização da lista de setores para configuração."
+          >
+            <TableHeader
+              columns={[
+                { width: "w-[50%]", content: "NOME" },
+                { width: "w-[50%]", content: "DESCRIÇÃO" },
+              ]}
+            ></TableHeader>
+
+            <div className="h-[80%] overflow-y-auto">
+              {/* Aqui você irá adicionar os itens da tabela futuramente */}
+            </div>
+          </Box>
+
+        </Motion>
       </BaseScreen>
     </>
   );

@@ -6,23 +6,21 @@ import { useNavigate } from "react-router-dom";
 import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
+import { Motion } from "@/components/animation/Motion";
 
 const ManageBusiness = () => {
   const navigate = useNavigate();
 
-  function handleNavigate(path: string) {
-    navigate(path);
-  }
 
   return (
     <>
       <BaseScreen>
         <div className="flex items-center justify-between">
-          <BackButton onClick={() => handleNavigate("/configuracoes")}></BackButton>
+          <BackButton onClick={() => navigate("/configuracoes")}></BackButton>
 
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/configuracoes/negocios/novo")}
+            onClick={() => navigate("/configuracoes/negocios/novo", { state: { previousRoute: "/configuracoes/negocios" } })}
             color="customYellow"
             width="w-[330px]"
             title="ADICIONAR SETOR DE NEGÓCIO"
@@ -40,24 +38,25 @@ const ManageBusiness = () => {
             placeholder="Pesquise um setor de negócio aqui..."
           ></SearchBar>
         </div>
+        <Motion>
+          <Box
+            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+            height="h-[640px]"
+            title="Lista de Setores de Negócio"
+            subtitle="Visualização da lista de setores de negócio para configuração."
+          >
+            <TableHeader
+              columns={[
+                { width: "w-[40%]", content: "NOME" },
+                { width: "w-[60%]", content: "DESCRIÇÃO" },
+              ]}
+            ></TableHeader>
 
-        <Box
-          width="w-[600px] lg:w-[800px] xl:w-[1000px]"
-          height="h-[640px]"
-          title="Lista de Setores de Negócio"
-          subtitle="Visualização da lista de setores de negócio para configuração."
-        >
-          <TableHeader
-            columns={[
-              { width: "w-[40%]", content: "NOME" },
-              { width: "w-[60%]", content: "DESCRIÇÃO" },
-            ]}
-          ></TableHeader>
-
-          <div className="h-[80%] overflow-y-auto">
-            {/* Aqui você irá adicionar os itens da tabela futuramente */}
-          </div>
-        </Box>
+            <div className="h-[80%] overflow-y-auto">
+              {/* Aqui você irá adicionar os itens da tabela futuramente */}
+            </div>
+          </Box>
+        </Motion>
       </BaseScreen>
     </>
   );

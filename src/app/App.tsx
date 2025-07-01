@@ -27,15 +27,15 @@ import CriarEquipe from "@/views/teams/CreateTeam";
 
 // Setores
 import GerenciarSetores from "@/views/sectors/ManageSectors";
-//import CriarSetor from "@/views/sectors/CreateSector";
+import CriarSetor from "@/views/sectors/CreateSector";
 
 // Setores de Negócio
 import GerenciarNegocios from "@/views/business/ManageBusiness";
-//import CriarNegocio from "@/views/business/CreateBusiness";
+import CriarNegocio from "@/views/business/CreateBusiness";
 
 // Serviços
 import GerenciarServicos from "@/views/services/ManageServices";
-//import CriarServico from "@/views/services/CreateService";
+import CriarServico from "@/views/services/CreateService";
 
 // Relatórios e Configurações gerais
 import Relatorios from "@/views/reports/ReportsScreen";
@@ -57,6 +57,8 @@ const App = () => {
     // Demandas
     { path: "/demandas", element: <Demandas /> },
     { path: "/demandas/nova", element: <CriarDemanda /> },
+    { path: "configuracoes/demandas/nova", element: <CriarDemanda /> },
+
     { path: "/demandas/:id", element: <DetalhesDemanda /> },
     { path: "/demandas/lista", element: <ListarDemandas /> },
     { path: "/configuracoes/demandas", element: <GerenciarDemandas /> },
@@ -85,15 +87,15 @@ const App = () => {
 
     // Setores
     { path: "/configuracoes/setores", element: <GerenciarSetores /> },
-    //{ path: "/configuracoes/setores/novo", element: <CriarSetor /> },
+    { path: "/configuracoes/setores/novo", element: <CriarSetor /> },
 
     // Setores de Negócio
     { path: "/configuracoes/negocios", element: <GerenciarNegocios /> },
-    //{ path: "/configuracoes/setores-de-negocio/novo", element: <CriarNegocio /> },
+    { path: "/configuracoes/negocios/novo", element: <CriarNegocio /> },
 
     // Serviços
     { path: "/configuracoes/servicos", element: <GerenciarServicos /> },
-    //{ path: "/configuracoes/servicos/novo", element: <CriarServico /> },
+    { path: "/configuracoes/servicos/novo", element: <CriarServico /> },
 
     // Relatórios e Configurações gerais
     { path: "/relatorios", element: <Relatorios /> },

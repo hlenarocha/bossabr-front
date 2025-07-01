@@ -1,98 +1,103 @@
-import { useState } from "react";
 
 interface InputNumberProps {
   title: string;
   isMandatory: boolean;
   width?: string;
-  height: string;
+  height?: string; // Altura agora é opcional, pois o componente tem um padrão.
   min?: number;
   max?: number;
   step?: number;
-  value?: number;
+  value: number; // 'value' é agora obrigatório para um componente controlado
+  onChange: (value: number) => void; // 'onChange' também é obrigatório
   isReadOnly?: boolean;
   borderColor?: string;
   errorMessage?: string;
-  rounded?: string;
-  onChange?: (value: number) => void;
 }
 
 const InputNumber = (props: InputNumberProps) => {
-  const [value, setValue] = useState<number>(props.value || 1);
-  const step = props.step || 1;
+  const {
+    title,
+    isMandatory,
+    width,
+    height = "h-[40px]",
+    min = 0,
+    max = 99,
+    step = 1,
+    value,
+    onChange,
+    isReadOnly,
+    borderColor,
+    errorMessage,
+  } = props;
 
-  const handleChange = (newValue: number) => {
-    if (
-      (!props.min || newValue >= props.min) &&
-      (!props.max || newValue <= props.max)
-    ) {
-      setValue(newValue);
-      if (props.onChange) props.onChange(newValue);
+  const handleIncrement = () => {
+    const newValue = value + step;
+    if (newValue <= max) {
+      onChange(newValue);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value, 10);
-    if (!isNaN(newValue)) {
-      handleChange(newValue);
+  const handleDecrement = () => {
+    const newValue = value - step;
+    if (newValue >= min) {
+      onChange(newValue);
     }
   };
 
-  const increment = () => handleChange(value + step);
-  const decrement = () => handleChange(value - step);
+  // Desabilita o botão se o valor atual for menor ou igual ao mínimo
+  const isDecrementDisabled = isReadOnly || value <= min;
+  // Desabilita o botão se o valor atual for maior ou igual ao máximo
+  const isIncrementDisabled = isReadOnly || value >= max;
 
   return (
-    <div className={`flex flex-col mb-2 ${props.width}`}>
+    <div className={`flex flex-col mb-2 ${width}`}>
+      {/* Título e indicador de obrigatoriedade */}
       <div className="text-sm mt-2 font-black mb-1 text-white">
-        {props.title}
+        {title}
         <span
           className={`${
-            props.isMandatory ? "visible" : "hidden"
+            isMandatory ? "visible" : "hidden"
           } text-customYellow text-xl`}
         >
           {" "}
           *
         </span>
       </div>
-      <div className="flex flex-row gap-4 w-fit">
+
+      {/* Container unificado para uma aparência mais limpa */}
+      <div
+        className={`flex flex-row items-center justify-between bg-customInputGray w-fit rounded-[20px] p-1 ${height} ${
+          isReadOnly ? "opacity-50" : ""
+        } ${borderColor || "border-transparent"} border`}
+      >
+        {/* Botão de Decremento */}
         <button
           type="button"
-          onClick={decrement}
-          className="bg-customYellow text-black hover:bg-opacity-80 rounded-full px-4 py-1 font-bold text-lg"
-          disabled={props.isReadOnly}
+          onClick={handleDecrement}
+          disabled={isDecrementDisabled}
+          className="w-10 h-full text-white font-bold text-lg rounded-full hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           -
         </button>
 
-        <div className="flex items-center justify-center bg-customInputGray w-full rounded-[20px] overflow-hidden border px-4">
-          <input
-            type="number"
-            value={value}
-            onChange={handleInputChange}
-            readOnly={props.isReadOnly || false}
-            className={`appearance-none text-center bg-transparent outline-none w-12 ${
-              props.height
-            } ${
-              props.isReadOnly ? "pointer-events-none caret-transparent" : ""
-            }`}
-            style={{
-              MozAppearance: "textfield",
-            }}
-            onWheel={(e) => e.currentTarget.blur()} // previne scroll mudar valor
-          />
-        </div>
+        {/* Display do número (não é mais um input) */}
+        <span className="text-white font-semibold text-center w-12 select-none">
+          {value}
+        </span>
+
+        {/* Botão de Incremento */}
         <button
           type="button"
-          onClick={increment}
-          className="bg-customYellow text-black hover:bg-opacity-80 rounded-full px-4 py-1 font-bold text-lg"
-          disabled={props.isReadOnly}
+          onClick={handleIncrement}
+          disabled={isIncrementDisabled}
+          className="w-10 h-full text-white font-bold text-lg rounded-full hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           +
         </button>
       </div>
 
-      <div className="text-xs text-customRedAlert mt-1">
-        {props.errorMessage}
-      </div>
+      {/* Mensagem de erro */}
+      <div className="text-xs text-customRedAlert mt-1">{errorMessage}</div>
     </div>
   );
 };

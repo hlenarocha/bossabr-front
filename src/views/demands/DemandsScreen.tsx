@@ -48,9 +48,6 @@ const DemandsScreen = () => {
     onDrop,
   } = useDragDrop(initialTasks);
 
-  const handleNavigate = (path: string) => {
-    navigate(path);
-  };
 
   return (
     <>
@@ -62,11 +59,11 @@ const DemandsScreen = () => {
             width="w-[280px]"
             title="LISTA DE DEMANDAS"
             icon="fa-solid fa-eye"
-            onClick={() => handleNavigate("/demandas/lista")}
+            onClick={() => navigate("/demandas/lista")}
           ></ColoredButton>
           <ColoredButton
             justify="justify-center"
-            onClick={() => handleNavigate("/demandas/nova")}
+            onClick={() => navigate("/demandas/nova", { state: { previousRoute: "/demandas" } })}
             color="customYellow"
             width="w-[280px]"
             title="ADICIONAR DEMANDA"

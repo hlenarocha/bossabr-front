@@ -199,11 +199,14 @@ const CreateWorker = () => {
         <BackButton
           onClick={() => handleNavigate("/configuracoes/colaboradores")}
         ></BackButton>
-        <PageTitle marginTop="mt-4" title="Cadastrar Colaborador"></PageTitle>
+        <PageTitle
+          icon="fa-solid fa-circle-plus"
+          marginTop="mt-4"
+          title="Cadastrar Colaborador"></PageTitle>
 
         <Motion>
           <Box
-            title="Cadastrar"
+            title="Novo Colaborador"
             subtitle="Cadastre um colaborador aqui."
             width="xl:w-[1000px] w-[600px] lg:w-[800px]"
             height="h-[700px]"
@@ -234,21 +237,21 @@ const CreateWorker = () => {
                   options={
                     isLoading
                       ? [
-                          {
-                            id: 0,
-                            name: "Carregando...",
-                            className: "text-customYellow",
-                          },
-                        ]
+                        {
+                          id: 0,
+                          name: "Carregando...",
+                          className: "text-customYellow",
+                        },
+                      ]
                       : isError
-                      ? [
+                        ? [
                           {
                             id: 0,
                             name: "Erro.",
                             className: "text-customRedAlert",
                           },
                         ]
-                      : teamsResponse?.map((t) => {
+                        : teamsResponse?.map((t) => {
                           return {
                             id: t.id_equipe,
                             name: t.nome_equipe,
