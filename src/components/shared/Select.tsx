@@ -5,7 +5,7 @@ interface SelectProps {
   height?: string;
   options: { id: number; name: string, className?: string; }[];
   errorMessage?: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const Select = (props: SelectProps) => {

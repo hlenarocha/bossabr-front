@@ -19,7 +19,7 @@ interface InputDateProps {
   width?: string;
   height?: string;
   borderColor?: string;
-  onChange: (e: string) => void;
+  onChange?: (e: string) => void;
   errorMessage?: string;
   value?: string | null;
 }
@@ -48,7 +48,7 @@ const InputDate = (props: InputDateProps) => {
         >
           <DatePicker
             value={dateValue}
-            onChange={(date) => date && props.onChange(dayjs(date).format('YYYY-MM-DD'))}
+            onChange={(date) => date && props.onChange?(dayjs(date).format('YYYY-MM-DD')) : ""}
             slotProps={{
               yearButton: {
                 sx: {

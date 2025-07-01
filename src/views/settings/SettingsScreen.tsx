@@ -7,6 +7,7 @@ import { Motion } from "@/components/animation/Motion";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import InputString from "@/components/shared/InputString";
+import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 
 const SettingsScreen = () => {
   const navigate = useNavigate();
@@ -163,6 +164,7 @@ const SettingsScreen = () => {
             </div>
           </Box>
         </Motion>
+        <ScrollToEndArrow />
       </BaseScreen>
     </>
   );

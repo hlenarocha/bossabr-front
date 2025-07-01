@@ -12,6 +12,7 @@ import TextArea from "@/components/shared/TextArea";
 import InputQuantity from "@/components/shared/InputQuantity";
 import ColoredButton from "@/components/shared/ColoredButton";
 import { Motion } from "@/components/animation/Motion";
+import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 
 const CreateDemand = () => {
   const navigate = useNavigate();
@@ -129,6 +130,7 @@ const CreateDemand = () => {
             </div>
           </Box>
         </Motion>
+        <ScrollToEndArrow />
       </BaseScreen>
     </>
   );

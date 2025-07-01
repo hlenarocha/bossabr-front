@@ -5,7 +5,7 @@ import { UserContext } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "@/components/login/LoginButton";
-import Logo from "@/assets/images/mktflow_logo.png";
+import Logo from "@/assets/images/mktflow_brand.svg";
 import GoogleIcon from "@/assets/images/icon-google.png";
 import LoadingScreen from "@/views/auth/LoadingScreen";
 import Modal from "@/components/modal/Modal";
@@ -107,17 +107,18 @@ const LoginCard = () => {
   */
     <>
       <Modal
-      title="Usuário não autorizado!"
-      description="Entre em contato com o administrador do sistema caso isso seja um erro."
-      onClick1={() => setIsModalErrorVisible(false)}
-      isModalVisible={isModalErrorVisible}
-      buttonTitle1="FECHAR"
-      iconImage={IconSad}
-      
+        title="Usuário não autorizado!"
+        description="Entre em contato com o administrador do sistema caso isso seja um erro."
+        onClick1={() => setIsModalErrorVisible(false)}
+        isModalVisible={isModalErrorVisible}
+        buttonTitle1="FECHAR"
+        iconImage={IconSad}
+
       ></Modal>
 
       <div className="w-[90%] max-w-[600px] flex  absolute flex-col justify-center items-center h-auto sm:h-[600px] bg-black/10 rounded-lg sm:rounded-full p-10 shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)] backdrop-blur-[30px]">
-        <img className="mx-auto mb-8" src={Logo} alt="Logo MKTFlow" />
+        <img className="w-72 mb-8" src={Logo} alt="Logo MKTFlow" />
+       
         <div className="w-full cursor-default max-w-[368px] h-[46px] text-white text-[32px] font-normal font-alatsi text-left">
           Login
         </div>

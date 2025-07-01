@@ -1,4 +1,4 @@
-import Logo from "@/assets/images/mktflow_logo.png";
+import Logo from "@/assets/images/mktflow_brand.svg";
 import IconMenu from "@/assets/images/icon-menu.svg";
 import IconClose from "@/assets/images/icon-close.svg";
 
