@@ -29,46 +29,45 @@ const SettingsScreen = () => {
                   ></img>
                 </div>
               </div>
-              <div className="w-2/3">
-                <div className="flex flex-row gap-2 w-full">
-                  <div className="flex-1">
+              <div className="w-fit">
+                <div className="flex flex-row gap-4 w-full">
                     <InputString
                       title="NOME"
                       placeholder={user?.first_name || ""}
                       isMandatory={false}
                       height="h-8"
+                      width="w-fit"
                       isReadOnly={true}
                     />
-                  </div>
-                  <div className="flex-1">
                     <InputString
                       title="DATA DE NASCIMENTO"
                       placeholder={""}
                       isMandatory={false}
+                      width="w-fit"
+
                       height="h-8"
                       isReadOnly={true}
                     />
-                  </div>
                 </div>
-                <div className="flex flex-row gap-2">
-                  <div className="flex-1">
+                <div className="flex flex-row gap-4">
                     <InputString
                       title="E-MAIL"
                       placeholder={""}
+                      width="w-fit"
+
                       isMandatory={false}
                       height="h-8"
                       isReadOnly={true}
                     />
-                  </div>
-                  <div className="flex-1">
+                 
                     <InputString
                       title="TELEFONE"
                       placeholder={""}
                       isMandatory={false}
+                      width="w-fit"
                       height="h-8"
                       isReadOnly={true}
                     />
-                  </div>
                 </div>
               </div>
             </div>

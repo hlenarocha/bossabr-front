@@ -60,7 +60,7 @@ const LoginCard = () => {
           // 4. Redireciona e exibe tela de carregamento
           setTimeout(() => {
             setLoading(false); // Reseta loading state
-            navigate("/workspace");
+            navigate("/area-trabalho");
           }, 2000);
         }
       } catch (error) {

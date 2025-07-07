@@ -17,7 +17,7 @@ const NotFound = () => {
             <h1 className="text-8xl font-bold text-customYellow [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">
               404
             </h1>
-            <p className="text-2xl font-bold text-white mt-4">
+            <p className="text-2xl font-bold text-white mt-6 bg-customYellow bg-opacity-40 px-6 py-2 rounded-lg">
               PÁGINA NÃO ENCONTRADA!
             </p>
             <img

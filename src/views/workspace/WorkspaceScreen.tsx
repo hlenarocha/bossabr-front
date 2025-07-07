@@ -115,7 +115,7 @@ const WorkspaceScreen = () => {
                     placeholder={user?.first_name || ""}
                     isMandatory={false}
                     height="h-8"
-                    width="w-[40%]"
+                    width="w-fit"
                     isReadOnly={true}
                   ></InputString>
                   <InputString
@@ -123,15 +123,18 @@ const WorkspaceScreen = () => {
                     placeholder={equipe || ""} // colocar equipe no lugar de user?.first_name
                     isMandatory={false}
                     height="h-8"
-                    width="w-[40%]"
+                    width="w-fit"
                     isReadOnly={true}
                   ></InputString>
-                  <div className="flex flex-col w-fit">
-                    <p className="mt-4 text-sm font-black text-white mb-1">
-                      SETOR
-                    </p>
-                    <SectorTag></SectorTag>
-                  </div>
+                  <InputString
+                    title="SETOR"
+                    placeholder={equipe || ""} // colocar equipe no lugar de user?.first_name
+                    isMandatory={false}
+                    height="h-8"
+                    width="w-fit"
+                    isReadOnly={true}
+                  ></InputString>
+                 
                 </div>
                 <div className="mt-4">
                   <InputTitle title="Pontuação semanal"></InputTitle>

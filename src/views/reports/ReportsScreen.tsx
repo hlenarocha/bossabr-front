@@ -46,7 +46,7 @@ const ReportScreen = () => {
               placeholder="{NOME}"
               isMandatory={false}
               height="h-8"
-              width="w-[40%]"
+              width="w-1/3"
               isReadOnly={true}
             ></InputString>
             <InputString
@@ -54,14 +54,17 @@ const ReportScreen = () => {
               placeholder="{EQUIPE}" // colocar equipe no lugar de user?.first_name
               isMandatory={false}
               height="h-8"
-              width="w-[40%]"
+              width="w-1/3"
               isReadOnly={true}
-            ></InputString>
+        ></InputString>
 
-            <div className="flex flex-col w-fit">
-              <p className="mt-4 text-sm font-black text-white mb-1">SETOR</p>
-              <SectorTag></SectorTag>
-            </div>
+            <InputString
+              title="SETOR"
+              placeholder="{SETOR}"
+              isMandatory={false}
+              height="h-8"
+              width="w-1/3"
+              isReadOnly={true} />
           </div>
 
           <InputTitle title="Atividades do dia" />
