@@ -12,7 +12,7 @@ import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 const SettingsScreen = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext); // desconstruindo objeto {}
-  console.log(user?.avatar);
+  console.log(user?.url_avatar);
 
   return (
     <>
@@ -25,7 +25,7 @@ const SettingsScreen = () => {
                 <div className="w-36 h-36  flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255, 255, 255, 0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
                   <img
                     className="rounded-full w-32 h-32"
-                    src={user?.avatar}
+                    src={user?.url_avatar}
                   ></img>
                 </div>
               </div>

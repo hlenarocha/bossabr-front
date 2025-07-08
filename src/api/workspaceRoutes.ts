@@ -1,13 +1,9 @@
+import { WorkspaceResponse } from "@/interfaces/WorkspaceInterface";
 import api from "./axiosInstance";
 
-type FuncionarioWorkspace = {
-  dadosEssenciais: any[];
-  demandas: any[];
-}
-
-const readWorkspace = async (id_funcionario: number | undefined): Promise<FuncionarioWorkspace> => {
+const readWorkspace = async (id_pessoa: number): Promise<WorkspaceResponse> => {
   try {
-    const response = await api.get(`/funcionario/${id_funcionario}/workspace`);
+    const response = await api.get(`/pessoa/${id_pessoa}/workspace`);
     //   , {
     //   headers: {
     //     Authorization: `Bearer ${authToken}`,

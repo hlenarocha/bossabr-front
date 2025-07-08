@@ -1,8 +1,8 @@
 export default interface UserInterface {
-  id_funcionario: number;
+  id_pessoa: number;
   first_name: string;
   email: string;
   role: string;
   tema: boolean;
-  avatar: string;
+  url_avatar: string;
 }

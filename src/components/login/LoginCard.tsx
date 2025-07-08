@@ -16,6 +16,7 @@ const LoginCard = () => {
   const { setUser } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
+  const [unauthorizedEmail, setUnauthorizedEmail] = useState("nom");
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -33,7 +34,11 @@ const LoginCard = () => {
         // console.log(response?.status);
 
         if (response?.status === 401) {
-          setIsModalErrorVisible(true);
+          console.log("STATUS401RESPONSE" + response);
+           if(response.user?.email) {
+             setUnauthorizedEmail(response.user.email);
+           }
+-          setIsModalErrorVisible(true);
           return;
         }
 
@@ -49,11 +54,11 @@ const LoginCard = () => {
 
           // 3. Armazena dados não sensíveis no contexto do usuário
           setUser({
-            id_funcionario: response.user.id_funcionario,
+            id_pessoa: response.user.id_pessoa,
             first_name: response.user.first_name,
             email: response.user.email,
             role: response.user.role,
-            avatar: response.user.avatar,
+            url_avatar: response.user.url_avatar,
             tema: response.user.tema || false,
           });
 
@@ -108,7 +113,7 @@ const LoginCard = () => {
     <>
       <Modal
         title="Usuário não autorizado!"
-        description="Entre em contato com o administrador do sistema caso isso seja um erro."
+        description={`Entre em contato com o administrador ${unauthorizedEmail} do sistema caso isso seja um erro.`}
         onClick1={() => setIsModalErrorVisible(false)}
         isModalVisible={isModalErrorVisible}
         buttonTitle1="FECHAR"

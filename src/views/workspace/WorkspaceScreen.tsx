@@ -6,7 +6,6 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
-import SectorTag from "@/components/tags/SectorTag";
 import ActivityCard from "@/components/activity/ActivityCard";
 import ColoredButton from "@/components/shared/ColoredButton";
 import ScoreBar from "@/components/shared/ScoreBar";
@@ -16,6 +15,7 @@ import readWorkspace from "@/api/workspaceRoutes";
 import { useDragDrop } from "@/hooks/useDragDrop";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
+import { DadosEssenciaisInterface } from "@/interfaces/WorkspaceInterface";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
@@ -24,38 +24,39 @@ const WorkspaceScreen = () => {
   // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
   // const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
   // const auth_token = Cookies.get("auth_token");
-  const [equipe, setEquipe] = useState<string>(""); // estado para armazenar a equipe
+  const [equipe, setEquipe] = useState<string>(""); 
+  const [setor, setSetor] = useState<string>(""); 
+  const [dadosEssenciais, setDadosEssenciais] = useState<DadosEssenciaisInterface | null>(null);
+
 
   console.log(equipe);
-  console.log(user?.id_funcionario); // id_funcionario do usuário logado
-  // console.debug(user);
+  console.log(user?.id_pessoa); // id_pessoa do usuário logado
 
   useEffect(() => {
-    if (user?.id_funcionario) {
+    if (user?.id_pessoa) {
       const fetchWorkspaceData = async () => {
         try {
-          // if (!auth_token) {
-          //   throw new Error("Authentication token is missing");
-          // }
-          const data = await readWorkspace(user?.id_funcionario);
-          console.log(data);
-          // console.log(data.dadosEssenciais);
-          // console.log(data.demandas);
+          const data = await readWorkspace(user.id_pessoa);
+          console.log("Dados recebidos da API:", data);
 
-          // se não tiver id_funcionario
-          if (data) {
-            console.log(data.dadosEssenciais[0].first_name);
-            setEquipe(data.dadosEssenciais[0].nome_equipe);
+          if (data && data.dadosEssenciais) {
+
+            setDadosEssenciais(data.dadosEssenciais);
+            setEquipe(data.dadosEssenciais.nome_equipe);
+            setSetor(data.dadosEssenciais.nome_setor);   
+
           } else {
-            console.log("Sem resposta");
+            console.log("A resposta da API não contém os dados esperados.");
           }
         } catch (error) {
           console.error("Erro ao buscar dados do workspace", error);
         }
       };
+
       fetchWorkspaceData();
     }
-  }, [user]); // roda sempre que {user} mudar, evitando que rode apenas uma vez (quando componente monte)
+  }, [user]); 
+ // roda sempre que {user} mudar, evitando que rode apenas uma vez (quando componente monte)
 
   const initialTasks = [
     { title: "Banner", status: "não iniciada" },
@@ -93,7 +94,7 @@ const WorkspaceScreen = () => {
       <BaseScreen>
         <div className="flex items-center cursor-default  mt-4 gap-4">
           <div className="w-12 h-12  flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255, 255, 255, 0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
-            <img className="rounded-full w-10 h-10" src={user?.avatar}></img>
+            <img className="rounded-full w-10 h-10" src={user?.url_avatar}></img>
           </div>
           <p className="text-white font-bold text-xl">{user?.first_name}</p>
         </div>
@@ -128,7 +129,7 @@ const WorkspaceScreen = () => {
                   ></InputString>
                   <InputString
                     title="SETOR"
-                    placeholder={equipe || ""} // colocar equipe no lugar de user?.first_name
+                    placeholder={setor || ""} // colocar equipe no lugar de user?.first_name
                     isMandatory={false}
                     height="h-8"
                     width="w-fit"
