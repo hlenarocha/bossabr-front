@@ -36,7 +36,7 @@ const CreateClient = () => {
           <Box
             title="Novo Cliente"
             subtitle="Preencha os dados do formulário e cadastre um novo cliente."
-            width="xl:w-[1000px] w-[600px] lg:w-[800px]"
+            width="max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
             height="h-fit"
           >
             <InputTitle title="Cliente"></InputTitle>

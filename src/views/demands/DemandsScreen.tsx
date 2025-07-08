@@ -52,27 +52,30 @@ const DemandsScreen = () => {
   return (
     <>
       <BaseScreen>
-        <div className="flex justify-end mb-4 flex-row gap-4">
-          <ColoredButton
-            justify="justify-center"
-            color="customYellow"
-            width="w-[280px]"
-            title="LISTA DE DEMANDAS"
-            icon="fa-solid fa-eye"
-            onClick={() => navigate("/demandas/lista")}
-          ></ColoredButton>
-          <ColoredButton
-            justify="justify-center"
-            onClick={() => navigate("/demandas/nova", { state: { previousRoute: "/demandas" } })}
-            color="customYellow"
-            width="w-[280px]"
-            title="ADICIONAR DEMANDA"
-            icon="fa-solid fa-circle-plus"
-          ></ColoredButton>
+        <div className="flex justify-between mb-4 flex-row gap-4">
+          <PageTitle icon="fa-solid fa-list-check" marginTop="mt-4" title="Demandas"></PageTitle>
+          <div className="flex gap-4">
+            <ColoredButton
+              justify="justify-center"
+              color="customYellow"
+              width="w-[280px]"
+              title="LISTA DE DEMANDAS"
+              icon="fa-solid fa-eye"
+              onClick={() => navigate("/demandas/lista")}
+            ></ColoredButton>
+            <ColoredButton
+              justify="justify-center"
+              onClick={() => navigate("/demandas/nova", { state: { previousRoute: "/demandas" } })}
+              color="customYellow"
+              width="w-[280px]"
+              title="ADICIONAR DEMANDA"
+              icon="fa-solid fa-circle-plus"
+            ></ColoredButton>
+          </div>
         </div>
-        <PageTitle icon="fa-solid fa-list-check" marginTop="mt-4" title="Demandas"></PageTitle>
-        <div className="flex flex-col w-full xl:w-[1000px]">
-          <Motion>
+
+        <div className="flex flex-col w-full max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]">
+        <Motion>
             <div className="flex flex-col xl:flex-row gap-4 items-center ">
               <Box
                 title="Para esta semana"
