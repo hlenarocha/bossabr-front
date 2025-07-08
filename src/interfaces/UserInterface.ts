@@ -3,6 +3,7 @@ export default interface UserInterface {
   first_name: string;
   email: string;
   role: string;
-  tema: boolean;
   url_avatar: string;
+  nome_equipe?: string;
+  nome_setor?: string;
 }

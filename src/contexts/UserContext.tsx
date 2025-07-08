@@ -3,8 +3,7 @@ import UserInterface from '@/interfaces/UserInterface';
 
 interface UserContextInterface { // interface para o contexto
   user: UserInterface | null;
-  setUser: (user: UserInterface | null) => void;
-}
+  setUser: React.Dispatch<React.SetStateAction<UserInterface | null>>;}
 
 
 export const UserContext = createContext<UserContextInterface>({

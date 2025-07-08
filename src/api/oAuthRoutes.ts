@@ -48,4 +48,21 @@ const getUserByAuthToken = async (authToken: string, setUser: (user: UserData | 
   }
 }
 
+export const requestAccess = async (email: string, type: 'unauthorized' | 'new_request') => {
+  try {
+    // Faz a chamada POST para a rota que criamos no Laravel
+    const response = await api.post('/request-access', {
+      email, 
+      type,  
+    });
+    return response.data; // Retorna a resposta do backend (ex: { message: '...' })
+  } catch (error: any) {
+    // Se o axios der erro (ex: 4xx, 5xx), ele cairá aqui.
+    // Lançamos o erro para que o componente que chamou a função possa tratá-lo.
+    console.error("Erro na chamada da API para solicitar acesso:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
 export { sendJwt, type AuthResponse, getUserByAuthToken };

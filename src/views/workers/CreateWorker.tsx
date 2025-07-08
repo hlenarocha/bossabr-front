@@ -286,7 +286,7 @@ const CreateWorker = () => {
                   title="E-MAIL"
                   width="w-[50%]"
                   height="h-8"
-                  placeholder="Digite o email..."
+                  placeholder="Digite o e-mail..."
                   isMandatory={true}
                   borderColor={getBorderColor("email")}
                   stringType="email"

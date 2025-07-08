@@ -2,16 +2,18 @@ import PageTitle from "@/components/title/PageTitle";
 import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import InputString from "@/components/shared/InputString";
-import SectorTag from "@/components/tags/SectorTag";
 import InputTitle from "@/components/title/InputTitle";
 import TableItem from "@/components/table/TableItem";
 import TableHeader from "@/components/table/TableHeader";
 import ColoredButton from "@/components/shared/ColoredButton";
 import { useNavigate } from "react-router-dom";
 import { Motion } from "@/components/animation/Motion";
+import { useContext } from "react";
+import { UserContext } from "@/contexts/UserContext";
 
 const ReportScreen = () => {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   return (
     <BaseScreen>
@@ -43,7 +45,7 @@ const ReportScreen = () => {
           <div className="flex flex-row gap-2 w-full mb-4">
             <InputString
               title="NOME"
-              placeholder="{NOME}"
+              placeholder={user?.first_name || ""}
               isMandatory={false}
               height="h-8"
               width="w-1/3"
@@ -51,7 +53,7 @@ const ReportScreen = () => {
             ></InputString>
             <InputString
               title="EQUIPE"
-              placeholder="{EQUIPE}" // colocar equipe no lugar de user?.first_name
+              placeholder={user?.nome_equipe || ""}
               isMandatory={false}
               height="h-8"
               width="w-1/3"
@@ -60,7 +62,7 @@ const ReportScreen = () => {
 
             <InputString
               title="SETOR"
-              placeholder="{SETOR}"
+              placeholder={user?.nome_setor || ""}
               isMandatory={false}
               height="h-8"
               width="w-1/3"

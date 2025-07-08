@@ -2,7 +2,7 @@ import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import { greetingFunction } from "@/utils/greetingFunction";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
@@ -11,53 +11,22 @@ import ColoredButton from "@/components/shared/ColoredButton";
 import ScoreBar from "@/components/shared/ScoreBar";
 import TaskColumn from "@/components/task/TaskColumn";
 import { useNavigate } from "react-router-dom";
-import readWorkspace from "@/api/workspaceRoutes";
 import { useDragDrop } from "@/hooks/useDragDrop";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
-import { DadosEssenciaisInterface } from "@/interfaces/WorkspaceInterface";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
-  const { user } = useContext(UserContext); // desconstruindo objeto {}
+  const { user} = useContext(UserContext); // desconstruindo objeto {}
   const navigate = useNavigate();
   // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
   // const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
   // const auth_token = Cookies.get("auth_token");
-  const [equipe, setEquipe] = useState<string>(""); 
-  const [setor, setSetor] = useState<string>(""); 
-  const [dadosEssenciais, setDadosEssenciais] = useState<DadosEssenciaisInterface | null>(null);
 
 
-  console.log(equipe);
   console.log(user?.id_pessoa); // id_pessoa do usuário logado
 
-  useEffect(() => {
-    if (user?.id_pessoa) {
-      const fetchWorkspaceData = async () => {
-        try {
-          const data = await readWorkspace(user.id_pessoa);
-          console.log("Dados recebidos da API:", data);
-
-          if (data && data.dadosEssenciais) {
-
-            setDadosEssenciais(data.dadosEssenciais);
-            setEquipe(data.dadosEssenciais.nome_equipe);
-            setSetor(data.dadosEssenciais.nome_setor);   
-
-          } else {
-            console.log("A resposta da API não contém os dados esperados.");
-          }
-        } catch (error) {
-          console.error("Erro ao buscar dados do workspace", error);
-        }
-      };
-
-      fetchWorkspaceData();
-    }
-  }, [user]); 
- // roda sempre que {user} mudar, evitando que rode apenas uma vez (quando componente monte)
-
+  
   const initialTasks = [
     { title: "Banner", status: "não iniciada" },
     { title: "Post Rosa", status: "em andamento" },
@@ -88,6 +57,7 @@ const WorkspaceScreen = () => {
   } = useDragDrop(initialTasks);
 
   console.log(activeCard);
+  console.log(user?.url_avatar);
 
   return (
     <>
@@ -121,7 +91,7 @@ const WorkspaceScreen = () => {
                   ></InputString>
                   <InputString
                     title="EQUIPE"
-                    placeholder={equipe || ""} // colocar equipe no lugar de user?.first_name
+                    placeholder={user?.nome_equipe || ""} // colocar equipe no lugar de user?.first_name
                     isMandatory={false}
                     height="h-8"
                     width="w-fit"
@@ -129,7 +99,7 @@ const WorkspaceScreen = () => {
                   ></InputString>
                   <InputString
                     title="SETOR"
-                    placeholder={setor || ""} // colocar equipe no lugar de user?.first_name
+                    placeholder={user?.nome_setor || ""} // colocar equipe no lugar de user?.first_name
                     isMandatory={false}
                     height="h-8"
                     width="w-fit"
