@@ -33,7 +33,7 @@ const ClientsScreen = () => {
             <Box
               title="Lista de Clientes"
               subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
-              width="w-full max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
+              width="w-full"
               height="h-[640px]"
             >
               <SearchBar

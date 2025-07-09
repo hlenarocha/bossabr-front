@@ -12,7 +12,7 @@ const NotFound = () => {
     <BaseScreen>
       <Motion>
         <Box
-            width="max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
+            width="w-full"
             height="h-fit">
           <div className="flex flex-col text-white items-center justify-center">
             <p className="text-xl font-bold text-white mb-2">ERRO</p>

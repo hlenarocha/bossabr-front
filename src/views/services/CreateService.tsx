@@ -33,7 +33,7 @@ const CreateService = () => {
           <Box
             title="Novo Serviço"
             subtitle="Preencha os dados do formulário e cadastre um novo serviço."
-            width="max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
+            width="w-full"
             height="h-fit"
           >
             <InputTitle title="Serviço"></InputTitle>

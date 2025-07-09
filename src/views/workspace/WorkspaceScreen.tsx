@@ -74,7 +74,7 @@ const WorkspaceScreen = () => {
           <Box
             title={`${greeting}, ${user?.first_name}!`}
             subtitle="Visualize os dados de pontuação, progresso das demandas e atividades dos últimos sete dias."
-            width="w-full max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]" //Comentei porque acho que quando a tela fica melhor se for full
+            width="w-full"
             height="h-fit"
           >
             <div className="flex w-[100%] flex-row gap-8 mt-8 ">

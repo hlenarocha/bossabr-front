@@ -40,8 +40,7 @@ const ManageClients = () => {
         </div>
 
         <Motion>
-        <Box
-          width="max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
+        <Box width="w-full"
           height="h-[640px]"
           title="Lista de Clientes"
           subtitle="Visualização da lista de clientes para configuração."

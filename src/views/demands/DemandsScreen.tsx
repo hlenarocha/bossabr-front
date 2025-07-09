@@ -74,7 +74,7 @@ const DemandsScreen = () => {
           </div>
         </div>
 
-        <div className="flex flex-col w-full max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]">
+        <div className="flex flex-col w-full">
         <Motion>
             <div className="flex flex-col xl:flex-row gap-4 items-center ">
               <Box

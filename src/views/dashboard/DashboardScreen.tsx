@@ -55,11 +55,12 @@ const DashboardScreen = () => {
             </div>
           </div>
 
+          <div className="flex flex-row w-full gap-4">
             <Box
               title="Progresso das Demandas"
               subtitle="Progresso das demandas do agência."
               height="h-fit"
-              width="w-full max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
+              width="w-full"
             >
               <div className="flex flex-row flex-wrap items-center justify-center gap-8 p-4">
                 {(Object.entries(demandProgress) as [DemandStatus, number][]).map(([status, count]) => (
@@ -72,9 +73,9 @@ const DashboardScreen = () => {
                 ))}
               </div>
             </Box>
+          </div>
+
             <div className="flex flex-row w-full gap-4">
-
-
               <Box
                 title="Peças Produzidas"
                 subtitle="Visão geral de produtividade semanal e mensal."
