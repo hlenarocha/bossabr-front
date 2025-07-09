@@ -40,8 +40,7 @@ const ManageDemands = () => {
           ></SearchBar>
         </div>
         <Motion>
-          <Box
-            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+          <Box width="w-full max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
             height="h-[640px]"
             title="Lista de Demandas"
             subtitle="Visualização da lista de demandas para configuração."

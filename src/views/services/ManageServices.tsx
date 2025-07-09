@@ -41,7 +41,7 @@ const ManageServices = () => {
         </div>
         <Motion>
           <Box
-            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+            width="max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
             height="h-[640px]"
             title="Lista de Tipos de Serviço"
             subtitle="Visualização da lista de tipos de serviço para configuração."
