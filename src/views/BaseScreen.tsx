@@ -24,20 +24,19 @@ const BaseScreen = (prop: BaseScreenProps) => {
         />
       </div>
 
-      <div className="flex flex-row p-5 min-h-[calc(100vh-5rem)] transition-all duration-300">
-        {/* Sidebar: nunca sobrepõe o conteúdo, fica sempre ao lado */}
-        {isSideBarOpen && (
-          <div className="flex-shrink-0 w-[250px] mr-6 transition-all duration-300">
-            <SideBar />
-          </div>
-        )}
-        {/* Conteúdo: centralizado quando sidebar fechado */}
-        <div className={`flex-1 flex transition-all duration-300 ${
-            isSideBarOpen
-              ? "justify-start"
-              : "justify-center"
-          }`}>
-          <div className="p-5 w-full max-w-6xl">
+      <div className="flex flex-row p-5 overflow-hidden">
+        <div
+          className={`z-10 fixed transition-all duration-200 ease-in-out ${
+            isSideBarOpen ? "w-[250px]" : "hidden"
+          }`}
+        >
+          <SideBar />
+        </div>
+        <div className="w-full flex justify-center">
+          <div
+            className={`p-5 transition-all z-0 duration-500 ease-in-out 
+            }`}
+          >
             {prop.children}
           </div>
         </div>

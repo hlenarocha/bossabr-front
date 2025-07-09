@@ -28,7 +28,7 @@ const CreateBusiness = () => {
           <Box
             title="Novo Setor de Negócio"
             subtitle="Preencha os dados do formulário e cadastre um novo setor de negócio."
-            width="max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
+            width="xl:w-[1000px] w-[600px] lg:w-[800px]"
             height="h-fit"
           >
             <InputTitle title="Setor de Negócio"></InputTitle>
