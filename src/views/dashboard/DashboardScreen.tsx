@@ -42,24 +42,26 @@ const DashboardScreen = () => {
 
       <div className="mt-4">
         <Motion>
-          {/*<div className=" md:w-[700px] gap-4 lg:w-[900px]">*/}
-          <div className="flex justify-between mb-4 gap-4 ">
-            <PageTitle icon="fa-solid fa-chart-pie" marginTop="mt-4" title="Dashboard"></PageTitle>
-            <div className="text-white w-1/2">
-              <p className="mb-2 text-xl">Dashboard Selecionado:</p>
-              <BlurSelect
-                options={options}
-                value={selectedOption}
-                onChange={(e) => setSelectedOption(e.target.value)}
-              />
+          <div className=" md:w-[700px] gap-4 lg:w-[900px]">
+            <div className="flex justify-end mb-4 gap-4 ">
+              <div className="text-white w-1/2">
+                <p className="mb-2 text-xl">Dashboard Selecionado:</p>
+                <BlurSelect
+                  options={options}
+                  value={selectedOption}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+              </div>
+
+
             </div>
-          </div>
+            <PageTitle icon="fa-solid fa-chart-pie" marginTop="mt-4" title="Dashboard"></PageTitle>
 
             <Box
               title="Progresso das Demandas"
               subtitle="Progresso das demandas do agência."
               height="h-fit"
-              width="w-full max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
+              width="w-full"
             >
               <div className="flex flex-row flex-wrap items-center justify-center gap-8 p-4">
                 {(Object.entries(demandProgress) as [DemandStatus, number][]).map(([status, count]) => (
@@ -177,8 +179,10 @@ const DashboardScreen = () => {
               >
                 <Component />
               </Box>
+
+              
             </div>
-          {/*</div>*/}
+          </div>
         </Motion>
       </div>
       <ScrollToEndArrow />

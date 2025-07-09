@@ -15,31 +15,34 @@ const ClientsScreen = () => {
   return (
     <>
       <BaseScreen>
+        <div className="flex w-[100%] justify-end">
+          <ColoredButton
+            justify="justify-center"
+            onClick={() =>
+             navigate("/clientes/novo", { state: { previousRoute: "/clientes" } })
+            }
+            color="customYellow"
+            width="w-[300px]"
+            title="ADICIONAR CLIENTE"
+            icon="fa-solid fa-circle-plus"
+          ></ColoredButton>
+        </div>
+
         <div className="flex flex-col lg:justify-between lg:flex-row">
           <PageTitle icon="fa-solid fa-user-tie" marginTop="mt-4" title="Clientes"></PageTitle>
-            <ColoredButton
-                justify="justify-center"
-                onClick={() =>
-                    navigate("/clientes/novo", { state: { previousRoute: "/clientes" } })
-                }
-                color="customYellow"
-                width="w-[300px]"
-                title="ADICIONAR CLIENTE"
-                icon="fa-solid fa-circle-plus"
-            ></ColoredButton>
+          <SearchBar
+            marginTop="mt-6"
+            placeholder="Pesquise um cliente aqui..."
+          ></SearchBar>
         </div>
         <div className="mt-4 ">
           <Motion>
             <Box
               title="Lista de Clientes"
               subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
-              width="w-full max-w-[100%] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1100px]"
+              width="w-[600px] lg:w-[800px] xl:w-[1000px]"
               height="h-[640px]"
             >
-              <SearchBar
-                marginTop="mt-6"
-                placeholder="Pesquise um cliente aqui..."
-              ></SearchBar>
               <TableHeader
                 columns={[
                   { width: "w-[25%]", content: "NOME" },
