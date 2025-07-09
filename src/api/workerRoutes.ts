@@ -4,13 +4,14 @@ interface WorkerData {
   // defines the properties of FuncionarioData here for more security
   first_name: string;
   last_name?: string;
+  cnpj?: string;
   email: string;
   telefone?: string;
   data_entrada: string;
   data_aniversario: string;
   tema?: boolean;
   avatar?: string;
-  role: string;
+  role_id: number;
   id_equipe: number;
 }
 

@@ -11,12 +11,12 @@ interface SelectProps {
 const Select = (props: SelectProps) => {
   return (
     <div className={`flex flex-col mb-4 ${props.width}`}>
-      <div className="text-sm mt-2 font-black mb-1 text-white">
+      <div className="text-md mt-2 font-black mb-1 text-white">
         {props.title}
         <span
           className={` ${
             props.isMandatory ? "visible" : "hidden"
-          } text-customYellow text-xl`}
+          } text-customYellow`}
         >
           {" "}
           *
