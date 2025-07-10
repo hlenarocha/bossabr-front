@@ -8,7 +8,7 @@ import InputString from "@/components/shared/InputString";
 import ColoredButton from "@/components/shared/ColoredButton";
 import Select from "@/components/shared/Select";
 import PlainButton from "@/components/shared/PlainButton";
-import React, { useState } from "react";
+import { useState } from "react";
 import { validateInput } from "@/utils/validateInput";
 import InputDate from "@/components/shared/InputDate";
 import getTeam from "@/api/teamRoutes";
@@ -22,13 +22,20 @@ import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { Motion } from "@/components/animation/Motion";
 
-// schema de validação com Zod e react hook form
-// para o formulário de cadastro de colaborador
+// Schema de validação com Zod e react hook form
 const workerSchema = z.object({
-  name: z
+  firstName: z
     .string()
-    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .min(2, "Nome deve ter pelo menos 2 caracteres")
     .max(100, "Nome não pode exceder 100 caracteres"),
+  lastName: z.string().optional(),
+  cnpj: z
+    .string()
+    .optional()
+    .refine((val) => !val || validateInput(val, "cnpj"), "CNPJ inválido"),
+  roleId: z.number().min(1, "Selecione uma permissão"),
+  sectorId: z.number().min(1, "Selecione um setor"),
+  selectedTeam: z.number().min(1, "Selecione uma equipe"),
   email: z
     .string()
     .email("E-mail inválido")
@@ -36,12 +43,11 @@ const workerSchema = z.object({
   phone: z
     .string()
     .refine((val) => !val || validateInput(val, "phone"), "Telefone inválido"),
-  selectedTeam: z.number().min(1, "Selecione uma equipe"),
-  birthday: z
+  birthDate: z
     .string()
     .optional()
     .refine(
-      (val) => !val || validateInput(val, "birthdayDate"),
+      (val) => !val || validateInput(val, "birthDate"),
       "Data de nascimento inválida"
     ),
   entryDate: z
@@ -55,26 +61,34 @@ const workerSchema = z.object({
 
 type WorkerFormData = z.infer<typeof workerSchema>;
 
+// --- DADOS FICTÍCIOS (MOCKS) PARA PERMISSÕES E SETORES ---
+const mockRoles = [
+  { id: 1, name: "Administrador" },
+  { id: 2, name: "Atendente" },
+  { id: 3, name: "Funcionário" },
+];
+
+const mockSectors = [
+  { id: 1, name: "Design" },
+  { id: 2, name: "Social Media" },
+];
+// --- FIM DOS DADOS FICTÍCIOS ---
+
 const CreateWorker = () => {
   const navigate = useNavigate();
 
   const {
     data: teamsResponse,
-    isLoading,
-    isError,
+    isLoading: isLoadingTeams,
+    isError: isErrorTeams,
   } = useQuery({
     queryFn: () => getTeam(),
-    staleTime: 1000 * 60 * 5, // dados "fresh" por 5 min
-    queryKey: ["teams"], // chave única para a query
-    // cria cache de dados, otimizando a necessidade de requisições
-    // o useMutation é utilizado qnd há updates -> quando há sucesso, queryKey deve dar refetch nos dados
+    staleTime: 1000 * 60 * 5,
+    queryKey: ["teams"],
   });
 
   const [isModalSuccessVisible, setIsModalSucessVisible] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
-  const [isModalFailedVisible, setIsModalFailedVisible] = useState(false);
-  const [isModalFailedDatesVisible, setIsModalFailedDatesVisible] =
-    useState(false);
 
   const {
     register,
@@ -86,11 +100,15 @@ const CreateWorker = () => {
   } = useForm<WorkerFormData>({
     resolver: zodResolver(workerSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      cnpj: "",
+      roleId: 0,
+      sectorId: 0,
+      selectedTeam: 0,
       email: "",
       phone: "",
-      selectedTeam: 0,
-      birthday: "",
+      birthDate: "",
       entryDate: "",
     },
     mode: "onChange",
@@ -98,18 +116,16 @@ const CreateWorker = () => {
   });
 
   const getBorderColor = (fieldName: keyof WorkerFormData) => {
-    if (fieldName === "entryDate" || fieldName === "birthday") {
+    if (fieldName === "entryDate" || fieldName === "birthDate") {
       if (errors[fieldName]) {
         return "#EF4444";
       }
-
       return "#F6BC0A";
     }
 
     if (touchedFields[fieldName] && errors[fieldName]) {
       return "border-customRedAlert";
     }
-
     return "border-customYellow";
   };
 
@@ -124,35 +140,30 @@ const CreateWorker = () => {
   const onSubmit = async (data: WorkerFormData) => {
     try {
       const response = await createWorker({
-        first_name: data.name,
-        //last_name: "",
+        first_name: data.firstName,
+        last_name: data.lastName,
+        cnpj: data.cnpj,
         email: data.email,
         telefone: data.phone,
-        data_aniversario: data.birthday ?? "",
+        data_aniversario: data.birthDate ?? "",
         data_entrada: data.entryDate ?? "",
-        role: "funcionario",
+        role_id: data.roleId,
         id_equipe: data.selectedTeam,
       });
 
-      if (
-        // verificar documentação da API para saber se o status é 200 ou 201
-        response?.status === 200 ||
-        response?.success === true ||
-        response?.status === 201
-      ) {
+      if (response?.status === 201 || response?.success) {
         setIsModalSucessVisible(true);
       } else {
         setIsModalErrorVisible(true);
       }
-      console.log(response);
     } catch (error) {
-      console.log(error);
+      console.error("Erro ao criar colaborador:", error);
       setIsModalErrorVisible(true);
     }
   };
 
-  const handleFormSubmit = handleSubmit(onSubmit, (errors) => {
-    console.log(errors);
+  const handleFormSubmit = handleSubmit(onSubmit, (formErrors) => {
+    console.log("Erros de validação:", formErrors);
     setIsModalErrorVisible(true);
   });
 
@@ -164,45 +175,30 @@ const CreateWorker = () => {
     <>
       <Modal
         title="Sucesso!"
-        description="A operação de cadastro do (a) colaborador (a) foi concluída."
-        onClick1={() => setIsModalSucessVisible(false)}
+        description="O colaborador foi cadastrado com sucesso."
+        onClick1={() => handleNavigate("/configuracoes/colaboradores")}
         isModalVisible={isModalSuccessVisible}
         buttonTitle1="OK"
         iconImage={IconHappy}
-      ></Modal>
+      />
       <Modal
         title="Erro!"
-        description="A operação de cadastro do (a) colaborador (a) NÃO foi concluída."
+        description="Não foi possível cadastrar o colaborador. Verifique os dados ou tente novamente."
         onClick1={() => setIsModalErrorVisible(false)}
         isModalVisible={isModalErrorVisible}
         buttonTitle1="FECHAR"
         iconImage={IconSad}
-      ></Modal>
-      <Modal
-        title="Reveja os campos obrigatórios!"
-        description="Preencha todos os campos obrigatórios (*) corretamente."
-        onClick1={() => setIsModalFailedVisible(false)}
-        isModalVisible={isModalFailedVisible}
-        buttonTitle1="FECHAR"
-        iconImage={IconSad}
-      ></Modal>
-      <Modal
-        title="Reveja os campos de data!"
-        description="Preencha os campos de data com datas válidas."
-        onClick1={() => setIsModalFailedDatesVisible(false)}
-        isModalVisible={isModalFailedDatesVisible}
-        buttonTitle1="FECHAR"
-        iconImage={IconSad}
-      ></Modal>
+      />
 
       <BaseScreen>
         <BackButton
           onClick={() => handleNavigate("/configuracoes/colaboradores")}
-        ></BackButton>
+        />
         <PageTitle
           icon="fa-solid fa-circle-plus"
           marginTop="mt-4"
-          title="Cadastrar Colaborador"></PageTitle>
+          title="Cadastrar Colaborador"
+        />
 
         <Motion>
           <Box
@@ -210,129 +206,164 @@ const CreateWorker = () => {
             subtitle="Cadastre um colaborador aqui."
             width="w-full"
             height="h-[700px]"
+
           >
             <form onSubmit={handleFormSubmit}>
               <InputTitle title="Colaborador" />
-              <InputString
-                {...register("name")}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  handleInputChange("name", e.target.value);
-                }}
-                title="NOME DO COLABORADOR"
-                width="w-[100%]"
-                height="h-8"
-                placeholder="Digite o nome..."
-                isMandatory={true}
-                stringType="text"
-                borderColor={getBorderColor("name")}
-                errorMessage={errors.name?.message}
-              ></InputString>
-
-              <div className="flex gap-4 flex-row justify-normal items-center w-[100%]">
-                <Select
-                  {...register("selectedTeam", { valueAsNumber: true })}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                    handleInputChange("selectedTeam", e.target.value);
-                  }}
-                  options={
-                    isLoading
-                      ? [
-                        {
-                          id: 0,
-                          name: "Carregando...",
-                          className: "text-customYellow",
-                        },
-                      ]
-                      : isError
-                        ? [
-                          {
-                            id: 0,
-                            name: "Erro.",
-                            className: "text-customRedAlert",
-                          },
-                        ]
-                        : teamsResponse?.map((t) => {
-                          return {
-                            id: t.id_equipe,
-                            name: t.nome_equipe,
-                          };
-                        }) || []
+              {/* CORREÇÃO: items-start para alinhar pelo topo */}
+              <div className="flex gap-4 items-start justify-normal">
+                <InputString
+                  {...register("firstName")}
+                  onChange={(e) =>
+                    handleInputChange("firstName", e.target.value)
                   }
-                  title="EQUIPE"
+                  title="NOME"
+                  width="w-1/2"
+                  height="h-8"
+                  placeholder="Digite o nome..."
                   isMandatory={true}
-                  width="w-[70%]"
-                  errorMessage={errors.selectedTeam?.message}
-                ></Select>
-
-                {isError && (
-                  <span className="text-customRedAlert text-xs mt-4">
-                    Erro ao carregar equipes.
-                  </span>
-                )}
-
-                <PlainButton
-                  title="NOVA EQUIPE"
-                  color="bg-customYellow"
-                  width="w-[30%]"
-                ></PlainButton>
+                  borderColor={getBorderColor("firstName")}
+                  errorMessage={errors.firstName?.message}
+                />
+                <InputString
+                  {...register("lastName")}
+                  onChange={(e) =>
+                    handleInputChange("lastName", e.target.value)
+                  }
+                  title="SOBRENOME"
+                  width="w-1/2"
+                  height="h-8"
+                  placeholder="Digite o sobrenome..."
+                  isMandatory={false}
+                  borderColor={getBorderColor("lastName")}
+                  errorMessage={errors.lastName?.message}
+                />
               </div>
 
-              <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
+              {/* CORREÇÃO: items-start para alinhar pelo topo */}
+              <div className="flex gap-4 items-start justify-normal">
+                <InputString
+                  {...register("cnpj")}
+                  onChange={(e) => handleInputChange("cnpj", e.target.value)}
+                  title="CNPJ"
+                  width="w-1/2"
+                  height="h-8"
+                  placeholder="__.___.___/____-__"
+                  isMandatory={false}
+                  mask="99.999.999/9999-99"
+                  borderColor={getBorderColor("cnpj")}
+                  errorMessage={errors.cnpj?.message}
+                />
+                <Select
+                  {...register("roleId", { valueAsNumber: true })}
+                  onChange={(e) =>
+                    handleInputChange("roleId", Number(e.target.value))
+                  }
+                  options={mockRoles}
+                  title="PERMISSÃO"
+                  isMandatory={true}
+                  width="w-1/2"
+                  errorMessage={errors.roleId?.message}
+                />
+              </div>
+
+              {/* CORREÇÃO: items-start para alinhar pelo topo */}
+              <div className="flex flex-row gap-4 w-full items-center">
+                <Select
+                  {...register("sectorId", { valueAsNumber: true })}
+                  onChange={(e) =>
+                    handleInputChange("sectorId", Number(e.target.value))
+                  }
+                  options={mockSectors}
+                  title="SETOR"
+                  isMandatory={true}
+                  width="w-1/2"
+                  errorMessage={errors.sectorId?.message}
+                />
+                {/* CORREÇÃO: items-end para alinhar o botão com o select */}
+
+                <div className="flex gap-4 flex-row justify-normal items-center w-full">                   {" "}
+                  <Select
+                    {...register("selectedTeam", { valueAsNumber: true })}
+                    onChange={(e) =>
+                      handleInputChange("selectedTeam", Number(e.target.value))
+                    }
+                    options={
+                      isLoadingTeams
+                        ? [{ id: 0, name: "Carregando..." }]
+                        : isErrorTeams
+                        ? [{ id: 0, name: "Erro ao carregar" }]
+                        : teamsResponse?.map((t) => ({
+                            id: t.id_equipe,
+                            name: t.nome_equipe,
+                          })) || []
+                    }
+                    title="EQUIPE"
+                    isMandatory={true}
+                    width="w-1/2"
+                    errorMessage={errors.selectedTeam?.message}
+                  />
+                  <PlainButton
+                    title="NOVA EQUIPE"
+                    color="bg-customYellow"
+                    width="w-1/2"
+                  />
+                </div>
+              </div>
+
+              {/* CORREÇÃO: items-start para alinhar pelo topo */}
+              <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
                 <InputString
                   {...register("email")}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    handleInputChange("email", e.target.value);
-                  }}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   title="E-MAIL"
                   width="w-[50%]"
                   height="h-8"
                   placeholder="Digite o e-mail..."
                   isMandatory={true}
                   borderColor={getBorderColor("email")}
-                  stringType="email"
                   errorMessage={errors.email?.message}
-                ></InputString>
+                />
                 <InputString
                   {...register("phone")}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    handleInputChange("phone", e.target.value);
-                  }}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
                   title="TELEFONE"
                   width="w-[50%]"
                   height="h-8"
                   placeholder="(__) _____-____"
-                  isMandatory={true}
+                  isMandatory={false}
                   mask="(99) 99999-9999"
                   borderColor={getBorderColor("phone")}
                   errorMessage={errors.phone?.message}
-                ></InputString>
+                />
               </div>
 
-              <div className="flex gap-4 flex-row justify-between items-center w-[100%]">
+              {/* CORREÇÃO: items-start para alinhar pelo topo */}
+              <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
                 <InputDate
-                  {...register("birthday")}
-                  onChange={(value: string) => {
-                    setValue("birthday", value, { shouldValidate: true });
-                  }}
+                  {...register("birthDate")}
+                  onChange={(value) =>
+                    setValue("birthDate", value, { shouldValidate: true })
+                  }
                   title="DATA DE NASCIMENTO"
                   isMandatory={false}
                   width="w-[50%]"
-                  borderColor={getBorderColor("birthday")}
-                  errorMessage={errors.birthday?.message}
-                  value={watch("birthday")}
-                ></InputDate>
+                  borderColor={getBorderColor("birthDate")}
+                  errorMessage={errors.birthDate?.message}
+                  value={watch("birthDate")}
+                />
                 <InputDate
                   {...register("entryDate")}
-                  onChange={(value: string) => {
-                    setValue("entryDate", value, { shouldValidate: true });
-                  }}
+                  onChange={(value) =>
+                    setValue("entryDate", value, { shouldValidate: true })
+                  }
                   title="DATA DE ENTRADA"
                   isMandatory={false}
                   width="w-[50%]"
                   borderColor={getBorderColor("entryDate")}
                   errorMessage={errors.entryDate?.message}
                   value={watch("entryDate")}
-                ></InputDate>
+                />
               </div>
 
               <div className="w-[100%] flex justify-center mt-6">
@@ -343,7 +374,7 @@ const CreateWorker = () => {
                   width="w-[180px]"
                   justify="justify-center"
                   icon="fa-solid fa-floppy-disk"
-                ></ColoredButton>
+                />
               </div>
             </form>
           </Box>

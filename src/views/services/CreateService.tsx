@@ -34,6 +34,7 @@ const CreateService = () => {
             title="Novo Serviço"
             subtitle="Preencha os dados do formulário e cadastre um novo serviço."
             width="w-full"
+
             height="h-fit"
           >
             <InputTitle title="Serviço"></InputTitle>

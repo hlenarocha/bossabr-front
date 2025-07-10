@@ -42,6 +42,7 @@ const ManageSectors = () => {
         <Motion>
           <Box
             width="w-full"
+
             height="h-[640px]"
             title="Lista de Setores"
             subtitle="Visualização da lista de setores para configuração."

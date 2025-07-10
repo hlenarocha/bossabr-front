@@ -47,7 +47,7 @@ const TaskColumn = (props: TaskColumnProps) => {
 
   return (
     <div
-      className="flex flex-col w-full h-[350px]"
+      className="flex flex-col w-full h-[250px]"
       onDragLeave={handleDragLeave}
     >
       <div className="flex items-center just gap-2 mb-4 px-4">

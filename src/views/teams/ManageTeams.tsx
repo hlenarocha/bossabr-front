@@ -40,6 +40,7 @@ const ManageTeams = () => {
         <Motion>
           <Box
             width="w-full"
+
             height="h-[640px]"
             title="Lista de Equipes"
             subtitle="Visualização da lista de equipes para configuração."

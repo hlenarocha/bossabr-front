@@ -14,6 +14,7 @@ const NotFound = () => {
         <Box
             width="w-full"
             height="h-fit">
+
           <div className="flex flex-col text-white items-center justify-center">
             <p className="text-xl font-bold text-white mb-2">ERRO</p>
             <h1 className="text-8xl font-bold text-customYellow [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">

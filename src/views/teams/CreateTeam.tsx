@@ -30,6 +30,7 @@ const CreateTeam = () => {
             title="Nova Equipe"
             subtitle="Preencha os dados do formulário e cadastre uma nova equipe."
             width="w-full"
+
             height="h-fit"
           >
             <InputTitle title="Equipe"></InputTitle>

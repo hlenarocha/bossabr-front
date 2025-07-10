@@ -19,8 +19,8 @@ const SettingsScreen = () => {
       <BaseScreen>
         <PageTitle icon="fa-solid fa-gear" marginTop="mt-4" title="Configurações"></PageTitle>
         <Motion>
-          <Box title={`Olá, {user}`} width="w-full flex-1" height="h-fit">
-            <div className="flex flex-row gap-4">
+          <Box title={`Olá, {user}`} height="h-fit">
+            <div className="flex flex-row gap-6">
               <div className="w-1/3 flex items-center justify-center">
                 <div className="w-36 h-36  flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255, 255, 255, 0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
                   <img
@@ -44,6 +44,7 @@ const SettingsScreen = () => {
                       placeholder={""}
                       isMandatory={false}
                       width="w-fit"
+
                       height="h-8"
                       isReadOnly={true}
                     />
@@ -53,10 +54,12 @@ const SettingsScreen = () => {
                       title="E-MAIL"
                       placeholder={""}
                       width="w-fit"
+
                       isMandatory={false}
                       height="h-8"
                       isReadOnly={true}
                     />
+                 
                     <InputString
                       title="TELEFONE"
                       placeholder={""}
@@ -75,7 +78,7 @@ const SettingsScreen = () => {
             <Box
               title="Colaboradores"
               subtitle="Veja, altere ou exclua as informações pertinentes aos colaboradores."
-              width="w-full flex-1"
+              width="md:w-[50%]"
               height="h-[378px]"
             >
               <div className="flex flex-col gap-4 items-center">
@@ -105,10 +108,11 @@ const SettingsScreen = () => {
                 ></ColoredButton>
               </div>
             </Box>
+
             <Box
               title="Clientes"
               subtitle="Veja, altere ou exclua as informações pertinentes aos clientes."
-              width="w-full flex-1"
+              width="md:w-[50%]"
               height="h-[378px]"
             >
               <div className="flex flex-col gap-4 items-center">
@@ -133,33 +137,31 @@ const SettingsScreen = () => {
           </div>
         </Motion>
         <Motion>
-          <div className="mt-4 flex flex-col gap-4 md:flex-row">
-            <Box
-              title="Demandas"
-              subtitle="Veja, altere ou exclua as informações pertinentes às demandas."
-              width="w-full"
-              height="h-[378px]"
-            >
-              <div className="flex flex-col gap-4 items-center">
-                <ColoredButton
-                  onClick={() => navigate("/configuracoes/demandas")}
-                  justify="justify-between"
-                  width="w-full"
-                  icon="fa solid fa-arrow-right"
-                  color="customYellow"
-                  title="CONFIGURAR DEMANDAS"
-                ></ColoredButton>
-                <ColoredButton
-                  onClick={() => navigate("/configuracoes/servicos")}
-                  justify="justify-between"
-                  width="w-full"
-                  icon="fa solid fa-arrow-right"
-                  color="customYellow"
-                  title="CONFIGURAR TIPOS DE SERVIÇO"
-                ></ColoredButton>
-              </div>
-            </Box>
-          </div>
+          <Box
+            title="Demandas"
+            subtitle="Veja, altere ou exclua as informações pertinentes às demandas."
+            width="md:w-[50%]"
+            height="h-[378px]"
+          >
+            <div className="flex flex-col gap-4 items-center">
+              <ColoredButton
+                onClick={() => navigate("/configuracoes/demandas")}
+                justify="justify-between"
+                width="w-full"
+                icon="fa solid fa-arrow-right"
+                color="customYellow"
+                title="CONFIGURAR DEMANDAS"
+              ></ColoredButton>
+              <ColoredButton
+                onClick={() => navigate("/configuracoes/servicos")}
+                justify="justify-between"
+                width="w-full"
+                icon="fa solid fa-arrow-right"
+                color="customYellow"
+                title="CONFIGURAR TIPOS DE SERVIÇO"
+              ></ColoredButton>
+            </div>
+          </Box>
         </Motion>
         <ScrollToEndArrow />
       </BaseScreen>

@@ -37,6 +37,7 @@ const CreateDemand = () => {
             title="Nova Demanda"
             subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
             width="w-full"
+
             height="h-fit"
           >
             <InputTitle title="Cliente"></InputTitle>

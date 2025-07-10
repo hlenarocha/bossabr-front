@@ -19,12 +19,12 @@ const InputString = (props: InputStringProps) => {
   return (
     <>
       <div className={`flex flex-col mb-2 ${props.width}`}>
-        <div className="text-sm mt-2 font-black mb-1 text-white">
+        <div className="text-md mt-2 font-black mb-1 text-white">
           {props.title}
           <span
             className={` ${
               props.isMandatory ? "visible" : "hidden"
-            } text-customYellow text-xl`}
+            } text-customYellow`}
           >
             {" "}
             *
@@ -39,7 +39,7 @@ const InputString = (props: InputStringProps) => {
           }}
           className={` ${props.height} ${
             props.isReadOnly ? "pointer-events-none caret-transparent" : ""
-          } bg-customInputGray py-2 px-4 border outline-none  rounded-[20px] ${
+          } bg-customInputGray py-2 px-4 border outline-none rounded-[20px] ${
             props.borderColor
           } `}
           placeholder={props.placeholder}

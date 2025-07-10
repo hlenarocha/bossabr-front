@@ -27,7 +27,7 @@ const ListDemands = () => {
             title="Lista de demandas"
             subtitle="Visualização de todas as demandas de forma geral ou de forma filtrada por equipe, setor, prazo ou cliente."
             width="w-full"
-            height="h-[640px]"
+
           >
             <TableHeader
               columns={[

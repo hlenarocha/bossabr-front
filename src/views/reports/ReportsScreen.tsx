@@ -40,6 +40,7 @@ const ReportScreen = () => {
           title="Relatório Diário"
           subtitle="Visualize as suas atividades realizadas no dia {dd / mm / YY}"
           width="w-full"
+
           height="h-fit"
         >
           <div className="flex flex-row gap-2 w-full mb-4">

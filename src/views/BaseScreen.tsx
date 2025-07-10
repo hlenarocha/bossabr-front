@@ -47,6 +47,7 @@ const BaseScreen = ({ children }: BaseScreenProps) => {
                     {children}
                 </main>
             </div>
+
         </div>
     );
 };
