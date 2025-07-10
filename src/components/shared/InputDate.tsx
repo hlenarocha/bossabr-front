@@ -74,13 +74,15 @@ const InputDate = (props: InputDateProps) => {
               },
               textField: {
                 size: "small",
+
                 sx: {
                   "& .MuiOutlinedInput-root": {
+                    
                     backgroundColor: "#555555",
                     borderRadius: "100px",
                     "& fieldset": { borderColor: props.borderColor }, // Cor do contorno
                     "&:hover fieldset": { borderColor: props.borderColor }, // Outline ao passar o mouse
-                    "&.Mui-focused fieldset": { borderColor: props.borderColor }, // Outline quando focado
+                    "&.Mui-focused fieldset": { borderColor: props.borderColor + "!important" }, // Outline quando focado
                   },
                   input: { color: "white" },
                   svg: { color: "white" },

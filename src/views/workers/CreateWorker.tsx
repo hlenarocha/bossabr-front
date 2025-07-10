@@ -33,7 +33,7 @@ const workerSchema = z.object({
     .string()
     .optional()
     .refine((val) => !val || validateInput(val, "cnpj"), "CNPJ inválido"),
-  roleId: z.number().min(1, "Selecione uma permissão"),
+  roleId: z.number().min(1, "Selecione um cargo"),
   sectorId: z.number().min(1, "Selecione um setor"),
   selectedTeam: z.number().min(1, "Selecione uma equipe"),
   email: z
@@ -210,7 +210,6 @@ const CreateWorker = () => {
           >
             <form onSubmit={handleFormSubmit}>
               <InputTitle title="Colaborador" />
-              {/* CORREÇÃO: items-start para alinhar pelo topo */}
               <div className="flex gap-4 items-start justify-normal">
                 <InputString
                   {...register("firstName")}
@@ -240,7 +239,6 @@ const CreateWorker = () => {
                 />
               </div>
 
-              {/* CORREÇÃO: items-start para alinhar pelo topo */}
               <div className="flex gap-4 items-start justify-normal">
                 <InputString
                   {...register("cnpj")}
@@ -260,14 +258,13 @@ const CreateWorker = () => {
                     handleInputChange("roleId", Number(e.target.value))
                   }
                   options={mockRoles}
-                  title="PERMISSÃO"
+                  title="CARGO"
                   isMandatory={true}
                   width="w-1/2"
                   errorMessage={errors.roleId?.message}
                 />
               </div>
 
-              {/* CORREÇÃO: items-start para alinhar pelo topo */}
               <div className="flex flex-row gap-4 w-full items-center">
                 <Select
                   {...register("sectorId", { valueAsNumber: true })}
@@ -280,9 +277,7 @@ const CreateWorker = () => {
                   width="w-1/2"
                   errorMessage={errors.sectorId?.message}
                 />
-                {/* CORREÇÃO: items-end para alinhar o botão com o select */}
-
-                <div className="flex gap-4 flex-row justify-normal items-center w-full">                   {" "}
+                <div className="flex gap-4 flex-row justify-normal items-center w-full">
                   <Select
                     {...register("selectedTeam", { valueAsNumber: true })}
                     onChange={(e) =>
@@ -292,7 +287,7 @@ const CreateWorker = () => {
                       isLoadingTeams
                         ? [{ id: 0, name: "Carregando..." }]
                         : isErrorTeams
-                        ? [{ id: 0, name: "Erro ao carregar" }]
+                        ? [{ id: 0, name: "Erro ao carregar." }]
                         : teamsResponse?.map((t) => ({
                             id: t.id_equipe,
                             name: t.nome_equipe,
@@ -311,7 +306,6 @@ const CreateWorker = () => {
                 </div>
               </div>
 
-              {/* CORREÇÃO: items-start para alinhar pelo topo */}
               <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
                 <InputString
                   {...register("email")}
@@ -338,13 +332,16 @@ const CreateWorker = () => {
                 />
               </div>
 
-              {/* CORREÇÃO: items-start para alinhar pelo topo */}
               <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
                 <InputDate
                   {...register("birthDate")}
-                  onChange={(value) =>
-                    setValue("birthDate", value, { shouldValidate: true })
-                  }
+                  // --- CORREÇÃO FINAL AQUI ---
+                  onChange={(value) => {
+                    // 1. Define o valor do campo
+                    setValue("birthDate", value, { shouldTouch: true });
+                    // 2. Força a validação deste campo específico
+                    trigger("birthDate");
+                  }}
                   title="DATA DE NASCIMENTO"
                   isMandatory={false}
                   width="w-[50%]"
@@ -354,9 +351,13 @@ const CreateWorker = () => {
                 />
                 <InputDate
                   {...register("entryDate")}
-                  onChange={(value) =>
-                    setValue("entryDate", value, { shouldValidate: true })
-                  }
+                  // --- CORREÇÃO FINAL AQUI ---
+                  onChange={(value) => {
+                    // 1. Define o valor do campo
+                    setValue("entryDate", value, { shouldTouch: true });
+                    // 2. Força a validação deste campo específico
+                    trigger("entryDate");
+                  }}
                   title="DATA DE ENTRADA"
                   isMandatory={false}
                   width="w-[50%]"
@@ -369,9 +370,9 @@ const CreateWorker = () => {
               <div className="w-[100%] flex justify-center mt-6">
                 <ColoredButton
                   type="submit"
-                  title="SALVAR"
+                  title="CADASTRAR COLABORADOR"
                   color="customYellow"
-                  width="w-[180px]"
+                  width="w-[40%]"
                   justify="justify-center"
                   icon="fa-solid fa-floppy-disk"
                 />

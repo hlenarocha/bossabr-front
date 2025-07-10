@@ -29,7 +29,6 @@ const CreateSector = () => {
             title="Novo Setor"
             subtitle="Preencha os dados do formulário e cadastre um setor."
             width="w-full"
-
             height="h-fit"
           >
             <InputTitle title="Setor"></InputTitle>
