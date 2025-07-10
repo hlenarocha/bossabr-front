@@ -26,8 +26,8 @@ const ListDemands = () => {
           <Box
             title="Lista de demandas"
             subtitle="Visualização de todas as demandas de forma geral ou de forma filtrada por equipe, setor, prazo ou cliente."
-            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
-            height="h-[640px]"
+            width="w-full"
+
           >
             <TableHeader
               columns={[

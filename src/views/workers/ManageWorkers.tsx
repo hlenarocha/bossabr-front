@@ -73,7 +73,8 @@ const ManageWorkers = () => {
         </div>
 
         <Box
-          width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+          width="w-full"
+
           height="h-[640px]"
           title="Lista de Colaboradores"
           subtitle="Visualização da lista de colaboradores para configuração."

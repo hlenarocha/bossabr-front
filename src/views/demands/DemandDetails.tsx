@@ -40,7 +40,8 @@ const DemandDetails = () => {
         <Box
           title="Detalhes da Demanda"
           subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
-          width="xl:w-[1000px] w-[600px] lg:w-[800px]"
+          width="w-full"
+
           height="h-fit"
         >
           <div></div>

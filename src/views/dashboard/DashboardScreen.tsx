@@ -57,6 +57,7 @@ const DashboardScreen = () => {
             </div>
             <PageTitle icon="fa-solid fa-chart-pie" marginTop="mt-4" title="Dashboard"></PageTitle>
 
+          <div className="flex flex-row w-full gap-4">
             <Box
               title="Progresso das Demandas"
               subtitle="Progresso das demandas do agência."
@@ -74,9 +75,9 @@ const DashboardScreen = () => {
                 ))}
               </div>
             </Box>
+          </div>
+
             <div className="flex flex-row w-full gap-4">
-
-
               <Box
                 title="Peças Produzidas"
                 subtitle="Visão geral de produtividade semanal e mensal."

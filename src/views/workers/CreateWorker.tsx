@@ -204,8 +204,9 @@ const CreateWorker = () => {
           <Box
             title="Novo Colaborador"
             subtitle="Cadastre um colaborador aqui."
-            width="xl:w-[1000px] w-[600px] lg:w-[800px]"
-            height="h-fit"
+            width="w-full"
+            height="h-[700px]"
+
           >
             <form onSubmit={handleFormSubmit}>
               <InputTitle title="Colaborador" />

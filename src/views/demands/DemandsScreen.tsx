@@ -70,9 +70,10 @@ const DemandsScreen = () => {
             icon="fa-solid fa-circle-plus"
           ></ColoredButton>
         </div>
-        <PageTitle icon="fa-solid fa-list-check" marginTop="mt-4" title="Demandas"></PageTitle>
-        <div className="flex flex-col w-full xl:w-[1000px]">
-          <Motion>
+
+        <div className="flex flex-col w-full">
+        <Motion>
+
             <div className="flex flex-col xl:flex-row gap-4 items-center ">
               <Box
                 title="Para esta semana"

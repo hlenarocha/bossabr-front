@@ -40,7 +40,8 @@ const ClientsScreen = () => {
             <Box
               title="Lista de Clientes"
               subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
-              width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+              width="w-full"
+
               height="h-[640px]"
             >
               <TableHeader

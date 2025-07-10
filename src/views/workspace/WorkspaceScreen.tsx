@@ -74,7 +74,8 @@ const WorkspaceScreen = () => {
           <Box
             title={`${greeting}, ${user?.first_name}!`}
             subtitle="Visualize os dados de pontuação, progresso das demandas e atividades dos últimos sete dias."
-            width="w-full md:w-[700px] lg:w-[900px]"
+            width="w-full"
+
             height="h-fit"
           >
             <div className="flex w-[100%] flex-row gap-8 mt-8 ">

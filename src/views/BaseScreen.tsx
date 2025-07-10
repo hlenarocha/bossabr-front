@@ -5,44 +5,51 @@ import SideBar from "@/components/sidebar/SideBar";
 import { SideBarContext } from "@/contexts/SideBarContext";
 
 interface BaseScreenProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
-const BaseScreen = (prop: BaseScreenProps) => {
-  // const [isSideBarOpen, setIsSideBarOpen] = useState(true);
-  const { isSideBarOpen, setIsSideBarOpen } = useContext(SideBarContext);
+const BaseScreen = ({ children }: BaseScreenProps) => {
+    const { isSideBarOpen, setIsSideBarOpen } = useContext(SideBarContext);
 
-  return (
-    <div
-      className="bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-[#333333]"
-      style={{ backgroundImage: `url(${BackgroundImage})` }} // Apenas a URL precisa ser aplicada inline
-    >
-      <div className="sticky top-0 z-50">
-        <HeaderFull
-          isSideBarOpen={isSideBarOpen}
-          toggleSideBar={() => setIsSideBarOpen(!isSideBarOpen)}
-        />
-      </div>
-
-      <div className="flex flex-row p-5 overflow-hidden">
+    return (
         <div
-          className={`z-10 fixed transition-all duration-200 ease-in-out ${
-            isSideBarOpen ? "w-[250px]" : "hidden"
-          }`}
-        >
-          <SideBar />
+            className="bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-[#333333]"
+            style={{ backgroundImage: `url(${BackgroundImage})` }}>
+
+            <div className="sticky top-0 z-50">
+                <HeaderFull
+                    isSideBarOpen={isSideBarOpen}
+                    toggleSideBar={() => setIsSideBarOpen(!isSideBarOpen)}
+                />
+            </div>
+
+            <div className="flex flex-row overflow-hidden">
+                <div>
+                    {/* Sidebar fixo para desktop */}
+                    <div className="hidden md:block fixed top-[116px] left-5 h-[calc(100%-4rem)] w-[250px] z-60">
+                        <SideBar />
+                    </div>
+
+                    {/* Sidebar para tablets e menores */}
+                    <div className={`fixed top-[116px] left-0 h-[calc(100%-4rem)] w-[250px] z-20 transition-transform duration-300 ease-in-out md:hidden
+                        ${isSideBarOpen ? "translate-x-0" : "-translate-x-full"}
+                      `}>
+                        <SideBar />
+                    </div>
+                </div>
+
+                <main
+                    className={`
+                        flex-1 transition-all duration-300 ease-in-out
+                        p-5
+                        md:ml-[270px]  /* 250px de largura + 20px de margem */
+                      `}>
+                    {children}
+                </main>
+            </div>
+
         </div>
-        <div className="w-full flex justify-center">
-          <div
-            className={`p-5 transition-all z-0 duration-500 ease-in-out 
-            }`}
-          >
-            {prop.children}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default BaseScreen;

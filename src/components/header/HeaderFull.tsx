@@ -1,7 +1,7 @@
 import HeaderDate from "@/components/header/HeaderDate";
 import LogoutButton from "@/components/header/LogoutButton";
 import SideMenu from "@/components/header/SideMenu";
-import Logo from "@/assets/images/mktflow_logo.png";
+import Logo from "@/assets/images/mktflow_brand.svg";
 import Modal from "@/components/modal/Modal";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

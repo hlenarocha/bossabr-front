@@ -29,7 +29,8 @@ const CreateTeam = () => {
           <Box
             title="Nova Equipe"
             subtitle="Preencha os dados do formulário e cadastre uma nova equipe."
-            width="xl:w-[1000px] w-[600px] lg:w-[800px]"
+            width="w-full"
+
             height="h-fit"
           >
             <InputTitle title="Equipe"></InputTitle>

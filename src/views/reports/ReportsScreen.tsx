@@ -39,7 +39,8 @@ const ReportScreen = () => {
         <Box
           title="Relatório Diário"
           subtitle="Visualize as suas atividades realizadas no dia {dd / mm / YY}"
-          width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+          width="w-full"
+
           height="h-fit"
         >
           <div className="flex flex-row gap-2 w-full mb-4">

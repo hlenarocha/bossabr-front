@@ -41,7 +41,8 @@ const ManageDemands = () => {
         </div>
         <Motion>
           <Box
-            width="w-[600px] lg:w-[800px] xl:w-[1000px]"
+            width="w-full"
+
             height="h-[640px]"
             title="Lista de Demandas"
             subtitle="Visualização da lista de demandas para configuração."

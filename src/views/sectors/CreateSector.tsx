@@ -28,7 +28,8 @@ const CreateSector = () => {
           <Box
             title="Novo Setor"
             subtitle="Preencha os dados do formulário e cadastre um setor."
-            width="xl:w-[1000px] w-[600px] lg:w-[800px]"
+            width="w-full"
+
             height="h-fit"
           >
             <InputTitle title="Setor"></InputTitle>
