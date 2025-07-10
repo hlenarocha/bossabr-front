@@ -5,6 +5,7 @@ import TableItem from "@/components/table/TableItem";
 import BackButton from "@/components/shared/BackButton";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "@/components/shared/SearchBar";
+import { Motion } from "@/components/animation/Motion";
 
 const ListDemands = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const ListDemands = () => {
           ></SearchBar>
         </div>
         <div className="mt-4 ">
+          <Motion>
           <Box
             title="Lista de demandas"
             subtitle="Visualização de todas as demandas de forma geral ou de forma filtrada por equipe, setor, prazo ou cliente."
@@ -125,6 +127,7 @@ const ListDemands = () => {
               ></TableItem>
             </div>
           </Box>
+          </Motion>
         </div>
       </BaseScreen>
     </>
