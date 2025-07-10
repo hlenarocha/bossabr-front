@@ -18,7 +18,7 @@ import IconSad from "@/assets/images/famicons_sad.png";
 import { createWorker } from "@/api/workerRoutes";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { Motion } from "@/components/animation/Motion";
 
@@ -93,6 +93,7 @@ const CreateWorker = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, touchedFields },
     watch,
     setValue,
@@ -206,7 +207,6 @@ const CreateWorker = () => {
             subtitle="Cadastre um colaborador aqui."
             width="w-full"
             height="h-[700px]"
-
           >
             <form onSubmit={handleFormSubmit}>
               <InputTitle title="Colaborador" />
@@ -333,37 +333,36 @@ const CreateWorker = () => {
               </div>
 
               <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
-                <InputDate
-                  {...register("birthDate")}
-                  // --- CORREÇÃO FINAL AQUI ---
-                  onChange={(value) => {
-                    // 1. Define o valor do campo
-                    setValue("birthDate", value, { shouldTouch: true });
-                    // 2. Força a validação deste campo específico
-                    trigger("birthDate");
-                  }}
-                  title="DATA DE NASCIMENTO"
-                  isMandatory={false}
-                  width="w-[50%]"
-                  borderColor={getBorderColor("birthDate")}
-                  errorMessage={errors.birthDate?.message}
-                  value={watch("birthDate")}
+                <Controller
+                  control={control}
+                  name="birthDate"
+                  render={({ field, fieldState }) => (
+                    <InputDate
+                      value={field.value}
+                      onChange={(val) => field.onChange(val)}
+                      title="DATA DE NASCIMENTO"
+                      isMandatory={false}
+                      width="w-[50%]"
+                      borderColor={fieldState.error ? "#EF4444" : "#F6BC0A"}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
                 />
-                <InputDate
-                  {...register("entryDate")}
-                  // --- CORREÇÃO FINAL AQUI ---
-                  onChange={(value) => {
-                    // 1. Define o valor do campo
-                    setValue("entryDate", value, { shouldTouch: true });
-                    // 2. Força a validação deste campo específico
-                    trigger("entryDate");
-                  }}
-                  title="DATA DE ENTRADA"
-                  isMandatory={false}
-                  width="w-[50%]"
-                  borderColor={getBorderColor("entryDate")}
-                  errorMessage={errors.entryDate?.message}
-                  value={watch("entryDate")}
+
+                <Controller
+                  control={control}
+                  name="entryDate"
+                  render={({ field, fieldState }) => (
+                    <InputDate
+                      value={field.value}
+                      onChange={(val) => field.onChange(val)}
+                      title="DATA DE ENTRADA"
+                      isMandatory={false}
+                      width="w-[50%]"
+                      borderColor={fieldState.error ? "#EF4444" : "#F6BC0A"}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
                 />
               </div>
 

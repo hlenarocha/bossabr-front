@@ -5,6 +5,7 @@ import "dayjs/locale/pt-br";
 import dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
 import "dayjs/locale/pt-br";
+import React from "react";
 
 // Para formatação correta dos dias da semana
 dayjs.extend(updateLocale);
@@ -24,11 +25,12 @@ interface InputDateProps {
   value?: string | null;
 }
 
-const InputDate = (props: InputDateProps) => {
-  const dateValue = props.value ? dayjs(props.value) : null;
+const InputDate = React.forwardRef<HTMLInputElement, InputDateProps>(
+  (props, ref) => {
+    const dateValue = props.value ? dayjs(props.value) : null;
 
-  return (
-    <>
+    console.log("borderColor", props.borderColor);
+    return (
       <div className={`flex flex-col ${props.width}`}>
         <div className="text-sm mt-2 font-black mb-1 text-white">
           {props.title}
@@ -48,7 +50,11 @@ const InputDate = (props: InputDateProps) => {
         >
           <DatePicker
             value={dateValue}
-            onChange={(date) => date && props.onChange?(dayjs(date).format('YYYY-MM-DD')) : ""}
+            onChange={(date) => {
+              if (date && props.onChange) {
+                props.onChange(dayjs(date).format("YYYY-MM-DD"));
+              }
+            }}
             slotProps={{
               yearButton: {
                 sx: {
@@ -73,16 +79,21 @@ const InputDate = (props: InputDateProps) => {
                 },
               },
               textField: {
+                inputRef: ref,
                 size: "small",
-
+                error: !!props.errorMessage,
                 sx: {
                   "& .MuiOutlinedInput-root": {
-                    
                     backgroundColor: "#555555",
                     borderRadius: "100px",
                     "& fieldset": { borderColor: props.borderColor }, // Cor do contorno
                     "&:hover fieldset": { borderColor: props.borderColor }, // Outline ao passar o mouse
-                    "&.Mui-focused fieldset": { borderColor: props.borderColor + "!important" }, // Outline quando focado
+                    "&.Mui-focused fieldset": {
+                      borderColor: props.borderColor + "!important",
+                    },
+                    "&.Mui-error fieldset": {
+                      borderColor: props.borderColor + " !important", // <-- Força a borda vermelha personalizada
+                    }, // Outline quando focado
                   },
                   input: { color: "white" },
                   svg: { color: "white" },
@@ -129,12 +140,12 @@ const InputDate = (props: InputDateProps) => {
             }}
           />
         </LocalizationProvider>
-      </div>
-      <div className="text-xs text-customRedAlert mt-1">
+        <div className="text-xs text-customRedAlert mt-1">
           {props.errorMessage}
         </div>
-    </>
-  );
-};
+      </div>
+    );
+  }
+);
 
 export default InputDate;
