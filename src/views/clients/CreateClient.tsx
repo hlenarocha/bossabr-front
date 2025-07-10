@@ -37,7 +37,6 @@ const CreateClient = () => {
             title="Novo Cliente"
             subtitle="Preencha os dados do formulário e cadastre um novo cliente."
             width="w-full"
-
             height="h-fit"
           >
             <InputTitle title="Cliente"></InputTitle>
