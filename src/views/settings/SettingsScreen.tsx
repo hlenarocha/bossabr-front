@@ -19,7 +19,7 @@ const SettingsScreen = () => {
       <BaseScreen>
         <PageTitle icon="fa-solid fa-gear" marginTop="mt-4" title="Configurações"></PageTitle>
         <Motion>
-          <Box title={`Olá, {user}`} height="h-fit">
+          <Box title={`Olá, {user}`} width="w-full" height="h-fit">
             <div className="flex flex-row gap-6">
               <div className="w-1/3 flex items-center justify-center">
                 <div className="w-36 h-36  flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255, 255, 255, 0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
@@ -29,7 +29,7 @@ const SettingsScreen = () => {
                   ></img>
                 </div>
               </div>
-              <div className="w-fit">
+              <div className="w-full flex flex-col">
                 <div className="flex flex-row gap-4 w-full">
                     <InputString
                       title="NOME"

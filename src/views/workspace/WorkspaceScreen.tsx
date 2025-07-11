@@ -62,7 +62,7 @@ const WorkspaceScreen = () => {
   return (
     <>
       <BaseScreen>
-        <div className="flex items-end cursor-default  mt-4 gap-4">
+        <div className="flex items-end cursor-default mt-4 gap-4">
           <div className="w-12 h-12  flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255, 255, 255, 0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
             <img className="rounded-full w-10 h-10" src={user?.url_avatar}></img>
           </div>
@@ -77,7 +77,7 @@ const WorkspaceScreen = () => {
             width="w-full"
             height="h-fit"
           >
-            <div className="flex w-[100%] flex-row gap-8 mt-8 ">
+            <div className="flex w-full flex-row gap-8 mt-8 ">
               <div className="flex flex-col w-2/3 gap-2">
                 <InputTitle title="Informações básicas"></InputTitle>
                 <div className="flex flex-row gap-2 w-full flex-wrap">

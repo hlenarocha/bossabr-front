@@ -12,7 +12,7 @@ const Menu = (props: MenuProps) => {
     <>
       <div className="flex gap-6 flex-row">
 
-        {/* shadcn */}<div className="lg:hidden">
+        {/* shadcn */}<div className="md:hidden flex flex-row">
           <img
             alt="Ícone do menu"
             onClick={() => props.onClick()}

@@ -42,7 +42,7 @@ const ClientsScreen = () => {
               subtitle="Visualização da lista de clientes com base do progresso geral das tarefas relacionadas ao pedido do cliente."
               width="w-full"
 
-              height="h-[640px]"
+              height="h-fit"
             >
               <TableHeader
                 columns={[
@@ -53,7 +53,7 @@ const ClientsScreen = () => {
                 ]}
               />
 
-              <div className="h-[70%] overflow-y-auto">
+              <div className="h-full overflow-y-auto">
                 <TableItem
                   itemWidth="w-full "
                   itemHeight="h-16"
