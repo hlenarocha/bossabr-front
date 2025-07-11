@@ -9,59 +9,20 @@ import ColoredButton from "@/components/shared/ColoredButton";
 import Select from "@/components/shared/Select";
 import PlainButton from "@/components/shared/PlainButton";
 import { useState } from "react";
-import { validateInput } from "@/utils/validateInput";
 import InputDate from "@/components/shared/InputDate";
 import getTeam from "@/api/teamRoutes";
 import Modal from "@/components/modal/Modal";
 import IconHappy from "@/assets/images/famicons_happy.png";
 import IconSad from "@/assets/images/famicons_sad.png";
 import { createWorker } from "@/api/workerRoutes";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { Motion } from "@/components/animation/Motion";
+import { workerSchema, WorkerFormData } from "@/schemas/workerSchema";
+import { getBorderColor, handleInputChange } from "@/utils/formUtils";
 
-// Schema de validação com Zod e react hook form
-const workerSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, "Nome deve ter pelo menos 2 caracteres")
-    .max(100, "Nome não pode exceder 100 caracteres"),
-  lastName: z.string().optional(),
-  cnpj: z
-    .string()
-    .optional()
-    .refine((val) => !val || validateInput(val, "cnpj"), "CNPJ inválido"),
-  roleId: z.number().min(1, "Selecione um cargo"),
-  sectorId: z.number().min(1, "Selecione um setor"),
-  selectedTeam: z.number().min(1, "Selecione uma equipe"),
-  email: z
-    .string()
-    .email("E-mail inválido")
-    .max(100, "E-mail não pode exceder 100 caracteres"),
-  phone: z
-    .string()
-    .refine((val) => !val || validateInput(val, "phone"), "Telefone inválido"),
-  birthDate: z
-    .string()
-    .optional()
-    .refine(
-      (val) => !val || validateInput(val, "birthDate"),
-      "Data de nascimento inválida"
-    ),
-  entryDate: z
-    .string()
-    .optional()
-    .refine(
-      (val) => !val || validateInput(val, "entryDate"),
-      "Data de entrada inválida"
-    ),
-});
-
-type WorkerFormData = z.infer<typeof workerSchema>;
-
-// --- DADOS FICTÍCIOS (MOCKS) PARA PERMISSÕES E SETORES ---
+// --- DADOS MOCKADOS ---
 const mockRoles = [
   { id: 1, name: "Administrador" },
   { id: 2, name: "Atendente" },
@@ -72,7 +33,6 @@ const mockSectors = [
   { id: 1, name: "Design" },
   { id: 2, name: "Social Media" },
 ];
-// --- FIM DOS DADOS FICTÍCIOS ---
 
 const CreateWorker = () => {
   const navigate = useNavigate();
@@ -95,7 +55,6 @@ const CreateWorker = () => {
     handleSubmit,
     control,
     formState: { errors, touchedFields },
-    watch,
     setValue,
     trigger,
   } = useForm<WorkerFormData>({
@@ -116,85 +75,65 @@ const CreateWorker = () => {
     reValidateMode: "onChange",
   });
 
-  const getBorderColor = (fieldName: keyof WorkerFormData) => {
-    if (fieldName === "entryDate" || fieldName === "birthDate") {
-      if (errors[fieldName]) {
-        return "#EF4444";
-      }
-      return "#F6BC0A";
-    }
+  const showSuccessModal = () => setIsModalSucessVisible(true);
+  const showErrorModal = () => setIsModalErrorVisible(true);
 
-    if (touchedFields[fieldName] && errors[fieldName]) {
-      return "border-customRedAlert";
-    }
-    return "border-customYellow";
-  };
-
-  const handleInputChange = async (
-    fieldName: keyof WorkerFormData,
-    value: string | number
-  ) => {
-    setValue(fieldName, value, { shouldTouch: true, shouldValidate: true });
-    await trigger(fieldName);
+  const registerWorkerForm = async (data: WorkerFormData) => {
+    return createWorker({
+      first_name: data.firstName,
+      last_name: data.lastName,
+      cnpj: data.cnpj,
+      email: data.email,
+      telefone: data.phone,
+      data_aniversario: data.birthDate ?? "",
+      data_entrada: data.entryDate ?? "",
+      role_id: data.roleId,
+      id_equipe: data.selectedTeam,
+    });
   };
 
   const onSubmit = async (data: WorkerFormData) => {
     try {
-      const response = await createWorker({
-        first_name: data.firstName,
-        last_name: data.lastName,
-        cnpj: data.cnpj,
-        email: data.email,
-        telefone: data.phone,
-        data_aniversario: data.birthDate ?? "",
-        data_entrada: data.entryDate ?? "",
-        role_id: data.roleId,
-        id_equipe: data.selectedTeam,
-      });
+      const response = await registerWorkerForm(data);
+      const success = response?.status === 201 || response?.success;
 
-      if (response?.status === 201 || response?.success) {
-        setIsModalSucessVisible(true);
-      } else {
-        setIsModalErrorVisible(true);
-      }
+      success ? showSuccessModal() : showErrorModal();
     } catch (error) {
       console.error("Erro ao criar colaborador:", error);
-      setIsModalErrorVisible(true);
+      showErrorModal();
     }
   };
 
-  const handleFormSubmit = handleSubmit(onSubmit, (formErrors) => {
-    console.log("Erros de validação:", formErrors);
-    setIsModalErrorVisible(true);
+  const handleFormSubmit = handleSubmit(onSubmit, () => {
+    showErrorModal();
   });
-
-  function handleNavigate(path: string) {
-    navigate(path);
-  }
 
   return (
     <>
-      <Modal
-        title="Sucesso!"
-        description="O colaborador foi cadastrado com sucesso."
-        onClick1={() => handleNavigate("/configuracoes/colaboradores")}
-        isModalVisible={isModalSuccessVisible}
-        buttonTitle1="OK"
-        iconImage={IconHappy}
-      />
-      <Modal
-        title="Erro!"
-        description="Não foi possível cadastrar o colaborador. Verifique os dados ou tente novamente."
-        onClick1={() => setIsModalErrorVisible(false)}
-        isModalVisible={isModalErrorVisible}
-        buttonTitle1="FECHAR"
-        iconImage={IconSad}
-      />
+      {isModalSuccessVisible && (
+        <Modal
+          title="Sucesso!"
+          description="O colaborador foi cadastrado com sucesso."
+          onClick1={() => navigate("/configuracoes/colaboradores")}
+          isModalVisible
+          buttonTitle1="OK"
+          iconImage={IconHappy}
+        />
+      )}
+
+      {isModalErrorVisible && (
+        <Modal
+          title="Erro!"
+          description="Não foi possível cadastrar o colaborador. Verifique os dados ou tente novamente."
+          onClick1={() => setIsModalErrorVisible(false)}
+          isModalVisible
+          buttonTitle1="FECHAR"
+          iconImage={IconSad}
+        />
+      )}
 
       <BaseScreen>
-        <BackButton
-          onClick={() => handleNavigate("/configuracoes/colaboradores")}
-        />
+        <BackButton onClick={() => navigate("/configuracoes/colaboradores")} />
         <PageTitle
           icon="fa-solid fa-circle-plus"
           marginTop="mt-4"
@@ -214,27 +153,27 @@ const CreateWorker = () => {
                 <InputString
                   {...register("firstName")}
                   onChange={(e) =>
-                    handleInputChange("firstName", e.target.value)
+                    handleInputChange(setValue, trigger, "firstName", e.target.value)
                   }
                   title="NOME"
                   width="w-1/2"
                   height="h-8"
                   placeholder="Digite o nome..."
-                  isMandatory={true}
-                  borderColor={getBorderColor("firstName")}
+                  isMandatory
+                  borderColor={getBorderColor("firstName", errors, touchedFields as Record<string, boolean>)}
                   errorMessage={errors.firstName?.message}
                 />
                 <InputString
                   {...register("lastName")}
                   onChange={(e) =>
-                    handleInputChange("lastName", e.target.value)
+                    handleInputChange(setValue, trigger, "lastName", e.target.value)
                   }
                   title="SOBRENOME"
                   width="w-1/2"
+                  isMandatory={false}
                   height="h-8"
                   placeholder="Digite o sobrenome..."
-                  isMandatory={false}
-                  borderColor={getBorderColor("lastName")}
+                  borderColor={getBorderColor("lastName", errors, touchedFields as Record<string, boolean>)}
                   errorMessage={errors.lastName?.message}
                 />
               </div>
@@ -242,24 +181,27 @@ const CreateWorker = () => {
               <div className="flex gap-4 items-start justify-normal">
                 <InputString
                   {...register("cnpj")}
-                  onChange={(e) => handleInputChange("cnpj", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange(setValue, trigger, "cnpj", e.target.value)
+                  }
                   title="CNPJ"
                   width="w-1/2"
                   height="h-8"
-                  placeholder="__.___.___/____-__"
                   isMandatory={false}
+
+                  placeholder="__.___.___/____-__"
                   mask="99.999.999/9999-99"
-                  borderColor={getBorderColor("cnpj")}
+                  borderColor={getBorderColor("cnpj", errors, touchedFields as Record<string, boolean>)}
                   errorMessage={errors.cnpj?.message}
                 />
                 <Select
                   {...register("roleId", { valueAsNumber: true })}
                   onChange={(e) =>
-                    handleInputChange("roleId", Number(e.target.value))
+                    handleInputChange(setValue, trigger, "roleId", Number(e.target.value))
                   }
                   options={mockRoles}
                   title="CARGO"
-                  isMandatory={true}
+                  isMandatory
                   width="w-1/2"
                   errorMessage={errors.roleId?.message}
                 />
@@ -269,11 +211,11 @@ const CreateWorker = () => {
                 <Select
                   {...register("sectorId", { valueAsNumber: true })}
                   onChange={(e) =>
-                    handleInputChange("sectorId", Number(e.target.value))
+                    handleInputChange(setValue, trigger, "sectorId", Number(e.target.value))
                   }
                   options={mockSectors}
                   title="SETOR"
-                  isMandatory={true}
+                  isMandatory
                   width="w-1/2"
                   errorMessage={errors.sectorId?.message}
                 />
@@ -281,7 +223,7 @@ const CreateWorker = () => {
                   <Select
                     {...register("selectedTeam", { valueAsNumber: true })}
                     onChange={(e) =>
-                      handleInputChange("selectedTeam", Number(e.target.value))
+                      handleInputChange(setValue, trigger, "selectedTeam", Number(e.target.value))
                     }
                     options={
                       isLoadingTeams
@@ -294,7 +236,7 @@ const CreateWorker = () => {
                           })) || []
                     }
                     title="EQUIPE"
-                    isMandatory={true}
+                    isMandatory
                     width="w-1/2"
                     errorMessage={errors.selectedTeam?.message}
                   />
@@ -309,25 +251,30 @@ const CreateWorker = () => {
               <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
                 <InputString
                   {...register("email")}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange(setValue, trigger, "email", e.target.value)
+                  }
                   title="E-MAIL"
                   width="w-[50%]"
                   height="h-8"
                   placeholder="Digite o e-mail..."
-                  isMandatory={true}
-                  borderColor={getBorderColor("email")}
+                  isMandatory
+                  borderColor={getBorderColor("email", errors, touchedFields as Record<string, boolean>)}
                   errorMessage={errors.email?.message}
                 />
                 <InputString
                   {...register("phone")}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange(setValue, trigger, "phone", e.target.value)
+                  }
                   title="TELEFONE"
                   width="w-[50%]"
                   height="h-8"
-                  placeholder="(__) _____-____"
                   isMandatory={false}
+
+                  placeholder="(__) _____-____"
                   mask="(99) 99999-9999"
-                  borderColor={getBorderColor("phone")}
+                  borderColor={getBorderColor("phone", errors, touchedFields as Record<string, boolean>)}
                   errorMessage={errors.phone?.message}
                 />
               </div>
@@ -339,7 +286,7 @@ const CreateWorker = () => {
                   render={({ field, fieldState }) => (
                     <InputDate
                       value={field.value}
-                      onChange={(val) => field.onChange(val)}
+                      onChange={field.onChange}
                       title="DATA DE NASCIMENTO"
                       isMandatory={false}
                       width="w-[50%]"
@@ -348,14 +295,13 @@ const CreateWorker = () => {
                     />
                   )}
                 />
-
                 <Controller
                   control={control}
                   name="entryDate"
                   render={({ field, fieldState }) => (
                     <InputDate
                       value={field.value}
-                      onChange={(val) => field.onChange(val)}
+                      onChange={field.onChange}
                       title="DATA DE ENTRADA"
                       isMandatory={false}
                       width="w-[50%]"
