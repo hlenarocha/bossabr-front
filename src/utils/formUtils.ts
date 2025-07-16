@@ -1,27 +1,25 @@
-import { FieldErrors, FieldValues } from "react-hook-form";
+import { FieldErrors, FieldValues, Path } from "react-hook-form";
 
+/**
+ * Determines the border color for a form input based on its error and touched state.
+ * @param fieldName The name of the field.
+ * @param errors The errors object from react-hook-form.
+ * @param touchedFields The touchedFields object from react-hook-form.
+ * @returns A string representing the border color class.
+ */
 export const getBorderColor = <T extends FieldValues>(
-  fieldName: keyof T,
+  fieldName: Path<T>,
   errors: FieldErrors<T>,
-  touchedFields: Record<keyof T, boolean>
+  touchedFields: Partial<Readonly<{ [K in Path<T>]?: boolean }>>
 ): string => {
-  if (fieldName === "entryDate" || fieldName === "birthDate") {
-    return errors[fieldName] ? "#EF4444" : "#F6BC0A";
+  const isTouched = touchedFields[fieldName];
+  const hasError = errors[fieldName];
+
+  if (hasError) {
+    return "border-customRedAlert"; // Red for errors
   }
-
-  if (touchedFields[fieldName] && errors[fieldName]) {
-    return "border-customRedAlert";
+  if (isTouched) {
+    return "border-customYellow"; // Yellow for touched and valid
   }
-
-  return "border-customYellow";
-};
-
-export const handleInputChange = async <T extends FieldValues>(
-  setValue: (field: keyof T, value: any, options?: any) => void,
-  trigger: (field: keyof T) => Promise<boolean>,
-  fieldName: keyof T,
-  value: string | number
-) => {
-  setValue(fieldName, value, { shouldTouch: true, shouldValidate: true });
-  await trigger(fieldName);
+  return "border-customYellow"; // Default color
 };

@@ -1,26 +1,31 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+
+import { workerSchema, WorkerFormData } from "@/schemas/workerSchema";
+import { createWorker } from "@/api/workerRoutes";
+import getTeam from "@/api/teamRoutes";
+import { getBorderColor } from "@/utils/formUtils"; // A função handleInputChange não é mais necessária aqui
+
+// Componentes de UI
 import BackButton from "@/components/shared/BackButton";
 import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import InputTitle from "@/components/title/InputTitle";
 import PageTitle from "@/components/title/PageTitle";
 import InputString from "@/components/shared/InputString";
+import InputDate from "@/components/shared/InputDate";
 import ColoredButton from "@/components/shared/ColoredButton";
 import Select from "@/components/shared/Select";
 import PlainButton from "@/components/shared/PlainButton";
-import { useState } from "react";
-import InputDate from "@/components/shared/InputDate";
-import getTeam from "@/api/teamRoutes";
 import Modal from "@/components/modal/Modal";
+import { Motion } from "@/components/animation/Motion";
+
+// Ícones
 import IconHappy from "@/assets/images/famicons_happy.png";
 import IconSad from "@/assets/images/famicons_sad.png";
-import { createWorker } from "@/api/workerRoutes";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
-import { Motion } from "@/components/animation/Motion";
-import { workerSchema, WorkerFormData } from "@/schemas/workerSchema";
-import { getBorderColor, handleInputChange } from "@/utils/formUtils";
 
 // --- DADOS MOCKADOS ---
 const mockRoles = [
@@ -51,12 +56,9 @@ const CreateWorker = () => {
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
 
   const {
-    register,
-    handleSubmit,
     control,
+    handleSubmit,
     formState: { errors, touchedFields },
-    setValue,
-    trigger,
   } = useForm<WorkerFormData>({
     resolver: zodResolver(workerSchema),
     defaultValues: {
@@ -96,7 +98,6 @@ const CreateWorker = () => {
     try {
       const response = await registerWorkerForm(data);
       const success = response?.status === 201 || response?.success;
-
       success ? showSuccessModal() : showErrorModal();
     } catch (error) {
       console.error("Erro ao criar colaborador:", error);
@@ -104,8 +105,12 @@ const CreateWorker = () => {
     }
   };
 
+  // Envolvemos o onSubmit em handleSubmit para que a validação ocorra primeiro.
+  // O segundo argumento de handleSubmit é opcional para tratar erros de validação.
   const handleFormSubmit = handleSubmit(onSubmit, () => {
-    showErrorModal();
+    // Você pode adicionar uma lógica aqui caso o formulário seja inválido,
+    // mas o Zod já vai exibir as mensagens de erro nos campos.
+    console.log("Erro de validação do formulário.");
   });
 
   return (
@@ -145,101 +150,121 @@ const CreateWorker = () => {
             title="Novo Colaborador"
             subtitle="Cadastre um colaborador aqui."
             width="w-full"
-            height="h-[700px]"
+            height="h-fit"
           >
             <form onSubmit={handleFormSubmit}>
               <InputTitle title="Colaborador" />
               <div className="flex gap-4 items-start justify-normal">
-                <InputString
-                  {...register("firstName")}
-                  onChange={(e) =>
-                    handleInputChange(setValue, trigger, "firstName", e.target.value)
-                  }
-                  title="NOME"
-                  width="w-1/2"
-                  height="h-8"
-                  placeholder="Digite o nome..."
-                  isMandatory
-                  borderColor={getBorderColor("firstName", errors, touchedFields as Record<string, boolean>)}
-                  errorMessage={errors.firstName?.message}
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <InputString
+                      {...field}
+                      title="NOME"
+                      width="w-1/2"
+                      height="h-8"
+                      placeholder="Digite o nome..."
+                      isMandatory
+                      borderColor={getBorderColor("firstName", errors, touchedFields)}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
                 />
-                <InputString
-                  {...register("lastName")}
-                  onChange={(e) =>
-                    handleInputChange(setValue, trigger, "lastName", e.target.value)
-                  }
-                  title="SOBRENOME"
-                  width="w-1/2"
-                  isMandatory={false}
-                  height="h-8"
-                  placeholder="Digite o sobrenome..."
-                  borderColor={getBorderColor("lastName", errors, touchedFields as Record<string, boolean>)}
-                  errorMessage={errors.lastName?.message}
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <InputString
+                      {...field}
+                      title="SOBRENOME"
+                      width="w-1/2"
+                      isMandatory={false}
+                      height="h-8"
+                      placeholder="Digite o sobrenome..."
+                      borderColor={getBorderColor("lastName", errors, touchedFields)}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
                 />
               </div>
 
               <div className="flex gap-4 items-start justify-normal">
-                <InputString
-                  {...register("cnpj")}
-                  onChange={(e) =>
-                    handleInputChange(setValue, trigger, "cnpj", e.target.value)
-                  }
-                  title="CNPJ"
-                  width="w-1/2"
-                  height="h-8"
-                  isMandatory={false}
-
-                  placeholder="__.___.___/____-__"
-                  mask="99.999.999/9999-99"
-                  borderColor={getBorderColor("cnpj", errors, touchedFields as Record<string, boolean>)}
-                  errorMessage={errors.cnpj?.message}
+                <Controller
+                  name="cnpj"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <InputString
+                      {...field}
+                      title="CNPJ"
+                      width="w-1/2"
+                      height="h-8"
+                      isMandatory={false}
+                      placeholder="__.___.___/____-__"
+                      mask="00.000.000/0000-00"
+                      borderColor={getBorderColor("cnpj", errors, touchedFields)}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
                 />
-                <Select
-                  {...register("roleId", { valueAsNumber: true })}
-                  onChange={(e) =>
-                    handleInputChange(setValue, trigger, "roleId", Number(e.target.value))
-                  }
-                  options={mockRoles}
-                  title="CARGO"
-                  isMandatory
-                  width="w-1/2"
-                  errorMessage={errors.roleId?.message}
+                <Controller
+                  name="roleId"
+                  control={control}
+                  render={({ field }) => (
+                     <Select
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))} // Converte para número
+                        options={mockRoles}
+                        title="CARGO"
+                        isMandatory
+                        width="w-1/2"
+                        errorMessage={errors.roleId?.message}
+                      />
+                  )}
                 />
               </div>
 
               <div className="flex flex-row gap-4 w-full items-center">
-                <Select
-                  {...register("sectorId", { valueAsNumber: true })}
-                  onChange={(e) =>
-                    handleInputChange(setValue, trigger, "sectorId", Number(e.target.value))
-                  }
-                  options={mockSectors}
-                  title="SETOR"
-                  isMandatory
-                  width="w-1/2"
-                  errorMessage={errors.sectorId?.message}
+                 <Controller
+                  name="sectorId"
+                  control={control}
+                  render={({ field }) => (
+                     <Select
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        options={mockSectors}
+                        title="SETOR"
+                        isMandatory
+                        width="w-1/2"
+                        errorMessage={errors.sectorId?.message}
+                      />
+                  )}
                 />
                 <div className="flex gap-4 flex-row justify-normal items-center w-full">
-                  <Select
-                    {...register("selectedTeam", { valueAsNumber: true })}
-                    onChange={(e) =>
-                      handleInputChange(setValue, trigger, "selectedTeam", Number(e.target.value))
-                    }
-                    options={
-                      isLoadingTeams
-                        ? [{ id: 0, name: "Carregando..." }]
-                        : isErrorTeams
-                        ? [{ id: 0, name: "Erro ao carregar." }]
-                        : teamsResponse?.map((t) => ({
-                            id: t.id_equipe,
-                            name: t.nome_equipe,
-                          })) || []
-                    }
-                    title="EQUIPE"
-                    isMandatory
-                    width="w-1/2"
-                    errorMessage={errors.selectedTeam?.message}
-                  />
+                   <Controller
+                      name="selectedTeam"
+                      control={control}
+                      render={({ field }) => (
+                         <Select
+                            {...field}
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                            options={
+                              isLoadingTeams
+                                ? [{ id: 0, name: "Carregando..." }]
+                                : isErrorTeams
+                                ? [{ id: 0, name: "Erro ao carregar." }]
+                                : teamsResponse?.map((t) => ({
+                                    id: t.id_equipe,
+                                    name: t.nome_equipe,
+                                  })) || []
+                            }
+                            title="EQUIPE"
+                            isMandatory
+                            width="w-1/2"
+                            errorMessage={errors.selectedTeam?.message}
+                          />
+                      )}
+                    />
                   <PlainButton
                     title="NOVA EQUIPE"
                     color="bg-customYellow"
@@ -249,33 +274,38 @@ const CreateWorker = () => {
               </div>
 
               <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
-                <InputString
-                  {...register("email")}
-                  onChange={(e) =>
-                    handleInputChange(setValue, trigger, "email", e.target.value)
-                  }
-                  title="E-MAIL"
-                  width="w-[50%]"
-                  height="h-8"
-                  placeholder="Digite o e-mail..."
-                  isMandatory
-                  borderColor={getBorderColor("email", errors, touchedFields as Record<string, boolean>)}
-                  errorMessage={errors.email?.message}
-                />
-                <InputString
-                  {...register("phone")}
-                  onChange={(e) =>
-                    handleInputChange(setValue, trigger, "phone", e.target.value)
-                  }
-                  title="TELEFONE"
-                  width="w-[50%]"
-                  height="h-8"
-                  isMandatory={false}
-
-                  placeholder="(__) _____-____"
-                  mask="(99) 99999-9999"
-                  borderColor={getBorderColor("phone", errors, touchedFields as Record<string, boolean>)}
-                  errorMessage={errors.phone?.message}
+                 <Controller
+                    name="email"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <InputString
+                        {...field}
+                        title="E-MAIL"
+                        width="w-[50%]"
+                        height="h-8"
+                        placeholder="Digite o e-mail..."
+                        isMandatory
+                        borderColor={getBorderColor("email", errors, touchedFields)}
+                        errorMessage={fieldState.error?.message}
+                      />
+                    )}
+                  />
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <InputString
+                      {...field}
+                      title="TELEFONE"
+                      width="w-[50%]"
+                      height="h-8"
+                      isMandatory={false}
+                      placeholder="(__) _____-____"
+                      mask="(00) 00000-0000"
+                      borderColor={getBorderColor("phone", errors, touchedFields)}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
                 />
               </div>
 
