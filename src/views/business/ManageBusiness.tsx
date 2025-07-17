@@ -11,51 +11,24 @@ import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
 import { Motion } from "@/components/animation/Motion";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import TableItem from "@/components/table/TableItem";
 import { BusinessItem } from "@/api/businessRoutes";
+// Importando nosso novo componente genérico!
+import { ResourceListView } from "@/components/shared/ResourceListView";
 
 const ManageBusiness = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
+  // 1. Hook busca os dados da API.
   const { data: businessSectors, isLoading, isError } = useReadBusiness();
-  console.log("Dados recebidos da API (businessSectors):", businessSectors);
 
-  // Verificamos explicitamente se 'businessSectors' é um array antes de usar .filter().
-  // Se não for, 'filteredSectors' se torna um array vazio, evitando o erro.
+  // 2. A lógica de filtragem permanece aqui, pois é específica desta página.
   const filteredSectors = Array.isArray(businessSectors)
     ? businessSectors.filter((sector: BusinessItem) =>
         sector.nome_setor_negocio.toLowerCase().includes(searchTerm.toLowerCase())
       )
-    : []; // Fallback para um array vazio se não for um array
-
-  const renderContent = () => {
-    if (isLoading) {
-      return <LoadingSpinner />;
-    }
-
-    if (isError) {
-      return <div className="text-center text-customRedAlert mt-10">Erro ao carregar os setores de negócio.</div>;
-    }
-    
-    if (filteredSectors.length === 0) {
-      return <div className="text-center text-gray-400 mt-10">Nenhum setor de negócio encontrado.</div>;
-    }
-
-    return filteredSectors.map((sector: BusinessItem) => (
-      <TableItem
-        key={sector.id_setor_negocio}
-        columns={[
-          { width: "w-full", content: sector.nome_setor_negocio },
-        ]}
-        itemWidth="w-full"
-        itemHeight="h-12"
-        onClick={() => navigate(`/configuracoes/negocios/${sector.id_setor_negocio}`)} // fazer lógica de visualização para update e delete
-        icon="fa-solid fa-eye"
-      />
-    ));
-  };
+    : [];
 
   return (
     <>
@@ -90,7 +63,27 @@ const ManageBusiness = () => {
           >
             <TableHeader columns={[{ width: "w-full", content: "NOME" }]} />
             <div className="h-[80%] overflow-y-auto">
-              {renderContent()}
+              {/* 3. Usando o componente genérico para renderizar a lista */}
+              <ResourceListView
+                isLoading={isLoading}
+                isError={isError}
+                items={filteredSectors}
+                // emptyMessage="Nenhum setor de negócio encontrado."
+                // errorMessage="Erro ao carregar os setores."
+                // A prop renderItem ensina o componente como renderizar um TableItem
+                renderItem={(sector) => (
+                  <TableItem
+                    key={sector.id_setor_negocio}
+                    columns={[
+                      { width: "w-full", content: sector.nome_setor_negocio },
+                    ]}
+                    itemWidth="w-full"
+                    itemHeight="h-12"
+                    onClick={() => navigate(`/configuracoes/negocios/${sector.id_setor_negocio}`)}
+                    icon="fa-solid fa-eye"
+                  />
+                )}
+              />
             </div>
           </Box>
         </Motion>
