@@ -1,12 +1,16 @@
 interface SearchBarProps {
   placeholder: string;
   marginTop?: string;
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
 const SearchBar = (props: SearchBarProps) => {
   return (
     <div className={`${props.marginTop} relative flex`}>
       <input
+        value={props.value}
+        onChange={(e) => props.onChange && props.onChange(e.target.value)}
         className={` w-96 h-12 px-4 text-white placeholder:text-gray-300 bg-customItemBackgroundGray pl-14 focus:border-2 focus:border-customYellow outline-none rounded-[400px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]`}
         type="text"
         placeholder={props.placeholder}

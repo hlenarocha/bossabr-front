@@ -4,6 +4,7 @@ interface TableItemProps {
   itemHeight: string;
   columns: { width: string; content: React.ReactNode }[];
   icon: string;
+  onClick?: () => void;
 }
 
 const TableItem = (props: TableItemProps) => {
