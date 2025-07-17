@@ -13,20 +13,23 @@ import SearchBar from "@/components/shared/SearchBar";
 import { Motion } from "@/components/animation/Motion";
 import TableItem from "@/components/table/TableItem";
 import { BusinessItem } from "@/api/businessRoutes";
-// Importando nosso novo componente genérico!
+
 import { ResourceListView } from "@/components/shared/ResourceListView";
+import { normalizeString } from "@/utils/normalizeString";
 
 const ManageBusiness = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // 1. Hook busca os dados da API.
   const { data: businessSectors, isLoading, isError } = useReadBusiness();
 
-  // 2. A lógica de filtragem permanece aqui, pois é específica desta página.
+  const normalizedSearchTerm = normalizeString(searchTerm);
+
   const filteredSectors = Array.isArray(businessSectors)
     ? businessSectors.filter((sector: BusinessItem) =>
-        sector.nome_setor_negocio.toLowerCase().includes(searchTerm.toLowerCase())
+        normalizeString(sector.nome_setor_negocio).includes(
+          normalizedSearchTerm
+        )
       )
     : [];
 
@@ -37,7 +40,11 @@ const ManageBusiness = () => {
           <BackButton onClick={() => navigate("/configuracoes")} />
           <ColoredButton
             justify="justify-center"
-            onClick={() => navigate("/configuracoes/negocios/novo", { state: { previousRoute: "/configuracoes/negocios" } })}
+            onClick={() =>
+              navigate("/configuracoes/negocios/novo", {
+                state: { previousRoute: "/configuracoes/negocios" },
+              })
+            }
             color="customYellow"
             width="w-[330px]"
             title="ADICIONAR SETOR DE NEGÓCIO"
@@ -63,14 +70,12 @@ const ManageBusiness = () => {
           >
             <TableHeader columns={[{ width: "w-full", content: "NOME" }]} />
             <div className="h-[80%] overflow-y-auto">
-              {/* 3. Usando o componente genérico para renderizar a lista */}
               <ResourceListView
                 isLoading={isLoading}
                 isError={isError}
                 items={filteredSectors}
                 // emptyMessage="Nenhum setor de negócio encontrado."
                 // errorMessage="Erro ao carregar os setores."
-                // A prop renderItem ensina o componente como renderizar um TableItem
                 renderItem={(sector) => (
                   <TableItem
                     key={sector.id_setor_negocio}
@@ -79,7 +84,11 @@ const ManageBusiness = () => {
                     ]}
                     itemWidth="w-full"
                     itemHeight="h-12"
-                    onClick={() => navigate(`/configuracoes/negocios/${sector.id_setor_negocio}`)}
+                    onClick={() =>
+                      navigate(
+                        `/configuracoes/negocios/${sector.id_setor_negocio}`
+                      )
+                    }
                     icon="fa-solid fa-eye"
                   />
                 )}
