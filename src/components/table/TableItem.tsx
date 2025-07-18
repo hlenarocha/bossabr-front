@@ -26,7 +26,7 @@ const TableItem = (props: TableItemProps) => {
           </div>
         ))}
         <div className="w-[10%] justify-center flex">
-          <i
+          <i onClick={props.onClick}
             className={`${props.icon} fa-solid text-md cursor-pointer hover:opacity-80`}
           ></i>
         </div>

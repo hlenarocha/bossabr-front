@@ -53,7 +53,7 @@ const ManageBusiness = () => {
         </div>
 
         <div className="flex flex-col lg:justify-between lg:flex-row">
-          <PageTitle marginTop="mt-6" title="Configurar Setores de Negócio" />
+          <PageTitle marginTop="mt-6" title="Configurar Setores de Negócio" icon="fa-solid fa-gear"/>
           <SearchBar
             marginTop="mt-6"
             placeholder="Pesquise um setor de negócio aqui..."
@@ -89,7 +89,7 @@ const ManageBusiness = () => {
                         `/configuracoes/negocios/${sector.id_setor_negocio}`
                       )
                     }
-                    icon="fa-solid fa-eye"
+                    icon="fa-solid fa-pencil"
                   />
                 )}
               />

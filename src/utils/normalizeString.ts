@@ -12,5 +12,5 @@ export const normalizeString = (str: string): string => {
   return str
     .normalize('NFD') // Separa os caracteres base dos seus acentos (ex: 'ú' -> 'u' + '´')
     .replace(/[\u0300-\u036f]/g, '') // Remove os acentos (diacríticos) usando uma faixa de códigos Unicode
-    .toLowerCase(); // Converte o resultado para minúsculas
+    .toLowerCase(); 
 };

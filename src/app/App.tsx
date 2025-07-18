@@ -8,7 +8,7 @@ import { UserProvider, UserContext } from "@/contexts/UserContext";
 import { SideBarProvider } from "@/contexts/SideBarContext";
 
 // Lógica da API e Interfaces
-import readWorkspace from "@/api/workspaceRoutes"; 
+import readWorkspace from "@/api/workspaceRoutes";
 
 // Telas Principais
 import LoginScreen from "@/views/auth/LoginScreen";
@@ -50,7 +50,7 @@ import CriarNegocio from "@/views/business/CreateBusiness";
 // Telas de Serviços
 import GerenciarServicos from "@/views/services/ManageServices";
 import CriarServico from "@/views/services/CreateService";
-
+import EditBusiness from "@/views/business/EditBusiness";
 
 const queryClient = new QueryClient();
 
@@ -101,8 +101,14 @@ const AppContainer = () => {
     { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
 
     // Colaboradores
-    { path: "/configuracoes/colaboradores", element: <GerenciarColaboradores /> },
-    { path: "/configuracoes/colaboradores/novo", element: <CriarColaborador /> },
+    {
+      path: "/configuracoes/colaboradores",
+      element: <GerenciarColaboradores />,
+    },
+    {
+      path: "/configuracoes/colaboradores/novo",
+      element: <CriarColaborador />,
+    },
 
     // Equipes
     { path: "/configuracoes/equipes", element: <GerenciarEquipes /> },
@@ -115,6 +121,7 @@ const AppContainer = () => {
     // Setores de Negócio
     { path: "/configuracoes/negocios", element: <GerenciarNegocios /> },
     { path: "/configuracoes/negocios/novo", element: <CriarNegocio /> },
+    { path: "/configuracoes/negocios/:id", element: <EditBusiness /> },
 
     // Serviços
     { path: "/configuracoes/servicos", element: <GerenciarServicos /> },
@@ -131,19 +138,28 @@ const AppContainer = () => {
   return <RouterProvider router={router} />;
 };
 
-
 const App = () => {
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
   if (!googleClientId) {
     return (
-      <div style={{ padding: '2rem', fontFamily: 'sans-serif', color: 'red', textAlign: 'center' }}>
+      <div
+        style={{
+          padding: "2rem",
+          fontFamily: "sans-serif",
+          color: "red",
+          textAlign: "center",
+        }}
+      >
         <h1>Erro de Configuração</h1>
-        <p>A variável VITE_GOOGLE_CLIENT_ID não foi encontrada. Verifique seu arquivo .env</p>
+        <p>
+          A variável VITE_GOOGLE_CLIENT_ID não foi encontrada. Verifique seu
+          arquivo .env
+        </p>
       </div>
     );
   }
-  
+
   return (
     // provedores que fornecerão contexto para toda a aplicação
     <QueryClientProvider client={queryClient}>

@@ -33,7 +33,7 @@ const readBusiness = async (): Promise<BusinessItem[]> => {
 }
 
 // READ BY ID
-const getBusinessById = async (id: number): Promise<BusinessItem> => {
+const readBusinessById = async (id: number): Promise<BusinessItem> => {
   const response = await api.get(`/setorNegocio/${id}`);
   return response.data.data;
 }
@@ -44,9 +44,10 @@ const updateBusinessById = async (id: number, data: BusinessDTO) => {
   return response.data;
 }
 
+// DELETE BY ID
 const deleteBusinessById = async (id: number) => {
   const response = await api.delete(`/setorNegocio/${id}`);
   return response.data;
 }
 
-export { createBusiness, readBusiness, getBusinessById, updateBusinessById, deleteBusinessById };
+export { createBusiness, readBusiness, readBusinessById, updateBusinessById, deleteBusinessById };

@@ -36,7 +36,7 @@ export function ResourceListView<T extends { [key:string]: any }>({
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center h-full p-4">
-        <i className="fa-solid fa-magnifying-glass text-gray-500 text-5xl mb-4"></i>
+        <i className="fa-solid fa-magnifying-glass text-gray-300 text-5xl mb-4"></i>
         <p className="text-lg font-bold text-white">{emptyMessage}</p>
         <p className="text-sm text-gray-400 mt-1">Tente uma busca com termos diferentes ou adicione um novo item.</p>
       </div>

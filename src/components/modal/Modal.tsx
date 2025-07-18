@@ -13,6 +13,7 @@ interface PropsModal {
   iconImage?: string;
   iconName?: string;
   children?: React.ReactNode;
+  iconColor?: string;
 }
 
 const Modal = (props: PropsModal) => {
@@ -26,7 +27,13 @@ const Modal = (props: PropsModal) => {
         <div className="p-8 gap-4 justify-center relative text-white shadow-[10px_10px_30px_0px_rgba(0,0,0,0.30)] w-[600px] h-fit flex flex-col rounded-[20px] bg-customBoxGray border-[5px] border-customYellow">
           <div className="flex flex-row items-center gap-2">
             <img src={props.iconImage}></img>
-            {props.iconName && (<i className={`fa-solid ${props.iconName} text-4xl text-customYellow mr-2`}></i>)}
+            {props.iconName && (
+              <i
+                className={`fa-solid ${props.iconName} text-4xl ${
+                  props.iconColor ? props.iconColor : "text-customYellow"
+                } mr-2`}
+              ></i>
+            )}
 
             <p className="text-2xl font-bold">{props.title}</p>
           </div>
