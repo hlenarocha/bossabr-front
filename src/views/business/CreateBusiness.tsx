@@ -105,7 +105,7 @@ const CreateBusiness = () => {
                       placeholder="Digite o nome do setor de negócio..."
                       height="h-[40px]"
                       errorMessage={errors.businessName?.message}
-                      // Muda a cor da borda em caso de erro
+                      // muda a cor da borda em caso de erro
                       borderColor={
                         errors.businessName
                           ? "border-customRedAlert"

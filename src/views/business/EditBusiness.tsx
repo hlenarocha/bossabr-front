@@ -3,10 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+// Hooks
 import { useReadBusinessById } from "@/hooks/business/useReadBusinessById";
-import { useUpdateBusiness } from "@/hooks/business/useUpdateBusiness";
 import { useDeleteBusiness } from "@/hooks/business/useDeleteBusiness";
+import { useResourceMutation } from "@/hooks/useResourceMutation"; // 1. Importando o seu novo hook genérico
 
+// API, Schemas e Componentes
+import { updateBusinessById, BusinessDTO } from "@/api/businessRoutes";
 import { businessSchema, BusinessFormData } from "@/schemas/businessSchema";
 import BaseScreen from "@/views/BaseScreen";
 import BackButton from "@/components/shared/BackButton";
@@ -15,15 +18,12 @@ import Box from "@/components/box/BoxContent";
 import InputString from "@/components/shared/InputString";
 import ColoredButton from "@/components/shared/ColoredButton";
 import Modal from "@/components/modal/Modal";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { Motion } from "@/components/animation/Motion";
-
-// import IconHappy from "@/assets/images/famicons_happy.png";
 import IconSad from "@/assets/images/famicons_sad.png";
+import { StatusView } from "@/components/shared/StatusView";
 
 const EditBusiness = () => {
   const navigate = useNavigate();
-  // useParams pega o id da URL
   const { id } = useParams<{ id: string }>();
   const businessId = Number(id);
 
@@ -32,18 +32,27 @@ const EditBusiness = () => {
     isLoading: isLoadingData,
     isError,
   } = useReadBusinessById(businessId);
-  const { mutate: update } = useUpdateBusiness();
-  const { mutate: deleteItem } = useDeleteBusiness();
 
-  // const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
+  const {
+    mutate: update,
+    isPending: isUpdating,
+    isErrorModalVisible: isUpdateErrorModalVisible,
+    errorModalMessage: updateErrorMessage,
+    closeErrorModal: closeUpdateErrorModal,
+  } = useResourceMutation<BusinessDTO>({
+    mutationFn: (vars) => updateBusinessById(vars.id!, vars.payload),
+    successToastMessage: "Setor de negócio atualizado com sucesso!",
+    successNavigationRoute: "/configuracoes/negocios",
+    errorModalMessage:
+      "Não foi possível atualizar o setor. Verifique os dados e tente novamente.",
+  });
+
+  const { mutate: deleteItem, isPending: isDeleting } = useDeleteBusiness();
+  const [isDeleteErrorModalVisible, setDeleteErrorModalVisible] =
+    useState(false);
   const [isDeleteConfirmModalVisible, setDeleteConfirmModalVisible] =
     useState(false);
-  const [isModalErrorDeleteVisible, setIsModalErrorDeleteVisible] =
-    useState(false);
-  const [isModalErrorUpdateVisible, setIsModalErrorUpdateVisible] =
-    useState(false);
 
-  // REACT HOOK FORM
   const {
     control,
     handleSubmit,
@@ -53,28 +62,17 @@ const EditBusiness = () => {
     resolver: zodResolver(businessSchema),
   });
 
-  // preenche o formulário quando os dados da API chegam
   useEffect(() => {
     if (businessData) {
       reset({ businessName: businessData.nome_setor_negocio });
     }
   }, [businessData, reset]);
 
-  // HANDLERS
   const onUpdateSubmit = (data: BusinessFormData) => {
-    update(
-      { id: businessId, data: { nome_setor_negocio: data.businessName } },
-      {
-        onSuccess: () => {
-          navigate("/configuracoes/negocios", {
-            state: { toastMessage: "Setor de negócio atualizado com sucesso!" },
-          });
-        },
-        onError: () => {
-          setIsModalErrorUpdateVisible(true);
-        },
-      }
-    );
+    update({
+      id: businessId,
+      payload: { nome_setor_negocio: data.businessName },
+    });
   };
 
   const handleDeleteConfirm = () => {
@@ -82,79 +80,51 @@ const EditBusiness = () => {
       onSuccess: () => {
         navigate("/configuracoes/negocios", {
           state: {
-            toastMessage: `Setor de negócio "${businessData?.nome_setor_negocio}" excluído com sucesso!`,
+            toastMessage: `Setor "${businessData?.nome_setor_negocio}" excluído com sucesso!`,
           },
         });
       },
       onError: () => {
-        setIsModalErrorDeleteVisible(true);
+        setDeleteConfirmModalVisible(false); // fecha o modal de confirmação antes
+        setDeleteErrorModalVisible(true);
       },
     });
   };
 
-  // Carregamento e erros
-  if (isLoadingData) {
-    return (
-      <BaseScreen>
-        <div className="flex justify-center items-center h-full">
-          <LoadingSpinner />
-        </div>
-      </BaseScreen>
-    );
-  }
-
-  if (isError) {
-    return (
-      <BaseScreen>
-        <div className="text-center text-customRedAlert mt-10">
-          Erro ao carregar os dados do setor.
-        </div>
-      </BaseScreen>
-    );
-  }
-
   return (
     <>
-      {/* <Modal
-        title="Sucesso!"
-        description="Setor de negócio atualizado com sucesso."
-        isModalVisible={isSuccessModalVisible}
-        onClick1={() => setSuccessModalVisible(false)}
-        buttonTitle1="OK"
-        iconImage={IconHappy}
-      /> */}
       <Modal
         title="Confirmar Exclusão"
         description={`Tem certeza que deseja excluir o setor "${businessData?.nome_setor_negocio}"? Esta ação não pode ser desfeita.`}
         isModalVisible={isDeleteConfirmModalVisible}
         buttonTitle1="CANCELAR"
-        onClick2={handleDeleteConfirm}
+        onClick1={() => setDeleteConfirmModalVisible(false)}
         buttonColor1="bg-customYellow"
         buttonTitle2="CONFIRMAR"
-        onClick1={() => setDeleteConfirmModalVisible(false)}
+        onClick2={handleDeleteConfirm}
         buttonColor2="bg-customRedAlert"
         iconName="fa-circle-exclamation"
         iconColor="text-customRedAlert"
       />
 
       <Modal
-        title="Erro!"
-        isModalVisible={isModalErrorDeleteVisible}
-        description="Não foi possível deletar o setor. Tente novamente."
-        onClick1={() => setIsModalErrorDeleteVisible(false)}
+        title="Erro na Atualização"
+        isModalVisible={isUpdateErrorModalVisible}
+        description={updateErrorMessage}
+        onClick1={closeUpdateErrorModal}
         buttonTitle1="FECHAR"
         iconImage={IconSad}
         isError={true}
       />
 
       <Modal
-        title="Erro!"
-        isModalVisible={isModalErrorUpdateVisible}
-        description="Não foi possível atualizar o setor. Tente novamente."
-        onClick1={() => setIsModalErrorUpdateVisible(false)}
+        title="Erro na Exclusão"
+        isModalVisible={isDeleteErrorModalVisible}
+        description="Não foi possível excluir o setor. Tente novamente."
+        onClick1={() => setDeleteErrorModalVisible(false)}
         buttonTitle1="FECHAR"
-        isError={true}
         iconImage={IconSad}
+        isError={true}
       />
 
       <BaseScreen>
@@ -171,48 +141,50 @@ const EditBusiness = () => {
             title={`Detalhes de: ${businessData?.nome_setor_negocio || ""}`}
             subtitle="Altere o nome ou exclua o setor de negócio."
           >
-            <form onSubmit={handleSubmit(onUpdateSubmit)}>
-              <div className="w-full flex flex-col">
-                <Controller
-                  name="businessName"
-                  control={control}
-                  render={({ field }) => (
-                    <InputString
-                      {...field}
-                      title="NOME DO SETOR DE NEGÓCIO"
-                      height="h-[40px]"
-                      isMandatory
-                      placeholder="Digite o nome do setor de negócio"
-                      errorMessage={errors.businessName?.message}
-                      borderColor={
-                        errors.businessName
-                          ? "border-customRedAlert"
-                          : "border-customYellow"
-                      }
-                    />
-                  )}
-                />
-              </div>
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-10">
-                <ColoredButton
-                  type="button"
-                  onClick={() => setDeleteConfirmModalVisible(true)}
-                  title={"EXCLUIR"}
-                  color="customRedAlert"
-                  icon="fa-solid fa-trash"
-                  width="w-full sm:w-auto"
-                  justify="justify-center"
-                />
-                <ColoredButton
-                  type="submit"
-                  title={"SALVAR ALTERAÇÕES"}
-                  color="customYellow"
-                  icon="fa-solid fa-floppy-disk"
-                  width="w-full sm:w-auto"
-                  justify="justify-center"
-                />
-              </div>
-            </form>
+            <StatusView isLoading={isLoadingData} isError={isError}>
+              <form onSubmit={handleSubmit(onUpdateSubmit)}>
+                <div className="w-full flex flex-col">
+                  <Controller
+                    name="businessName"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        {...field}
+                        title="NOME DO SETOR DE NEGÓCIO"
+                        height="h-[40px]"
+                        isMandatory
+                        placeholder="Digite o nome do setor de negócio"
+                        errorMessage={errors.businessName?.message}
+                        borderColor={
+                          errors.businessName
+                            ? "border-customRedAlert"
+                            : "border-customYellow"
+                        }
+                      />
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-10">
+                  <ColoredButton
+                    type="button"
+                    onClick={() => setDeleteConfirmModalVisible(true)}
+                    title={isDeleting ? "EXCLUINDO..." : "EXCLUIR"}
+                    color="customRedAlert"
+                    icon="fa-solid fa-trash"
+                    width="w-full sm:w-auto"
+                    justify="justify-center"
+                  />
+                  <ColoredButton
+                    type="submit"
+                    title={isUpdating ? "SALVANDO..." : "SALVAR ALTERAÇÕES"}
+                    color="customYellow"
+                    icon="fa-solid fa-floppy-disk"
+                    width="w-full sm:w-auto"
+                    justify="justify-center"
+                  />
+                </div>
+              </form>
+            </StatusView>
           </Box>
         </Motion>
       </BaseScreen>
