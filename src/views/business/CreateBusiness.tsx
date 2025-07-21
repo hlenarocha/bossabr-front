@@ -1,9 +1,7 @@
 // hooks e bibliotecas
-import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateBusiness } from "@/hooks/business/useCreateBusiness";
 
 // API e schemas
 import { businessSchema, BusinessFormData } from "@/schemas/businessSchema";
@@ -21,6 +19,8 @@ import { Motion } from "@/components/animation/Motion";
 
 // ícones
 import IconSad from "@/assets/images/famicons_sad.png";
+import { useResourceMutation } from "@/hooks/useResourceMutation";
+import { BusinessDTO, createBusiness } from "@/api/businessRoutes";
 
 const CreateBusiness = () => {
   const navigate = useNavigate();
@@ -28,8 +28,22 @@ const CreateBusiness = () => {
 
   const previousRoute = location.state?.previousRoute;
 
-  // const [isModalSuccessVisible, setIsModalSuccessVisible] = useState(false);
-  const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
+  // Hook personalizado para lidar com mutações de criação de setores de negócio
+  const {
+    mutate,
+    isPending,
+    isErrorModalVisible,
+    errorModalMessage,
+    closeErrorModal,
+  } = useResourceMutation<BusinessDTO>({
+    // função de API específica
+    mutationFn: ({ payload }) => createBusiness(payload),
+    // mensagens e rotas de sucesso/erro
+    successToastMessage: "Setor de negócio cadastrado com sucesso!",
+    successNavigationRoute: "/configuracoes/negocios",
+    errorModalMessage:
+      "Não foi possível cadastrar o setor. Verifique os dados e tente novamente.",
+  });
 
   // react hook form
   const {
@@ -44,45 +58,22 @@ const CreateBusiness = () => {
     mode: "onChange", // valida campo à medida que user digita
   });
 
-  // tanstack encapsulado no Hook useCreateBusiness
-  const { mutate } = useCreateBusiness({
-    onSuccess: () => {
-      navigate(previousRoute, {
-        state: { toastMessage: "Setor de negócio cadastrado com sucesso!" },
-      });
-    },
-    onError: () => setIsModalErrorVisible(true),
-  });
-
   const onSubmit = (data: BusinessFormData) => {
-    // chama mutação com os dados formatados para a API
-    mutate({ nome_setor_negocio: data.businessName });
+    const payload: BusinessDTO = { nome_setor_negocio: data.businessName };
+    mutate({ payload });
   };
 
   return (
     <>
-      {/* Modal de Sucesso */}
-      {/* {isModalSuccessVisible && (
-        <Modal
-          title="Sucesso!"
-          description="O setor de negócio foi cadastrado com sucesso."
-          onClick1={() => setIsModalSuccessVisible(false)}
-          isModalVisible
-          buttonTitle1="OK"
-          iconImage={IconHappy}
-        />
-      )} */}
-
-      {/* Modal de Erro */}
-        <Modal
-          title="Erro!"
-          description="Não foi possível cadastrar o setor. Verifique os dados e tente novamente."
-          onClick1={() => setIsModalErrorVisible(false)}
-          isModalVisible={isModalErrorVisible}
-          buttonTitle1="FECHAR"
-          isError={true}
-          iconImage={IconSad}
-        />
+      <Modal
+        title="Erro!"
+        description={errorModalMessage}
+        onClick1={closeErrorModal}
+        isModalVisible={isErrorModalVisible}
+        buttonTitle1="FECHAR"
+        isError={true}
+        iconImage={IconSad}
+      />
       <BaseScreen>
         <BackButton onClick={() => navigate(previousRoute)} />
         <PageTitle
@@ -126,8 +117,9 @@ const CreateBusiness = () => {
               </div>
               <div className="flex w-full mt-10 justify-center">
                 <ColoredButton
-                  title="CADASTRAR SETOR DE NEGÓCIO"
-                  
+                  title={
+                    isPending ? "CADASTRANDO..." : "CADASTRAR SETOR DE NEGÓCIO"
+                  }
                   type="submit"
                   width="w-[40%]"
                   icon={"fa-solid fa-floppy-disk"}
