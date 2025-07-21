@@ -18,7 +18,8 @@ import Modal from "@/components/modal/Modal";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { Motion } from "@/components/animation/Motion";
 
-import IconHappy from "@/assets/images/famicons_happy.png";
+// import IconHappy from "@/assets/images/famicons_happy.png";
+import IconSad from "@/assets/images/famicons_sad.png";
 
 const EditBusiness = () => {
   const navigate = useNavigate();
@@ -34,8 +35,12 @@ const EditBusiness = () => {
   const { mutate: update } = useUpdateBusiness();
   const { mutate: deleteItem } = useDeleteBusiness();
 
-  const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
+  // const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
   const [isDeleteConfirmModalVisible, setDeleteConfirmModalVisible] =
+    useState(false);
+  const [isModalErrorDeleteVisible, setIsModalErrorDeleteVisible] =
+    useState(false);
+  const [isModalErrorUpdateVisible, setIsModalErrorUpdateVisible] =
     useState(false);
 
   // REACT HOOK FORM
@@ -60,14 +65,30 @@ const EditBusiness = () => {
     update(
       { id: businessId, data: { nome_setor_negocio: data.businessName } },
       {
-        onSuccess: () => setSuccessModalVisible(true),
+        onSuccess: () => {
+          navigate("/configuracoes/negocios", {
+            state: { toastMessage: "Setor de negócio atualizado com sucesso!" },
+          });
+        },
+        onError: () => {
+          setIsModalErrorUpdateVisible(true);
+        },
       }
     );
   };
 
   const handleDeleteConfirm = () => {
     deleteItem(businessId, {
-      onSuccess: () => navigate("/configuracoes/negocios"), // Volta para a lista após deletar
+      onSuccess: () => {
+        navigate("/configuracoes/negocios", {
+          state: {
+            toastMessage: `Setor de negócio "${businessData?.nome_setor_negocio}" excluído com sucesso!`,
+          },
+        });
+      },
+      onError: () => {
+        setIsModalErrorDeleteVisible(true);
+      },
     });
   };
 
@@ -94,14 +115,14 @@ const EditBusiness = () => {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         title="Sucesso!"
         description="Setor de negócio atualizado com sucesso."
         isModalVisible={isSuccessModalVisible}
         onClick1={() => setSuccessModalVisible(false)}
         buttonTitle1="OK"
         iconImage={IconHappy}
-      />
+      /> */}
       <Modal
         title="Confirmar Exclusão"
         description={`Tem certeza que deseja excluir o setor "${businessData?.nome_setor_negocio}"? Esta ação não pode ser desfeita.`}
@@ -114,7 +135,26 @@ const EditBusiness = () => {
         buttonColor2="bg-customRedAlert"
         iconName="fa-circle-exclamation"
         iconColor="text-customRedAlert"
-        
+      />
+
+      <Modal
+        title="Erro!"
+        isModalVisible={isModalErrorDeleteVisible}
+        description="Não foi possível deletar o setor. Tente novamente."
+        onClick1={() => setIsModalErrorDeleteVisible(false)}
+        buttonTitle1="FECHAR"
+        iconImage={IconSad}
+        isError={true}
+      />
+
+      <Modal
+        title="Erro!"
+        isModalVisible={isModalErrorUpdateVisible}
+        description="Não foi possível atualizar o setor. Tente novamente."
+        onClick1={() => setIsModalErrorUpdateVisible(false)}
+        buttonTitle1="FECHAR"
+        isError={true}
+        iconImage={IconSad}
       />
 
       <BaseScreen>

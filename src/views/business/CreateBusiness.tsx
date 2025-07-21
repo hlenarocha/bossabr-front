@@ -20,7 +20,6 @@ import Modal from "@/components/modal/Modal";
 import { Motion } from "@/components/animation/Motion";
 
 // ícones
-import IconHappy from "@/assets/images/famicons_happy.png";
 import IconSad from "@/assets/images/famicons_sad.png";
 
 const CreateBusiness = () => {
@@ -29,7 +28,7 @@ const CreateBusiness = () => {
 
   const previousRoute = location.state?.previousRoute;
 
-  const [isModalSuccessVisible, setIsModalSuccessVisible] = useState(false);
+  // const [isModalSuccessVisible, setIsModalSuccessVisible] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
 
   // react hook form
@@ -47,7 +46,11 @@ const CreateBusiness = () => {
 
   // tanstack encapsulado no Hook useCreateBusiness
   const { mutate } = useCreateBusiness({
-    onSuccess: () => setIsModalSuccessVisible(true),
+    onSuccess: () => {
+      navigate(previousRoute, {
+        state: { toastMessage: "Setor de negócio cadastrado com sucesso!" },
+      });
+    },
     onError: () => setIsModalErrorVisible(true),
   });
 
@@ -59,7 +62,7 @@ const CreateBusiness = () => {
   return (
     <>
       {/* Modal de Sucesso */}
-      {isModalSuccessVisible && (
+      {/* {isModalSuccessVisible && (
         <Modal
           title="Sucesso!"
           description="O setor de negócio foi cadastrado com sucesso."
@@ -68,19 +71,18 @@ const CreateBusiness = () => {
           buttonTitle1="OK"
           iconImage={IconHappy}
         />
-      )}
+      )} */}
 
       {/* Modal de Erro */}
-      {isModalErrorVisible && (
         <Modal
           title="Erro!"
           description="Não foi possível cadastrar o setor. Verifique os dados e tente novamente."
           onClick1={() => setIsModalErrorVisible(false)}
-          isModalVisible
+          isModalVisible={isModalErrorVisible}
           buttonTitle1="FECHAR"
+          isError={true}
           iconImage={IconSad}
         />
-      )}
       <BaseScreen>
         <BackButton onClick={() => navigate(previousRoute)} />
         <PageTitle

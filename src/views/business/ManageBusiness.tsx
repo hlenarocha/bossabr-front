@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useReadBusiness } from "@/hooks/business/useReadBusiness";
 
 // Componentes
@@ -13,13 +13,18 @@ import SearchBar from "@/components/shared/SearchBar";
 import { Motion } from "@/components/animation/Motion";
 import TableItem from "@/components/table/TableItem";
 import { BusinessItem } from "@/api/businessRoutes";
-
 import { ResourceListView } from "@/components/shared/ResourceListView";
+import Toast from "@/components/shared/Toast";
+
+// utils
 import { normalizeString } from "@/utils/normalizeString";
 
 const ManageBusiness = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // hook para ler estado da navegação
   const [searchTerm, setSearchTerm] = useState("");
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<"success" | "error">("success");
 
   const { data: businessSectors, isLoading, isError } = useReadBusiness();
 
@@ -32,6 +37,16 @@ const ManageBusiness = () => {
         )
       )
     : [];
+
+  // Exibe mensagem de toast se houver ele na navegação
+  useEffect(() => {
+    if (location.state?.toastMessage) {
+      setToastMessage(location.state.toastMessage);
+      setToastType(location.state.type || "success");
+      // Limpa o estado para não exibir toast novamente
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   return (
     <>
@@ -53,7 +68,11 @@ const ManageBusiness = () => {
         </div>
 
         <div className="flex flex-col lg:justify-between lg:flex-row">
-          <PageTitle marginTop="mt-6" title="Configurar Setores de Negócio" icon="fa-solid fa-gear"/>
+          <PageTitle
+            marginTop="mt-6"
+            title="Configurar Setores de Negócio"
+            icon="fa-solid fa-gear"
+          />
           <SearchBar
             marginTop="mt-6"
             placeholder="Pesquise um setor de negócio aqui..."
@@ -96,6 +115,8 @@ const ManageBusiness = () => {
             </div>
           </Box>
         </Motion>
+        {toastMessage && <Toast message={toastMessage} type={toastType} onClose={() => setToastMessage(null)} />}
+
       </BaseScreen>
     </>
   );
