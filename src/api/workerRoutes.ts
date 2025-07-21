@@ -33,5 +33,32 @@ const readWorker = async () => {
     }
 }
 
-export { createWorker, readWorker };
+const readWorkerById = async (id: number) => {
+  try {
+    const response = await api.get(`/funcionario/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const updateWorkerById = async (id: number, data: WorkerData) => {
+  try {
+    const response = await api.put(`/funcionario/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteWorkerById = async (id: number) => {
+  try {
+    const response = await api.delete(`/funcionario/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { createWorker, readWorker, readWorkerById, updateWorkerById, deleteWorkerById };
 
