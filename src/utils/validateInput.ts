@@ -60,6 +60,22 @@ export const validateInput = (value: string, type: string) => {
 
   }
 
+  if (type === "deadline") {
+    // CORREÇÃO DE FUSO: Constrói a data manualmente para garantir hora local.
+    const dateParts = value.split('-').map(part => parseInt(part, 10));
+    const inputDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // - data de prazo não pode ser em data passada
+    if (inputDate < today) {
+      return false;
+    }
+
+    return dateRegex.test(value) && value.length > 0;
+  }
+
   if (type === 'cnpj') {
     const cnpj = value.replace(/[^\d]+/g, '');
 

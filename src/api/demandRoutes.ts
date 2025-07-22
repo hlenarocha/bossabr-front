@@ -11,17 +11,17 @@ export interface DemandItem {
   deadline?: string;
   quantity?: number;
   sectorId: number;
-}
+} 
 
 export interface DemandDTO {
-  serviceId: number;
-  clientId: number;
-  statusId: number;
-  description: string;
-  driveLink?: string;
-  deadline?: string;
-  quantity?: number;
-  sectorId: number;
+  id_tipo_servico: number;
+  //id_pessoa: number;
+  id_cliente: number;
+  quantidade: number;
+  prazo: string;
+  descricao: string;
+  link_drive?: string;
+ // id_status: number;
 }
 
 const getDemands = async (): Promise<DemandItem[] | undefined> => {

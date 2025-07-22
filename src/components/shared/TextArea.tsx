@@ -17,7 +17,8 @@ const TextArea = (props: TextAreaProps) => {
       <label className="text-sm mt-2 font-black mb-1 text-white">
         {props.title}
         <span className={`${props.isMandatory ? "visible" : "hidden"} text-customYellow text-xl`}>
-           *
+          {" "}
+          *
         </span>
       </label>
 
