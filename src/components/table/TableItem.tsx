@@ -20,7 +20,7 @@ const TableItem = (props: TableItemProps) => {
         {props.columns.map((col, index) => (
           <div
             key={index}
-            className={`${col.width} h-8 items-center flex flex-row justify-center border-r-2`}
+            className={`${col.width} ml-4 h-8 items-center flex flex-row justify-start border-r-2`}
           >
             {col.content}
           </div>
