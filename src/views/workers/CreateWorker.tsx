@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { workerSchema, WorkerFormData } from "@/schemas/workerSchema";
 import { createWorker } from "@/api/workerRoutes";
-import getTeam from "@/api/teamRoutes";
+import { getTeams } from "@/api/teamRoutes";
 import { getBorderColor } from "@/utils/formUtils"; // A função handleInputChange não é mais necessária aqui
 
 // Componentes de UI
@@ -47,7 +47,7 @@ const CreateWorker = () => {
     isLoading: isLoadingTeams,
     isError: isErrorTeams,
   } = useQuery({
-    queryFn: () => getTeam(),
+    queryFn: () => getTeams(),
     staleTime: 1000 * 60 * 5,
     queryKey: ["teams"],
   });
@@ -253,7 +253,7 @@ const CreateWorker = () => {
                                 ? [{ id: 0, name: "Carregando..." }]
                                 : isErrorTeams
                                 ? [{ id: 0, name: "Erro ao carregar." }]
-                                : teamsResponse?.map((t) => ({
+                                : teamsResponse?.map((t: any) => ({
                                     id: t.id_equipe,
                                     name: t.nome_equipe,
                                   })) || []
