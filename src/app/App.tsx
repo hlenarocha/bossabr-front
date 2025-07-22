@@ -14,7 +14,7 @@ import readWorkspace from "@/api/workspaceRoutes";
 import LoginScreen from "@/views/auth/LoginScreen";
 import Dashboard from "@/views/dashboard/DashboardScreen";
 import AreaTrabalho from "@/views/workspace/WorkspaceScreen";
-import Relatorios from "@/views/reports/ReportsScreen";
+import Diario from "@/views/reports/ReportsScreen";
 import Configuracoes from "@/views/settings/SettingsScreen";
 import NotFound from "@/views/errors/NotFound";
 
@@ -128,7 +128,7 @@ const AppContainer = () => {
     { path: "/configuracoes/servicos/novo", element: <CriarServico /> },
 
     // Relatórios e Configurações gerais
-    { path: "/relatorios", element: <Relatorios /> },
+    { path: "/diario", element: <Diario /> },
     { path: "/configuracoes", element: <Configuracoes /> },
 
     // Rota para página não encontrada (404)

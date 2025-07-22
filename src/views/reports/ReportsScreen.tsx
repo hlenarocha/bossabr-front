@@ -19,9 +19,9 @@ const ReportScreen = () => {
     <BaseScreen>
       <div className="flex flex-col items-center lg:justify-between lg:flex-row">
         <PageTitle
-          icon="fa-solid fa-file"
+          icon="fa-solid fa-book"
           marginTop="mt-4"
-          title="Relatório Diário de {user}"
+          title="Diário de {user}"
         ></PageTitle>
         <ColoredButton
           onClick={() => {
@@ -37,8 +37,8 @@ const ReportScreen = () => {
       </div>
       <Motion>
         <Box
-          title="Relatório Diário"
-          subtitle="Visualize as suas atividades realizadas no dia {dd / mm / YY}"
+          title="Diário de Atividades"
+          subtitle="Visualize as atividades realizadas no dia {dd / mm / YYYY}"
           width="w-full"
 
           height="h-fit"
