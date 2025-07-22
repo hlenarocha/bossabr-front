@@ -12,10 +12,12 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
   const [unauthorizedEmail, setUnauthorizedEmail] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setLoading(true);
+      setAuthError(null);
       try {
         const { access_token } = tokenResponse;
         if (!access_token) throw new Error("Access token não encontrado");
@@ -30,6 +32,7 @@ export const useAuth = () => {
 
         const response = await sendJwt(access_token);
         
+        // User não autorizado
         if (response?.status === 401) {
           setIsModalErrorVisible(true);
           setLoading(false);
@@ -42,8 +45,8 @@ export const useAuth = () => {
           navigate("/area-trabalho");
         }
       } catch (error) {
-        console.error("Erro no login:", error);
-        alert("Falha no processo de login. Tente novamente.");
+        //console.error("Erro no login:", error);
+        setAuthError("Não foi possível conectar ao servidor. Verifique sua conexão ou tente mais tarde.")
       } finally {
         setLoading(false);
       }
@@ -57,5 +60,7 @@ export const useAuth = () => {
     isModalErrorVisible, 
     setIsModalErrorVisible, 
     unauthorizedEmail,
+    authError,
+    setAuthError
   };
 };

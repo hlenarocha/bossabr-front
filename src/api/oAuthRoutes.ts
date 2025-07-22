@@ -8,21 +8,26 @@ interface AuthResponse {
   user: UserData;
 }
 
-const sendJwt = async (accessToken: string): Promise<AuthResponse | undefined> => {
+const sendJwt = async (accessToken: string): Promise<AuthResponse> => {
   try {
-    const response = await api.post<AuthResponse>("/auth/callback", { token: accessToken });
-    return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      if (error.response.status === 401) {
-        return { status: 401, token: "", user: {} as UserData };
+    const response = await api.post<AuthResponse>(
+      "/auth/callback",
+      { token: accessToken },
+      { 
+        validateStatus: function (status) {
+          return (status >= 200 && status < 300) || status === 401;
+        },
       }
-      console.error("Erro no login ao enviar JWT:", error.response.data);
-    } else {
-      console.error("Erro inesperado ao enviar JWT:", error);
-    }
+    );
+    
+    return { status: response.status, ...response.data };
+
+  } catch (error: any) {
+    console.error("Erro inesperado na chamada 'sendJwt':", error.message);
+    throw error; 
   }
-}
+};
+
 
 const getUserByAuthToken = async (authToken: string, setUser: (user: UserData | null) => void) => {
 

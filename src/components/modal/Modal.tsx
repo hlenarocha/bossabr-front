@@ -26,7 +26,7 @@ const Modal = (props: PropsModal) => {
         } fixed top-0 left-0  right-0 bottom-0 backdrop-blur-sm bg-black bg-opacity-5 z-50 flex items-center justify-center`}
       >
         <div
-          className={`p-8 gap-4 justify-center relative text-white shadow-[10px_10px_30px_0px_rgba(0,0,0,0.30)] w-[600px] h-fit flex flex-col rounded-[20px] bg-customBoxGray border-[5px] ${
+          className={`p-8 gap-4 justify-center relative text-white shadow-[10px_10px_30px_0px_rgba(0,0,0,0.30)] w-[600px] h-fit flex flex-col rounded-[20px] bg-zinc-800 border-[5px] ${
             props.isError ? "border-customRedTask" : "border-customYellow"
           }`}
         >
