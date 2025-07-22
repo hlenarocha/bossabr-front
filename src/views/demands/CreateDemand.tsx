@@ -108,7 +108,6 @@ const CreateDemand = () => {
         <Motion>
           <Box title="Nova Demanda" subtitle="Preencha os dados do formulário e cadastre uma nova demanda." width="w-full" height="h-fit">
             <form onSubmit={handleSubmit(onSubmit)}>
-              {/* --- CLIENTE --- */}
               <InputTitle title="Cliente" />
               <div className="flex gap-6 flex-row w-full">
                 <Controller
@@ -131,7 +130,6 @@ const CreateDemand = () => {
                 </div>
               </div>
 
-              {/* --- SERVIÇO --- */}
               <div className="mt-6">
                 <InputTitle title="Serviço" />
                 <div className="flex gap-6 flex-row w-full">
@@ -223,7 +221,6 @@ const CreateDemand = () => {
                 </div>
               </div>
 
-              {/* --- ATRIBUIÇÃO --- */}
               <div className="mt-6">
                 <InputTitle title="Atribuição" />
                 <Controller
