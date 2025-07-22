@@ -19,6 +19,7 @@ interface SearchableSelectProps {
   errorMessage?: string;
   name?: string;
   onBlur?: () => void;
+  isSearchable?: boolean;
 }
 
 const SearchableSelect = ({
@@ -33,6 +34,7 @@ const SearchableSelect = ({
   errorMessage,
   name,
   onBlur,
+  isSearchable = true,
 }: SearchableSelectProps) => {
 
   // Objeto de estilos usando os valores HEX diretos do seu tailwind.config.js
@@ -111,6 +113,7 @@ const SearchableSelect = ({
         options={options}
         value={value}
         onChange={onChange}
+        isSearchable={isSearchable}
         onBlur={onBlur}
         placeholder={placeholder}
         styles={customStyles}

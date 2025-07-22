@@ -8,12 +8,12 @@ import ScoreBar from "@/components/shared/ScoreBar";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 import StatusSphere from "@/components/3D/StatusSphere";
 import { useState } from "react";
-import BlurSelect from "@/components/shared/BlurSelect";
+import FilterSelect from "@/components/shared/FilterSelect";
 
 type DemandStatus = "não iniciadas" | "em andamento" | "concluídas" | "atrasadas";
 
 const DashboardScreen = () => {
-  const [selectedOption, setSelectedOption] = useState('geral');
+  const [selectedOption, setSelectedOption] = useState<string | null>('geral');
 
   const demandProgress: Record<DemandStatus, number> = {
     "não iniciadas": 15,
@@ -47,10 +47,10 @@ const DashboardScreen = () => {
             <PageTitle icon="fa-solid fa-chart-pie" marginTop="mt-4" title="Dashboard"></PageTitle>
             <div className="text-white w-1/2">
               <p className="mb-2 text-xl">Dashboard Selecionado:</p>
-              <BlurSelect
+              <FilterSelect
                 options={options}
                 value={selectedOption}
-                onChange={(e) => setSelectedOption(e.target.value)}
+                onChange={(value) => setSelectedOption(value)}
               />
             </div>
           </div>
