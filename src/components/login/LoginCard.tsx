@@ -24,7 +24,6 @@ const LoginCard = () => {
     setAuthError,
   } = useAuth();
 
-  // Estado local que pertence APENAS a este componente
   const [isRequestAccessModalVisible, setIsRequestAccessModalVisible] =
     useState(false);
   const [requestEmail, setRequestEmail] = useState("");
@@ -34,10 +33,14 @@ const LoginCard = () => {
     isVisible: false,
     title: "",
     description: "",
-    isError: false
+    isError: false,
   });
 
-  const showAlertModal = (title: string, description: string, isError: boolean) => {
+  const showAlertModal = (
+    title: string,
+    description: string,
+    isError: boolean
+  ) => {
     setAlertModal({ isVisible: true, title, description, isError });
   };
 
@@ -48,7 +51,6 @@ const LoginCard = () => {
     }
   }, [authError, setAuthError, showAlertModal]);
 
-  // Handler local para o modal de solicitação de acesso
   const handleRequestAccessSubmit = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -57,7 +59,7 @@ const LoginCard = () => {
       return;
     }
 
-    setEmailError(""); 
+    setEmailError("");
 
     try {
       const response = await requestAccess(requestEmail, "new_request");
@@ -67,7 +69,6 @@ const LoginCard = () => {
         "Sucesso!",
         response.message || "Sua solicitação foi enviada com sucesso!",
         false
-
       );
     } catch (error) {
       setIsRequestAccessModalVisible(false);
@@ -85,7 +86,6 @@ const LoginCard = () => {
 
   return (
     <>
-      {/* NOVO: Modal de Alerta Genérico */}
       <Modal
         title={alertModal.title}
         description={alertModal.description}
@@ -95,7 +95,9 @@ const LoginCard = () => {
         buttonColor1="bg-customYellow"
         iconName="fa-solid fa-circle-info"
         isError={alertModal.isError}
-        iconColor={alertModal.isError ? "text-customRedAlert" : "text-customYellow"}
+        iconColor={
+          alertModal.isError ? "text-customRedAlert" : "text-customYellow"
+        }
       />
 
       {/* Modal para usuário não autorizado */}
@@ -143,9 +145,11 @@ const LoginCard = () => {
           value={requestEmail}
           height="h-12"
           errorMessage={emailError}
-          borderColor={emailError ? "border-customRedAlert" : "border-customYellow"}
+          borderColor={
+            emailError ? "border-customRedAlert" : "border-customYellow"
+          }
           onChange={(e) => {
-            setRequestEmail(e.target.value)
+            setRequestEmail(e.target.value);
             if (emailError) {
               setEmailError("");
             }
