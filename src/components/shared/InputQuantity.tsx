@@ -3,7 +3,7 @@ interface InputNumberProps {
   title: string;
   isMandatory: boolean;
   width?: string;
-  height?: string; // Altura agora é opcional, pois o componente tem um padrão.
+  height?: string; 
   min?: number;
   max?: number;
   step?: number;
@@ -44,33 +44,28 @@ const InputNumber = (props: InputNumberProps) => {
     }
   };
 
-  // Desabilita o botão se o valor atual for menor ou igual ao mínimo
   const isDecrementDisabled = isReadOnly || value <= min;
-  // Desabilita o botão se o valor atual for maior ou igual ao máximo
   const isIncrementDisabled = isReadOnly || value >= max;
 
   return (
     <div className={`flex flex-col mb-2 ${width}`}>
-      {/* Título e indicador de obrigatoriedade */}
-      <div className="text-sm mt-2 font-black mb-1 text-white">
+      <div className="text-md mt-2 font-black mb-1 text-white">
         {title}
         <span
           className={`${
             isMandatory ? "visible" : "hidden"
-          } text-customYellow text-xl`}
+          } text-customYellow`}
         >
           {" "}
           *
         </span>
       </div>
 
-      {/* Container unificado para uma aparência mais limpa */}
       <div
         className={`flex flex-row items-center justify-between bg-customInputGray w-fit rounded-[20px] p-1 ${height} ${
           isReadOnly ? "opacity-50" : ""
         } ${borderColor || "border-transparent"} border`}
       >
-        {/* Botão de Decremento */}
         <button
           type="button"
           onClick={handleDecrement}
@@ -80,12 +75,10 @@ const InputNumber = (props: InputNumberProps) => {
           -
         </button>
 
-        {/* Display do número (não é mais um input) */}
         <span className="text-white font-semibold text-center w-12 select-none">
           {value}
         </span>
 
-        {/* Botão de Incremento */}
         <button
           type="button"
           onClick={handleIncrement}
@@ -96,7 +89,6 @@ const InputNumber = (props: InputNumberProps) => {
         </button>
       </div>
 
-      {/* Mensagem de erro */}
       <div className="text-xs text-customRedAlert mt-1">{errorMessage}</div>
     </div>
   );

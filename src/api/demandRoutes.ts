@@ -15,7 +15,7 @@ export interface DemandItem {
 
 export interface DemandDTO {
   id_tipo_servico: number;
-  //id_pessoa: number;
+  id_pessoa: number;
   id_cliente: number;
   quantidade: number;
   prazo: string;

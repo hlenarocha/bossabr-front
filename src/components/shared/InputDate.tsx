@@ -32,12 +32,12 @@ const InputDate = React.forwardRef<HTMLInputElement, InputDateProps>(
     console.log("borderColor", props.borderColor);
     return (
       <div className={`flex flex-col ${props.width}`}>
-        <div className="text-sm mt-2 font-black mb-1 text-white">
+        <div className="text-md mt-2 font-black mb-1 text-white">
           {props.title}
           <span
             className={`${
               props.isMandatory ? "visible" : "hidden"
-            } text-customYellow text-xl`}
+            } text-customYellow`}
           >
             {" "}
             *

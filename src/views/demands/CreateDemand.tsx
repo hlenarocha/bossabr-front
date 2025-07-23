@@ -37,18 +37,22 @@ const CreateDemand = () => {
     mutationFn: ({ payload }) => createDemand(payload),
     successToastMessage: "Demanda cadastrada com sucesso!",
     successNavigationRoute: previousRoute,
-    errorModalMessage: "Não foi possível cadastrar a demanda. Verifique os dados e tente novamente.",
+    errorModalMessage:
+      "Não foi possível cadastrar a demanda. Verifique os dados e tente novamente.",
   });
 
-  const { control, handleSubmit, formState: { errors } } = useForm<DemandFormData>({
+  // default values
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<DemandFormData>({
     resolver: zodResolver(demandSchema),
     defaultValues: {
       clientId: undefined,
-      serviceId: undefined,
-      //statusId: undefined,
-      sectorId: undefined,
+      personId: undefined,
       description: "",
-      quantity: 1,
+      quantity: 1, // começa com valor válido
       driveLink: "",
       deadline: "",
     },
@@ -58,12 +62,12 @@ const CreateDemand = () => {
   const onSubmit = (data: DemandFormData) => {
     const payload: DemandDTO = {
       id_tipo_servico: data.serviceId,
+      id_pessoa: data.personId,
       id_cliente: data.clientId,
       quantidade: data.quantity || 1,
-      prazo: data.deadline || "",
-      descricao: data.description,
+      prazo: data.deadline,
+      descricao: data.description || "",
       link_drive: data.driveLink || undefined,
-     // id_status: data.statusId,
     };
 
     console.log("Payload a ser enviado para a API:", payload);
@@ -78,18 +82,34 @@ const CreateDemand = () => {
     { value: 3, label: "Construtora Horizonte Azul" },
     { value: 4, label: "Varejão Econômico Supermercados" },
     { value: 5, label: "LogiMax Transportes e Logística" },
+
+    { value: 6, label: "EducaMais Cursos Online" },
+    { value: 7, label: "Saúde e Bem-Estar Spa Natural" },
+    { value: 8, label: "TechNova Inovações Tecnológicas" },
+    { value: 9, label: "Moda e Estilo Boutique Elegante" },
+    { value: 10, label: "Gastronomia Gourmet Delícias" },
+
+    { value: 11, label: "Construções Sustentáveis EcoBuild" },
+    { value: 12, label: "Serviços Financeiros FinanMais" },
+    { value: 13, label: "Turismo e Viagens Mundo Afora" },
+    { value: 14, label: "Comunicação e Mídia ConectaCom" },
+    { value: 15, label: "Saúde Animal PetCare" },
+
+    { value: 16, label: "Educação Infantil Brincando e Aprendendo" },
+    { value: 17, label: "Beleza e Estética Glamour Beauty" },
+    { value: 18, label: "Serviços Jurídicos Justo & Claro" },
+    { value: 19, label: "Eventos e Festas Celebrações" },
+    { value: 20, label: "Consultoria Empresarial Sucesso Empresarial" },
   ];
   const mockServiceOptions = [
     { value: 1, label: "Criação de Logo" },
     { value: 2, label: "Gestão de Mídias" },
     { value: 3, label: "Desenvolvimento de Website" },
   ];
-  const mockSectorOptions = [
-    { value: 1, label: "Design" },
-    { value: 2, label: "Desenvolvimento" },
-    { value: 3, label: "Marketing" },
+  const mockPersonOptions = [
+    { value: 1, label: "João Silva (Design)" },
+    { value: 2, label: "Silvia Ramos (Social Media)" },
   ];
-  
 
   return (
     <>
@@ -104,12 +124,21 @@ const CreateDemand = () => {
       />
       <BaseScreen>
         <BackButton onClick={() => navigate(previousRoute)} />
-        <PageTitle icon="fa-solid fa-circle-plus" marginTop="mt-4" title="Cadastrar Demanda" />
+        <PageTitle
+          icon="fa-solid fa-circle-plus"
+          marginTop="mt-4"
+          title="Cadastrar Demanda"
+        />
         <Motion>
-          <Box title="Nova Demanda" subtitle="Preencha os dados do formulário e cadastre uma nova demanda." width="w-full" height="h-fit">
+          <Box
+            title="Nova Demanda"
+            subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
+            width="w-full"
+            height="h-fit"
+          >
             <form onSubmit={handleSubmit(onSubmit)}>
               <InputTitle title="Cliente" />
-              <div className="flex gap-6 flex-row w-full">
+              <div className="flex gap-6 flex-row w-2/3">
                 <Controller
                   name="clientId"
                   control={control}
@@ -118,16 +147,22 @@ const CreateDemand = () => {
                       title="CLIENTE"
                       isMandatory
                       options={mockClientOptions}
-                      value={mockClientOptions.find(c => c.value === field.value) || null}
-                      onChange={option => field.onChange(option ? option.value : undefined)}
+                      value={
+                        mockClientOptions.find(
+                          (c) => c.value === field.value
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        field.onChange(option ? option.value : undefined)
+                      }
                       placeholder="Digite para pesquisar um cliente..."
                       errorMessage={errors.clientId?.message}
                     />
                   )}
                 />
-                <div className="mt-auto mb-3 w-1/3">
+                {/* <div className="mt-auto mb-3 w-1/3">
                   <PlainButton title="NOVO CLIENTE" color="bg-customYellow" height="h-10" width="w-full" />
-                </div>
+                </div>  */}
               </div>
 
               <div className="mt-6">
@@ -141,29 +176,34 @@ const CreateDemand = () => {
                         title="TIPO DE SERVIÇO"
                         isMandatory
                         options={mockServiceOptions}
-                        value={mockServiceOptions.find(c => c.value === field.value) || null}
-                        onChange={option => field.onChange(option ? option.value : undefined)}
+                        value={
+                          mockServiceOptions.find(
+                            (c) => c.value === field.value
+                          ) || null
+                        }
+                        onChange={(option) =>
+                          field.onChange(option ? option.value : undefined)
+                        }
                         placeholder="Selecione o serviço..."
                         errorMessage={errors.serviceId?.message}
                         width="w-1/3"
                       />
                     )}
                   />
-                  <div className="flex items-center w-1/3">
+                  {/* <div className="flex items-center w-1/3">
                     <PlainButton title="NOVO SERVIÇO" color="bg-customYellow" height="h-10" width="w-full" />
-                  </div>
+                  </div> */}
                   <Controller
                     name="deadline"
                     control={control}
                     render={({ field }) => (
                       <InputDate
                         title="PRAZO"
-                        isMandatory={false}
-                        value={typeof field.value === "string" ? field.value : ""}
+                        isMandatory={true}
+                        value={field.value}
                         onChange={field.onChange}
                         errorMessage={errors.deadline?.message}
                         borderColor={errors.deadline ? "#EF4444" : "#F6BC0A"} // lógica diferente para input date
-                      
                       />
                     )}
                   />
@@ -176,11 +216,15 @@ const CreateDemand = () => {
                       {...field}
                       title="DESCRIÇÃO DO SERVIÇO"
                       placeholder="Digite detalhes sobre o serviço..."
-                      isMandatory={true}
+                      isMandatory={false}
                       errorMessage={errors.description?.message}
                       height="h-[100px]"
                       rounded="rounded-[20px]"
-                      borderColor={errors.description ? "border-customRedAlert" : "border-customYellow"}
+                      borderColor={
+                        errors.description
+                          ? "border-customRedAlert"
+                          : "border-customYellow"
+                      }
                     />
                   )}
                 />
@@ -196,7 +240,11 @@ const CreateDemand = () => {
                         placeholder="Insira o link para o Drive do serviço..."
                         width="w-2/3"
                         errorMessage={errors.driveLink?.message}
-                        borderColor={errors.driveLink ? "border-customRedAlert" : "border-customYellow"}
+                        borderColor={
+                          errors.driveLink
+                            ? "border-customRedAlert"
+                            : "border-customYellow"
+                        }
                         height="h-[40px]"
                       />
                     )}
@@ -208,8 +256,12 @@ const CreateDemand = () => {
                       <InputQuantity
                         title="QUANTIDADE"
                         isMandatory={true}
-                        borderColor={errors.quantity ? "border-customRedAlert" : "border-customYellow"}
-                        value={field.value ?? 0}
+                        borderColor={
+                          errors.quantity
+                            ? "border-customRedAlert"
+                            : "border-customYellow"
+                        }
+                        value={field.value}
                         onChange={field.onChange}
                         errorMessage={errors.quantity?.message}
                         min={1}
@@ -224,18 +276,24 @@ const CreateDemand = () => {
               <div className="mt-6">
                 <InputTitle title="Atribuição" />
                 <Controller
-                  name="sectorId"
+                  name="personId"
                   control={control}
                   render={({ field }) => (
                     <SearchableSelect
-                      title="SETOR RESPONSÁVEL"
+                      title="RESPONSÁVEL PELO SETOR"
                       isMandatory
-                      options={mockSectorOptions}
-                      value={mockSectorOptions.find(c => c.value === field.value) || null}
-                      onChange={option => field.onChange(option ? option.value : undefined)}
-                      placeholder="Selecione o setor..."
-                      errorMessage={errors.sectorId?.message}
-                      width="w-1/3"
+                      options={mockPersonOptions}
+                      value={
+                        mockPersonOptions.find(
+                          (c) => c.value === field.value
+                        ) || null
+                      }
+                      onChange={(option) =>
+                        field.onChange(option ? option.value : undefined)
+                      }
+                      placeholder="Selecione o responsável..."
+                      errorMessage={errors.personId?.message}
+                      width="w-2/3"
                     />
                   )}
                 />

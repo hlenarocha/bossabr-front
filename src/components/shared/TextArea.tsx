@@ -14,9 +14,9 @@ interface TextAreaProps {
 const TextArea = (props: TextAreaProps) => {
   return (
     <div className={`flex flex-col mb-2 ${props.width}`}>
-      <label className="text-sm mt-2 font-black mb-1 text-white">
+      <label className="text-md mt-2 font-black mb-1 text-white">
         {props.title}
-        <span className={`${props.isMandatory ? "visible" : "hidden"} text-customYellow text-xl`}>
+        <span className={`${props.isMandatory ? "visible" : "hidden"} text-customYellow`}>
           {" "}
           *
         </span>
