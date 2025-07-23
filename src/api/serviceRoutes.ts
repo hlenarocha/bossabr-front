@@ -1,4 +1,4 @@
-import api from "@/api/axiosInstance";  
+import api from "@/api/axiosInstance";
 // ATUALIZAR DEPOIS PARA REFLETIR O SCHEMA
 // id_tipo_servico	integer
 // example: 1
@@ -13,31 +13,44 @@ import api from "@/api/axiosInstance";
 // }
 
 export interface ServiceItem {
-  id_servico: number;
+  id_tipo_servico: number;
+  id_setor: number;
   nome_servico: string;
-  setor_responsavel: string;
-  pontuacao: number;
+  pontuacao: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+
+export interface ServiceForm {
+  setores: {
+    id_setor: number;
+    nome_setor: string;
+  }[];
 }
 
 export interface ServiceDTO {
+  id_setor: number;
   nome_servico: string;
-  setor_responsavel: string;
-  pontuacao: number;
+  pontuacao: number | null;
 }
 
- const getServices = async (): Promise<ServiceItem[] | undefined> => {
+const getServices = async (): Promise<ServiceItem[]> => {
   try {
-    const response = await api.get("/servico");
-    return response.data.data;
+    const response = await api.get("/tipoServico");
+   
+    return response.data?.data || [];
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao buscar serviços:", error);
+    throw error; 
   }
 };
 
+
 // CREATE
- const createService = async (data: ServiceDTO): Promise<ServiceItem> => {
+const createService = async (data: ServiceDTO): Promise<ServiceItem> => {
   try {
-    const response = await api.post("/servico", data);
+    const response = await api.post("/tipoServico", data);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar serviço:", error);
@@ -46,9 +59,9 @@ export interface ServiceDTO {
 };
 
 // READ BY ID
- const readServiceById = async (id: number): Promise<ServiceItem> => {
+const readServiceById = async (id: number): Promise<ServiceItem> => {
   try {
-    const response = await api.get(`/servico/${id}`);
+    const response = await api.get(`/tipoServico/${id}`);
     return response.data.data;
   } catch (error) {
     console.error("Erro ao buscar serviço por ID:", error);
@@ -57,9 +70,9 @@ export interface ServiceDTO {
 }
 
 // UPDATE BY ID
- const updateServiceById = async (id: number, data: ServiceDTO): Promise<ServiceItem> => {
+const updateServiceById = async (id: number, data: ServiceDTO): Promise<ServiceItem> => {
   try {
-    const response = await api.put(`/servico/${id}`, data);
+    const response = await api.put(`/tipoServico/${id}`, data);
     return response.data;
   } catch (error) {
     console.error("Erro ao atualizar serviço:", error);
@@ -68,13 +81,23 @@ export interface ServiceDTO {
 };
 
 // DELETE BY ID
- const deleteServiceById = async (id: number): Promise<void> => {
+const deleteServiceById = async (id: number): Promise<void> => {
   try {
-    await api.delete(`/servico/${id}`);
+    await api.delete(`/tipoServico/${id}`);
   } catch (error) {
     console.error("Erro ao deletar serviço:", error);
     throw error;
   }
 };
 
-export { getServices, createService, readServiceById, updateServiceById, deleteServiceById };
+const getServiceFormData = async (): Promise<ServiceForm> => {
+  try {
+    const response = await api.get("/tipoServico/form");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar dados do formulário de serviço:", error);
+    throw error;
+  }
+}
+
+export { getServices, createService, readServiceById, updateServiceById, deleteServiceById, getServiceFormData };
