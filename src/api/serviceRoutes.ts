@@ -1,5 +1,17 @@
 import api from "@/api/axiosInstance";  
 // ATUALIZAR DEPOIS PARA REFLETIR O SCHEMA
+// id_tipo_servico	integer
+// example: 1
+// id_setor*	integer
+// example: 1
+// nome_servico*	string
+// maxLength: 200
+// example: Banner
+// pontuacao	number($float)
+// example: 2
+// nullable: true
+// }
+
 export interface ServiceItem {
   id_servico: number;
   nome_servico: string;

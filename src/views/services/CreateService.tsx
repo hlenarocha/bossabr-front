@@ -39,21 +39,25 @@ const CreateService = () => {
           >
             <InputTitle title="Serviço"></InputTitle>
             <div className="w-full flex flex-col">
+              <div className="flex flex-row gap-4">
               <InputString
                 title="NOME DO SERVIÇO"
-                width="w-full"
+                width="w-1/2"
                 isMandatory={true}
                 placeholder="Digite o nome do serviço..."
                 height="h-[40px]"
               />
-              <div className="flex gap-6 flex-row">
-                <Select
+               <Select
                   title="SETOR RESPONSÁVEL"
                   options={[{id: 1, name: "Design"}, {id: 2, name: "Social Media"}]}
-                  width="w-2/3"
+                  width="w-1/2"
+                  
                   isMandatory={true}
                   height="h-[40px]"
                 />
+                </div>
+              {/* <div className="flex gap-6 flex-row">
+               
                 <div className="mt-5 w-1/3">
                   <PlainButton
                     title="NOVO SETOR"
@@ -62,7 +66,7 @@ const CreateService = () => {
                     width="w-full"
                   />
                 </div>
-              </div>
+              </div> */}
                <InputQuantity
 
                   title="PONTUAÇÃO"
