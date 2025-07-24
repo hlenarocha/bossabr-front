@@ -28,7 +28,11 @@ const ManageServices = () => {
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
   // Busca a lista de serviços
-  const { data: services, isLoading: isLoadingServices, isError: isErrorServices } = useQuery({
+  const {
+    data: services,
+    isLoading: isLoadingServices,
+    isError: isErrorServices,
+  } = useQuery({
     queryKey: ["services"],
     queryFn: getServices,
   });
@@ -43,14 +47,15 @@ const ManageServices = () => {
     if (!formData?.setores) {
       return new Map<number, string>();
     }
-    return new Map(formData.setores.map(s => [s.id_setor, s.nome_setor]));
+    return new Map(formData.setores.map((s) => [s.id_setor, s.nome_setor]));
   }, [formData]);
 
   // Filtra os serviços com base na busca
   const normalizedSearchTerm = normalizeString(searchTerm);
-  const filteredServices = services?.filter((service) =>
-    normalizeString(service.nome_servico).includes(normalizedSearchTerm)
-  ) || [];
+  const filteredServices =
+    services?.filter((service) =>
+      normalizeString(service.nome_servico).includes(normalizedSearchTerm)
+    ) || [];
 
   useEffect(() => {
     if (location.state?.toastMessage) {
@@ -100,12 +105,17 @@ const ManageServices = () => {
           title="Lista de Serviços"
           subtitle="Visualização da lista de serviços para configuração."
         >
-          <TableHeader columns={[
-            { width: "w-1/12", content: "ID" },
-            { width: "w-5/12", content: "NOME DO SERVIÇO" },
-            { width: "w-4/12", content: "SETOR" },
-            { width: "w-2/12", content: "PONTUAÇÃO" },
-          ]} />
+          <TableItem
+            columns={[
+              { width: "10%", content: "ID" },
+              { width: "30%", content: "NOME DO SERVIÇO" },
+              { width: "30%", content: "SETOR" },
+              { width: "15%", content: "PONTUAÇÃO" },
+              { width: "15%", content: "AÇÕES" },
+            ]}
+            isTableHeader={true}
+            itemHeight="h-12"
+          />
           <div className="h-[80%] overflow-y-auto">
             <ResourceListView
               isLoading={isLoading}
@@ -117,26 +127,49 @@ const ManageServices = () => {
                 <TableItem
                   key={service.id_tipo_servico}
                   columns={[
-                    { width: "w-1/12", content: String(service.id_tipo_servico) },
-                    { width: "w-5/12", content: service.nome_servico },
-                    { width: "w-4/12", content: sectorMap.get(service.id_setor) || "Não encontrado" },
-                    { width: "w-2/12", content: String(service.pontuacao ?? 'N/A') },
+                    {
+                      width: "10%",
+                      content: String(service.id_tipo_servico),
+                    },
+                    { width: "30%", content: service.nome_servico },
+                    {
+                      width: "30%",
+                      content:
+                        sectorMap.get(service.id_setor) || "Não encontrado",
+                    },
+                    {
+                      width: "15%",
+                      content: String(service.pontuacao ?? "N/A"),
+                    },
+                    {
+                      width: "15%",
+                      content: (
+                        <i
+                          className={`fa-solid fa-pencil text-lg text-customYellow`}
+                          title="Visualizar / Editar"
+                        ></i>
+                      ),
+                    },
                   ]}
-                  itemWidth="w-full"
                   itemHeight="h-12"
                   onClick={() =>
                     navigate(
                       `/configuracoes/servicos/${service.id_tipo_servico}`
                     )
                   }
-                  icon="fa-solid fa-pencil"
                 />
               )}
             />
           </div>
         </Box>
       </Motion>
-      {toastMessage && <Toast message={toastMessage} type={toastType} onClose={() => setToastMessage(null)} />}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setToastMessage(null)}
+        />
+      )}
     </BaseScreen>
   );
 };

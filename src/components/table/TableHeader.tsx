@@ -6,9 +6,9 @@ const TableHeader = (props: TableHeaderProps) => {
   return (
     <>
       <div
-        className="w-full justify-center flex ml-1 text-white font-black py-0 items-center mt-4 mb-2"
+        className="w-full flex ml-4 justify-start text-white font-black items-center mt-4 mb-2"
         style={{
-          width: "calc(100% - 10%)",
+          // width: "calc(100% - 10%)",
           display: "grid grid-row-1",
           gridTemplateColumns: props.columns.map((col) => col.width).join(" "),
         }}
@@ -16,7 +16,7 @@ const TableHeader = (props: TableHeaderProps) => {
         {props.columns.map((col, index) => (
           <span
           key={index}
-          className={`${col.width} items-center justify-center text-center flex font-bold`}
+          className={`${col.width} items-center justify-start text-center flex font-bold`}
           
           >
             {col.content}

@@ -87,7 +87,14 @@ const ManageBusiness = () => {
             title="Lista de Setores de Negócio"
             subtitle="Visualização da lista de setores de negócio para configuração."
           >
-            <TableHeader columns={[{ width: "w-full", content: "NOME" }]} />
+            <TableItem
+              columns={[
+                { width: "90%", content: "NOME" },
+                { width: "10%", content: "AÇÕES" },
+              ]}
+              isTableHeader={true}
+              itemHeight="h-12"
+            />
             <div className="h-[80%] overflow-y-auto">
               <ResourceListView
                 isLoading={isLoading}
@@ -99,7 +106,22 @@ const ManageBusiness = () => {
                   <TableItem
                     key={sector.id_setor_negocio}
                     columns={[
-                      { width: "w-full", content: sector.nome_setor_negocio },
+                      { width: "90%", content: sector.nome_setor_negocio },
+                      {
+                        width: "10%",
+                        content: (
+                          <i
+                            className={`fa-solid fa-pencil text-lg text-customYellow hover:cursor-pointer`}
+                            title="Visualizar / Editar"
+                            onClick={() =>
+                              navigate(
+                                `/configuracoes/negocios/${sector.id_setor_negocio}`
+                              )
+                            }
+                            
+                          ></i>
+                        ),
+                      },
                     ]}
                     itemWidth="w-full"
                     itemHeight="h-12"
@@ -115,8 +137,13 @@ const ManageBusiness = () => {
             </div>
           </Box>
         </Motion>
-        {toastMessage && <Toast message={toastMessage} type={toastType} onClose={() => setToastMessage(null)} />}
-
+        {toastMessage && (
+          <Toast
+            message={toastMessage}
+            type={toastType}
+            onClose={() => setToastMessage(null)}
+          />
+        )}
       </BaseScreen>
     </>
   );
