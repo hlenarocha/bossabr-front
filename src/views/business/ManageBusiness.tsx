@@ -7,7 +7,6 @@ import BackButton from "@/components/shared/BackButton";
 import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import ColoredButton from "@/components/shared/ColoredButton";
-import TableHeader from "@/components/table/TableHeader";
 import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
 import { Motion } from "@/components/animation/Motion";

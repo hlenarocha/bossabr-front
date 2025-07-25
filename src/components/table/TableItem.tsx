@@ -11,7 +11,8 @@ interface TableItemProps {
 const TableItem = (props: TableItemProps) => {
   return (
     <div
-      className={`${props.isTableHeader ? "bg-stone-800 font-black border-customYellow border" : "bg-customItemBackgroundGray"} ${props.itemHeight} w-full flex flex-row px-2 py-0 items-center rounded-[400px] mt-4`}
+      onClick={props.onClick}
+      className={`${props.isTableHeader ? "bg-stone-800 font-black  uppercase border-b-2 border-customYellow rounded-md" : "bg-customItemBackgroundGray rounded-[400px]  hover:bg-neutral-600 cursor-pointer transition-colors duration-200"} ${props.itemHeight} w-full flex flex-row px-2 py-0 items-center mt-4`}
       style={{
         display: "grid",
         gridTemplateColumns: props.columns.map((col) => col.width).join(" "),

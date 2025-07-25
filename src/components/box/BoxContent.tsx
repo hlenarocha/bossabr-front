@@ -12,9 +12,17 @@ interface BoxProps {
 const ContentBox = (prop: BoxProps) => {
   return (
     <div
-      className={`${prop.height} ${prop.width} bg-customBoxGray bg-opacity-30 cursor-default backdrop-blur-md rounded-[20px] shadow-[5px_5px_10px_0px_rgba(17,17,17,0.15)] p-8 text-white mt-6`}
+      className={`${prop.height} ${
+        prop.width
+      } bg-customBoxGray bg-opacity-30 cursor-default backdrop-blur-md rounded-[20px] shadow-[5px_5px_10px_0px_rgba(17,17,17,0.15)] p-8 text-white mt-6`}
     >
-      <div className="text-white text-2xl font-extrabold">{prop.title}</div>
+      <div
+        className="text-white text-2xl font-extrabold truncate max-w-[500px]"
+        title={prop.title}
+      >
+        {prop.title}
+      </div>
+
       <div className="text-white text-1xl mt-2 mb-5">{prop.subtitle}</div>
       {prop.hr ? <hr className="mb-5" /> : ""}
       {prop.children}

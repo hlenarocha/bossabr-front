@@ -43,7 +43,7 @@ const Modal = (props: PropsModal) => {
             <p className="text-2xl font-bold">{props.title}</p>
           </div>
 
-          <p>{props.description}</p>
+          <p className="w-[300px]">{props.description}</p>
           <hr></hr>
           <p>{props.children}</p>
 

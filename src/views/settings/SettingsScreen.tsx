@@ -98,14 +98,14 @@ const SettingsScreen = () => {
                   color="customYellow"
                   title="CONFIGURAR EQUIPES"
                 ></ColoredButton>
-                <ColoredButton
+                {/* <ColoredButton
                   onClick={() => navigate("/configuracoes/setores")}
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
                   color="customYellow"
                   title="CONFIGURAR SETORES"
-                ></ColoredButton>
+                ></ColoredButton> */}
               </div>
             </Box>
 
