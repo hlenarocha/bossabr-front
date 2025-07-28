@@ -5,6 +5,8 @@ import api from "@/api/axiosInstance";
 export interface TeamItem {
   id_equipe: number;
   nome_equipe: string;
+  nome_responsavel: string; 
+  nome_setor: string;
 }
 
 export interface TeamDTO {
@@ -25,6 +27,13 @@ export interface TeamFormDataResponse {
   }[];
 }
 
+export interface PaginatedTeamsResponse {
+  current_page: number;
+  data: TeamItem[];
+  last_page: number;
+  total: number;
+}
+
  const getTeams = async (): Promise<TeamItem[] | undefined> => {
   try {
     const response = await api.get("/equipe");
@@ -33,6 +42,23 @@ export interface TeamFormDataResponse {
     console.error(error);
   }
 };
+
+const readTeams = async (page: number, search: string): Promise<PaginatedTeamsResponse> => {
+  try {
+    const response = await api.get("/equipe", {
+      params: {
+        page: page,
+        search: search,
+        por_pagina: 10
+      }
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("Erro ao buscar equipes:", error);
+    throw error;
+  }
+};
+
 
 
 export const getTeamFormData = async (): Promise<TeamFormDataResponse> => {
@@ -89,4 +115,4 @@ export const getTeamFormData = async (): Promise<TeamFormDataResponse> => {
   }
 };
 
-export { getTeams, createTeam, readTeamById, updateTeamById, deleteTeamById };
+export { getTeams, createTeam, readTeamById, updateTeamById, deleteTeamById, readTeams };
