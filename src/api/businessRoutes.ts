@@ -9,6 +9,13 @@ export interface BusinessItem {
   nome_setor_negocio: string;
 }
 
+export interface PaginatedBusinessResponse {
+  current_page: number;
+  data: BusinessItem[];
+  last_page: number;
+  total: number;
+}
+ 
 // CREATE
 const createBusiness = async (data: BusinessDTO) => {
   try {
@@ -20,10 +27,17 @@ const createBusiness = async (data: BusinessDTO) => {
   }
 };
 
-// READ ALL
-const readBusiness = async (): Promise<BusinessItem[]> => {
+// PAGINATED READ
+const readBusiness = async (page: number, search: string): Promise<PaginatedBusinessResponse> => {
   try {
-    const response = await api.get("/setorNegocio");
+    const response = await api.get("/setorNegocio", {
+      params: {
+        page: page, 
+        search: search, 
+        por_pagina: 10
+      }
+    });
+    console.log(response);
     return response.data.data;
 
   } catch (error) {

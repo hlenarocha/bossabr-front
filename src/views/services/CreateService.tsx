@@ -67,7 +67,7 @@ const CreateService = () => {
       pontuacao: data.pontuation ?? null,
     };
 
-    console.log("Payload: " + payload.pontuacao);
+    console.log("Payload: ", payload);
 
     mutate({ payload });
   };
@@ -149,6 +149,7 @@ const CreateService = () => {
                       title="PONTUAÇÃO"
                       height="h-[40px]"
                       width="w-1/3"
+                      
                       isMandatory={false}
                       min={0}
                       max={10}

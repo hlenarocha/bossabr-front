@@ -14,6 +14,7 @@ import TableItem from "@/components/table/TableItem";
 import { BusinessItem } from "@/api/businessRoutes";
 import { ResourceListView } from "@/components/shared/ResourceListView";
 import Toast from "@/components/shared/Toast";
+import PaginationControls from "@/components/shared/PaginationControls";
 
 // utils
 import { normalizeString } from "@/utils/normalizeString";
@@ -21,21 +22,41 @@ import { normalizeString } from "@/utils/normalizeString";
 const ManageBusiness = () => {
   const navigate = useNavigate();
   const location = useLocation(); // hook para ler estado da navegação
-  const [searchTerm, setSearchTerm] = useState("");
+
+  // toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
-  const { data: businessSectors, isLoading, isError } = useReadBusiness();
+  // const { data: businessSectors, isLoading, isError } = useReadBusiness();
 
-  const normalizedSearchTerm = normalizeString(searchTerm);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredSectors = Array.isArray(businessSectors)
-    ? businessSectors.filter((sector: BusinessItem) =>
-        normalizeString(sector.nome_setor_negocio).includes(
-          normalizedSearchTerm
-        )
-      )
-    : [];
+  // const normalizedSearchTerm = normalizeString(searchTerm);
+
+  // const filteredSectors = Array.isArray(businessSectors)
+  //   ? businessSectors.filter((sector: BusinessItem) =>
+  //       normalizeString(sector.nome_setor_negocio).includes(
+  //         normalizedSearchTerm
+  //       )
+  //     )
+  //   : [];
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      setCurrentPage(1); // Volta para a página 1 em uma nova busca
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  // hook agora chamado com a página e a busca
+  const {
+    data: paginatedData,
+    isLoading,
+    isError,
+  } = useReadBusiness(currentPage, debouncedSearchTerm);
 
   // Exibe mensagem de toast se houver ele na navegação
   useEffect(() => {
@@ -82,7 +103,7 @@ const ManageBusiness = () => {
         <Motion>
           <Box
             width="w-full"
-            height="h-[640px]"
+            height="h-fit"
             title="Lista de Setores de Negócio"
             subtitle="Visualização da lista de setores de negócio para configuração."
           >
@@ -94,11 +115,12 @@ const ManageBusiness = () => {
               isTableHeader={true}
               itemHeight="h-12"
             />
-            <div className="h-[80%] overflow-y-auto">
+            <div className="h-[350px] overflow-y-auto">
               <ResourceListView
                 isLoading={isLoading}
                 isError={isError}
-                items={filteredSectors}
+                // paginatedData
+                items={paginatedData?.data ?? []}
                 // emptyMessage="Nenhum setor de negócio encontrado."
                 // errorMessage="Erro ao carregar os setores."
                 renderItem={(sector) => (
@@ -117,7 +139,6 @@ const ManageBusiness = () => {
                                 `/configuracoes/negocios/${sector.id_setor_negocio}`
                               )
                             }
-                            
                           ></i>
                         ),
                       },
@@ -134,6 +155,12 @@ const ManageBusiness = () => {
                 )}
               />
             </div>
+            <PaginationControls
+              currentPage={paginatedData?.current_page ?? 1}
+              totalPages={paginatedData?.last_page ?? 1}
+              onPageChange={setCurrentPage}
+              isLoading={isLoading}
+            />
           </Box>
         </Motion>
         {toastMessage && (

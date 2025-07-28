@@ -34,6 +34,7 @@ const InputNumber = (props: InputNumberProps) => {
     const newValue = value + step;
     if (newValue <= max) {
       onChange(newValue);
+      console.log(props.value)
     }
   };
 
@@ -41,9 +42,11 @@ const InputNumber = (props: InputNumberProps) => {
     const newValue = value - step;
     if (newValue >= min) {
       onChange(newValue);
+      console.log(props.value)
     }
   };
 
+  console.log(props.value)
   const isDecrementDisabled = isReadOnly || value <= min;
   const isIncrementDisabled = isReadOnly || value >= max;
 

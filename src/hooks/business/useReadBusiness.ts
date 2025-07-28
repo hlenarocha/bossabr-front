@@ -1,14 +1,15 @@
 import { readBusiness } from "@/api/businessRoutes";
 import { useQuery } from "@tanstack/react-query";
 
-export const useReadBusiness = () => {
+export const useReadBusiness = (page: number, search: string) => {
   return useQuery({
+  
+    queryKey: ["businessList", page, search],
 
-    // mesma key do useCreateBusiness
-    queryKey: ["businessList"],
+    queryFn: () => readBusiness(page, search),
 
-    // função que busca dados
-    queryFn: readBusiness,
+    // // Opção útil: mantém os dados antigos visíveis enquanto os novos carregam,
+    // // evitando um "pisca-pisca" na tela.
+    // keepPreviousData: true,
   });
-
-}
+};

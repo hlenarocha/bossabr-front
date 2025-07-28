@@ -46,11 +46,12 @@ import CriarSetor from "@/views/sectors/CreateSector";
 // Telas de Setores de Negócio
 import GerenciarNegocios from "@/views/business/ManageBusiness";
 import CriarNegocio from "@/views/business/CreateBusiness";
+import EditarNegocio from "@/views/business/EditBusiness";
 
 // Telas de Serviços
 import GerenciarServicos from "@/views/services/ManageServices";
 import CriarServico from "@/views/services/CreateService";
-import EditBusiness from "@/views/business/EditBusiness";
+import EditarServico from "@/views/services/EditService";
 
 const queryClient = new QueryClient();
 
@@ -121,11 +122,12 @@ const AppContainer = () => {
     // Setores de Negócio
     { path: "/configuracoes/negocios", element: <GerenciarNegocios /> },
     { path: "/configuracoes/negocios/novo", element: <CriarNegocio /> },
-    { path: "/configuracoes/negocios/:id", element: <EditBusiness /> },
+    { path: "/configuracoes/negocios/:id", element: <EditarNegocio /> },
 
     // Serviços
     { path: "/configuracoes/servicos", element: <GerenciarServicos /> },
     { path: "/configuracoes/servicos/novo", element: <CriarServico /> },
+    { path: "/configuracoes/servicos/:id", element: <EditarServico /> },
 
     // Relatórios e Configurações gerais
     { path: "/diario", element: <Diario /> },
