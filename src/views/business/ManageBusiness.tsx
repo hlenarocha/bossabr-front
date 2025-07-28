@@ -11,13 +11,9 @@ import PageTitle from "@/components/title/PageTitle";
 import SearchBar from "@/components/shared/SearchBar";
 import { Motion } from "@/components/animation/Motion";
 import TableItem from "@/components/table/TableItem";
-import { BusinessItem } from "@/api/businessRoutes";
 import { ResourceListView } from "@/components/shared/ResourceListView";
 import Toast from "@/components/shared/Toast";
 import PaginationControls from "@/components/shared/PaginationControls";
-
-// utils
-import { normalizeString } from "@/utils/normalizeString";
 
 const ManageBusiness = () => {
   const navigate = useNavigate();
@@ -121,8 +117,7 @@ const ManageBusiness = () => {
                 isError={isError}
                 // paginatedData
                 items={paginatedData?.data ?? []}
-                // emptyMessage="Nenhum setor de negócio encontrado."
-                // errorMessage="Erro ao carregar os setores."
+                
                 renderItem={(sector) => (
                   <TableItem
                     key={sector.id_setor_negocio}

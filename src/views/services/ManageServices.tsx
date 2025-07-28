@@ -16,27 +16,36 @@ import { ResourceListView } from "@/components/shared/ResourceListView";
 import Toast from "@/components/shared/Toast";
 
 // API, tipos e utils
-import { getServices, getServiceFormData } from "@/api/serviceRoutes";
-import { normalizeString } from "@/utils/normalizeString";
+import { getServiceFormData } from "@/api/serviceRoutes";
+import { useReadServices } from "@/hooks/service/useReadServices";
+import PaginationControls from "@/components/shared/PaginationControls";
 
 const ManageServices = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
-  // Busca a lista de serviços
+  // debounce
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      setCurrentPage(1);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
   const {
-    data: services,
+    data: paginatedServices,
     isLoading: isLoadingServices,
     isError: isErrorServices,
-  } = useQuery({
-    queryKey: ["services"],
-    queryFn: getServices,
-  });
+  } = useReadServices(currentPage, debouncedSearchTerm);
 
-  // Busca os dados do formulário (que contêm os nomes dos setores)
   const { data: formData, isLoading: isLoadingFormData } = useQuery({
     queryKey: ["serviceFormData"],
     queryFn: getServiceFormData,
@@ -48,13 +57,6 @@ const ManageServices = () => {
     }
     return new Map(formData.setores.map((s) => [s.id_setor, s.nome_setor]));
   }, [formData]);
-
-  // Filtra os serviços com base na busca
-  const normalizedSearchTerm = normalizeString(searchTerm);
-  const filteredServices =
-    services?.filter((service) =>
-      normalizeString(service.nome_servico).includes(normalizedSearchTerm)
-    ) || [];
 
   useEffect(() => {
     if (location.state?.toastMessage) {
@@ -115,11 +117,11 @@ const ManageServices = () => {
             isTableHeader={true}
             itemHeight="h-12"
           />
-          <div className="h-[80%] overflow-y-auto">
+          <div className="h-[350px] overflow-y-auto">
             <ResourceListView
               isLoading={isLoading}
               isError={isErrorServices}
-              items={filteredServices}
+              items={paginatedServices?.data ?? []}
               emptyMessage="Nenhum serviço encontrado."
               errorMessage="Erro ao carregar os serviços."
               renderItem={(service) => (
@@ -165,6 +167,12 @@ const ManageServices = () => {
               )}
             />
           </div>
+          <PaginationControls
+            currentPage={paginatedServices?.current_page ?? 1}
+            totalPages={paginatedServices?.last_page ?? 1}
+            onPageChange={setCurrentPage}
+            isLoading={isLoading}
+          />
         </Box>
       </Motion>
       {toastMessage && (

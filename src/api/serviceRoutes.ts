@@ -35,14 +35,27 @@ export interface ServiceDTO {
   pontuacao: number | null;
 }
 
-const getServices = async (): Promise<ServiceItem[]> => {
+export interface PaginatedServicesResponse {
+  current_page: number;
+  data: ServiceItem[];
+  last_page: number;
+  total: number;
+}
+
+const readServices = async (page: number, search: string): Promise<PaginatedServicesResponse> => {
   try {
-    const response = await api.get("/tipoServico");
-   
-    return response.data?.data || [];
+    const response = await api.get("/tipoServico", {
+      params: {
+        por_pagina: 10,
+        page: page,
+        search: search
+      }
+    });
+
+    return response.data?.data;
   } catch (error) {
     console.error("Erro ao buscar serviços:", error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -100,4 +113,4 @@ const getServiceFormData = async (): Promise<ServiceForm> => {
   }
 }
 
-export { getServices, createService, readServiceById, updateServiceById, deleteServiceById, getServiceFormData };
+export { readServices, createService, readServiceById, updateServiceById, deleteServiceById, getServiceFormData };
