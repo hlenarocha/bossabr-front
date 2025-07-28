@@ -9,6 +9,20 @@ export interface TeamItem {
 
 export interface TeamDTO {
   nome_equipe: string;
+  id_setor: number;
+  responsavel_equipe?: number; // Pode ser opcional
+  equipe_interna: boolean;
+}
+
+export interface TeamFormDataResponse {
+  setores: {
+    id_setor: number;
+    nome_setor: string;
+  }[];
+  pessoas: {
+    id_pessoa: number;
+    first_name: string;
+  }[];
 }
 
  const getTeams = async (): Promise<TeamItem[] | undefined> => {
@@ -19,6 +33,18 @@ export interface TeamDTO {
     console.error(error);
   }
 };
+
+
+export const getTeamFormData = async (): Promise<TeamFormDataResponse> => {
+  try {
+    const response = await api.get("/equipe/form");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar dados do formulário de equipe:", error);
+    throw error;
+  }
+};
+
 
 // CREATE
  const createTeam = async (data: TeamDTO): Promise<TeamItem> => {

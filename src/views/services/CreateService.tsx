@@ -103,7 +103,7 @@ const CreateService = () => {
             height="h-fit"
           >
             <form onSubmit={handleSubmit(onSubmit)}>
-              <InputTitle title="Serviço" />
+              <InputTitle title="Dados do Serviço" />
               <div className="w-full flex flex-col">
                 <div className="flex flex-row gap-4">
                   <Controller
