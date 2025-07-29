@@ -38,6 +38,7 @@ import CriarColaborador from "@/views/workers/CreateWorker";
 // Telas de Equipes
 import GerenciarEquipes from "@/views/teams/ManageTeams";
 import CriarEquipe from "@/views/teams/CreateTeam";
+import EditarEquipe from "@/views/teams/EditTeam";
 
 // Telas de Setores
 import GerenciarSetores from "@/views/sectors/ManageSectors";
@@ -114,6 +115,7 @@ const AppContainer = () => {
     // Equipes
     { path: "/configuracoes/equipes", element: <GerenciarEquipes /> },
     { path: "/configuracoes/equipes/novo", element: <CriarEquipe /> },
+    { path: "/configuracoes/equipes/:id", element: <EditarEquipe /> },
 
     // Setores
     { path: "/configuracoes/setores", element: <GerenciarSetores /> },

@@ -4,9 +4,10 @@ import api from "@/api/axiosInstance";
 
 export interface TeamItem {
   id_equipe: number;
+  id_setor: number;
   nome_equipe: string;
-  nome_responsavel: string; 
-  nome_setor: string;
+  responsavel_equipe: number; 
+  equipe_interna: boolean;
 }
 
 export interface TeamDTO {

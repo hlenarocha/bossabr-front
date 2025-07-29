@@ -112,7 +112,9 @@ const ManageTeams = () => {
             <TableItem
               columns={[
                 { width: "30%", content: "NOME DA EQUIPE" },
-                { width: "30%", content: "RESPONSÁVEL" },
+                { width: "20%", content: "RESPONSÁVEL" },
+                { width: "10%", content: "TIPO" },
+
                 { width: "25%", content: "SETOR" },
                 { width: "15%", content: "AÇÕES" },
               ]}
@@ -120,7 +122,7 @@ const ManageTeams = () => {
               itemHeight="h-12"
             />
 
-            <div className="h-[75%] overflow-y-auto">
+            <div className="h-[350px] overflow-y-auto">
               <ResourceListView
                 isLoading={isLoading}
                 isError={isErrorTeams}
@@ -133,15 +135,19 @@ const ManageTeams = () => {
                     columns={[
                       { width: "30%", content: team.nome_equipe },
                       {
-                        width: "30%",
+                        width: "20%",
                         content:
-                          responsibleMap.get(Number(team.nome_responsavel)) ||
+                          responsibleMap.get(Number(team.responsavel_equipe)) ||
                           "Não encontrado",
+                      },
+                      {
+                        width: "10%",
+                        content: team.equipe_interna ? "Interna" : "Externa",
                       },
                       {
                         width: "25%",
                         content:
-                          sectorMap.get(Number(team.nome_setor)) ||
+                          sectorMap.get(Number(team.id_equipe)) ||
                           "Não encontrado",
                       },
                       {
@@ -160,6 +166,9 @@ const ManageTeams = () => {
                       },
                     ]}
                     itemHeight="h-12"
+                    onClick={() =>
+                      navigate(`/configuracoes/equipes/${team.id_equipe}`)
+                    }
                   />
                 )}
               />

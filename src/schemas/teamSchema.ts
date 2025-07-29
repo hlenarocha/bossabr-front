@@ -9,7 +9,7 @@ const teamSchema = z.object({
     sectorId:
         z.coerce.number({ required_error: "Selecione um setor.", invalid_type_error: "Selecione um setor." }).min(1, "Selecione um setor."),
     responsibleId: z.coerce.number({ required_error: "Selecione um setor.", invalid_type_error: "Selecione um setor." }).min(1, "Selecione um setor.").optional(),
-    isInternal: z.boolean().default(true),
+    isInternal: z.boolean(),
 });
 
 type TeamFormData = z.infer<typeof teamSchema>;
