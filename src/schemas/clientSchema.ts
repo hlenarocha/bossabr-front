@@ -10,23 +10,23 @@ const clientSchema = z.object({
      .string()
         .min(1, "Nome da empresa deve ter pelo menos 1 caractere")
         .max(255, "Nome da empresa não pode exceder 255 caracteres")
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,]+$/, "O nome da empresa contém caracteres inválidos."),
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,'"()/:;!?_#@%*+]+$/
+, "O nome da empresa contém caracteres inválidos."),
     contactName: z
         .string()
         .min(1, "Nome do contato deve ter pelo menos 1 caractere")
         .max(255, "Nome do contato não pode exceder 255 caracteres")
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,]+$/, "O nome do contato contém caracteres inválidos."),
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,'"()/:;!?_#@%*+]+$/
+, "O nome do contato contém caracteres inválidos."),
     contactEmail: z
         .string()
-        .min(1, "Email do contato deve ter pelo menos 1 caractere")
-        .max(100, "Email do contato não pode exceder 100 caracteres")
-        .email("Email do contato deve ser um email válido")
+        .email("E-mail inválido")
         .optional(),
     contactPhone: z
     .string()
         .min(11, "Telefone deve ter 11 caracteres")
         .max(11, "Telefone deve ter 11 caracteres")
-        .refine((val) => !val || validateInput(val, "phone"), "Telefone inválido")
+        // .refine((val) => !val || validateInput(val, "phone"), "Telefone inválido")
         .optional(),
     entryDate: z
         .string()
@@ -49,24 +49,25 @@ const clientSchema = z.object({
         .string()
         .min(10, "Descrição do contrato deve ter pelo menos 10 caracteres")
         .max(500, "Descrição do contrato não pode exceder 500 caracteres")
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,]+$/, "A descrição do contrato contém caracteres inválidos.")
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,'"()/:;!?_#@%*+]+$/
+, "A descrição do contrato contém caracteres inválidos.")
         .optional(),
     briefing: z
         .string()
         .min(10, "Briefing deve ter pelo menos 10 caracteres")
         .max(1000, "Briefing não pode exceder 1000 caracteres")
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,]+$/, "O briefing contém caracteres inválidos.")
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,'"()/:;!?_#@%*+]+$/
+, "O briefing contém caracteres inválidos.")
         .optional(),
     isActive: z
         .boolean()
-        .optional()
-        .default(true)
-        .refine((val) => typeof val === 'boolean', "O campo 'Ativo' deve ser um booleano"),
+        .optional(),
     classification: z
         .string()
         .min(1, "Classificação deve ter pelo menos 1 caractere")
         .max(100, "Classificação não pode exceder 100 caracteres")
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,]+$/, "A classificação contém caracteres inválidos.")
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,'"()/:;!?_#@%*+]+$/
+, "A classificação contém caracteres inválidos.")
         .optional(),
 
 });

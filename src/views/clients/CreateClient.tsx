@@ -1,37 +1,120 @@
-import PageTitle from "@/components/title/PageTitle";
-import BaseScreen from "@/views/BaseScreen";
-import BackButton from "@/components/shared/BackButton";
-import Box from "@/components/box/BoxContent";
-import InputTitle from "@/components/title/InputTitle";
+// hooks e bibliotecas
 import { useNavigate, useLocation } from "react-router-dom";
-import { Motion } from "@/components/animation/Motion";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+
+// componentes
+import BaseScreen from "@/views/BaseScreen";
+import Box from "@/components/box/BoxContent";
+import BackButton from "@/components/shared/BackButton";
+import PageTitle from "@/components/title/PageTitle";
+import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
-import PlainButton from "@/components/shared/PlainButton";
-import ColoredButton from "@/components/shared/ColoredButton";
-import Select from "@/components/shared/Select";
 import InputDate from "@/components/shared/InputDate";
-import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 import TextArea from "@/components/shared/TextArea";
+import SearchableSelect from "@/components/shared/SearchableSelect";
 import ToggleSwitch from "@/components/shared/ToggleSwitch";
-import { useState } from "react";
+import ColoredButton from "@/components/shared/ColoredButton";
+import Modal from "@/components/modal/Modal";
+import { Motion } from "@/components/animation/Motion";
+
+// API, schemas, hooks e assets
+import { clientSchema, ClientFormData } from "@/schemas/clientSchema"; // Usa o novo schema
+import { createClient, getClientFormData, ClientDTO } from "@/api/clientRoutes";
+import { useResourceMutation } from "@/hooks/useResourceMutation";
+import IconSad from "@/assets/images/famicons_sad.png";
+
+
+// VERIFICAR IS MANDATORY NOS INPUTS E TESTAR
+
 
 const CreateClient = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isClientActive, setIsClientActive] = useState(false);
-
   const previousRoute = location.state?.previousRoute;
+
+  const { data: formData, isLoading: isLoadingFormData } = useQuery({
+    queryKey: ["clientFormData"],
+    queryFn: getClientFormData,
+  });
+
+  const {
+    mutate,
+    isPending,
+    isErrorModalVisible,
+    errorModalMessage,
+    closeErrorModal,
+  } = useResourceMutation<ClientDTO>({
+    mutationFn: ({ payload }) => createClient(payload),
+    successToastMessage: "Cliente cadastrado com sucesso!",
+    successNavigationRoute: previousRoute || "/clientes",
+    errorModalMessage: "Não foi possível cadastrar o cliente.",
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ClientFormData>({
+    resolver: zodResolver(clientSchema),
+    defaultValues: {
+      enterpriseName: "",
+      contactName: "",
+      contactPhone: "",
+      contactEmail: "",
+      isActive: true,
+      businessId: undefined,
+    },
+    mode: "onBlur",
+  });
+
+  const onSubmit = (data: ClientFormData) => {
+    const payload: ClientDTO = {
+      nome_empresa: data.enterpriseName,
+      nome_responsavel: data.contactName,
+      id_setor_negocio: data.businessId ?? 0,
+      email: data.contactEmail ?? "",
+      telefone: data.contactPhone ?? "",
+      data_entrada: data.entryDate ?? "",
+      data_fim_contrato: data.contractEndDate ?? "",
+      desc_contrato: data.contractDescription ?? "",
+      briefing: data.briefing ?? "",
+      ativo: data.isActive ?? false,
+      classificacao: data.classification ?? "",
+    };
+
+    console.log("Cliente payload: ", payload);
+
+    mutate({ payload });
+
+    
+  };
+
+  const businessSectorOptions =
+    formData?.setoresNegocio?.map((s) => ({
+      value: s.id_setor_negocio,
+      label: s.nome_setor_negocio,
+    })) || [];
 
   return (
     <>
+      <Modal
+        title="Erro!"
+        description={errorModalMessage}
+        onClick1={closeErrorModal}
+        isModalVisible={isErrorModalVisible}
+        buttonTitle1="FECHAR"
+        isError={true}
+        iconImage={IconSad}
+      />
       <BaseScreen>
-        <BackButton onClick={() => navigate(previousRoute)} />
+        <BackButton onClick={() => navigate(previousRoute || "/clientes")} />
         <PageTitle
-          // icon client
           icon="fa-solid fa-user-tie"
           marginTop="mt-4"
-          title={`Cadastrar Cliente`}
-        ></PageTitle>
+          title="Cadastrar Cliente"
+        />
         <Motion>
           <Box
             title="Novo Cliente"
@@ -39,116 +122,213 @@ const CreateClient = () => {
             width="w-full"
             height="h-fit"
           >
-            <InputTitle title="Cliente"></InputTitle>
-
-            <div className="flex flex-row items-center gap-4">
-            <InputString
-              title="NOME DO CLIENTE"
-              width="w-2/3"
-              isMandatory={true}
-              placeholder="Pesquise o cliente..."
-              height="h-[40px]"
-            />
-            <ToggleSwitch
-              title="CLIENTE ATIVO?"
-              isMandatory={false}
-              isChecked={isClientActive}
-              onChange={(e) => setIsClientActive(e.target.checked)}
-
-
-
-            />
-            </div>
-
-            <div className="flex flex-row w-full gap-2">
-              <Select
-                isMandatory={false}
-                title="SETOR DE NEGÓCIO"
-                width="w-2/3"
-                options={[{ id: 1, name: "Alimentício" }, { id: 2, name: "Varejo" },]}
-
-              ></Select>
-              <div className="mt-3 w-1/3">
-                <PlainButton
-                  title="NOVO SETOR DE NEGÓCIO"
-                  color="bg-customYellow"
-                  height="h-fit"
-                  width="w-full"
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <InputTitle title="Dados do Cliente" />
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-row items-end gap-4">
+                  <Controller
+                    name="enterpriseName"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        {...field}
+                        title="NOME DO CLIENTE"
+                        width="w-2/3"
+                        height="h-[40px]"
+                        isMandatory
+                        placeholder="Digite o nome do cliente..."
+                        errorMessage={errors.enterpriseName?.message}
+                        borderColor={errors.enterpriseName ? "border-customRedAlert" : "border-customYellow"}
+                      />
+                    )}
+                  />
+                  <div className="w-1/3 mb-1">
+                    <Controller
+                      name="isActive"
+                      control={control}
+                      render={({ field }) => (
+                        <ToggleSwitch
+                          isMandatory={false}
+                          title="CLIENTE ATIVO?"
+                          isChecked={field.value ?? false}
+                          onChange={field.onChange}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+                <Controller
+                    name="classification"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        {...field}
+                        title="CLASSIFICAÇÃO"
+                        width="w-2/3"
+                        height="h-[40px]"
+                        isMandatory={false}
+                        placeholder="ex.: Lead Qualificado"
+                        errorMessage={errors.enterpriseName?.message}
+                        borderColor={errors.enterpriseName ? "border-customRedAlert" : "border-customYellow"}
+                      />
+                    )}
+                  />
+                <Controller
+                  name="businessId"
+                  control={control}
+                  render={({ field }) => (
+                    <SearchableSelect
+                      title="SETOR DE NEGÓCIO"
+                      isMandatory
+                      options={businessSectorOptions}
+                      value={
+                        businessSectorOptions.find(
+                          (c) => c.value === field.value
+                        ) || null
+                      }
+                      onChange={(option) => field.onChange(option?.value)}
+                      placeholder={
+                        isLoadingFormData
+                          ? "Carregando..."
+                          : "Selecione um setor"
+                      }
+                      errorMessage={errors.businessId?.message}
+                      width="w-full"
+                    />
+                  )}
+                />
+                <div className="flex gap-4">
+                  {/* Controller agora usa 'entryDate' */}
+                  <Controller
+                    name="entryDate"
+                    control={control}
+                    render={({ field }) => (
+                      <InputDate
+                        isMandatory={false}
+                        {...field}
+                        title="DATA DE ENTRADA"
+                        width="w-1/2"
+                        errorMessage={errors.entryDate?.message}
+                        borderColor={errors.entryDate ? "#EF4444" : "#F6BC0A"}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="contractEndDate"
+                    control={control}
+                    render={({ field }) => (
+                      <InputDate
+                        {...field}
+                        isMandatory={false}
+                        title="DATA DE FIM CONTRATO"
+                        width="w-1/2"
+                        errorMessage={errors.contractEndDate?.message}
+                        borderColor={errors.contractEndDate ? "#EF4444" : "#F6BC0A"}
+                      />
+                    )}
+                  />
+                </div>
+                <Controller
+                  name="contractDescription"
+                  control={control}
+                  render={({ field }) => (
+                    <TextArea
+                      isMandatory={false}
+                      {...field}
+                      title="DESCRIÇÃO DO CONTRATO"
+                      placeholder="Digite um resumo do contrato..."
+                      height="h-[100px]"
+                      errorMessage={errors.contractDescription?.message}
+                      borderColor={errors.contractDescription ? "border-customRedAlert" : "border-customYellow"}
+                    />
+                  )}
+                />
+                {/* Controller agora usa 'briefing' */}
+                <Controller
+                  name="briefing"
+                  control={control}
+                  render={({ field }) => (
+                    <TextArea
+                      {...field}
+                      title="BRIEFING"
+                      isMandatory={false}
+                      placeholder="Digite o briefing do cliente..."
+                      height="h-[100px]"
+                      errorMessage={errors.briefing?.message}
+                      borderColor={errors.briefing ? "border-customRedAlert" : "border-customYellow"}
+                    />
+                  )}
                 />
               </div>
-            </div>
 
-            <div className="flex gap-4 flex-row mb-2 justify-between items-center w-[100%]">
-              <InputDate
+              <InputTitle title="Responsável pelo Cliente" />
+              <div className="flex flex-col gap-4">
+                <Controller
+                  name="contactName"
+                  control={control}
+                  render={({ field }) => (
+                    <InputString
+                      height="h-[40px]"
+                      {...field}
+                      title="NOME DO RESPONSÁVEL"
+                      width="w-2/3"
+                      isMandatory
+                      placeholder="Digite o nome..."
+                      errorMessage={errors.contactName?.message}
+                      borderColor={errors.contactName ? "border-customRedAlert" : "border-customYellow"}
+                    />
+                  )}
+                />
+                <div className="flex gap-4">
+                  <Controller
+                    name="contactPhone"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        height="h-[40px]"
+                        {...field}
+                        title="NÚMERO PARA CONTATO"
+                        width="w-1/2"
+                        isMandatory
+                        placeholder="(__) _____-____"
+                        mask="(00) 00000-0000"
+                        errorMessage={errors.contactPhone?.message}
+                        borderColor={errors.contactPhone ? "border-customRedAlert" : "border-customYellow"}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="contactEmail"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        isMandatory={false}
+                        height="h-[40px]"
+                        {...field}
+                        title="E-MAIL PARA CONTATO"
+                        width="w-1/2"
+                        placeholder="Digite o e-mail..."
+                        errorMessage={errors.contactEmail?.message}
+                        borderColor={errors.contactEmail ? "border-customRedAlert" : "border-customYellow"}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
 
-                title="DATA DE ENTRADA"
-                isMandatory={false}
-                width="w-1/2"
-
-              ></InputDate>
-              <InputDate
-
-                title="DATA DE FIM CONTRATO"
-                isMandatory={false}
-                width="w-1/2"
-
-              ></InputDate>
-            </div>
-            <TextArea
-              title="DESCRIÇÃO DO CONTRATO"
-              isMandatory={false}
-              placeholder="Digite um resumo do contrato acordado..."
-              height="h-[100px]"
-            />
-            <TextArea
-              title="BRIEFING"
-              isMandatory={false}
-              placeholder="Digite o briefing do cliente..."
-              height="h-[100px]"
-            />
-            <div className="flex mt-4">
-              <InputTitle title="Responsável"></InputTitle>
-            </div>
-            <InputString
-              title="NOME DO RESPONSÁVEL"
-              width="w-2/3"
-              isMandatory={true}
-              placeholder="Digite o nome..."
-              height="h-[40px]"
-            />
-            <InputString
-              title="NÚMERO PARA CONTATO"
-              width="w-2/3"
-              isMandatory={true}
-              placeholder="(__) _____-____"
-              mask="(99) 99999-9999"
-              height="h-[40px]"
-            />
-            <InputString
-              title="E-MAIL PARA CONTATO"
-              width="w-2/3"
-              isMandatory={false}
-              placeholder="Pesquise o cliente..."
-              height="h-[40px]"
-            />
-
-
-
-            <div className="flex w-full mt-10 justify-center">
-              <ColoredButton
-                onClick={() => {
-                  // navigate("/reports");
-                }}
-                title="CADASTRAR CLIENTE"
-                width="w-[40%]"
-                icon={"fa-solid fa-floppy-disk"}
-                color="customYellow"
-                justify="justify-center"
-              ></ColoredButton>
-            </div>
+              <div className="flex w-full mt-10 justify-center">
+                <ColoredButton
+                  type="submit"
+                  title={isPending ? "CADASTRANDO..." : "CADASTRAR CLIENTE"}
+                  width="w-[40%]"
+                  icon="fa-solid fa-floppy-disk"
+                  color="customYellow"
+                  justify="justify-center"
+                />
+              </div>
+            </form>
           </Box>
         </Motion>
-        <ScrollToEndArrow />
       </BaseScreen>
     </>
   );

@@ -60,6 +60,22 @@ export const validateInput = (value: string, type: string) => {
 
   }
 
+  const maxContractEndDate = new Date();
+  maxContractEndDate.setFullYear(currentDate.getFullYear() + 50);
+  if (type === "contractEndDate") {
+    const inputDate = new Date(value);
+    // - data de término de contrato não pode ser em data passada
+
+    if (inputDate < currentDate) {
+      return false;
+    }
+    // - data de término de contrato não pode ser em data futura (50 anos)
+    if (inputDate > maxContractEndDate) {
+      return false;
+    }
+    return dateRegex.test(value) && value.length > 0;
+  }
+
   if (type === "deadline") {
     // CORREÇÃO DE FUSO: Constrói a data manualmente para garantir hora local.
     const dateParts = value.split('-').map(part => parseInt(part, 10));
@@ -67,7 +83,7 @@ export const validateInput = (value: string, type: string) => {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     // - data de prazo não pode ser em data passada
     if (inputDate < today) {
       return false;

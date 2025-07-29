@@ -31,12 +31,54 @@ export interface ClientItem {
   classificacao: string;
 }
 
+export interface ClientFormDataResponse {
+  setoresNegocio: {
+    id_setor_negocio: number;
+    nome_setor_negocio: string;
+  }[];
+}
+
+
+
+export interface PaginatedClientsResponse {
+  current_page: number;
+  data: ClientItem[];
+  last_page: number;
+  total: number;
+}
+
+// FORM
+export const getClientFormData = async (): Promise<ClientFormDataResponse> => {
+  try {
+    const response = await api.get("/cliente/form");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar dados do formulário de cliente:", error);
+    throw error;
+  }
+};
 
 // READ ALL
-const readClients = async (): Promise<ClientItem[]> => {
+const getClients = async (): Promise<ClientItem[]> => {
   try {
     const response = await api.get("/cliente");
     return response.data.data || [];
+  } catch (error) {
+    console.error("Erro ao buscar clientes:", error);
+    throw error;
+  }
+};
+
+const readClients = async (page: number, search: string): Promise<PaginatedClientsResponse> => {
+  try {
+    const response = await api.get("/cliente", {
+      params: {
+        page: page,
+        search: search,
+        por_pagina: 10
+      }
+    });
+    return response.data.data;
   } catch (error) {
     console.error("Erro ao buscar clientes:", error);
     throw error;
@@ -47,6 +89,8 @@ const readClients = async (): Promise<ClientItem[]> => {
 const createClient = async (data: ClientDTO): Promise<any> => {
   try {
     const response = await api.post("/cliente", data);
+    console.log(response);
+
     return response.data;
   } catch (error) {
     console.error("Erro ao criar cliente:", error);
@@ -87,4 +131,4 @@ const deleteClientById = async (id: number): Promise<any> => {
   }
 }
 
-export { createClient, readClients, readClientById, updateClientById, deleteClientById };
+export { createClient, getClients, readClients, readClientById, updateClientById, deleteClientById };
