@@ -79,13 +79,16 @@ const ManageWorkers = () => {
           title="Lista de Colaboradores"
           subtitle="Visualização da lista de colaboradores para configuração."
         >
-          <TableHeader
+          <TableItem
             columns={[
-              { width: "w-[33%]", content: "NOME" },
-              { width: "w-[33%]", content: "EQUIPE" },
-              { width: "w-[33%]", content: "SETOR" },
+              { width: "25%", content: "NOME" },
+              { width: "25%", content: "EQUIPE" },
+              { width: "25%", content: "SETOR" },
+              { width: "25%", content: "AÇÕES" },
             ]}
-          ></TableHeader>
+            isTableHeader={true}
+            itemHeight="h-12"
+          />
           <>
             <div className="h-[80%] overflow-y-auto">
               {loading ? (
@@ -98,13 +101,17 @@ const ManageWorkers = () => {
                     itemHeight="h-16"
                     columns={[
                       {
-                        width: "w-[33%]",
-                        content: funcionario.first_name,
+                        width: "w-[25%]",
+                        content: "Funcionário",
                       },
-                      { width: "w-[33%]", content: "Equipe" },
-                      { width: "w-[33%]", content: "Setor" },
+                      { width: "25%", content: "Equipe" },
+                      { width: "25%", content: "Setor" },
+                      { width: "25%", content: (
+                        <i className="fa-solid fa-pencil" title="Visualizar / Editar"></i>
+                      )},
                     ]}
-                    icon="fa-eye"
+                    isTableHeader={false}
+                    
                   ></TableItem>
                 ))
               )}

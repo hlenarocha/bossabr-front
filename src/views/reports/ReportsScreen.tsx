@@ -4,7 +4,6 @@ import Box from "@/components/box/BoxContent";
 import InputString from "@/components/shared/InputString";
 import InputTitle from "@/components/title/InputTitle";
 import TableItem from "@/components/table/TableItem";
-import TableHeader from "@/components/table/TableHeader";
 import ColoredButton from "@/components/shared/ColoredButton";
 import { useNavigate } from "react-router-dom";
 import { Motion } from "@/components/animation/Motion";
@@ -73,93 +72,42 @@ const ReportScreen = () => {
           <InputTitle title="Atividades do dia" />
           <TableItem
             columns={[
-              {
-                width: "10%",
-                content: "ID REGISTRO",
-              },
+              // {
+              //   width: "10%",
+              //   content: "ID REGISTRO",
+              // },
               { width: "20%", content: "EQUIPE" },
               { width: "20%", content: "SETOR" },
               { width: "30%", content: "OBSERVAÇÃO" },
               { width: "20%", content: "STATUS" },
+              { width: "10%", content: "AÇÕES" },
             ]}
+            isTableHeader={true}
+            itemHeight="h-12"
           />
 
           <div className="h-[350px] overflow-y-auto">
             <TableItem
-              itemWidth="w-full "
-              itemHeight="h-16"
               columns={[
+                { width: "20%", content: "Equipe A" },
+                { width: "20%", content: "Setor X" },
+                { width: "30%", content: "Atividade realizada com sucesso." },
+                { width: "20%", content: "Concluído" },
                 {
-                  width: "w-[16%]",
-                  content: "ID Registro",
+                  width: "10%",
+                  content: (
+                    <i
+                      className="fa-solid fa-eye text-lg text-customYellow hover:cursor-pointer"
+                      title="Visualizar Detalhes"
+                      onClick={() => navigate("/reports/details")}
+                    ></i>
+                  ),
                 },
-                { width: "w-[16%]", content: "Equipe" },
-                { width: "w-[16%]", content: "Setor" },
-                { width: "w-[30%]", content: "Observação" },
-                { width: "w-[20%]", content: "Status" },
               ]}
-              icon="fa-pencil"
-            ></TableItem>
-            <TableItem
-              itemWidth="w-full "
-              itemHeight="h-16"
-              columns={[
-                {
-                  width: "w-[16%]",
-                  content: "ID Registro",
-                },
-                { width: "w-[16%]", content: "Equipe" },
-                { width: "w-[16%]", content: "Setor" },
-                { width: "w-[30%]", content: "Observação" },
-                { width: "w-[20%]", content: "Status" },
-              ]}
-              icon="fa-pencil"
-            ></TableItem>
-            <TableItem
-              itemWidth="w-full "
-              itemHeight="h-16"
-              columns={[
-                {
-                  width: "w-[16%]",
-                  content: "ID Registro",
-                },
-                { width: "w-[16%]", content: "Equipe" },
-                { width: "w-[16%]", content: "Setor" },
-                { width: "w-[30%]", content: "Observação" },
-                { width: "w-[20%]", content: "Status" },
-              ]}
-              icon="fa-eye"
-            ></TableItem>
-            <TableItem
-              itemWidth="w-full "
-              itemHeight="h-16"
-              columns={[
-                {
-                  width: "w-[16%]",
-                  content: "ID Registro",
-                },
-                { width: "w-[16%]", content: "Equipe" },
-                { width: "w-[16%]", content: "Setor" },
-                { width: "w-[30%]", content: "Observação" },
-                { width: "w-[20%]", content: "Status" },
-              ]}
-              icon="fa-eye"
-            ></TableItem>
-            <TableItem
-              itemWidth="w-full"
-              itemHeight="h-16"
-              columns={[
-                {
-                  width: "w-[16%]",
-                  content: "ID Registro",
-                },
-                { width: "w-[16%]", content: "Equipe" },
-                { width: "w-[16%]", content: "Setor" },
-                { width: "w-[30%]", content: "Observação" },
-                { width: "w-[20%]", content: "Status" },
-              ]}
-              icon="fa-eye"
-            ></TableItem>
+              isTableHeader={false}
+              itemHeight="h-12"
+            />
+
           </div>
           <div className="flex w-full mt-10 justify-center"></div>
         </Box>

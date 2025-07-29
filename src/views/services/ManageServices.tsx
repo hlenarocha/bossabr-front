@@ -108,11 +108,10 @@ const ManageServices = () => {
         >
           <TableItem
             columns={[
-              { width: "10%", content: "ID" },
               { width: "30%", content: "NOME DO SERVIÇO" },
               { width: "30%", content: "SETOR" },
-              { width: "15%", content: "PONTUAÇÃO" },
-              { width: "15%", content: "AÇÕES" },
+              { width: "20%", content: "PONTUAÇÃO" },
+              { width: "20%", content: "AÇÕES" },
             ]}
             isTableHeader={true}
             itemHeight="h-12"
@@ -128,10 +127,7 @@ const ManageServices = () => {
                 <TableItem
                   key={service.id_tipo_servico}
                   columns={[
-                    {
-                      width: "10%",
-                      content: String(service.id_tipo_servico),
-                    },
+                    
                     { width: "30%", content: service.nome_servico },
                     {
                       width: "30%",
@@ -139,11 +135,11 @@ const ManageServices = () => {
                         sectorMap.get(service.id_setor) || "Não encontrado",
                     },
                     {
-                      width: "15%",
+                      width: "20%",
                       content: String(service.pontuacao ?? "N/A"),
                     },
                     {
-                      width: "15%",
+                      width: "20%",
                       content: (
                         <i
                           className={`fa-solid fa-pencil text-lg text-customYellow`}
