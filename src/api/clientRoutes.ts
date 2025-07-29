@@ -69,6 +69,7 @@ const getClients = async (): Promise<ClientItem[]> => {
   }
 };
 
+// PAGINATED READ
 const readClients = async (page: number, search: string): Promise<PaginatedClientsResponse> => {
   try {
     const response = await api.get("/cliente", {

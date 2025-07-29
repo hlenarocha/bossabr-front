@@ -124,7 +124,7 @@ const CreateClient = () => {
           >
             <form onSubmit={handleSubmit(onSubmit)}>
               <InputTitle title="Dados do Cliente" />
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 mb-4">
                 <div className="flex flex-row items-end gap-4">
                   <Controller
                     name="enterpriseName"
@@ -220,7 +220,7 @@ const CreateClient = () => {
                       <InputDate
                         {...field}
                         isMandatory={false}
-                        title="DATA DE FIM CONTRATO"
+                        title="DATA DE FIM DO CONTRATO"
                         width="w-1/2"
                         errorMessage={errors.contractEndDate?.message}
                         borderColor={errors.contractEndDate ? "#EF4444" : "#F6BC0A"}

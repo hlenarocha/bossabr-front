@@ -71,18 +71,18 @@ const ReportScreen = () => {
           </div>
 
           <InputTitle title="Atividades do dia" />
-          <TableHeader
+          <TableItem
             columns={[
               {
-                width: "w-[16%]",
+                width: "10%",
                 content: "ID REGISTRO",
               },
-              { width: "w-[16%]", content: "EQUIPE" },
-              { width: "w-[16%]", content: "SETOR" },
-              { width: "w-[30%]", content: "OBSERVAÇÃO" },
-              { width: "w-[20%]", content: "STATUS" },
+              { width: "20%", content: "EQUIPE" },
+              { width: "20%", content: "SETOR" },
+              { width: "30%", content: "OBSERVAÇÃO" },
+              { width: "20%", content: "STATUS" },
             ]}
-          ></TableHeader>
+          />
 
           <div className="h-[350px] overflow-y-auto">
             <TableItem
