@@ -60,7 +60,7 @@ const CreateTeam = () => {
       responsibleId: undefined,
       isInternal: true,
     },
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   // Função chamada ao submeter o formulário válido

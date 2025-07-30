@@ -30,6 +30,8 @@ import Clientes from "@/views/clients/ClientsScreen";
 import DetalhesCliente from "@/views/clients/ClientDetails";
 import CriarCliente from "@/views/clients/CreateClient";
 import GerenciarClientes from "@/views/clients/ManageClients";
+import EditarCliente from "@/views/clients/EditClient";
+
 
 // Telas de Colaboradores
 import GerenciarColaboradores from "@/views/workers/ManageWorkers";
@@ -101,6 +103,7 @@ const AppContainer = () => {
     { path: "/configuracoes/clientes/novo", element: <CriarCliente /> },
     { path: "/clientes/:id", element: <DetalhesCliente /> },
     { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
+    { path: "configuracoes/clientes/:id", element: <EditarCliente /> },
 
     // Colaboradores
     {

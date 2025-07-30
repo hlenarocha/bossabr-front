@@ -66,7 +66,7 @@ const CreateClient = () => {
       isActive: true,
       businessId: undefined,
     },
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   const onSubmit = (data: ClientFormData) => {
@@ -135,7 +135,7 @@ const CreateClient = () => {
                         title="NOME DO CLIENTE"
                         width="w-2/3"
                         height="h-[40px]"
-                        isMandatory
+                        isMandatory={true}
                         placeholder="Digite o nome do cliente..."
                         errorMessage={errors.enterpriseName?.message}
                         borderColor={errors.enterpriseName ? "border-customRedAlert" : "border-customYellow"}
@@ -148,7 +148,7 @@ const CreateClient = () => {
                       control={control}
                       render={({ field }) => (
                         <ToggleSwitch
-                          isMandatory={false}
+                          isMandatory={true}
                           title="CLIENTE ATIVO?"
                           isChecked={field.value ?? false}
                           onChange={field.onChange}
@@ -168,8 +168,8 @@ const CreateClient = () => {
                         height="h-[40px]"
                         isMandatory={false}
                         placeholder="ex.: Lead Qualificado"
-                        errorMessage={errors.enterpriseName?.message}
-                        borderColor={errors.enterpriseName ? "border-customRedAlert" : "border-customYellow"}
+                        errorMessage={errors.classification?.message}
+                        borderColor={errors.classification ? "border-customRedAlert" : "border-customYellow"}
                       />
                     )}
                   />
@@ -179,7 +179,7 @@ const CreateClient = () => {
                   render={({ field }) => (
                     <SearchableSelect
                       title="SETOR DE NEGÓCIO"
-                      isMandatory
+                      isMandatory={false}
                       options={businessSectorOptions}
                       value={
                         businessSectorOptions.find(
@@ -272,7 +272,7 @@ const CreateClient = () => {
                       {...field}
                       title="NOME DO RESPONSÁVEL"
                       width="w-2/3"
-                      isMandatory
+                      isMandatory={true}
                       placeholder="Digite o nome..."
                       errorMessage={errors.contactName?.message}
                       borderColor={errors.contactName ? "border-customRedAlert" : "border-customYellow"}
@@ -289,7 +289,7 @@ const CreateClient = () => {
                         {...field}
                         title="NÚMERO PARA CONTATO"
                         width="w-1/2"
-                        isMandatory
+                        isMandatory={false}
                         placeholder="(__) _____-____"
                         mask="(00) 00000-0000"
                         errorMessage={errors.contactPhone?.message}

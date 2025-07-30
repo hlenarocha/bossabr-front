@@ -10,6 +10,7 @@ interface TextAreaProps {
   borderColor?: string;
   errorMessage?: string;
   rounded?: string;
+  value?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
@@ -31,6 +32,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
         <textarea
           ref={ref}
+          value={props.value || ""}
           onChange={(e) => {
             if (props.onChange) {
               props.onChange(e);

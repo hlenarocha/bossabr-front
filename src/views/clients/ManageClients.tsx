@@ -30,7 +30,7 @@ const ManageClients = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
-  
+
   // Debounce para a busca
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -41,10 +41,10 @@ const ManageClients = () => {
   }, [searchTerm]);
 
   // Busca a lista de clientes de forma paginada
-  const { 
-    data: paginatedClients, 
-    isLoading: isLoadingClients, 
-    isError: isErrorClients 
+  const {
+    data: paginatedClients,
+    isLoading: isLoadingClients,
+    isError: isErrorClients,
   } = useReadClients(currentPage, debouncedSearchTerm);
 
   // Busca os dados de apoio (setores de negócio) para exibir os nomes
@@ -56,7 +56,12 @@ const ManageClients = () => {
   // Cria um mapa para buscar o nome do setor de negócio por ID
   const businessSectorMap = useMemo(() => {
     if (!formData?.setoresNegocio) return new Map<number, string>();
-    return new Map(formData.setoresNegocio.map((s) => [s.id_setor_negocio, s.nome_setor_negocio]));
+    return new Map(
+      formData.setoresNegocio.map((s) => [
+        s.id_setor_negocio,
+        s.nome_setor_negocio,
+      ])
+    );
   }, [formData]);
 
   // Efeito para exibir o toast
@@ -76,7 +81,11 @@ const ManageClients = () => {
         <BackButton onClick={() => navigate("/configuracoes")} />
         <ColoredButton
           justify="justify-center"
-          onClick={() => navigate("/configuracoes/clientes/novo", { state: { previousRoute: "/configuracoes/clientes" } })}
+          onClick={() =>
+            navigate("/configuracoes/clientes/novo", {
+              state: { previousRoute: "/configuracoes/clientes" },
+            })
+          }
           color="customYellow"
           width="w-[330px]"
           title="ADICIONAR CLIENTE"
@@ -115,8 +124,8 @@ const ManageClients = () => {
             isTableHeader={true}
             itemHeight="h-12"
           />
-          
-          <div className="h-[75%] overflow-y-auto">
+
+          <div className="h-[350px] overflow-y-auto">
             <ResourceListView
               isLoading={isLoading}
               isError={isErrorClients}
@@ -129,11 +138,34 @@ const ManageClients = () => {
                   columns={[
                     { width: "25%", content: client.nome_empresa },
                     { width: "25%", content: client.nome_responsavel },
-                    { width: "25%", content: businessSectorMap.get(client.id_setor_negocio) || "Não encontrado" },
+                    {
+                      width: "25%",
+                      content:
+                        businessSectorMap.get(client.id_setor_negocio) ||
+                        "Não encontrado",
+                    },
                     { width: "10%", content: client.ativo ? "Sim" : "Não" },
-                    { width: "15%", content: ( <i className="fa-solid fa-pencil text-lg text-customYellow hover:cursor-pointer" title="Visualizar / Editar" onClick={() => navigate(`/configuracoes/clientes/${client.id_cliente}`)} ></i> )},
+                    {
+                      width: "15%",
+                      content: (
+                        <i
+                          className="fa-solid fa-pencil text-lg text-customYellow hover:cursor-pointer"
+                          title="Visualizar / Editar"
+                          onClick={() =>
+                            navigate(
+                              `/configuracoes/clientes/${client.id_cliente}`
+                            )
+                          }
+                        ></i>
+                      ),
+                    },
                   ]}
                   itemHeight="h-12"
+                  onClick={() =>
+                    navigate(
+                      `/configuracoes/clientes/${client.id_cliente}`
+                    )
+                  }
                 />
               )}
             />

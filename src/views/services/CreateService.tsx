@@ -57,7 +57,7 @@ const CreateService = () => {
       sectorId: undefined,
       pontuation: 0,
     },
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   const onSubmit = (data: ServiceFormData) => {
