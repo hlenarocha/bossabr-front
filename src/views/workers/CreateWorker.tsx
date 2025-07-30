@@ -42,15 +42,15 @@ const mockSectors = [
 const CreateWorker = () => {
   const navigate = useNavigate();
 
-  const {
-    data: teamsResponse,
-    isLoading: isLoadingTeams,
-    isError: isErrorTeams,
-  } = useQuery({
-    queryFn: () => getTeams(),
-    staleTime: 1000 * 60 * 5,
-    queryKey: ["teams"],
-  });
+  // const {
+  //   data: teamsResponse,
+  //   isLoading: isLoadingTeams,
+  //   isError: isErrorTeams,
+  // } = useQuery({
+  //   queryFn: () => getTeams(),
+  //   staleTime: 1000 * 60 * 5,
+  //   queryKey: ["teams"],
+  // });
 
   const [isModalSuccessVisible, setIsModalSucessVisible] = useState(false);
   const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
@@ -67,7 +67,7 @@ const CreateWorker = () => {
       cnpj: "",
       roleId: 0,
       sectorId: 0,
-      selectedTeam: 0,
+      teamId: 0,
       email: "",
       phone: "",
       birthDate: "",
@@ -89,8 +89,8 @@ const CreateWorker = () => {
       telefone: data.phone,
       data_aniversario: data.birthDate ?? "",
       data_entrada: data.entryDate ?? "",
-      role_id: data.roleId,
-      id_equipe: data.selectedTeam,
+      id_cargo: data.roleId,
+     // id_equipe: data.teamId,
     });
   };
 
@@ -242,26 +242,27 @@ const CreateWorker = () => {
                 />
                 <div className="flex gap-4 flex-row justify-normal items-center w-full">
                    <Controller
-                      name="selectedTeam"
+                      name="teamId"
                       control={control}
                       render={({ field }) => (
                          <Select
                             {...field}
                             onChange={(e) => field.onChange(Number(e.target.value))}
                             options={
-                              isLoadingTeams
-                                ? [{ id: 0, name: "Carregando..." }]
-                                : isErrorTeams
-                                ? [{ id: 0, name: "Erro ao carregar." }]
-                                : teamsResponse?.map((t: any) => ({
-                                    id: t.id_equipe,
-                                    name: t.nome_equipe,
-                                  })) || []
+                              [{id: 0, name: "EQUIPE 1"}]
+                              // isLoadingTeams
+                              //   ? [{ id: 0, name: "Carregando..." }]
+                              //   : isErrorTeams
+                              //   ? [{ id: 0, name: "Erro ao carregar." }]
+                              //   : teamsResponse?.map((t: any) => ({
+                              //       id: t.id_equipe,
+                              //       name: t.nome_equipe,
+                              //     })) || []
                             }
                             title="EQUIPE"
                             isMandatory
                             width="w-1/2"
-                            errorMessage={errors.selectedTeam?.message}
+                            errorMessage={errors.teamId?.message}
                           />
                       )}
                     />

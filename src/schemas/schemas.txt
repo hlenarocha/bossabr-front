@@ -1,0 +1,119 @@
+AtividadeDesigner{
+id_ativ_designer	[...]
+id_demanda*	[...]
+id_status	[...]
+data_inicio	[...]
+data_fim	[...]
+link_drive	[...]
+observacoes	[...]
+}
+AtividadeSocialMedia{
+id_ativ_social_media	[...]
+id_demanda*	[...]
+id_status*	[...]
+data_inicio	[...]
+data_fim	[...]
+texto	[...]
+link_drive	[...]
+observacoes	[...]
+}
+Auditoria{
+id	[...]
+user_id	[...]
+event	[...]
+auditable_type	[...]
+auditable_id	[...]
+old_values	{...}
+example: OrderedMap { "nome": "antigo" }
+new_values	{...}
+example: OrderedMap { "nome": "novo" }
+url	[...]
+ip_address	[...]
+user_agent	[...]
+created_at	[...]
+updated_at	[...]
+}
+Cargo{
+id_cargo	[...]
+cargo*	[...]
+descricao	[...]
+created_at	[...]
+updated_at	[...]
+deleted_at	[...]
+}
+Cliente{
+id_cliente	[...]
+id_setor_negocio	[...]
+nome_empresa*	[...]
+nome_responsavel*	[...]
+email	[...]
+telefone	[...]
+data_entrada	[...]
+data_fim_contrato	[...]
+desc_contrato	[...]
+briefing	[...]
+ativo*	[...]
+classificacao	[...]
+}
+DataMarketing{
+id_data_marketing	[...]
+data_comemoracao*	[...]
+comemoracao*	[...]
+}
+Demanda{
+id_demanda	[...]
+id_tipo_servico*	[...]
+id_pessoa*	[...]
+id_cliente*	[...]
+quantidade*	[...]
+prazo*	[...]
+descricao	[...]
+link_drive	[...]
+id_status	[...]
+}
+Equipe{
+id_equipe	[...]
+id_setor*	[...]
+nome_equipe*	[...]
+responsavel_equipe	[...]
+equipe_interna*	[...]
+}
+EquipePessoa{
+id_equipe_pessoa	integer
+example: 1
+id_equipe*	integer
+example: 1
+id_pessoa*	integer
+example: 1
+}
+Pessoa{
+id_pessoa	[...]
+id_cargo*	[...]
+first_name*	[...]
+last_name	[...]
+email*	[...]
+cnpj	[...]
+telefone	[...]
+data_entrada	[...]
+data_nascimento	[...]
+avatar	[...]
+}
+Setor{
+id_setor	[...]
+nome_setor*	[...]
+responsavel_setor	[...]
+}
+SetorNegocio{
+id_setor_negocio	[...]
+nome_setor_negocio*	[...]
+}
+Status{
+id_status	[...]
+status*	[...]
+}
+TipoServico{
+id_tipo_servico	[...]
+id_setor*	[...]
+nome_servico*	[...]
+pontuacao	[...]
+}
