@@ -36,6 +36,7 @@ const createWorker = async (data: WorkerDTO) => {
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
 
   }
 };
@@ -46,7 +47,9 @@ const readWorker = async () => {
     return response.data;
   } catch (error) {
     console.error(error);
-    }
+    throw error;
+
+  }
 }
 
 const readWorkerById = async (id: number) => {
@@ -55,6 +58,8 @@ const readWorkerById = async (id: number) => {
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
+
   }
 };
 
@@ -64,6 +69,8 @@ const updateWorkerById = async (id: number, data: WorkerDTO) => {
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
+
   }
 };
 
@@ -73,6 +80,8 @@ const deleteWorkerById = async (id: number) => {
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
+
   }
 };
 

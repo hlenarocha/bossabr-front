@@ -1,32 +1,43 @@
-import PageTitle from "@/components/title/PageTitle";
+// hooks e bibliotecas
+import { useNavigate, useLocation } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+
+// componentes
 import BaseScreen from "../BaseScreen";
 import BackButton from "@/components/shared/BackButton";
 import Box from "@/components/box/BoxContent";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
-import { useLocation, useNavigate } from "react-router-dom";
-import PlainButton from "@/components/shared/PlainButton";
 import InputDate from "@/components/shared/InputDate";
 import TextArea from "@/components/shared/TextArea";
 import InputQuantity from "@/components/shared/InputQuantity";
 import ColoredButton from "@/components/shared/ColoredButton";
-import { Motion } from "@/components/animation/Motion";
-import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
-import { useResourceMutation } from "@/hooks/useResourceMutation";
-import { createDemand, DemandDTO } from "@/api/demandRoutes";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DemandFormData, demandSchema } from "@/schemas/demandSchema";
-import { Controller, useForm } from "react-hook-form";
-import IconSad from "@/assets/images/famicons_sad.png";
 import Modal from "@/components/modal/Modal";
 import SearchableSelect from "@/components/shared/SearchableSelect";
+import { Motion } from "@/components/animation/Motion";
+import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
+
+// API, schemas, hooks e assets
+import { useResourceMutation } from "@/hooks/useResourceMutation";
+import { createDemand, getDemandFormData, DemandDTO } from "@/api/demandRoutes";
+import { DemandFormData, demandSchema } from "@/schemas/demandSchema";
+import IconSad from "@/assets/images/famicons_sad.png";
+import PageTitle from "@/components/title/PageTitle";
 
 const CreateDemand = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const previousRoute = location.state?.previousRoute || "/demandas";
 
-  const previousRoute = location.state?.previousRoute;
+  // Busca os dados para os selects (clientes, serviços, etc.)
+  const { data: formData, isLoading: isLoadingFormData } = useQuery({
+    queryKey: ["demandFormData"],
+    queryFn: getDemandFormData,
+  });
 
+  // Hook para lidar com a criação da demanda
   const {
     mutate,
     isPending,
@@ -37,11 +48,9 @@ const CreateDemand = () => {
     mutationFn: ({ payload }) => createDemand(payload),
     successToastMessage: "Demanda cadastrada com sucesso!",
     successNavigationRoute: previousRoute,
-    errorModalMessage:
-      "Não foi possível cadastrar a demanda. Verifique os dados e tente novamente.",
+    errorModalMessage: "Não foi possível cadastrar a demanda.",
   });
 
-  // default values
   const {
     control,
     handleSubmit,
@@ -50,66 +59,51 @@ const CreateDemand = () => {
     resolver: zodResolver(demandSchema),
     defaultValues: {
       clientId: undefined,
+      serviceId: undefined,
       personId: undefined,
+      statusId: undefined,
       description: "",
-      quantity: 1, // começa com valor válido
+      quantity: 1,
       driveLink: "",
       deadline: "",
     },
-    mode: "onChange",
+    mode: "onBlur",
   });
 
+  // Mapeia os dados do formulário para o formato da API e envia
   const onSubmit = (data: DemandFormData) => {
     const payload: DemandDTO = {
-      id_tipo_servico: data.serviceId,
-      id_pessoa: data.personId,
       id_cliente: data.clientId,
-      quantidade: data.quantity || 1,
+      id_tipo_servico: data.serviceId,
       prazo: data.deadline,
-      descricao: data.description || "",
-      link_drive: data.driveLink || undefined,
+      id_pessoa: data.personId,
+      id_status: data.statusId,
+      descricao: data.description,
+      link_drive: data.driveLink,
+      quantidade: data.quantity,
     };
-
-    console.log("Payload a ser enviado para a API:", payload);
-
     mutate({ payload });
   };
 
-  // Dados mockados no formato { value, label } para o SearchableSelect
-  const mockClientOptions = [
-    { value: 1, label: "Innovatech Soluções Digitais Ltda." },
-    { value: 2, label: "AgroForte Produtos Agrícolas" },
-    { value: 3, label: "Construtora Horizonte Azul" },
-    { value: 4, label: "Varejão Econômico Supermercados" },
-    { value: 5, label: "LogiMax Transportes e Logística" },
-
-    { value: 6, label: "EducaMais Cursos Online" },
-    { value: 7, label: "Saúde e Bem-Estar Spa Natural" },
-    { value: 8, label: "TechNova Inovações Tecnológicas" },
-    { value: 9, label: "Moda e Estilo Boutique Elegante" },
-    { value: 10, label: "Gastronomia Gourmet Delícias" },
-
-    { value: 11, label: "Construções Sustentáveis EcoBuild" },
-    { value: 12, label: "Serviços Financeiros FinanMais" },
-    { value: 13, label: "Turismo e Viagens Mundo Afora" },
-    { value: 14, label: "Comunicação e Mídia ConectaCom" },
-    { value: 15, label: "Saúde Animal PetCare" },
-
-    { value: 16, label: "Educação Infantil Brincando e Aprendendo" },
-    { value: 17, label: "Beleza e Estética Glamour Beauty" },
-    { value: 18, label: "Serviços Jurídicos Justo & Claro" },
-    { value: 19, label: "Eventos e Festas Celebrações" },
-    { value: 20, label: "Consultoria Empresarial Sucesso Empresarial" },
-  ];
-  const mockServiceOptions = [
-    { value: 1, label: "Criação de Logo" },
-    { value: 2, label: "Gestão de Mídias" },
-    { value: 3, label: "Desenvolvimento de Website" },
-  ];
-  const mockPersonOptions = [
-    { value: 1, label: "João Silva (Design)" },
-    { value: 2, label: "Silvia Ramos (Social Media)" },
-  ];
+  // Prepara as opções para os selects a partir dos dados da API
+  const clientOptions =
+    formData?.clientes?.map((c) => ({
+      value: c.id_cliente,
+      label: c.nome_empresa,
+    })) || [];
+  const serviceOptions =
+    formData?.tiposServicos?.map((s) => ({
+      value: s.id_tipo_servico,
+      label: s.nome_servico,
+    })) || [];
+  const personOptions =
+    formData?.pessoas?.map((p) => ({
+      value: p.id_pessoa,
+      label: p.first_name,
+    })) || [];
+  const statusOptions =
+    formData?.status?.map((s) => ({ value: s.id_status, label: s.status })) ||
+    [];
 
   return (
     <>
@@ -138,7 +132,7 @@ const CreateDemand = () => {
           >
             <form onSubmit={handleSubmit(onSubmit)}>
               <InputTitle title="Cliente" />
-              <div className="flex gap-6 flex-row w-2/3">
+              <div className="w-2/3">
                 <Controller
                   name="clientId"
                   control={control}
@@ -146,28 +140,26 @@ const CreateDemand = () => {
                     <SearchableSelect
                       title="CLIENTE"
                       isMandatory
-                      options={mockClientOptions}
+                      options={clientOptions}
                       value={
-                        mockClientOptions.find(
-                          (c) => c.value === field.value
-                        ) || null
+                        clientOptions.find((c) => c.value === field.value) ||
+                        null
                       }
-                      onChange={(option) =>
-                        field.onChange(option ? option.value : undefined)
+                      onChange={(option) => field.onChange(option?.value)}
+                      placeholder={
+                        isLoadingFormData
+                          ? "Carregando..."
+                          : "Digite para pesquisar um cliente..."
                       }
-                      placeholder="Digite para pesquisar um cliente..."
                       errorMessage={errors.clientId?.message}
                     />
                   )}
                 />
-                {/* <div className="mt-auto mb-3 w-1/3">
-                  <PlainButton title="NOVO CLIENTE" color="bg-customYellow" height="h-10" width="w-full" />
-                </div>  */}
               </div>
 
-              <div className="mt-6">
-                <InputTitle title="Serviço" />
-                <div className="flex gap-6 flex-row w-full">
+              <InputTitle title="Serviço" />
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-4 flex-row w-full">
                   <Controller
                     name="serviceId"
                     control={control}
@@ -175,35 +167,33 @@ const CreateDemand = () => {
                       <SearchableSelect
                         title="TIPO DE SERVIÇO"
                         isMandatory
-                        options={mockServiceOptions}
+                        options={serviceOptions}
                         value={
-                          mockServiceOptions.find(
-                            (c) => c.value === field.value
-                          ) || null
+                          serviceOptions.find((s) => s.value === field.value) ||
+                          null
                         }
-                        onChange={(option) =>
-                          field.onChange(option ? option.value : undefined)
+                        onChange={(option) => field.onChange(option?.value)}
+                        placeholder={
+                          isLoadingFormData
+                            ? "Carregando..."
+                            : "Selecione o serviço..."
                         }
-                        placeholder="Selecione o serviço..."
                         errorMessage={errors.serviceId?.message}
                         width="w-1/3"
                       />
                     )}
                   />
-                  {/* <div className="flex items-center w-1/3">
-                    <PlainButton title="NOVO SERVIÇO" color="bg-customYellow" height="h-10" width="w-full" />
-                  </div> */}
                   <Controller
                     name="deadline"
                     control={control}
                     render={({ field }) => (
                       <InputDate
                         title="PRAZO"
-                        isMandatory={true}
+                        isMandatory
                         value={field.value}
                         onChange={field.onChange}
                         errorMessage={errors.deadline?.message}
-                        borderColor={errors.deadline ? "#EF4444" : "#F6BC0A"} // lógica diferente para input date
+                        borderColor={errors.deadline ? "#EF4444" : "#F6BC0A"}
                       />
                     )}
                   />
@@ -219,7 +209,6 @@ const CreateDemand = () => {
                       isMandatory={false}
                       errorMessage={errors.description?.message}
                       height="h-[100px]"
-                      rounded="rounded-[20px]"
                       borderColor={
                         errors.description
                           ? "border-customRedAlert"
@@ -228,7 +217,7 @@ const CreateDemand = () => {
                     />
                   )}
                 />
-                <div className="flex flex-row gap-6">
+                <div className="flex flex-row gap-4">
                   <Controller
                     name="driveLink"
                     control={control}
@@ -255,14 +244,14 @@ const CreateDemand = () => {
                     render={({ field }) => (
                       <InputQuantity
                         title="QUANTIDADE"
-                        isMandatory={true}
+                        isMandatory
+                        value={field.value}
+                        onChange={field.onChange}
                         borderColor={
                           errors.quantity
                             ? "border-customRedAlert"
                             : "border-customYellow"
                         }
-                        value={field.value}
-                        onChange={field.onChange}
                         errorMessage={errors.quantity?.message}
                         min={1}
                         width="w-1/3"
@@ -273,27 +262,53 @@ const CreateDemand = () => {
                 </div>
               </div>
 
-              <div className="mt-6">
-                <InputTitle title="Atribuição" />
+              <InputTitle title="Atribuição" />
+              <div className="w-2/3">
                 <Controller
                   name="personId"
                   control={control}
                   render={({ field }) => (
                     <SearchableSelect
-                      title="RESPONSÁVEL PELO SETOR"
+                      title="RESPONSÁVEL PELA DEMANDA"
                       isMandatory
-                      options={mockPersonOptions}
+                      options={personOptions}
                       value={
-                        mockPersonOptions.find(
-                          (c) => c.value === field.value
-                        ) || null
+                        personOptions.find((p) => p.value === field.value) ||
+                        null
                       }
-                      onChange={(option) =>
-                        field.onChange(option ? option.value : undefined)
+                      onChange={(option) => field.onChange(option?.value)}
+                      placeholder={
+                        isLoadingFormData
+                          ? "Carregando..."
+                          : "Selecione o responsável..."
                       }
-                      placeholder="Selecione o responsável..."
                       errorMessage={errors.personId?.message}
-                      width="w-2/3"
+                    />
+                  )}
+                />
+              </div>
+
+              <InputTitle title="Status" />
+              <div className="w-2/3">
+                <Controller
+                  name="statusId"
+                  control={control}
+                  render={({ field }) => (
+                    <SearchableSelect
+                      title="STATUS"
+                      isMandatory
+                      options={statusOptions}
+                      value={
+                        statusOptions.find((s) => s.value === field.value) ||
+                        null
+                      }
+                      onChange={(option) => field.onChange(option?.value)}
+                      placeholder={
+                        isLoadingFormData
+                          ? "Carregando..."
+                          : "Selecione um status..."
+                      }
+                      errorMessage={errors.statusId?.message}
                     />
                   )}
                 />

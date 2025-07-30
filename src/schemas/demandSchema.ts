@@ -29,39 +29,44 @@ import { z } from 'zod';
 export const demandSchema = z.object({
 
   serviceId: z.coerce
-  .number({ required_error: "Selecione um serviço.", invalid_type_error: "Selecione um serviço." })
-  .min(1, "Selecione um serviço."),
+    .number({ required_error: "Selecione um serviço.", invalid_type_error: "Selecione um serviço." })
+    .min(1, "Selecione um serviço."),
 
-clientId: z.coerce
-  .number({ required_error: "Selecione um cliente.", invalid_type_error: "Selecione um cliente." })
-  .min(1, "Selecione um cliente."),
+  clientId: z.coerce
+    .number({ required_error: "Selecione um cliente.", invalid_type_error: "Selecione um cliente." })
+    .min(1, "Selecione um cliente."),
 
-personId: z.coerce
-  .number({ required_error: "Selecione o responsável pelo setor.", invalid_type_error: "Selecione o responsável pelo setor." })
-  .min(1, "Selecione o responsável pelo setor."),
+  statusId: z.coerce
+    .number({ required_error: "Selecione um status.", invalid_type_error: "Selecione um status." })
+    .optional(),
 
-quantity: z.coerce
-  .number({ required_error: "A quantidade é obrigatória.", invalid_type_error: "A quantidade é obrigatória." })
-  .min(1, "A quantidade deve ser no mínimo 1."),
 
-description: z
-  .string()
-  .min(5, "A descrição deve ter no mínimo 5 caracteres.")
-  .max(500, "A descrição não pode exceder 500 caracteres.")
-  //.regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,_'"%]+$/, "A descrição contém caracteres inválidos.")
-  .optional()
-  .or(z.literal('')), // Permite string vazia para campos opcionais
+  personId: z.coerce
+    .number({ required_error: "Selecione o responsável pelo setor.", invalid_type_error: "Selecione o responsável pelo setor." })
+    .min(1, "Selecione o responsável pelo setor."),
 
-driveLink: z
-  .string()
-  .url("O link do Drive precisa ser uma URL válida.")
-  .optional()
-  .or(z.literal('')), // Permite string vazia e não falha na validação de URL
+  quantity: z.coerce
+    .number({ required_error: "A quantidade é obrigatória.", invalid_type_error: "A quantidade é obrigatória." })
+    .min(1, "A quantidade deve ser no mínimo 1."),
 
-deadline: z
-  .string({ required_error: "A data do prazo é obrigatória." })
-  .min(1, "A data do prazo é obrigatória.") // Garante que o campo não está vazio
-  .refine((val) => validateInput(val, "deadline"), "Formato de data inválido."),
+  description: z
+    .string()
+    .min(5, "A descrição deve ter no mínimo 5 caracteres.")
+    .max(500, "A descrição não pode exceder 500 caracteres.")
+    .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.,'"()/:;!?_#@%*+]+$/, "A descrição contém caracteres inválidos.")
+    .optional()
+    .or(z.literal('')), // Permite string vazia para campos opcionais
+
+  driveLink: z
+    .string()
+    .url("Insira uma URL válida.")
+    .optional()
+    .or(z.literal('')), // Permite string vazia e não falha na validação de URL
+
+  deadline: z
+    .string({ required_error: "A data do prazo é obrigatória." })
+    .min(1, "A data do prazo é obrigatória.") // Garante que o campo não está vazio
+    .refine((val) => validateInput(val, "deadline"), "Formato de data inválido."),
 });
 
 
