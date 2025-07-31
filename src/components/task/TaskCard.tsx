@@ -4,6 +4,7 @@ export interface TaskCardProps {
   setActiveCard?: React.Dispatch<React.SetStateAction<number | null>>;
   indexCard: number;
   activeCard?: number | null;
+  onClick?: () => void; // Optional click handler for additional functionality
 }
 
 const statusColor = {
@@ -19,6 +20,7 @@ const TaskCard = (props: TaskCardProps) => {
       draggable={!!props.setActiveCard}
       onDragStart={() => props.setActiveCard?.(props.indexCard)}
       onDragEnd={() => props.setActiveCard?.(null)}
+      onClick={props.onClick}
       className={`
         ${props.activeCard === props.indexCard ? "border-2 border-[#F6BC0A]" : "border border-[#2d2d2d]"}
         bg-customBlackBackground rounded-xl px-4 py-3 mb-3 shadow-md flex items-center gap-4 transition-transform

@@ -67,7 +67,7 @@ const CreateDemand = () => {
       driveLink: "",
       deadline: "",
     },
-    mode: "onBlur",
+    mode: "onChange",
   });
 
   // Mapeia os dados do formulário para o formato da API e envia
