@@ -20,10 +20,11 @@ import NotFound from "@/views/errors/NotFound";
 
 // Telas de Demandas
 import Demandas from "@/views/demands/DemandsScreen";
-import DetalhesDemanda from "@/views/demands/DemandDetails";
+//import DetalhesDemanda from "@/views/demands/DemandDetails";
 import CriarDemanda from "@/views/demands/CreateDemand";
 import ListarDemandas from "@/views/demands/ListDemands";
 import GerenciarDemandas from "@/views/demands/ManageDemands";
+import EditarDemanda from "@/views/demands/EditDemand";
 
 // Telas de Clientes
 import Clientes from "@/views/clients/ClientsScreen";
@@ -93,9 +94,11 @@ const AppContainer = () => {
     { path: "/demandas", element: <Demandas /> },
     { path: "/demandas/nova", element: <CriarDemanda /> },
     { path: "/configuracoes/demandas/nova", element: <CriarDemanda /> },
-    { path: "/demandas/:id", element: <DetalhesDemanda /> },
+    // { path: "/demandas/:id", element: <DetalhesDemanda /> },
+
     { path: "/demandas/lista", element: <ListarDemandas /> },
     { path: "/configuracoes/demandas", element: <GerenciarDemandas /> },
+    { path: "/configuracoes/demandas/:id", element: <EditarDemanda /> },
 
     // Clientes
     { path: "/clientes", element: <Clientes /> },

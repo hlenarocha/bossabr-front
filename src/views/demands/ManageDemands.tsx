@@ -156,13 +156,16 @@ const ManageDemands = () => {
                           className="fa-solid fa-pencil text-lg text-customYellow hover:cursor-pointer"
                           title="Visualizar / Editar"
                           onClick={() =>
-                            navigate(`/demandas/${demand.id_demanda}`)
+                            navigate(`/configuracoes/demandas/${demand.id_demanda}`)
                           }
                         ></i>
                       ),
                     },
                   ]}
                   itemHeight="h-12"
+                  onClick={() =>
+                    navigate(`/configuracoes/demandas/${demand.id_demanda}`)
+                  }
                 />
               )}
             />
