@@ -11,6 +11,8 @@ import { useDragDrop } from "@/hooks/useDragDrop";
 import { Calendar } from "@/components/ui/calendar";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
+import { useState } from "react";
+import CreateActivityModal from "@/views/activities/CreateActivityModal";
 
 const DemandsScreen = () => {
   const navigate = useNavigate();
@@ -48,6 +50,15 @@ const DemandsScreen = () => {
     onDrop,
   } = useDragDrop(initialTasks);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDemandId, setSelectedDemandId] = useState<number | null>(null);
+
+  // --- 3. FUNÇÃO PARA ABRIR O MODAL ---
+  const handleOpenActivityModal = (demandId: number) => {
+    setSelectedDemandId(demandId);
+    setIsModalOpen(true);
+  };
+
 
   return (
     <>
@@ -75,7 +86,7 @@ const DemandsScreen = () => {
         </div>
 
         <div className="flex flex-col w-full">
-        <Motion>
+          <Motion>
             <div className="flex flex-col xl:flex-row gap-4 items-center ">
               <Box
                 title="Para esta semana"
@@ -137,6 +148,8 @@ const DemandsScreen = () => {
                             title={task.title}
                             status={task.status}
                             indexCard={task.indexCard}
+                            onClick={() => handleOpenActivityModal(task.indexCard)}
+
                           />
                         );
                       })}
@@ -193,6 +206,15 @@ const DemandsScreen = () => {
         <ScrollToEndArrow />
 
       </BaseScreen>
+      {isModalOpen && (
+        <CreateActivityModal
+          demandId={selectedDemandId!}
+          // Para o teste, vamos assumir que o usuário é um designer.
+          // No futuro, isso viria do seu contexto de autenticação.
+          activityType="social_media" 
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </>
   );
 };

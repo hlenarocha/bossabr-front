@@ -19,7 +19,7 @@ const DemandDetails = () => {
     <>
       <BaseScreen>
         <div className="flex flex-row justify-between">
-          <BackButton onClick={() => navigate("/tasks")}></BackButton>
+          <BackButton onClick={() => navigate("/demandas")}></BackButton>
           <ColoredButton
             onClick={() => {
               // navigate("/reports");
