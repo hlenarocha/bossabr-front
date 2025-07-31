@@ -131,7 +131,7 @@ const CreateDemand = () => {
             height="h-fit"
           >
             <form onSubmit={handleSubmit(onSubmit)}>
-              <InputTitle title="Cliente" />
+              <InputTitle title="Cliente"  marginTop="mt-4s"/>
               <div className="w-2/3">
                 <Controller
                   name="clientId"
@@ -157,7 +157,7 @@ const CreateDemand = () => {
                 />
               </div>
 
-              <InputTitle title="Serviço" />
+              <InputTitle title="Serviço" marginTop="mt-4"/>
               <div className="flex flex-col gap-4">
                 <div className="flex gap-4 flex-row w-full">
                   <Controller
@@ -262,57 +262,60 @@ const CreateDemand = () => {
                 </div>
               </div>
 
-              <InputTitle title="Atribuição" />
-              <div className="w-2/3">
-                <Controller
-                  name="personId"
-                  control={control}
-                  render={({ field }) => (
-                    <SearchableSelect
-                      title="RESPONSÁVEL PELA DEMANDA"
-                      isMandatory
-                      options={personOptions}
-                      value={
-                        personOptions.find((p) => p.value === field.value) ||
-                        null
-                      }
-                      onChange={(option) => field.onChange(option?.value)}
-                      placeholder={
-                        isLoadingFormData
-                          ? "Carregando..."
-                          : "Selecione o responsável..."
-                      }
-                      errorMessage={errors.personId?.message}
-                    />
-                  )}
-                />
-              </div>
+              <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col w-1/2">
+                  <InputTitle title="Atribuição" marginTop="mt-4"/>
+                  <Controller
+                    name="personId"
+                    control={control}
+                    render={({ field }) => (
+                      <SearchableSelect
+                        title="RESPONSÁVEL PELA DEMANDA"
+                        isMandatory
+                        options={personOptions}
+                        value={
+                          personOptions.find((p) => p.value === field.value) ||
+                          null
+                        }
+                        onChange={(option) => field.onChange(option?.value)}
+                        placeholder={
+                          isLoadingFormData
+                            ? "Carregando..."
+                            : "Selecione o responsável..."
+                        }
+                        errorMessage={errors.personId?.message}
+                      />
+                    )}
+                  />
+                </div>
 
-              <InputTitle title="Status" />
-              <div className="w-2/3">
-                <Controller
-                  name="statusId"
-                  control={control}
-                  render={({ field }) => (
-                    <SearchableSelect
-                      title="STATUS"
-                      isMandatory
-                      options={statusOptions}
-                      value={
-                        statusOptions.find((s) => s.value === field.value) ||
-                        null
-                      }
-                      onChange={(option) => field.onChange(option?.value)}
-                      placeholder={
-                        isLoadingFormData
-                          ? "Carregando..."
-                          : "Selecione um status..."
-                      }
-                      errorMessage={errors.statusId?.message}
+                <div className="flex flex-col w-1/2">
+                  <InputTitle title="Status" marginTop="mt-4"/>
+                    <Controller
+                      name="statusId"
+                      control={control}
+                      render={({ field }) => (
+                        <SearchableSelect
+                          title="STATUS"
+                          isMandatory
+                          options={statusOptions}
+                          value={
+                            statusOptions.find(
+                              (s) => s.value === field.value
+                            ) || null
+                          }
+                          onChange={(option) => field.onChange(option?.value)}
+                          placeholder={
+                            isLoadingFormData
+                              ? "Carregando..."
+                              : "Selecione um status..."
+                          }
+                          errorMessage={errors.statusId?.message}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
+                  </div>
+                </div>
 
               <div className="flex w-full mt-10 justify-center">
                 <ColoredButton

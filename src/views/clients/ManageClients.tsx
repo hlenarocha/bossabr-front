@@ -144,7 +144,14 @@ const ManageClients = () => {
                         businessSectorMap.get(client.id_setor_negocio) ||
                         "Não encontrado",
                     },
-                    { width: "10%", content: client.ativo ? "Sim" : "Não" },
+                    {
+                      width: "10%",
+                      content: client.ativo ? (
+                        <p className="bg-customGreenTask shadow-md rounded-full text-white p-3"></p>
+                      ) : (
+                        <p className="bg-customRedAlert shadow-md rounded-full text-white p-3"></p>
+                      ),
+                    },
                     {
                       width: "15%",
                       content: (
@@ -162,9 +169,7 @@ const ManageClients = () => {
                   ]}
                   itemHeight="h-12"
                   onClick={() =>
-                    navigate(
-                      `/configuracoes/clientes/${client.id_cliente}`
-                    )
+                    navigate(`/configuracoes/clientes/${client.id_cliente}`)
                   }
                 />
               )}

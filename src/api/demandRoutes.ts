@@ -5,7 +5,7 @@ export interface DemandItem {
   id_tipo_servico: number;
   id_cliente: number;
   id_pessoa: number;
-  statusId: number;
+  id_status: number;
   descricao: string;
   link_drive?: string;
   prazo?: string;

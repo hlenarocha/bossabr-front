@@ -14,7 +14,7 @@ import TableItem from "@/components/table/TableItem";
 import { ResourceListView } from "@/components/shared/ResourceListView";
 import Toast from "@/components/shared/Toast";
 import PaginationControls from "@/components/shared/PaginationControls";
-
+import { formatDateToBR } from "@/utils/formatDate";
 // API, hook e tipos
 import { useReadDemands } from "@/hooks/demands/useReadDemands";
 
@@ -57,12 +57,12 @@ const ManageDemands = () => {
   return (
     <BaseScreen>
       <div className="flex items-center justify-between">
-        <BackButton onClick={() => navigate("/demandas")} />
+        <BackButton onClick={() => navigate("/configuracoes")} />
         <ColoredButton
           justify="justify-center"
           onClick={() =>
             navigate("/demandas/nova", {
-              state: { previousRoute: "/demandas" },
+              state: { previousRoute: "/configuracoes/demandas" },
             })
           }
           color="customYellow"
@@ -95,10 +95,14 @@ const ManageDemands = () => {
           {/* --- COLUNAS DO CABEÇALHO ATUALIZADAS --- */}
           <TableItem
             columns={[
-              { width: "40%", content: "DESCRIÇÃO" },
-              { width: "20%", content: "QUANTIDADE" },
-              { width: "20%", content: "PRAZO" },
-              { width: "20%", content: "AÇÕES" },
+              { width: "25%", content: "NOME DA DEMANDA" },
+              // { width: "20%", content: "DESCRIÇÃO" },
+              { width: "25%", content: "ATUAL RESPONSÁVEL" },
+              { width: "10%", content: "QTD." },
+              { width: "15%", content: "STATUS" },
+
+              { width: "15%", content: "PRAZO" },
+              { width: "10%", content: "AÇÕES" },
             ]}
             isTableHeader={true}
             itemHeight="h-12"
@@ -114,13 +118,39 @@ const ManageDemands = () => {
               renderItem={(demand) => (
                 <TableItem
                   key={demand.id_demanda}
-                  // --- COLUNAS DOS DADOS ATUALIZADAS ---
                   columns={[
-                    { width: "40%", content: demand.descricao || "N/A" },
-                    { width: "20%", content: String(demand.quantidade) },
-                    { width: "20%", content: demand.prazo },
                     {
-                      width: "20%",
+                      width: "25%",
+                      content:
+                        demand.id_tipo_servico + " - " + demand.id_cliente,
+                    },
+                    // { width: "20%", content: demand.descricao || "N/A" },
+                    { width: "25%", content: demand.id_pessoa },
+                    {
+                      width: "10%",
+                      content: (
+                        <div className="flex justify-center items-center">
+                          <div
+                            className="
+                              w-8 h-8
+                              rounded-full
+                              bg-zinc-700
+                              text-white
+                              flex items-center justify-center
+                              font-bold text-sm
+                              shadow-md
+                            "
+                          >
+                            {String(demand.quantidade)}
+                          </div>
+                        </div>
+                      ),
+                      // isNumber: true,
+                    },
+                    { width: "15%", content: demand.id_status },
+                    { width: "15%", content: formatDateToBR(demand.prazo) },
+                    {
+                      width: "10%",
                       content: (
                         <i
                           className="fa-solid fa-pencil text-lg text-customYellow hover:cursor-pointer"
