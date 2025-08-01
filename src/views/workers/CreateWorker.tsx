@@ -1,150 +1,125 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+// hooks e bibliotecas
+import { useNavigate, useLocation } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
 
-import { workerSchema, WorkerFormData } from "@/schemas/workerSchema";
-import { createWorker } from "@/api/workerRoutes";
-import { getTeams } from "@/api/teamRoutes";
-import { getBorderColor } from "@/utils/formUtils"; // A função handleInputChange não é mais necessária aqui
-
-// Componentes de UI
-import BackButton from "@/components/shared/BackButton";
+// componentes
 import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
-import InputTitle from "@/components/title/InputTitle";
+import BackButton from "@/components/shared/BackButton";
 import PageTitle from "@/components/title/PageTitle";
+import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
 import InputDate from "@/components/shared/InputDate";
+import SearchableSelect from "@/components/shared/SearchableSelect";
 import ColoredButton from "@/components/shared/ColoredButton";
-import Select from "@/components/shared/Select";
-import PlainButton from "@/components/shared/PlainButton";
 import Modal from "@/components/modal/Modal";
 import { Motion } from "@/components/animation/Motion";
 
-// Ícones
-import IconHappy from "@/assets/images/famicons_happy.png";
+// API, schemas, hooks e assets
+import { workerSchema, WorkerFormData } from "@/schemas/workerSchema";
+import { createWorker, getWorkerFormData, WorkerDTO } from "@/api/workerRoutes";
+import { useResourceMutation } from "@/hooks/useResourceMutation";
 import IconSad from "@/assets/images/famicons_sad.png";
-
-// --- DADOS MOCKADOS ---
-const mockRoles = [
-  { id: 1, name: "Administrador" },
-  { id: 2, name: "Atendente" },
-  { id: 3, name: "Funcionário" },
-];
-
-const mockSectors = [
-  { id: 1, name: "Design" },
-  { id: 2, name: "Social Media" },
-];
 
 const CreateWorker = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const previousRoute = location.state?.previousRoute;
 
-  // const {
-  //   data: teamsResponse,
-  //   isLoading: isLoadingTeams,
-  //   isError: isErrorTeams,
-  // } = useQuery({
-  //   queryFn: () => getTeams(),
-  //   staleTime: 1000 * 60 * 5,
-  //   queryKey: ["teams"],
-  // });
+  // Busca os dados para os selects (cargos e equipes)
+  const { data: formData, isLoading: isLoadingFormData } = useQuery<{
+    cargos: { id_cargo: number; cargo: string }[];
+    equipes: { id_equipe: number; nome_equipe: string; nome_setor: string }[];
+  }>({
+    queryKey: ["workerFormData"],
+    queryFn: getWorkerFormData,
+  });
 
-  const [isModalSuccessVisible, setIsModalSucessVisible] = useState(false);
-  const [isModalErrorVisible, setIsModalErrorVisible] = useState(false);
+  const {
+    mutate,
+    isPending,
+    isErrorModalVisible,
+    errorModalMessage,
+    closeErrorModal,
+  } = useResourceMutation<WorkerDTO>({
+    mutationFn: ({ payload }) => createWorker(payload),
+    successToastMessage: "Colaborador cadastrado com sucesso!",
+    successNavigationRoute: previousRoute || "/configuracoes/colaboradores",
+    errorModalMessage: "Não foi possível cadastrar o colaborador.",
+  });
 
   const {
     control,
     handleSubmit,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm<WorkerFormData>({
     resolver: zodResolver(workerSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
       cnpj: "",
-      roleId: 0,
-      sectorId: 0,
-      teamId: 0,
+      roleId: undefined,
+      teamId: undefined,
       email: "",
       phone: "",
       birthDate: "",
       entryDate: "",
     },
     mode: "onChange",
-    reValidateMode: "onChange",
   });
 
-  const showSuccessModal = () => setIsModalSucessVisible(true);
-  const showErrorModal = () => setIsModalErrorVisible(true);
-
-  const registerWorkerForm = async (data: WorkerFormData) => {
-    return createWorker({
+  // Mapeia os dados do formulário para o formato da API e envia
+  const onSubmit = (data: WorkerFormData) => {
+    const payload: WorkerDTO = {
       first_name: data.firstName,
       last_name: data.lastName,
       cnpj: data.cnpj,
       email: data.email,
       telefone: data.phone,
-      data_aniversario: data.birthDate ?? "",
-      data_entrada: data.entryDate ?? "",
+      data_aniversario: data.birthDate || "",
+      data_entrada: data.entryDate || "",
       id_cargo: data.roleId,
-     // id_equipe: data.teamId,
-    });
+      id_equipe: data.teamId,
+    };
+    mutate({ payload });
   };
 
-  const onSubmit = async (data: WorkerFormData) => {
-    try {
-      const response = await registerWorkerForm(data);
-      const success = response?.status === 201 || response?.success;
-      success ? showSuccessModal() : showErrorModal();
-    } catch (error) {
-      console.error("Erro ao criar colaborador:", error);
-      showErrorModal();
-    }
-  };
-
-  // Envolvemos o onSubmit em handleSubmit para que a validação ocorra primeiro.
-  // O segundo argumento de handleSubmit é opcional para tratar erros de validação.
-  const handleFormSubmit = handleSubmit(onSubmit, () => {
-    // Você pode adicionar uma lógica aqui caso o formulário seja inválido,
-    // mas o Zod já vai exibir as mensagens de erro nos campos.
-    console.log("Erro de validação do formulário.");
-  });
+  // Prepara as opções para os selects
+  const roleOptions =
+    formData?.cargos?.map((role) => ({
+      value: role.id_cargo,
+      label: role.cargo,
+    })) || [];
+  const teamOptions =
+    formData?.equipes?.map((team) => ({
+      value: team.id_equipe,
+      label: `${team.nome_equipe} - ${team.nome_setor}`, // Concatenação aqui!
+    })) || [];
 
   return (
     <>
-      {isModalSuccessVisible && (
-        <Modal
-          title="Sucesso!"
-          description="O colaborador foi cadastrado com sucesso."
-          onClick1={() => navigate("/configuracoes/colaboradores")}
-          isModalVisible
-          buttonTitle1="OK"
-          iconImage={IconHappy}
-        />
-      )}
-
-      {isModalErrorVisible && (
-        <Modal
-          title="Erro!"
-          description="Não foi possível cadastrar o colaborador. Verifique os dados ou tente novamente."
-          onClick1={() => setIsModalErrorVisible(false)}
-          isModalVisible
-          buttonTitle1="FECHAR"
-          iconImage={IconSad}
-        />
-      )}
-
+      <Modal
+        title="Erro!"
+        description={errorModalMessage}
+        onClick1={closeErrorModal}
+        isModalVisible={isErrorModalVisible}
+        buttonTitle1="FECHAR"
+        isError={true}
+        iconImage={IconSad}
+      />
       <BaseScreen>
-        <BackButton onClick={() => navigate("/configuracoes/colaboradores")} />
+        <BackButton
+          onClick={() =>
+            navigate(previousRoute || "/configuracoes/colaboradores")
+          }
+        />
         <PageTitle
           icon="fa-solid fa-circle-plus"
           marginTop="mt-4"
           title="Cadastrar Colaborador"
         />
-
         <Motion>
           <Box
             title="Novo Colaborador"
@@ -152,201 +127,208 @@ const CreateWorker = () => {
             width="w-full"
             height="h-fit"
           >
-            <form onSubmit={handleFormSubmit}>
-              <InputTitle title="Colaborador" />
-              <div className="flex gap-4 items-start justify-normal">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <InputTitle title="Dados Pessoais" />
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-4">
+                  <Controller
+                    name="firstName"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        {...field}
+                        title="NOME"
+                        width="w-1/2"
+                        isMandatory
+                        placeholder="Digite o nome..."
+                        errorMessage={errors.firstName?.message}
+                        height="h-[40px]"
+                        borderColor={
+                          errors.firstName
+                            ? "border-customRedAlert"
+                            : "border-customYellow"
+                        }
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="lastName"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        {...field}
+                        title="SOBRENOME"
+                        width="w-1/2"
+                        placeholder="Digite o sobrenome..."
+                        errorMessage={errors.lastName?.message}
+                        height="h-[40px]"
+                        isMandatory={false}
+                        borderColor={
+                          errors.lastName
+                            ? "border-customRedAlert"
+                            : "border-customYellow"
+                        }
+                      />
+                    )}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <Controller
+                    name="email"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        {...field}
+                        title="E-MAIL"
+                        width="w-1/2"
+                        isMandatory
+                        placeholder="Digite o e-mail..."
+                        errorMessage={errors.email?.message}
+                        height="h-[40px]"
+                        borderColor={
+                          errors.email
+                            ? "border-customRedAlert"
+                            : "border-customYellow"
+                        }
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="phone"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        {...field}
+                        title="TELEFONE"
+                        width="w-1/2"
+                        placeholder="(__) _____-____"
+                        mask="(00) 00000-0000"
+                        errorMessage={errors.phone?.message}
+                        isMandatory={false}
+                        height="h-[40px]"
+                        borderColor={
+                          errors.phone
+                            ? "border-customRedAlert"
+                            : "border-customYellow"
+                        }
+                      />
+                    )}
+                  />
+                </div>
                 <Controller
-                  name="firstName"
+                  name="birthDate"
                   control={control}
-                  render={({ field, fieldState }) => (
-                    <InputString
+                  render={({ field }) => (
+                    <InputDate
                       {...field}
-                      title="NOME"
+                      title="DATA DE NASCIMENTO"
                       width="w-1/2"
-                      height="h-8"
-                      placeholder="Digite o nome..."
-                      isMandatory
-                      borderColor={getBorderColor("firstName", errors, touchedFields)}
-                      errorMessage={fieldState.error?.message}
-                    />
-                  )}
-                />
-                <Controller
-                  name="lastName"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <InputString
-                      {...field}
-                      title="SOBRENOME"
-                      width="w-1/2"
+                      errorMessage={errors.birthDate?.message}
                       isMandatory={false}
-                      height="h-8"
-                      placeholder="Digite o sobrenome..."
-                      borderColor={getBorderColor("lastName", errors, touchedFields)}
-                      errorMessage={fieldState.error?.message}
+                      height="h-[40px]"
+                      borderColor={errors.birthDate ? "#EF4444" : "#F6BC0A"}
                     />
                   )}
                 />
               </div>
 
-              <div className="flex gap-4 items-start justify-normal">
-                <Controller
-                  name="cnpj"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <InputString
-                      {...field}
-                      title="CNPJ"
-                      width="w-1/2"
-                      height="h-8"
-                      isMandatory={false}
-                      placeholder="__.___.___/____-__"
-                      mask="00.000.000/0000-00"
-                      borderColor={getBorderColor("cnpj", errors, touchedFields)}
-                      errorMessage={fieldState.error?.message}
-                    />
-                  )}
-                />
-                <Controller
-                  name="roleId"
-                  control={control}
-                  render={({ field }) => (
-                     <Select
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))} // Converte para número
-                        options={mockRoles}
+              <InputTitle marginTop="mt-4" title="Dados Profissionais" />
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-4">
+                  <Controller
+                    name="roleId"
+                    control={control}
+                    render={({ field }) => (
+                      <SearchableSelect
                         title="CARGO"
                         isMandatory
                         width="w-1/2"
+                        options={roleOptions}
+                        value={
+                          roleOptions.find(
+                            (opt) => opt.value === field.value
+                          ) || null
+                        }
+                        onChange={(option) => field.onChange(option?.value)}
+                        placeholder={
+                          isLoadingFormData
+                            ? "Carregando..."
+                            : "Selecione um cargo"
+                        }
                         errorMessage={errors.roleId?.message}
                       />
-                  )}
-                />
-              </div>
-
-              <div className="flex flex-row gap-4 w-full items-center">
-                 <Controller
-                  name="sectorId"
-                  control={control}
-                  render={({ field }) => (
-                     <Select
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                        options={mockSectors}
-                        title="SETOR"
+                    )}
+                  />
+                  <Controller
+                    name="teamId"
+                    control={control}
+                    render={({ field }) => (
+                      <SearchableSelect
+                        title="EQUIPE"
                         isMandatory
                         width="w-1/2"
-                        errorMessage={errors.sectorId?.message}
+                        options={teamOptions}
+                        value={
+                          teamOptions.find(
+                            (opt) => opt.value === field.value
+                          ) || null
+                        }
+                        onChange={(option) => field.onChange(option?.value)}
+                        placeholder={
+                          isLoadingFormData
+                            ? "Carregando..."
+                            : "Selecione uma equipe"
+                        }
+                        errorMessage={errors.teamId?.message}
+                        height="h-[40px]"
                       />
-                  )}
-                />
-                <div className="flex gap-4 flex-row justify-normal items-center w-full">
-                   <Controller
-                      name="teamId"
-                      control={control}
-                      render={({ field }) => (
-                         <Select
-                            {...field}
-                            onChange={(e) => field.onChange(Number(e.target.value))}
-                            options={
-                              [{id: 0, name: "EQUIPE 1"}]
-                              // isLoadingTeams
-                              //   ? [{ id: 0, name: "Carregando..." }]
-                              //   : isErrorTeams
-                              //   ? [{ id: 0, name: "Erro ao carregar." }]
-                              //   : teamsResponse?.map((t: any) => ({
-                              //       id: t.id_equipe,
-                              //       name: t.nome_equipe,
-                              //     })) || []
-                            }
-                            title="EQUIPE"
-                            isMandatory
-                            width="w-1/2"
-                            errorMessage={errors.teamId?.message}
-                          />
-                      )}
-                    />
-                  <PlainButton
-                    title="NOVA EQUIPE"
-                    color="bg-customYellow"
-                    width="w-1/2"
+                    )}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <Controller
+                    name="entryDate"
+                    control={control}
+                    render={({ field }) => (
+                      <InputDate
+                        {...field}
+                        title="DATA DE ENTRADA"
+                        width="w-1/2"
+                        errorMessage={errors.entryDate?.message}
+                        isMandatory={false}
+                        height="h-[40px]"
+                        borderColor={errors.entryDate ? "#EF4444" : "#F6BC0A"}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="cnpj"
+                    control={control}
+                    render={({ field }) => (
+                      <InputString
+                        {...field}
+                        title="CNPJ"
+                        width="w-1/2"
+                        placeholder="__.___.___/____-__"
+                        mask="00.000.000/0000-00"
+                        errorMessage={errors.cnpj?.message}
+                        height="h-[40px]"
+                        isMandatory={false}
+                        borderColor={
+                          errors.cnpj
+                            ? "border-customRedAlert"
+                            : "border-customYellow"
+                        }
+                      />
+                    )}
                   />
                 </div>
               </div>
 
-              <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
-                 <Controller
-                    name="email"
-                    control={control}
-                    render={({ field, fieldState }) => (
-                      <InputString
-                        {...field}
-                        title="E-MAIL"
-                        width="w-[50%]"
-                        height="h-8"
-                        placeholder="Digite o e-mail..."
-                        isMandatory
-                        borderColor={getBorderColor("email", errors, touchedFields)}
-                        errorMessage={fieldState.error?.message}
-                      />
-                    )}
-                  />
-                <Controller
-                  name="phone"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <InputString
-                      {...field}
-                      title="TELEFONE"
-                      width="w-[50%]"
-                      height="h-8"
-                      isMandatory={false}
-                      placeholder="(__) _____-____"
-                      mask="(00) 00000-0000"
-                      borderColor={getBorderColor("phone", errors, touchedFields)}
-                      errorMessage={fieldState.error?.message}
-                    />
-                  )}
-                />
-              </div>
-
-              <div className="flex gap-4 flex-row justify-between items-start w-[100%]">
-                <Controller
-                  control={control}
-                  name="birthDate"
-                  render={({ field, fieldState }) => (
-                    <InputDate
-                      value={field.value}
-                      onChange={field.onChange}
-                      title="DATA DE NASCIMENTO"
-                      isMandatory={false}
-                      width="w-[50%]"
-                      borderColor={fieldState.error ? "#EF4444" : "#F6BC0A"}
-                      errorMessage={fieldState.error?.message}
-                    />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name="entryDate"
-                  render={({ field, fieldState }) => (
-                    <InputDate
-                      value={field.value}
-                      onChange={field.onChange}
-                      title="DATA DE ENTRADA"
-                      isMandatory={false}
-                      width="w-[50%]"
-                      borderColor={fieldState.error ? "#EF4444" : "#F6BC0A"}
-                      errorMessage={fieldState.error?.message}
-                    />
-                  )}
-                />
-              </div>
-
-              <div className="w-[100%] flex justify-center mt-6">
+              <div className="w-full flex justify-center mt-6">
                 <ColoredButton
                   type="submit"
-                  title="CADASTRAR COLABORADOR"
+                  title={isPending ? "CADASTRANDO..." : "CADASTRAR COLABORADOR"}
                   color="customYellow"
                   width="w-[40%]"
                   justify="justify-center"

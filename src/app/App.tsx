@@ -37,6 +37,8 @@ import EditarCliente from "@/views/clients/EditClient";
 // Telas de Colaboradores
 import GerenciarColaboradores from "@/views/workers/ManageWorkers";
 import CriarColaborador from "@/views/workers/CreateWorker";
+import EditarColaborador from "@/views/workers/EditWorker"
+
 
 // Telas de Equipes
 import GerenciarEquipes from "@/views/teams/ManageTeams";
@@ -116,6 +118,10 @@ const AppContainer = () => {
     {
       path: "/configuracoes/colaboradores/novo",
       element: <CriarColaborador />,
+    },
+    {
+      path: "/configuracoes/colaboradores/:id",
+      element: <EditarColaborador />,
     },
 
     // Equipes

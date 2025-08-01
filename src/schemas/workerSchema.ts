@@ -23,21 +23,22 @@ import { validateInput } from "@/utils/validateInput";
 //   id_pessoa*	integer
 //   example: 1
 // }
-  
+
 
 const workerSchema = z.object({
   firstName: z
     .string()
     .min(2, "Nome deve ter pelo menos 2 caracteres")
     .max(80, "Nome não pode exceder 100 caracteres")
-    .refine((val) => !val || validateInput(val, "name"), "Nome contém caracteres inválidos"),
+    .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.]+$/, "Nome contém caracteres inválidos"),
 
   lastName: z
     .string()
     .min(2, "Sobrenome deve ter pelo menos 2 caracteres")
     .max(200, "Sobrenome não pode exceder 200 caracteres")
-    .optional()
-    .refine((val) => !val || validateInput(val, "name"), "Sobrenome contém caracteres inválidos"),
+    .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-&.]+$/, "Sobrenome contém caracteres inválidos")
+    .optional(),
+
 
   cnpj: z
     .string()
@@ -48,11 +49,11 @@ const workerSchema = z.object({
     .or(z.literal("")),
 
 
-  roleId: z.number().min(1, "Selecione um cargo"),
+  roleId: z.coerce.number({ required_error: "Selecione um cargo.", invalid_type_error: "Selecione um cargo." }).min(1, "Selecione um cargo."),
 
-  sectorId: z.number().min(1, "Selecione um setor"),
+  //sectorId: z.number().min(1, "Selecione um setor"),
 
-  teamId: z.number().min(1, "Selecione uma equipe"),
+  teamId: z.coerce.number({ required_error: "Selecione uma equipe.", invalid_type_error: "Selecione uma equipe." }).min(1, "Selecione uma equipe."),
 
   email: z
     .string()

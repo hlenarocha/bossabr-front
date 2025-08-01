@@ -10,7 +10,7 @@ export interface WorkerDTO {
   data_aniversario: string;
   //avatar?: string;
   id_cargo: number;
-  //id_equipe: number;
+  id_equipe: number;
 }
 
 export interface WorkerItem {
@@ -23,16 +23,50 @@ export interface WorkerItem {
   data_entrada: string;
   data_aniversario: string;
   //avatar?: string;
-  id_cargo: number;
-  //id_equipe: number;
+  cargo: number;
+  nome_equipe: string;
+  nome_setor: string;
 }
 
 
+export interface WorkerFormDataResponse {
+  cargos: {
+    id_cargo: number;
+    cargo: string;
+  }[];
+  // setores: {
+  //   id_setor: number;
+  //   nome_setor: string;
+  // }[];
+  equipes: {
+    id_equipe: number;
+    nome_equipe: string;
+    nome_setor: string;
+  }[]
+}
 
+export interface PaginatedWorkersResponse {
+  current_page: number;
+  data: WorkerItem[];
+  last_page: number;
+  total: number;
+}
+
+
+// FORM
+export const getWorkerFormData = async (): Promise<WorkerFormDataResponse> => {
+  try {
+    const response = await api.get("/pessoa/form");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar dados do formulário de pessoa:", error);
+    throw error;
+  }
+};
 
 const createWorker = async (data: WorkerDTO) => {
   try {
-    const response = await api.post("/funcionario", data);
+    const response = await api.post("/pessoa", data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -41,9 +75,9 @@ const createWorker = async (data: WorkerDTO) => {
   }
 };
 
-const readWorker = async () => {
+const getWorkers = async () => {
   try {
-    const response = await api.get("/funcionario");
+    const response = await api.get("/pessoa");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -52,10 +86,31 @@ const readWorker = async () => {
   }
 }
 
+const readWorkers = async (page: number, search: string): Promise<PaginatedWorkersResponse> => {
+  try {
+    const response = await api.get("/pessoa", { 
+      params: {
+        page: page,
+        search: search,
+        por_pagina: 10
+      }
+    });
+    console.log(response);
+
+    return response.data.data;
+    
+  } catch (error) {
+    console.error("Erro ao buscar colaboradores:", error);
+    throw error;
+  }
+};
+
 const readWorkerById = async (id: number) => {
   try {
-    const response = await api.get(`/funcionario/${id}`);
-    return response.data;
+    const response = await api.get(`/pessoa/${id}`);
+    console.log(response);
+    return response.data.data;
+    
   } catch (error) {
     console.error(error);
     throw error;
@@ -65,7 +120,7 @@ const readWorkerById = async (id: number) => {
 
 const updateWorkerById = async (id: number, data: WorkerDTO) => {
   try {
-    const response = await api.put(`/funcionario/${id}`, data);
+    const response = await api.put(`/pessoa/${id}`, data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -76,7 +131,7 @@ const updateWorkerById = async (id: number, data: WorkerDTO) => {
 
 const deleteWorkerById = async (id: number) => {
   try {
-    const response = await api.delete(`/funcionario/${id}`);
+    const response = await api.delete(`/pessoa/${id}`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -85,5 +140,5 @@ const deleteWorkerById = async (id: number) => {
   }
 };
 
-export { createWorker, readWorker, readWorkerById, updateWorkerById, deleteWorkerById };
+export { createWorker, readWorkers, getWorkers, readWorkerById, updateWorkerById, deleteWorkerById };
 
