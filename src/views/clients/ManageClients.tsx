@@ -1,7 +1,6 @@
 // hooks e bibliotecas
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 
 // Componentes
 import BackButton from "@/components/shared/BackButton";
@@ -18,20 +17,17 @@ import PaginationControls from "@/components/shared/PaginationControls";
 
 // API, hook e tipos
 import { useReadClients } from "@/hooks/client/useReadClients";
-import { getClientFormData } from "@/api/clientRoutes";
 
 const ManageClients = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Estados de controle da tela
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
-  // Debounce para a busca
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -40,7 +36,6 @@ const ManageClients = () => {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  // Busca a lista de clientes de forma paginada
   const {
     data: paginatedClients,
     isLoading: isLoadingClients,
@@ -48,23 +43,12 @@ const ManageClients = () => {
   } = useReadClients(currentPage, debouncedSearchTerm);
 
   // Busca os dados de apoio (setores de negócio) para exibir os nomes
-  const { data: formData, isLoading: isLoadingFormData } = useQuery({
-    queryKey: ["clientFormData"],
-    queryFn: getClientFormData,
-  });
+  // const { data: formData, isLoading: isLoadingFormData } = useQuery({
+  //   queryKey: ["clientFormData"],
+  //   queryFn: getClientFormData,
+  // });
+ 
 
-  // Cria um mapa para buscar o nome do setor de negócio por ID
-  const businessSectorMap = useMemo(() => {
-    if (!formData?.setoresNegocio) return new Map<number, string>();
-    return new Map(
-      formData.setoresNegocio.map((s) => [
-        s.id_setor_negocio,
-        s.nome_setor_negocio,
-      ])
-    );
-  }, [formData]);
-
-  // Efeito para exibir o toast
   useEffect(() => {
     if (location.state?.toastMessage) {
       setToastMessage(location.state.toastMessage);
@@ -73,7 +57,7 @@ const ManageClients = () => {
     }
   }, [location, navigate]);
 
-  const isLoading = isLoadingClients || isLoadingFormData;
+  const isLoading = isLoadingClients;
 
   return (
     <BaseScreen>
@@ -141,7 +125,7 @@ const ManageClients = () => {
                     {
                       width: "25%",
                       content:
-                        businessSectorMap.get(client.id_setor_negocio) ||
+                        client.nome_setor_negocio ||
                         "Não encontrado",
                     },
                     {

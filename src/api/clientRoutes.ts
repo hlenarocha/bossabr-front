@@ -29,6 +29,7 @@ export interface ClientItem {
   briefing: string;
   ativo: boolean;
   classificacao: string;
+  nome_setor_negocio: string;
 }
 
 export interface ClientFormDataResponse {
