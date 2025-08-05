@@ -1,7 +1,6 @@
 // hooks e bibliotecas
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 
 // Componentes
 import BackButton from "@/components/shared/BackButton";
@@ -18,7 +17,6 @@ import Toast from "@/components/shared/Toast";
 
 // API, hook e tipos
 import { useReadTeams } from "@/hooks/teams/useReadTeams";
-import { getTeamFormData } from "@/api/teamRoutes";
 
 const ManageTeams = () => {
   const navigate = useNavigate();
@@ -44,20 +42,20 @@ const ManageTeams = () => {
     isError: isErrorTeams,
   } = useReadTeams(currentPage, debouncedSearchTerm);
 
-  const { data: formData, isLoading: isLoadingFormData } = useQuery({
-    queryKey: ["teamFormData"],
-    queryFn: getTeamFormData,
-  });
+  // const { data: formData, isLoading: isLoadingFormData } = useQuery({
+  //   queryKey: ["teamFormData"],
+  //   queryFn: getTeamFormData,
+  // });
 
-  const responsibleMap = useMemo(() => {
-    if (!formData?.pessoas) return new Map<number, string>();
-    return new Map(formData.pessoas.map((p) => [p.id_pessoa, p.first_name]));
-  }, [formData]);
+  // const responsibleMap = useMemo(() => {
+  //   if (!formData?.pessoas) return new Map<number, string>();
+  //   return new Map(formData.pessoas.map((p) => [p.id_pessoa, p.first_name]));
+  // }, [formData]);
 
-  const sectorMap = useMemo(() => {
-    if (!formData?.setores) return new Map<number, string>();
-    return new Map(formData.setores.map((s) => [s.id_setor, s.nome_setor]));
-  }, [formData]);
+  // const sectorMap = useMemo(() => {
+  //   if (!formData?.setores) return new Map<number, string>();
+  //   return new Map(formData.setores.map((s) => [s.id_setor, s.nome_setor]));
+  // }, [formData]);
 
   useEffect(() => {
     if (location.state?.toastMessage) {
@@ -67,7 +65,7 @@ const ManageTeams = () => {
     }
   }, [location, navigate]);
 
-  const isLoading = isLoadingTeams || isLoadingFormData;
+  const isLoading = isLoadingTeams;
 
   return (
     <>
@@ -137,7 +135,7 @@ const ManageTeams = () => {
                       {
                         width: "20%",
                         content:
-                          responsibleMap.get(Number(team.responsavel_equipe)) ||
+                          `${team.first_name} ${team.last_name}` ||
                           "Não encontrado",
                       },
                       {
@@ -147,7 +145,7 @@ const ManageTeams = () => {
                       {
                         width: "25%",
                         content:
-                          sectorMap.get(Number(team.id_equipe)) ||
+                          team.nome_setor ||
                           "Não encontrado",
                       },
                       {

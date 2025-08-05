@@ -8,6 +8,9 @@ export interface TeamItem {
   nome_equipe: string;
   responsavel_equipe: number; 
   equipe_interna: boolean;
+  first_name?: string; // Pode ser opcional
+  last_name?: string; // Pode ser opcional
+  nome_setor: string;
 }
 
 export interface TeamDTO {
