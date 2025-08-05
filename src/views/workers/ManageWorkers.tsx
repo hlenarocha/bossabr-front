@@ -17,6 +17,7 @@ import PaginationControls from "@/components/shared/PaginationControls";
 
 // API, hook e tipos
 import { useReadWorkers } from "@/hooks/worker/useReadWorkers"; // Supondo que você criou este hook
+import SectorTag from "@/components/shared/SectorTag";
 
 const ManageWorkers = () => {
   const navigate = useNavigate();
@@ -121,7 +122,10 @@ const ManageWorkers = () => {
                     },
                     { width: "20%", content: worker.cargo },
                     { width: "20%", content: worker.nome_equipe },
-                    { width: "20%", content: worker.nome_setor },
+                    {
+                      width: "20%",
+                      content: <SectorTag sectorName={worker.nome_setor} />,
+                    },
                     {
                       width: "15%",
                       content: (
@@ -139,9 +143,7 @@ const ManageWorkers = () => {
                   ]}
                   itemHeight="h-12"
                   onClick={() =>
-                    navigate(
-                      `/configuracoes/colaboradores/${worker.id_pessoa}`
-                    )
+                    navigate(`/configuracoes/colaboradores/${worker.id_pessoa}`)
                   }
                 />
               )}
