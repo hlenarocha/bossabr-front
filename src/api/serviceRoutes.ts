@@ -16,6 +16,7 @@ export interface ServiceItem {
   id_tipo_servico: number;
   id_setor: number;
   nome_servico: string;
+  nome_setor: string;
   pontuacao: number | null;
   created_at: string;
   updated_at: string;

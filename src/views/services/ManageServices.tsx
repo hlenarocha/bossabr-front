@@ -1,7 +1,6 @@
 // hooks e bibliotecas
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 
 // Componentes
 import BackButton from "@/components/shared/BackButton";
@@ -16,7 +15,6 @@ import { ResourceListView } from "@/components/shared/ResourceListView";
 import Toast from "@/components/shared/Toast";
 
 // API, tipos e utils
-import { getServiceFormData } from "@/api/serviceRoutes";
 import { useReadServices } from "@/hooks/service/useReadServices";
 import PaginationControls from "@/components/shared/PaginationControls";
 
@@ -46,17 +44,17 @@ const ManageServices = () => {
     isError: isErrorServices,
   } = useReadServices(currentPage, debouncedSearchTerm);
 
-  const { data: formData, isLoading: isLoadingFormData } = useQuery({
-    queryKey: ["serviceFormData"],
-    queryFn: getServiceFormData,
-  });
+  // const { data: formData, isLoading: isLoadingFormData } = useQuery({
+  //   queryKey: ["serviceFormData"],
+  //   queryFn: getServiceFormData,
+  // });
 
-  const sectorMap = useMemo(() => {
-    if (!formData?.setores) {
-      return new Map<number, string>();
-    }
-    return new Map(formData.setores.map((s) => [s.id_setor, s.nome_setor]));
-  }, [formData]);
+  // const sectorMap = useMemo(() => {
+  //   if (!formData?.setores) {
+  //     return new Map<number, string>();
+  //   }
+  //   return new Map(formData.setores.map((s) => [s.id_setor, s.nome_setor]));
+  // }, [formData]);
 
   useEffect(() => {
     if (location.state?.toastMessage) {
@@ -66,7 +64,7 @@ const ManageServices = () => {
     }
   }, [location, navigate]);
 
-  const isLoading = isLoadingServices || isLoadingFormData;
+  const isLoading = isLoadingServices;
 
   return (
     <BaseScreen>
@@ -132,7 +130,7 @@ const ManageServices = () => {
                     {
                       width: "30%",
                       content:
-                        sectorMap.get(service.id_setor) || "Não encontrado",
+                        service.nome_setor || "Não encontrado",
                     },
                     {
                       width: "20%",
