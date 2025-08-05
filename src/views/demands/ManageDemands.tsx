@@ -14,15 +14,14 @@ import TableItem from "@/components/table/TableItem";
 import { ResourceListView } from "@/components/shared/ResourceListView";
 import Toast from "@/components/shared/Toast";
 import PaginationControls from "@/components/shared/PaginationControls";
-import { formatDateToBR } from "@/utils/formatDate";
-// API, hook e tipos
+import StatusTag from "@/components/shared/StatusTag";
+import DeadlineDisplay from "@/components/shared/DeadlineDisplay"; 
 import { useReadDemands } from "@/hooks/demands/useReadDemands";
 
 const ManageDemands = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Estados de controle da tela
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,15 +91,12 @@ const ManageDemands = () => {
           title="Lista de Demandas"
           subtitle="Visualização de todas as demandas cadastradas."
         >
-          {/* --- COLUNAS DO CABEÇALHO ATUALIZADAS --- */}
           <TableItem
             columns={[
               { width: "25%", content: "NOME DA DEMANDA" },
-              // { width: "20%", content: "DESCRIÇÃO" },
               { width: "25%", content: "ATUAL RESPONSÁVEL" },
               { width: "10%", content: "QTD." },
               { width: "15%", content: "STATUS" },
-
               { width: "15%", content: "PRAZO" },
               { width: "10%", content: "AÇÕES" },
             ]}
@@ -121,20 +117,21 @@ const ManageDemands = () => {
                   columns={[
                     {
                       width: "25%",
-                      content:
-                        demand.id_tipo_servico + " - " + demand.id_cliente,
+                      content: demand.nome_servico,
                     },
-                    // { width: "20%", content: demand.descricao || "N/A" },
-                    { width: "25%", content: demand.id_pessoa },
+                    {
+                      width: "25%",
+                      content: `${demand.first_name} ${demand.last_name}`,
+                    },
                     {
                       width: "10%",
                       content: (
                         <div className="flex justify-center items-center">
                           <div
                             className="
-                              w-8 h-8
+                              w-10 h-10
                               rounded-full
-                              bg-zinc-700
+                              bg-zinc-800
                               text-white
                               flex items-center justify-center
                               font-bold text-sm
@@ -145,10 +142,15 @@ const ManageDemands = () => {
                           </div>
                         </div>
                       ),
-                      // isNumber: true,
                     },
-                    { width: "15%", content: demand.id_status },
-                    { width: "15%", content: formatDateToBR(demand.prazo) },
+                    {
+                      width: "15%",
+                      content: <StatusTag status={demand.status} />,
+                    },
+                    {
+                      width: "15%",
+                      content: <DeadlineDisplay prazo={demand.prazo} />,
+                    },
                     {
                       width: "10%",
                       content: (
