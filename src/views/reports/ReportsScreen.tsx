@@ -20,7 +20,7 @@ const ReportScreen = () => {
         <PageTitle
           icon="fa-solid fa-book"
           marginTop="mt-4"
-          title="Diário de {user}"
+          title="Diário"
         ></PageTitle>
         <ColoredButton
           onClick={() => {

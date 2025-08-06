@@ -17,16 +17,14 @@ import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
-  const { user} = useContext(UserContext); // desconstruindo objeto {}
+  const { user } = useContext(UserContext); // desconstruindo objeto {}
   const navigate = useNavigate();
   // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
   // const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
   // const auth_token = Cookies.get("auth_token");
 
-
   console.log(user?.id_pessoa); // id_pessoa do usuário logado
 
-  
   const initialTasks = [
     { title: "Banner", status: "não iniciada" },
     { title: "Post Rosa", status: "em andamento" },
@@ -57,19 +55,28 @@ const WorkspaceScreen = () => {
   } = useDragDrop(initialTasks);
 
   console.log(activeCard);
-  console.log(user?.url_avatar);
+  console.log("Avatar: ", user?.url_avatar);
+  console.log("Last: ", user?.last_name);
+
 
   return (
     <>
       <BaseScreen>
-        <div className="flex items-end cursor-default mt-4 gap-4">
-          <div className="w-12 h-12  flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255, 255, 255, 0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
-            <img className="rounded-full w-10 h-10" src={user?.url_avatar}></img>
-          </div>
-          <p className="text-white font-bold text-xl">{user?.first_name}</p>
-          <PageTitle marginTop="mt-6" title="Área de Trabalho" icon="fa-solid fa-desktop"></PageTitle>
-        </div>
+        <div className="w-full flex items-center justify-between cursor-default mt-4">
+          <PageTitle title="Área de Trabalho" icon="fa-solid fa-desktop" />
 
+          <div className="flex items-center hover:bg-zinc-900 hover:cursor-pointer gap-4 bg-black/20 backdrop-blur-sm rounded-[20px] p-2 pr-6 shadow-md">
+            <div className="w-20 h-20 flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
+              <img
+                className="rounded-full w-16 h-16" 
+                src={user?.url_avatar}
+                alt={`Avatar de ${user?.first_name}`}
+              />
+            </div>
+
+            <p className="text-white font-bold text-2xl">{user?.first_name}</p>
+          </div>
+        </div>
         <Motion>
           <Box
             title={`${greeting}, ${user?.first_name}!`}
@@ -91,7 +98,7 @@ const WorkspaceScreen = () => {
                   ></InputString>
                   <InputString
                     title="EQUIPE"
-                    placeholder={user?.nome_equipe || ""} // colocar equipe no lugar de user?.first_name
+                    placeholder={user?.nome_equipe || ""}
                     isMandatory={false}
                     height="h-8"
                     width="w-fit"
@@ -99,17 +106,22 @@ const WorkspaceScreen = () => {
                   ></InputString>
                   <InputString
                     title="SETOR"
-                    placeholder={user?.nome_setor || ""} // colocar equipe no lugar de user?.first_name
+                    placeholder={user?.nome_setor || ""}
                     isMandatory={false}
                     height="h-8"
                     width="w-fit"
                     isReadOnly={true}
                   ></InputString>
-                 
                 </div>
-                <div className="mt-4">
+                <div className="flex w-full mt-4 gap-4">
+                <div className="w-1/2">
                   <InputTitle title="Pontuação semanal"></InputTitle>
-                  <ScoreBar />
+                  <ScoreBar score={20} />
+                </div>
+                <div className="w-1/2">
+                  <InputTitle title="Pontuação mensal"></InputTitle>
+                  <ScoreBar score={10} />
+                </div>
                 </div>
               </div>
 
@@ -118,7 +130,7 @@ const WorkspaceScreen = () => {
                 <div className="text-sm mt-2 mb-2">
                   Auditoria da Equipe - Hoje
                 </div>
-                <div className="flex flex-col gap-1 h-[170px] overflow-y-auto ">
+                <div className="flex flex-col gap-1 h-[200px] overflow-y-auto ">
                   <ActivityCard
                     width="w-full"
                     title="Pessoa X conclui atividade Y"
@@ -198,7 +210,7 @@ const WorkspaceScreen = () => {
             </div>
           </Box>
         </Motion>
-        <ScrollToEndArrow/>
+        <ScrollToEndArrow />
       </BaseScreen>
     </>
   );

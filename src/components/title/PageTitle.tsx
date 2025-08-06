@@ -1,6 +1,6 @@
 interface PageTitleProps {
   title: string;
-  marginTop: string;
+  marginTop?: string;
   icon?: string;
   width?: string;
 }
