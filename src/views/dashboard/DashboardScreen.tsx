@@ -164,9 +164,9 @@ const DashboardScreen = () => {
                 width="w-full"
               >
                 <div className="h-[200px] flex flex-col overflow-y-auto]">
-                  <ScoreBar user="Nome" />
-                  <ScoreBar user="Nome" />
-                  <ScoreBar user="Nome" />
+                  <ScoreBar score={20} />
+                  <ScoreBar score={10} />
+                  <ScoreBar  score={30}/>
                 </div>
 
               </Box>
