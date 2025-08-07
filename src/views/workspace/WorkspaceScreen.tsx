@@ -74,7 +74,7 @@ const WorkspaceScreen = () => {
               />
             </div>
 
-            <p className="text-white font-bold text-2xl">{user?.first_name}</p>
+            <p className="text-white font-bold text-2xl">{user?.first_name} {user?.last_name}</p>
           </div>
         </div>
         <Motion>
@@ -90,7 +90,7 @@ const WorkspaceScreen = () => {
                 <div className="flex flex-row gap-2 w-full flex-wrap">
                   <InputString
                     title="NOME"
-                    placeholder={user?.first_name || ""}
+                    placeholder={`${user?.first_name} ${user?.last_name}` || ""}
                     isMandatory={false}
                     height="h-8"
                     width="w-fit"

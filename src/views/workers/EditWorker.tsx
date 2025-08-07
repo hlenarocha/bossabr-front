@@ -80,13 +80,17 @@ const EditWorker = () => {
   });
 
   useEffect(() => {
+
+
     if (workerData) {
+      console.log("DADOS DO BACK: ", workerData);
+
       reset({
         firstName: workerData.first_name,
         lastName: workerData.last_name,
         email: workerData.email,
         phone: workerData.telefone,
-        birthDate: workerData.data_aniversario,
+        birthDate: workerData.data_nascimento,
         entryDate: workerData.data_entrada,
         roleId: workerData.id_cargo,
         teamId: workerData.id_equipe,
@@ -101,13 +105,17 @@ const EditWorker = () => {
       last_name: data.lastName,
       email: data.email,
       telefone: data.phone,
-      data_aniversario: data.birthDate || "",
+      data_nascimento: data.birthDate || "",
       data_entrada: data.entryDate || "",
       id_cargo: data.roleId,
       id_equipe: data.teamId,
-      cnpj: data.cnpj,
+      cnpj: data.cnpj || "",
     };
+
+    console.log("DADOS SENDO ENVIADOS: ", payload);
+
     update({ id: workerId, payload });
+    
   };
 
   const handleDeleteConfirm = () => {
@@ -141,7 +149,6 @@ const EditWorker = () => {
 
   return (
     <>
-      {/* --- MODAIS --- */}
       <Modal
         title="Confirmar Exclusão"
         isModalVisible={isDeleteConfirmModalVisible}
@@ -368,6 +375,8 @@ const EditWorker = () => {
                       render={({ field }) => (
                         <InputString
                           {...field}
+                          value={field.value || ""}
+
                           title="CNPJ"
                           width="w-1/2"
                           placeholder="__.___.___/____-__"

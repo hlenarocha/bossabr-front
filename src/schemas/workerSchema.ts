@@ -45,6 +45,7 @@ const workerSchema = z.object({
     .min(14, "CNPJ deve ter 14 caracteres")
     .max(14, "CNPJ deve ter 14 caracteres")
     .optional()
+    .nullable()
     .refine((val) => !val || validateInput(val, "cnpj"), "CNPJ inválido")
     .or(z.literal("")),
 

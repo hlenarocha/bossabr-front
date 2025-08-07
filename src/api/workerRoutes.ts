@@ -7,7 +7,7 @@ export interface WorkerDTO {
   email: string;
   telefone?: string;
   data_entrada: string;
-  data_aniversario: string;
+  data_nascimento: string;
   //avatar?: string;
   id_cargo: number;
   id_equipe: number;
@@ -21,10 +21,12 @@ export interface WorkerItem {
   email: string;
   telefone?: string;
   data_entrada: string;
-  data_aniversario: string;
+  data_nascimento: string;
   //avatar?: string;
-  cargo: number;
-  nome_equipe: string;
+  id_equipe: number;
+  id_cargo: number;
+  //cargo: number;
+  //nome_equipe: string;
   nome_setor: string;
 }
 
@@ -105,7 +107,7 @@ const readWorkers = async (page: number, search: string): Promise<PaginatedWorke
   }
 };
 
-const readWorkerById = async (id: number) => {
+const readWorkerById = async (id: number): Promise<WorkerItem> => {
   try {
     const response = await api.get(`/pessoa/${id}`);
     console.log(response);

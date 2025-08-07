@@ -27,7 +27,6 @@ import {
   TeamItem,
 } from "@/api/teamRoutes";
 import { useResourceMutation } from "@/hooks/useResourceMutation";
-// --- CORREÇÃO 1: Caminhos de importação ajustados para 'team' (singular) ---
 import { useReadTeamById } from "@/hooks/teams/useReadTeamById";
 import { useDeleteTeam } from "@/hooks/teams/useDeleteTeam";
 import IconSad from "@/assets/images/famicons_sad.png";

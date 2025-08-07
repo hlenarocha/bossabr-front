@@ -75,15 +75,17 @@ const CreateWorker = () => {
     const payload: WorkerDTO = {
       first_name: data.firstName,
       last_name: data.lastName,
-      cnpj: data.cnpj,
+      cnpj: data.cnpj || "",
       email: data.email,
       telefone: data.phone,
-      data_aniversario: data.birthDate || "",
+      data_nascimento: data.birthDate || "",
       data_entrada: data.entryDate || "",
       id_cargo: data.roleId,
       id_equipe: data.teamId,
     };
     mutate({ payload });
+
+    console.log("DADOS SENDO ENVIADOS: ", payload);
   };
 
   // Prepara as opções para os selects
@@ -308,6 +310,7 @@ const CreateWorker = () => {
                       <InputString
                         {...field}
                         title="CNPJ"
+                        value={field.value || ""}
                         width="w-1/2"
                         placeholder="__.___.___/____-__"
                         mask="00.000.000/0000-00"

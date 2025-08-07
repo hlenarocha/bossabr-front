@@ -4,22 +4,42 @@ import PageTitle from "@/components/title/PageTitle";
 import ColoredButton from "@/components/shared/ColoredButton";
 import { useNavigate } from "react-router-dom";
 import { Motion } from "@/components/animation/Motion";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import InputString from "@/components/shared/InputString";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
+import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
+import { formatDateToBR } from "@/utils/formatDate"; 
 
 const SettingsScreen = () => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext); // desconstruindo objeto {}
-  console.log(user?.url_avatar);
+  const { user } = useContext(UserContext);
+
+  const [workerDetails, setWorkerDetails] = useState<WorkerItem | null>(null);
+
+  useEffect(() => {
+    const fetchWorkerData = async () => {
+      if (user?.id_pessoa) {
+        try {
+          const data = await readWorkerById(user.id_pessoa);
+          setWorkerDetails(data);
+        } catch (error) {
+          console.error("Erro ao buscar detalhes do colaborador:", error);
+        }
+      }
+    };
+
+    fetchWorkerData();
+  }, [user?.id_pessoa]);
+  
+  // 2. A função local `formatDate` foi removida.
 
   return (
     <>
       <BaseScreen>
         <PageTitle icon="fa-solid fa-gear" marginTop="mt-4" title="Configurações"></PageTitle>
         <Motion>
-          <Box title={`Olá, {user}`} width="w-full" height="h-fit">
+          <Box title={`Olá, ${user?.first_name}`} width="w-full" height="h-fit">
             <div className="flex flex-row gap-6">
               <div className="w-1/3 flex items-center justify-center">
                 <div className="w-36 h-36  flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255, 255, 255, 0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
@@ -33,7 +53,7 @@ const SettingsScreen = () => {
                 <div className="flex flex-row gap-4 w-full">
                     <InputString
                       title="NOME"
-                      placeholder={user?.first_name || ""}
+                      placeholder={`${user?.first_name || ''} ${user?.last_name || ''}`.trim() || "Erro ao carregar!"}
                       isMandatory={false}
                       height="h-8"
                       width="w-fit"
@@ -41,10 +61,10 @@ const SettingsScreen = () => {
                     />
                     <InputString
                       title="DATA DE NASCIMENTO"
-                      placeholder={""}
+                      // 3. Use a função importada para formatar a data.
+                      placeholder={workerDetails ? formatDateToBR(workerDetails.data_nascimento) : "Carregando..."}
                       isMandatory={false}
                       width="w-fit"
-
                       height="h-8"
                       isReadOnly={true}
                     />
@@ -52,9 +72,8 @@ const SettingsScreen = () => {
                 <div className="flex flex-row gap-4">
                     <InputString
                       title="E-MAIL"
-                      placeholder={""}
+                      placeholder={workerDetails?.email || "Carregando..."}
                       width="w-fit"
-
                       isMandatory={false}
                       height="h-8"
                       isReadOnly={true}
@@ -62,7 +81,7 @@ const SettingsScreen = () => {
                  
                     <InputString
                       title="TELEFONE"
-                      placeholder={""}
+                      placeholder={workerDetails?.telefone || "Carregando..."}
                       isMandatory={false}
                       width="w-fit"
                       height="h-8"
@@ -98,14 +117,6 @@ const SettingsScreen = () => {
                   color="customYellow"
                   title="CONFIGURAR EQUIPES"
                 ></ColoredButton>
-                {/* <ColoredButton
-                  onClick={() => navigate("/configuracoes/setores")}
-                  justify="justify-between"
-                  width="w-full"
-                  icon="fa solid fa-arrow-right"
-                  color="customYellow"
-                  title="CONFIGURAR SETORES"
-                ></ColoredButton> */}
               </div>
             </Box>
 
