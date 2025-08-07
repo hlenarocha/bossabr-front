@@ -101,7 +101,7 @@ const EditDemand = () => {
       id_pessoa: data.personId,
       id_status: data.statusId,
       descricao: data.description,
-      link_drive: data.driveLink,
+      link_drive: data.driveLink || "",
       quantidade: data.quantity,
     };
     update({ id: demandId, payload });
@@ -286,6 +286,7 @@ const EditDemand = () => {
                       render={({ field }) => (
                         <InputString
                           {...field}
+                          value={field.value || ""}
                           title="LINK DO DRIVE"
                           isMandatory={false}
                           placeholder="Insira o link..."

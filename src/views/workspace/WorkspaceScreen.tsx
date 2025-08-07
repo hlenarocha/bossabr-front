@@ -104,7 +104,11 @@ const WorkspaceScreen = () => {
                     width="w-fit"
                     isReadOnly={true}
                   ></InputString>
-                  <InputString
+                 
+                </div>
+                <div className="flex flex-row gap-2 w-full flex-wrap">
+
+                <InputString
                     title="SETOR"
                     placeholder={user?.nome_setor || ""}
                     isMandatory={false}
@@ -112,7 +116,15 @@ const WorkspaceScreen = () => {
                     width="w-fit"
                     isReadOnly={true}
                   ></InputString>
-                </div>
+                  <InputString
+                    title="CARGO"
+                    placeholder={user?.role || ""}
+                    isMandatory={false}
+                    height="h-8"
+                    width="w-fit"
+                    isReadOnly={true}
+                  ></InputString>
+                  </div>
                 <div className="flex w-full mt-4 gap-4">
                 <div className="w-1/2">
                   <InputTitle title="Pontuação semanal"></InputTitle>

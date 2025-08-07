@@ -61,6 +61,7 @@ export const demandSchema = z.object({
     .string()
     .url("Insira uma URL válida.")
     .optional()
+    .nullable()
     .or(z.literal('')), // Permite string vazia e não falha na validação de URL
 
   deadline: z

@@ -106,7 +106,7 @@ const SettingsScreen = () => {
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
-                  color="customYellow"
+                  color="zinc-800"
                   title="CONFIGURAR COLABORADORES"
                 ></ColoredButton>
                 <ColoredButton
@@ -114,7 +114,7 @@ const SettingsScreen = () => {
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
-                  color="customYellow"
+                  color="zinc-800"
                   title="CONFIGURAR EQUIPES"
                 ></ColoredButton>
               </div>
@@ -132,7 +132,7 @@ const SettingsScreen = () => {
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
-                  color="customYellow"
+                  color="zinc-800"
                   title="CONFIGURAR CLIENTES"
                 ></ColoredButton>
                 <ColoredButton
@@ -140,7 +140,7 @@ const SettingsScreen = () => {
                   justify="justify-between"
                   width="w-full"
                   icon="fa solid fa-arrow-right"
-                  color="customYellow"
+                  color="zinc-800"
                   title="CONFIGURAR SETORES DE NEGÓCIO"
                 ></ColoredButton>
               </div>
@@ -160,7 +160,7 @@ const SettingsScreen = () => {
                 justify="justify-between"
                 width="w-full"
                 icon="fa solid fa-arrow-right"
-                color="customYellow"
+                color="zinc-800"
                 title="CONFIGURAR DEMANDAS"
               ></ColoredButton>
               <ColoredButton
@@ -168,7 +168,7 @@ const SettingsScreen = () => {
                 justify="justify-between"
                 width="w-full"
                 icon="fa solid fa-arrow-right"
-                color="customYellow"
+                color="zinc-800"
                 title="CONFIGURAR TIPOS DE SERVIÇO"
               ></ColoredButton>
             </div>
