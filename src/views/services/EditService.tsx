@@ -221,6 +221,8 @@ const EditService = () => {
                     icon="fa-solid fa-trash"
                     width="w-full sm:w-auto"
                     justify="justify-center"
+                    borderColor="border-customRedAlert"
+
                   />
                   <ColoredButton
                     type="submit"
