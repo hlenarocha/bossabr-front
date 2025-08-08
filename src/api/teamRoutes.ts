@@ -28,6 +28,7 @@ export interface TeamFormDataResponse {
   pessoas: {
     id_pessoa: number;
     first_name: string;
+    last_name?: string;
   }[];
 }
 

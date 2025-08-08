@@ -78,8 +78,8 @@ const CreateDemand = () => {
       prazo: data.deadline,
       id_pessoa: data.personId,
       id_status: data.statusId,
-      descricao: data.description,
-      link_drive: data.driveLink,
+      descricao: data.description || "",
+      link_drive: data.driveLink || "",
       quantidade: data.quantity,
     };
     mutate({ payload });
@@ -190,7 +190,7 @@ const CreateDemand = () => {
                       <InputDate
                         title="PRAZO"
                         isMandatory
-                        value={field.value}
+                        value={field.value || ""}
                         onChange={field.onChange}
                         errorMessage={errors.deadline?.message}
                         borderColor={errors.deadline ? "#EF4444" : "#F6BC0A"}
@@ -235,6 +235,7 @@ const CreateDemand = () => {
                             : "border-customYellow"
                         }
                         height="h-[40px]"
+                        value={field.value || ""}
                       />
                     )}
                   />

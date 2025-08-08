@@ -180,7 +180,6 @@ const ManageTeams = () => {
             />
           </Box>
         </Motion>
-        {/* <-- ADICIONADO: Componente Toast --> */}
         {toastMessage && (
           <Toast
             message={toastMessage}

@@ -85,9 +85,9 @@ const EditDemand = () => {
         serviceId: demandData.id_tipo_servico,
         personId: demandData.id_pessoa,
         statusId: demandData.id_status,
-        description: demandData.descricao,
+        description: demandData.descricao || "",
         quantity: demandData.quantidade,
-        driveLink: demandData.link_drive,
+        driveLink: demandData.link_drive || "",
         deadline: demandData.prazo,
       });
     }
@@ -100,7 +100,7 @@ const EditDemand = () => {
       prazo: data.deadline,
       id_pessoa: data.personId,
       id_status: data.statusId,
-      descricao: data.description,
+      descricao: data.description || "",
       link_drive: data.driveLink || "",
       quantidade: data.quantity,
     };
