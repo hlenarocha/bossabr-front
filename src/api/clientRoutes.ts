@@ -32,6 +32,17 @@ export interface ClientItem {
   nome_setor_negocio: string;
 }
 
+export interface ClientListItem {
+  id_cliente: number; // Essencial que a API retorne este campo
+  nome_empresa: string;
+  ativo: boolean;
+  servicos: string[];
+  setores: string[];
+  progresso_geral: string;
+}
+
+
+
 export interface ClientFormDataResponse {
   setoresNegocio: {
     id_setor_negocio: number;
@@ -87,6 +98,18 @@ const readClients = async (page: number, search: string): Promise<PaginatedClien
   }
 };
 
+// NÃO ESTÁ PAGINADA!!
+const readClientList = async (): Promise<ClientListItem[]> => {
+  try {
+    const response = await api.get("/cliente/list");
+    return response.data.data || []; // A API retorna um array direto em 'data'
+  } catch (error) {
+    console.error("Erro ao buscar a lista de clientes:", error);
+    throw error;
+  }
+};
+
+
 // CREATE
 const createClient = async (data: ClientDTO): Promise<any> => {
   try {
@@ -133,4 +156,4 @@ const deleteClientById = async (id: number): Promise<any> => {
   }
 }
 
-export { createClient, getClients, readClients, readClientById, updateClientById, deleteClientById };
+export { createClient, getClients, readClients, readClientById, updateClientById, deleteClientById, readClientList };

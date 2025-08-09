@@ -35,7 +35,7 @@ const ClientDetails = () => {
         <PageTitle
           // icon bolinha verde
           marginTop="mt-4"
-          title={`Demanda Logotipo do Cliente Lorem Ipsum`}
+          title={`TESTE`}
         ></PageTitle>
         <Box
           title="Detalhes da Demanda"
