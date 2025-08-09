@@ -5,23 +5,40 @@ import InputString from "@/components/shared/InputString";
 import InputTitle from "@/components/title/InputTitle";
 import TableItem from "@/components/table/TableItem";
 import ColoredButton from "@/components/shared/ColoredButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Motion } from "@/components/animation/Motion";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/UserContext";
+import BackButton from "@/components/shared/BackButton";
 
-const ReportScreen = () => {
+const DailyReportScreen = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const location = useLocation();
+  const cameFromAdminList = location.state?.from === "/diarios/admin";
 
   return (
     <BaseScreen>
       <div className="flex flex-col items-center lg:justify-between lg:flex-row">
-        <PageTitle
-          icon="fa-solid fa-book"
-          marginTop="mt-4"
-          title="Diário"
-        ></PageTitle>
+        <div>
+          {cameFromAdminList ? (
+            <BackButton onClick={() => navigate("/diarios")} />
+          ) : (
+            // Opcional: Deixe um espaço vazio para manter o alinhamento
+            <div></div>
+          )}
+
+          <PageTitle
+            icon="fa-solid fa-book"
+            marginTop="mt-4"
+            title={
+              "Diário de " +
+              (user?.first_name || "Usuário") +
+              " " +
+              (user?.last_name || "")
+            }
+          ></PageTitle>
+        </div>
         <ColoredButton
           onClick={() => {
             navigate("/reports");
@@ -39,7 +56,6 @@ const ReportScreen = () => {
           title="Diário de Atividades"
           subtitle="Visualize as atividades realizadas no dia {dd / mm / YYYY}"
           width="w-full"
-
           height="h-fit"
         >
           <div className="flex flex-row gap-2 w-full mb-4">
@@ -58,7 +74,7 @@ const ReportScreen = () => {
               height="h-8"
               width="w-1/3"
               isReadOnly={true}
-        ></InputString>
+            ></InputString>
 
             <InputString
               title="SETOR"
@@ -66,7 +82,8 @@ const ReportScreen = () => {
               isMandatory={false}
               height="h-8"
               width="w-1/3"
-              isReadOnly={true} />
+              isReadOnly={true}
+            />
           </div>
 
           <InputTitle title="Atividades do dia" />
@@ -107,7 +124,6 @@ const ReportScreen = () => {
               isTableHeader={false}
               itemHeight="h-12"
             />
-
           </div>
           <div className="flex w-full mt-10 justify-center"></div>
         </Box>
@@ -115,4 +131,4 @@ const ReportScreen = () => {
     </BaseScreen>
   );
 };
-export default ReportScreen;
+export default DailyReportScreen;

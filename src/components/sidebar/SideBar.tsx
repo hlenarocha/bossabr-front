@@ -8,7 +8,7 @@ const menuItems = [
   { icon: "fa-solid fa-chart-pie", title: "Dashboard", path: "/dashboard" },
   { icon: "fa-solid fa-list-check", title: "Demandas", path: "/demandas" },
   { icon: "fa-solid fa-user-tie", title: "Clientes", path: "/clientes" },
-  { icon: "fa-solid fa-book", title: "Diário", path: "/diario" },
+  { icon: "fa-solid fa-book", title: "Diário", path: "/diarios" },
   { icon: "fa-solid fa-gear", title: "Configurações", path: "/configuracoes" },
 ];
 

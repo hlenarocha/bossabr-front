@@ -14,9 +14,12 @@ import readWorkspace from "@/api/workspaceRoutes";
 import LoginScreen from "@/views/auth/LoginScreen";
 import Dashboard from "@/views/dashboard/DashboardScreen";
 import AreaTrabalho from "@/views/workspace/WorkspaceScreen";
-import Diario from "@/views/reports/ReportsScreen";
 import Configuracoes from "@/views/settings/SettingsScreen";
 import NotFound from "@/views/errors/NotFound";
+
+// Telas de Diario
+import Diario from "@/views/reports/DailyReportScreen";
+import ListaDiariosAdmin from "@/views/reports/AdminReportList";
 
 // Telas de Demandas
 import Demandas from "@/views/demands/DemandsScreen";
@@ -144,7 +147,8 @@ const AppContainer = () => {
     { path: "/configuracoes/servicos/:id", element: <EditarServico /> },
 
     // Relatórios e Configurações gerais
-    { path: "/diario", element: <Diario /> },
+    { path: "/diarios/:id", element: <Diario /> },
+    { path: "/diarios", element: <ListaDiariosAdmin /> },
     { path: "/configuracoes", element: <Configuracoes /> },
 
     // Rota para página não encontrada (404)
