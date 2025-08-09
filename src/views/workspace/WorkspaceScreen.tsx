@@ -2,7 +2,7 @@ import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import { greetingFunction } from "@/utils/greetingFunction";
-import { useContext } from "react";
+import { useContext, useState } from "react"; // Adicionado useState
 import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
@@ -17,13 +17,11 @@ import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
-  const { user } = useContext(UserContext); // desconstruindo objeto {}
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
-  // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
-  // const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
-  // const auth_token = Cookies.get("auth_token");
 
-  console.log(user?.id_pessoa); // id_pessoa do usuário logado
+  // Estado para controlar o filtro de tempo ativo
+  const [timeFilter, setTimeFilter] = useState('semana'); // 'semana' como padrão
 
   const initialTasks = [
     { title: "Banner", status: "não iniciada" },
@@ -48,16 +46,26 @@ const WorkspaceScreen = () => {
   // Usando o hook que gerencia todo o estado de drag and drop
   const {
     tasks,
-    // setTasks,
     activeCard,
     setActiveCard,
     onDrop,
   } = useDragDrop(initialTasks);
 
-  console.log(activeCard);
-  console.log("Avatar: ", user?.url_avatar);
-  console.log("Last: ", user?.last_name);
-
+  // Opções e estilos para os botões de filtro
+  const filterOptions = [
+    { value: 'hoje', label: 'Hoje', icon: 'fa-solid fa-triangle-exclamation', baseColor: 'bg-red-500', textColor: 'text-white' },
+    { value: 'semana', label: 'Esta Semana', icon: 'fa-solid fa-hourglass-half', baseColor: 'bg-yellow-500', textColor: 'text-zinc-900' },
+    { value: 'mes', label: 'Este Mês', icon: 'fa-solid fa-calendar-days', baseColor: 'bg-blue-500', textColor: 'text-white' },
+    { value: 'geral', label: 'Geral', icon: 'fa-solid fa-globe', baseColor: 'bg-zinc-700', textColor: 'text-white' },
+  ];
+  
+  const getButtonClass = (value: string, baseColor: string, textColor: string) => {
+    const baseClass = "font-bold py-2 px-4 rounded-lg transition-all duration-200 flex items-center gap-2";
+    if (timeFilter === value) {
+      return `${baseClass} ${baseColor} ${textColor} ring-2 ring-offset-2 ring-offset-zinc-900 ring-white`; // Estilo ativo
+    }
+    return `${baseClass} ${baseColor} ${textColor} opacity-60 hover:opacity-100`; // Estilo inativo
+  };
 
   return (
     <>
@@ -104,11 +112,9 @@ const WorkspaceScreen = () => {
                     width="w-fit"
                     isReadOnly={true}
                   ></InputString>
-                 
                 </div>
                 <div className="flex flex-row gap-2 w-full flex-wrap">
-
-                <InputString
+                  <InputString
                     title="SETOR"
                     placeholder={user?.nome_setor || ""}
                     isMandatory={false}
@@ -124,16 +130,16 @@ const WorkspaceScreen = () => {
                     width="w-fit"
                     isReadOnly={true}
                   ></InputString>
-                  </div>
+                </div>
                 <div className="flex w-full mt-4 gap-4">
-                <div className="w-1/2">
-                  <InputTitle title="Pontuação semanal"></InputTitle>
-                  <ScoreBar score={20} />
-                </div>
-                <div className="w-1/2">
-                  <InputTitle title="Pontuação mensal"></InputTitle>
-                  <ScoreBar score={10} />
-                </div>
+                  <div className="w-1/2">
+                    <InputTitle title="Pontuação semanal"></InputTitle>
+                    <ScoreBar score={20} />
+                  </div>
+                  <div className="w-1/2">
+                    <InputTitle title="Pontuação mensal"></InputTitle>
+                    <ScoreBar score={10} />
+                  </div>
                 </div>
               </div>
 
@@ -158,19 +164,27 @@ const WorkspaceScreen = () => {
                     title="Pessoa X conclui atividade Y"
                     details="Atividades realizadas nos últimos sete dias."
                   />
-                  <ActivityCard
-                    width="w-full"
-                    title="Pessoa X conclui atividade Y"
-                    details="Atividades realizadas nos últimos sete dias."
-                  />
-                  <ActivityCard
-                    width="w-full"
-                    title="Pessoa X conclui atividade Y"
-                    details="Atividades realizadas nos últimos sete dias."
-                  />
                 </div>
               </div>
             </div>
+
+            {/* --- SEÇÃO DE FILTROS ADICIONADA AQUI --- */}
+            <div className="mt-12">
+              <InputTitle title="Filtrar por período"></InputTitle>
+              <div className="flex flex-wrap gap-4 mt-2">
+                {filterOptions.map(option => (
+                  <button 
+                    key={option.value}
+                    onClick={() => setTimeFilter(option.value)}
+                    className={getButtonClass(option.value, option.baseColor, option.textColor)}
+                  >
+                    <i className={option.icon}></i>
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="mt-12 flex flex-col gap-4">
               <InputTitle title="Progresso das demandas"></InputTitle>
               <div className="flex flex-row justify-between w-full gap-4">

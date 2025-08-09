@@ -1,64 +1,77 @@
+// hooks e bibliotecas
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// Componentes
 import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import ColoredButton from "@/components/shared/ColoredButton";
-// import CustomCalendar from "@/components/UI/CustomCalendar";
-import { useNavigate } from "react-router-dom";
-// import { useState } from "react";
 import TaskColumn from "@/components/task/TaskColumn";
 import TaskCard from "@/components/task/TaskCard";
 import { useDragDrop } from "@/hooks/useDragDrop";
 import { Calendar } from "@/components/ui/calendar";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
-import { useState } from "react";
 import CreateActivityModal from "@/views/activities/CreateActivityModal";
 
 const DemandsScreen = () => {
   const navigate = useNavigate();
 
-  // const [dragOver, setDragOver] = useState(false); // estado para controlar o drag over
-  // const [activeCard, setActiveCard] = useState<number | null>(null); // nenhum card está sendo arrastado
+  // Estado para controlar o filtro de tempo ativo
+  const [timeFilter, setTimeFilter] = useState('semana'); // 'semana' como padrão
 
   const initialTasks = [
-    { title: "Banner", status: "não iniciada" },
-    { title: "Post Rosa", status: "em andamento" },
-    { title: "Post Azul", status: "concluída" },
-    { title: "Vídeo Legal", status: "atrasada" },
-    { title: "Cartão", status: "não iniciada" },
-    { title: "Cartão Rosa", status: "em andamento" },
-    { title: "Post Lilás", status: "concluída" },
-    { title: "Post Legal", status: "atrasada" },
-    { title: "Post Marrom", status: "não iniciada" },
-    { title: "Banner Legal", status: "em andamento" },
-    { title: "Outdoor Arte", status: "concluída" },
-    { title: "Post De Novo", status: "atrasada" },
-    { title: "Banner De Novo", status: "não iniciada" },
-    { title: "Banner Legal", status: "em andamento" },
-    { title: "Banner Legal", status: "em andamento" },
-    { title: "Banner Legal", status: "em andamento" },
-    { title: "Banner Legal", status: "em andamento" },
+    { title: "Banner", status: "não iniciada", indexCard: 1 },
+    { title: "Post Rosa", status: "em andamento", indexCard: 2 },
+    { title: "Post Azul", status: "concluída", indexCard: 3 },
+    { title: "Vídeo Legal", status: "atrasada", indexCard: 4 },
+    { title: "Cartão", status: "não iniciada", indexCard: 5 },
+    { title: "Cartão Rosa", status: "em andamento", indexCard: 6 },
+    { title: "Post Lilás", status: "concluída", indexCard: 7 },
+    { title: "Post Legal", status: "atrasada", indexCard: 8 },
+    { title: "Post Marrom", status: "não iniciada", indexCard: 9 },
+    { title: "Banner Legal", status: "em andamento", indexCard: 10 },
+    { title: "Outdoor Arte", status: "concluída", indexCard: 11 },
+    { title: "Post De Novo", status: "atrasada", indexCard: 12 },
+    { title: "Banner De Novo", status: "não iniciada", indexCard: 13 },
+    { title: "Banner Legal", status: "em andamento", indexCard: 14 },
+    { title: "Banner Legal", status: "em andamento", indexCard: 15 },
+    { title: "Banner Legal", status: "em andamento", indexCard: 16 },
+    { title: "Banner Legal", status: "em andamento", indexCard: 17 },
   ];
 
   // Use o hook que gerencia todo o estado de drag and drop
   const {
     tasks,
-    // setTasks,
     activeCard,
     setActiveCard,
-
     onDrop,
   } = useDragDrop(initialTasks);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDemandId, setSelectedDemandId] = useState<number | null>(null);
 
-  // --- 3. FUNÇÃO PARA ABRIR O MODAL ---
   const handleOpenActivityModal = (demandId: number) => {
     setSelectedDemandId(demandId);
     setIsModalOpen(true);
   };
 
+  // Opções e estilos para os botões de filtro
+  const filterOptions = [
+    { value: 'hoje', label: 'Hoje', icon: 'fa-solid fa-triangle-exclamation', baseColor: 'bg-red-500', textColor: 'text-white' },
+    { value: 'semana', label: 'Esta Semana', icon: 'fa-solid fa-hourglass-half', baseColor: 'bg-yellow-500', textColor: 'text-zinc-900' },
+    { value: 'mes', label: 'Este Mês', icon: 'fa-solid fa-calendar-days', baseColor: 'bg-blue-500', textColor: 'text-white' },
+    { value: 'geral', label: 'Geral', icon: 'fa-solid fa-globe', baseColor: 'bg-zinc-700', textColor: 'text-white' },
+  ];
+  
+  const getButtonClass = (value: string, baseColor: string, textColor: string) => {
+    const baseClass = "font-bold py-2 px-4 rounded-lg transition-all duration-200 flex items-center gap-2";
+    if (timeFilter === value) {
+      return `${baseClass} ${baseColor} ${textColor} ring-2 ring-offset-2 ring-offset-zinc-900 ring-white`; // Estilo ativo
+    }
+    return `${baseClass} ${baseColor} ${textColor} opacity-60 hover:opacity-100`; // Estilo inativo
+  };
 
   return (
     <>
@@ -97,8 +110,6 @@ const DemandsScreen = () => {
                 <div className="max-h-[490px] overflow-y-auto">
                   {tasks.map((task, index) => {
                     return (
-                      // adicionar lógica para aparecer tarefas com prazo para os próximos sete dias
-
                       <TaskCard
                         key={index}
                         title={task.title}
@@ -119,7 +130,6 @@ const DemandsScreen = () => {
                 <div className="xl:grid xl:grid-cols-2 xl:gap-10 flex flex-col">
                   <div>
                     <div className="w-full flex flex-col items-center xl:items-start">
-                      {/* <CustomCalendar></CustomCalendar> */}
                       <Calendar></Calendar>
                     </div>
                     <div className="mt-5 flex flex-row items-center gap-2 text-sm">
@@ -141,15 +151,12 @@ const DemandsScreen = () => {
                     <div className="max-h-[200px] xl:max-h-[390px]  overflow-y-auto">
                       {tasks.map((task, index) => {
                         return (
-                          // adicionar lógica para aparecer tarefas com prazo para os próximos sete dias
-
                           <TaskCard
                             key={index}
                             title={task.title}
                             status={task.status}
                             indexCard={task.indexCard}
                             onClick={() => handleOpenActivityModal(task.indexCard)}
-
                           />
                         );
                       })}
@@ -159,6 +166,25 @@ const DemandsScreen = () => {
               </Box>
             </div>
           </Motion>
+
+          <Motion>
+            <Box title="Filtros" width="w-full" height="h-fit">
+              <p className="mb-3 text-lg text-zinc-300">Filtrar por período:</p>
+              <div className="flex flex-wrap gap-4">
+                {filterOptions.map(option => (
+                  <button 
+                    key={option.value}
+                    onClick={() => setTimeFilter(option.value)}
+                    className={getButtonClass(option.value, option.baseColor, option.textColor)}
+                  >
+                    <i className={option.icon}></i>
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </Box>
+          </Motion>
+
           <Motion>
             <Box
               title="Progresso das Demandas"
@@ -209,8 +235,6 @@ const DemandsScreen = () => {
       {isModalOpen && (
         <CreateActivityModal
           demandId={selectedDemandId!}
-          // Para o teste, vamos assumir que o usuário é um designer.
-          // No futuro, isso viria do seu contexto de autenticação.
           activityType="social_media" 
           onClose={() => setIsModalOpen(false)}
         />
