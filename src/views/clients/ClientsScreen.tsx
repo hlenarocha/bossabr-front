@@ -12,6 +12,8 @@ import ColoredButton from "@/components/shared/ColoredButton";
 import { Motion } from "@/components/animation/Motion";
 import { ResourceListView } from "@/components/shared/ResourceListView";
 import StatusTag from "@/components/shared/StatusTag";
+import SectorTag from "@/components/shared/SectorTag";
+import TagList from "@/components/shared/TagList"; // 1. IMPORTE O NOVO COMPONENTE
 
 // Hook e tipos
 import { useReadClientList } from "@/hooks/client/useReadClientList";
@@ -19,7 +21,6 @@ import { useReadClientList } from "@/hooks/client/useReadClientList";
 const ClientsScreen = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  // RETIRAR DEPOIS
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   // Debounce para a busca
@@ -88,22 +89,33 @@ const ClientsScreen = () => {
                     columns={[
                       { width: "25%", content: client.nome_empresa },
                       { width: "30%", content: client.servicos.join(', ') },
-                      { width: "20%", content: client.setores.join(', ') },
+                      {
+                        width: "20%",
+                        content: (
+                          <TagList
+                            items={client.setores}
+                            maxVisible={1}
+                            renderTag={(setor, index) => (
+                              <SectorTag key={index} sectorName={setor} />
+                            )}
+                          />
+                        ),
+                      },
                       { width: "15%", content: <StatusTag status={client.progresso_geral} /> },
                       {
                         width: "10%",
                         content: (
                           <button
-                          onClick={() =>
-                            navigate(`/clientes/${client.id_cliente}`, {
-                              state: { from: "/clientes" },
-                            })
-                          }
-                          className="bg-customYellow text-zinc-900 font-bold py-1 px-3 rounded-lg text-sm hover:bg-yellow-400 transition-colors"
-                        >
-                          <i className="fa-solid fa-eye mr-2"></i>
-                          Ver Cliente
-                        </button>
+                            onClick={() =>
+                              navigate(`/clientes/${client.id_cliente}`, {
+                                state: { from: "/clientes" },
+                              })
+                            }
+                            className="bg-customYellow text-zinc-900 font-bold py-1 px-3 rounded-lg text-sm hover:bg-yellow-400 transition-colors"
+                          >
+                            <i className="fa-solid fa-eye mr-2"></i>
+                            Ver Cliente
+                          </button>
                         ),
                       },
                     ]}

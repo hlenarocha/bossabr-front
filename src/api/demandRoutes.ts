@@ -14,6 +14,7 @@ export interface DemandItem {
   last_name: string;
   status: string;
   nome_servico: string;
+  nome_cliente: string;
 } 
 
 export interface DemandDTO {

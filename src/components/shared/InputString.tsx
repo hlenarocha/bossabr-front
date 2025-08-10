@@ -5,7 +5,7 @@ import { MaskedOptions } from "imask";
 interface InputStringProps {
   title: string;
   placeholder: string;
-  isMandatory: boolean;
+  isMandatory?: boolean;
   width?: string;
   height: string;
   mask?: MaskedOptions["mask"];

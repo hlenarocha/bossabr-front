@@ -25,8 +25,8 @@ export interface WorkerItem {
   //avatar?: string;
   id_equipe: number;
   id_cargo: number;
-  //cargo: number;
-  //nome_equipe: string;
+  cargo: number;
+  nome_equipe: string;
   nome_setor: string;
 }
 

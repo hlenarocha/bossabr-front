@@ -23,7 +23,7 @@ import ListaDiariosAdmin from "@/views/reports/AdminReportList";
 
 // Telas de Demandas
 import Demandas from "@/views/demands/DemandsScreen";
-//import DetalhesDemanda from "@/views/demands/DemandDetails";
+import DetalhesDemanda from "@/views/demands/DemandDetails";
 import CriarDemanda from "@/views/demands/CreateDemand";
 import ListarDemandas from "@/views/demands/ListDemands";
 import GerenciarDemandas from "@/views/demands/ManageDemands";
@@ -99,7 +99,7 @@ const AppContainer = () => {
     { path: "/demandas", element: <Demandas /> },
     { path: "/demandas/nova", element: <CriarDemanda /> },
     { path: "/configuracoes/demandas/nova", element: <CriarDemanda /> },
-    // { path: "/demandas/:id", element: <DetalhesDemanda /> },
+    { path: "/demandas/:id", element: <DetalhesDemanda /> },
 
     { path: "/demandas/lista", element: <ListarDemandas /> },
     { path: "/configuracoes/demandas", element: <GerenciarDemandas /> },

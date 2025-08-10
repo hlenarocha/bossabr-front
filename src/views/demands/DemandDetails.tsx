@@ -1,137 +1,109 @@
-import PageTitle from "@/components/title/PageTitle";
-import BaseScreen from "../BaseScreen";
-import BackButton from "@/components/shared/BackButton";
+// hooks e bibliotecas
+import { useState } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+
+// Componentes
+import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
+import BackButton from "@/components/shared/BackButton";
+import PageTitle from "@/components/title/PageTitle";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
-import { useNavigate } from "react-router-dom";
-import PlainButton from "@/components/shared/PlainButton";
-import Select from "@/components/shared/Select";
-import InputDate from "@/components/shared/InputDate";
-import TextArea from "@/components/shared/TextArea";
-import InputQuantity from "@/components/shared/InputQuantity";
 import ColoredButton from "@/components/shared/ColoredButton";
+import { Motion } from "@/components/animation/Motion";
+import { StatusView } from "@/components/shared/StatusView";
+import StatusTag from "@/components/shared/StatusTag";
+import DeadlineDisplay from "@/components/shared/DeadlineDisplay";
+import CreateActivityModal from "@/views/activities/CreateActivityModal";
 
-// EDITAR ESSA BASE PARA O DISPLAY DE DETALHES DA DEMANDA
+// API, hooks e tipos
+import { useReadDemandById } from "@/hooks/demands/useReadDemandById";
+
 const DemandDetails = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { id } = useParams<{ id: string }>();
+  const demandId = Number(id);
+
+  const cameFrom = location.state?.from;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: demand, isLoading, isError } = useReadDemandById(demandId);
+
+  // A API precisa retornar o tipo de serviço (ex: 'design') para o modal funcionar.
+  // Se o nome do setor for retornado, podemos usá-lo para inferir o tipo.
+  const inferActivityType = (sectorName: string | undefined): 'design' | 'social_media' => {
+    if (sectorName?.toLowerCase().includes('design')) return 'design';
+    return 'social_media'; // Padrão para Social Media ou outros
+  };
+
   return (
     <>
       <BaseScreen>
-        <div className="flex flex-row justify-between">
-          <BackButton onClick={() => navigate("/demandas")}></BackButton>
-          <ColoredButton
-            onClick={() => {
-              // navigate("/reports");
-            }}
-            title="INICIAR DEMANDA"
-            width="w-[30%]"
-            // icon start
-            icon="fa-solid fa-play"
-            color="customYellow"
-            justify="justify-center"
-          ></ColoredButton>
-        </div>
-        <PageTitle
-          // icon bolinha verde
-          marginTop="mt-4"
-          title={`Demanda Logotipo do Cliente Lorem Ipsum`}
-        ></PageTitle>
-        <Box
-          title="Detalhes da Demanda"
-          subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
-          width="w-full"
+        <BackButton onClick={() => navigate(cameFrom || -1)} />
+        <PageTitle marginTop="mt-4" icon="fa-solid fa-file-invoice" title="Detalhes da Demanda" />
 
-          height="h-fit"
-        >
-          <div></div>
-          {/* <InputTitle title="Cliente"></InputTitle>
-          <div className="flex gap-6 flex-row w-full">
-            <InputString
-              title="NOME DO CLIENTE"
-              isReadOnly={true}
-              width="w-2/3"
-              isMandatory={true}
-              placeholder="Lorem Ipsum"
-              height="h-[40px]"
-            />
-            <div className="mt-auto mb-3 w-1/3">
-              <PlainButton
-                title="NOVA EQUIPE"
-                color="bg-customYellow"
-                height="h-10"
-                width="w-full"
-              />
-            </div>
-          </div>
-          <div className="mt-6">
-            <InputTitle title="Serviço"></InputTitle>
-            <div className="flex gap-6 flex-row w-full">
-              <Select
-                options={[{ id: 1, name: "Banner" }]}
-                title="TIPO DE SERVIÇO"
-                isMandatory={true}
-                onChange={(selectedOption) => console.log(selectedOption)}
-                width="w-1/3"
-                height="h-[40px]"
-              />
-              <div className="flex items-center w-1/3">
-                <PlainButton
-                  title="NOVO SERVIÇO"
-                  color="bg-customYellow"
-                  height="h-10"
-                  width="w-full"
-                />
-              </div>
-              <div className="mt-auto mb-3 w-1/3">
-                <InputDate
-                  title="PRAZO"
-                  isMandatory={false}
-                  onChange={(date) => console.log(date)}
-                />
-              </div>
-            </div>
-            <TextArea
-              title="DESCRIÇÃO DO SERVIÇO"
-              placeholder="Digite detalhes sobre o serviço..."
-              isMandatory={true}
-              width="w-full"
-              height="h-[100px]"
-              rounded="rounded-[20px]"
-            />
-            <div className="flex flex-row gap-6">
-              <InputString
-                title="LINK DO DRIVE"
-                width="w-2/3"
-                isMandatory={true}
-                placeholder="Insira o link para o Drive do serviço..."
-                height="h-[40px]"
-              />
-              <InputQuantity
-                title="QUANTIDADE"
-                height="h-[40px]"
-                width="w-1/3"
-                isMandatory={true}
-                value={1}
-                min={1}
-                max={100}
-                onChange={(value) => console.log(value)}
-              />
-            </div>
-          </div>
-          <div className="mt-6">
-            <InputTitle title="Atribuição"></InputTitle>
-            <Select
-              options={[{ id: 1, name: "Design" }]}
-              title="SETOR RESPONSÁVEL"
-              isMandatory={true}
-              onChange={(selectedOption) => console.log(selectedOption)}
-              width="w-1/3"
-              height="h-[40px]"
-            />
-          </div> */}
-        </Box>
+        <Motion>
+          <Box
+            width="w-full"
+            height="h-fit"
+            title={demand?.nome_servico || "Carregando..."}
+            subtitle={`Cliente: ${demand?.nome_cliente || ""}`}
+          >
+            <StatusView isLoading={isLoading} isError={isError}>
+              {demand && (
+                <>
+                  {/* --- SEÇÃO SUPERIOR COM TAGS --- */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-between items-start mb-6">
+                    <InputString  title="RESPONSÁVEL" placeholder={demand.first_name + " " + (demand.last_name || "")} isReadOnly width="w-full sm:w-1/2" height="h-8"/>
+                    <div className="flex gap-4 w-full sm:w-auto sm:justify-end">
+                      <div>
+                        <p className="text-zinc-400 font-bold text-sm mb-1">STATUS</p>
+                        <StatusTag status={demand.status} />
+                      </div>
+                      <div>
+                        <p className="text-zinc-400 font-bold text-sm mb-1">PRAZO</p>
+                        <DeadlineDisplay prazo={demand.prazo} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <InputTitle title="Detalhes do Serviço" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <InputString  title="CLIENTE" placeholder={demand.nome_cliente} isReadOnly height="h-8" />
+                    <InputString title="TIPO DE SERVIÇO" placeholder={demand.nome_servico} isReadOnly height="h-8" />
+                  </div>
+                  <div className="mt-4">
+                    <InputString title="DESCRIÇÃO" placeholder={demand.descricao || "Nenhuma descrição fornecida."} isReadOnly height="h-8" />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <InputString title="LINK DO DRIVE" placeholder={demand.link_drive || "Nenhum link fornecido."} isReadOnly height="h-8" />
+                    <InputString title="QUANTIDADE" placeholder={String(demand.quantidade)} isReadOnly height="h-8" />
+                  </div>
+
+                  <div className="flex justify-center mt-10">
+                    <ColoredButton
+                      onClick={() => setIsModalOpen(true)}
+                      title="REGISTRAR ATIVIDADE"
+                      icon="fa-solid fa-plus"
+                      color="customYellow"
+                      width="w-full md:w-1/2"
+                      justify="justify-center"
+                    />
+                  </div>
+                </>
+              )}
+            </StatusView>
+          </Box>
+        </Motion>
       </BaseScreen>
+
+      {isModalOpen && demand && (
+        <CreateActivityModal
+          demandId={demandId}
+          activityType={inferActivityType("design")} // SÓ PARA TESTE
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </>
   );
 };
