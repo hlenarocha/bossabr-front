@@ -17,6 +17,7 @@ import Toast from "@/components/shared/Toast";
 // API, tipos e utils
 import { useReadServices } from "@/hooks/service/useReadServices";
 import PaginationControls from "@/components/shared/PaginationControls";
+import SectorTag from "@/components/shared/SectorTag";
 
 const ManageServices = () => {
   const navigate = useNavigate();
@@ -125,16 +126,30 @@ const ManageServices = () => {
                 <TableItem
                   key={service.id_tipo_servico}
                   columns={[
-                    
                     { width: "30%", content: service.nome_servico },
                     {
                       width: "30%",
-                      content:
-                        service.nome_setor || "Não encontrado",
+                      content: <SectorTag sectorName={service.nome_setor} />,
                     },
                     {
                       width: "20%",
-                      content: String(service.pontuacao ?? "N/A"),
+                      content: (
+                        <div className="flex justify-center items-center">
+                          <div
+                            className="
+                              w-10 h-10
+                              rounded-full
+                              bg-zinc-800
+                              text-white
+                              flex items-center justify-center
+                              font-bold text-sm
+                              shadow-md
+                            "
+                          >
+                            {String(service.pontuacao ?? "0")}
+                          </div>
+                        </div>
+                      ),
                     },
                     {
                       width: "20%",

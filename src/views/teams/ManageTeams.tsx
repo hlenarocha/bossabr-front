@@ -17,6 +17,8 @@ import Toast from "@/components/shared/Toast";
 
 // API, hook e tipos
 import { useReadTeams } from "@/hooks/teams/useReadTeams";
+import SectorTag from "@/components/shared/SectorTag";
+import TeamTypeTag from "@/components/shared/TeamTypeTag";
 
 const ManageTeams = () => {
   const navigate = useNavigate();
@@ -140,13 +142,12 @@ const ManageTeams = () => {
                       },
                       {
                         width: "10%",
-                        content: team.equipe_interna ? "Interna" : "Externa",
+                        content: <TeamTypeTag isInternal={team.equipe_interna}/>,
                       },
                       {
                         width: "25%",
                         content:
-                          team.nome_setor ||
-                          "Não encontrado",
+                          <SectorTag sectorName={team.nome_setor} /> 
                       },
                       {
                         width: "15%",
