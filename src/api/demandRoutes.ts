@@ -15,6 +15,7 @@ export interface DemandItem {
   status: string;
   nome_servico: string;
   nome_cliente: string;
+  nome_setor?: string;
 } 
 
 export interface DemandDTO {
@@ -83,6 +84,63 @@ export interface PaginatedDemandsResponse {
   last_page: number;
   total: number;
 }
+
+
+// HISTÓRICO DE DEMANDAS
+interface HistoryPessoa {
+  id_pessoa: number;
+  first_name: string;
+  last_name?: string;
+}
+
+interface HistoryStatus {
+  id_status: number;
+  status: string;
+}
+
+interface HistorySetor {
+  id_setor: number;
+  nome_setor: string;
+}
+
+interface HistoryEquipe {
+  id_equipe: number;
+  nome_equipe: string;
+  setor: HistorySetor;
+}
+
+interface HistoryEquipePessoa {
+  id_equipe_pessoa: number;
+  equipe: HistoryEquipe;
+}
+
+interface AtividadeDesignerHistoryItem {
+  id_ativ_designer: number;
+  data_inicio: string;
+  observacoes: string | null;
+  link_drive: string | null;
+  pessoa: HistoryPessoa;
+  status: HistoryStatus;
+  equipe_pessoa: HistoryEquipePessoa;
+}
+
+interface AtividadeSocialMediaHistoryItem {
+  id_ativ_social_media: number;
+  data_inicio: string;
+  texto: string | null;
+  observacoes: string | null;
+  link_drive: string | null;
+  pessoa: HistoryPessoa;
+  status: HistoryStatus;
+  equipe_pessoa: HistoryEquipePessoa;
+}
+
+export interface DemandHistoryResponse {
+  id_demanda: number;
+  atividades_designer: AtividadeDesignerHistoryItem[];
+  atividades_social_media: AtividadeSocialMediaHistoryItem[];
+}
+
 
 export const getDemandFormData = async (): Promise<DemandFormDataResponse> => {
   try {
@@ -159,6 +217,16 @@ const deleteDemandById = async (id: number): Promise<void> => {
     await api.delete(`/demanda/${id}`);
   } catch (error) {
     console.error("Erro ao deletar demanda:", error);
+    throw error;
+  }
+};
+
+export const readDemandHistory = async (id: number): Promise<DemandHistoryResponse> => {
+  try {
+    const response = await api.get(`/demanda/historico/${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.error(`Erro ao buscar histórico da demanda ${id}:`, error);
     throw error;
   }
 };

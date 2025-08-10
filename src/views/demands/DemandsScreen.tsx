@@ -50,12 +50,12 @@ const DemandsScreen = () => {
   } = useDragDrop(initialTasks);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDemandId, setSelectedDemandId] = useState<number | null>(null);
+  // const [selectedDemandId, setSelectedDemandId] = useState<number | null>(null);
 
-  const handleOpenActivityModal = (demandId: number) => {
-    setSelectedDemandId(demandId);
-    setIsModalOpen(true);
-  };
+  // const handleOpenActivityModal = (demandId: number) => {
+  //   setSelectedDemandId(demandId);
+  //   setIsModalOpen(true);
+  // };
 
   // Opções e estilos para os botões de filtro
   const filterOptions = [
@@ -156,7 +156,7 @@ const DemandsScreen = () => {
                             title={task.title}
                             status={task.status}
                             indexCard={task.indexCard}
-                            onClick={() => handleOpenActivityModal(task.indexCard)}
+                            onClick={() => navigate(`/demandas/${task.indexCard}`)}
                           />
                         );
                       })}
@@ -232,13 +232,13 @@ const DemandsScreen = () => {
         <ScrollToEndArrow />
 
       </BaseScreen>
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <CreateActivityModal
           demandId={selectedDemandId!}
           activityType="social_media" 
           onClose={() => setIsModalOpen(false)}
         />
-      )}
+      )} */}
     </>
   );
 };

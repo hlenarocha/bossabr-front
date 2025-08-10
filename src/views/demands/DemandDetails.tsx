@@ -1,6 +1,6 @@
 // hooks e bibliotecas
 import { useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Componentes
 import BaseScreen from "@/views/BaseScreen";
@@ -21,26 +21,38 @@ import { useReadDemandById } from "@/hooks/demands/useReadDemandById";
 
 const DemandDetails = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const demandId = Number(id);
 
-  const cameFrom = location.state?.from;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: demand, isLoading, isError } = useReadDemandById(demandId);
 
   // A API precisa retornar o tipo de serviço (ex: 'design') para o modal funcionar.
   // Se o nome do setor for retornado, podemos usá-lo para inferir o tipo.
-  const inferActivityType = (sectorName: string | undefined): 'design' | 'social_media' => {
-    if (sectorName?.toLowerCase().includes('design')) return 'design';
-    return 'social_media'; // Padrão para Social Media ou outros
+  const inferActivityType = (
+    sectorName: string | undefined
+  ): "design" | "social_media" => {
+    if (sectorName?.toLowerCase().includes("design")) return "design";
+    return "social_media"; // Padrão para Social Media ou outros
   };
 
   return (
     <>
       <BaseScreen>
-        <BackButton onClick={() => navigate(cameFrom || -1)} />
-        <PageTitle marginTop="mt-4" icon="fa-solid fa-file-invoice" title="Detalhes da Demanda" />
+        <BackButton onClick={() => navigate("/demandas")} />
+        <div className="flex flex-row justify-between"> 
+          <PageTitle
+            marginTop="mt-4"
+            icon="fa-solid fa-file-invoice"
+            title="Detalhes da Demanda"
+          />
+          <ColoredButton
+            title="HISTÓRICO DA DEMANDA"
+            icon="fa-solid  fa-history"
+            tip="Ver histórico"
+            onClick={() => navigate(`/demandas/${demandId}/historico`)}
+          />
+        </div>
 
         <Motion>
           <Box
@@ -52,16 +64,27 @@ const DemandDetails = () => {
             <StatusView isLoading={isLoading} isError={isError}>
               {demand && (
                 <>
-                  {/* --- SEÇÃO SUPERIOR COM TAGS --- */}
                   <div className="flex flex-col sm:flex-row gap-4 justify-between items-start mb-6">
-                    <InputString  title="RESPONSÁVEL" placeholder={demand.first_name + " " + (demand.last_name || "")} isReadOnly width="w-full sm:w-1/2" height="h-8"/>
+                    <InputString
+                      title="RESPONSÁVEL"
+                      placeholder={
+                        demand.first_name + " " + (demand.last_name || "")
+                      }
+                      isReadOnly
+                      width="w-full sm:w-1/2"
+                      height="h-8"
+                    />
                     <div className="flex gap-4 w-full sm:w-auto sm:justify-end">
                       <div>
-                        <p className="text-zinc-400 font-bold text-sm mb-1">STATUS</p>
+                        <p className="text-white font-bold text-sm mb-1">
+                          STATUS
+                        </p>
                         <StatusTag status={demand.status} />
                       </div>
                       <div>
-                        <p className="text-zinc-400 font-bold text-sm mb-1">PRAZO</p>
+                        <p className="text-white font-bold text-sm mb-1">
+                          PRAZO
+                        </p>
                         <DeadlineDisplay prazo={demand.prazo} />
                       </div>
                     </div>
@@ -69,15 +92,44 @@ const DemandDetails = () => {
 
                   <InputTitle title="Detalhes do Serviço" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                    <InputString  title="CLIENTE" placeholder={demand.nome_cliente} isReadOnly height="h-8" />
-                    <InputString title="TIPO DE SERVIÇO" placeholder={demand.nome_servico} isReadOnly height="h-8" />
+                    <InputString
+                      title="CLIENTE"
+                      placeholder={demand.nome_cliente}
+                      isReadOnly
+                      height="h-8"
+                    />
+                    <InputString
+                      title="TIPO DE SERVIÇO"
+                      placeholder={demand.nome_servico}
+                      isReadOnly
+                      height="h-8"
+                    />
                   </div>
                   <div className="mt-4">
-                    <InputString title="DESCRIÇÃO" placeholder={demand.descricao || "Nenhuma descrição fornecida."} isReadOnly height="h-8" />
+                    <InputString
+                      title="DESCRIÇÃO"
+                      placeholder={
+                        demand.descricao || "Nenhuma descrição fornecida."
+                      }
+                      isReadOnly
+                      height="h-8"
+                    />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <InputString title="LINK DO DRIVE" placeholder={demand.link_drive || "Nenhum link fornecido."} isReadOnly height="h-8" />
-                    <InputString title="QUANTIDADE" placeholder={String(demand.quantidade)} isReadOnly height="h-8" />
+                    <InputString
+                      title="LINK DO DRIVE"
+                      placeholder={
+                        demand.link_drive || "Nenhum link fornecido."
+                      }
+                      isReadOnly
+                      height="h-8"
+                    />
+                    <InputString
+                      title="QUANTIDADE"
+                      placeholder={String(demand.quantidade)}
+                      isReadOnly
+                      height="h-8"
+                    />
                   </div>
 
                   <div className="flex justify-center mt-10">
