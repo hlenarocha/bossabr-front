@@ -1,138 +1,171 @@
-import PageTitle from "@/components/title/PageTitle";
-import BaseScreen from "../BaseScreen";
-import BackButton from "@/components/shared/BackButton";
+// hooks e bibliotecas
+import { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+
+// Componentes
+import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
+import BackButton from "@/components/shared/BackButton";
+import PageTitle from "@/components/title/PageTitle";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
-import { useNavigate } from "react-router-dom";
-import PlainButton from "@/components/shared/PlainButton";
-import Select from "@/components/shared/Select";
-import InputDate from "@/components/shared/InputDate";
-import TextArea from "@/components/shared/TextArea";
-import InputQuantity from "@/components/shared/InputQuantity";
-import ColoredButton from "@/components/shared/ColoredButton";
+import { Motion } from "@/components/animation/Motion";
+import { StatusView } from "@/components/shared/StatusView";
+import SearchBar from "@/components/shared/SearchBar";
+import TableItem from "@/components/table/TableItem";
+import { ResourceListView } from "@/components/shared/ResourceListView";
+import StatusTag from "@/components/shared/StatusTag";
+import DeadlineDisplay from "@/components/shared/DeadlineDisplay";
 
-// EDITAR ESSA BASE PARA O DISPLAY DE DETALHES DO CLIENTE
+// API, hooks e tipos
+import { useReadClientById } from "@/hooks/client/useReadClientById";
+import { useReadDemandsByClientId } from "@/hooks/demands/useReadDemandsByClientId";
+import { DemandByClientItem } from "@/api/demandRoutes";
+import SectorTag from "@/components/shared/SectorTag";
+
 const ClientDetails = () => {
   const navigate = useNavigate();
-  return (
-    <>
-      <BaseScreen>
-        <div className="flex flex-row justify-between">
-          <BackButton onClick={() => navigate("/tasks")}></BackButton>
-          <ColoredButton
-            onClick={() => {
-              // navigate("/reports");
-            }}
-            title="INICIAR DEMANDA"
-            width="w-[30%]"
-            // icon start
-            icon="fa-solid fa-play"
-            color="customYellow"
-            justify="justify-center"
-          ></ColoredButton>
-        </div>
-        <PageTitle
-          // icon bolinha verde
-          marginTop="mt-4"
-          title={`TESTE`}
-        ></PageTitle>
-        <Box
-          title="Detalhes da Demanda"
-          subtitle="Preencha os dados do formulário e cadastre uma nova demanda."
-          width="w-full"
+  const location = useLocation();
+  const { id } = useParams<{ id: string }>();
+  const clientId = Number(id);
 
+  // --- BUSCA DE DADOS ---
+  const { data: client, isLoading: isLoadingClient, isError: isErrorClient } = useReadClientById(clientId);
+  const { data: demands, isLoading: isLoadingDemands, isError: isErrorDemands } = useReadDemandsByClientId(clientId);
+
+  // --- LÓGICA DE FILTRO E BUSCA PARA A LISTA DE DEMANDAS ---
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredDemands, setFilteredDemands] = useState<DemandByClientItem[]>([]);
+
+  useEffect(() => {
+    if (demands) {
+      if (!searchTerm) {
+        setFilteredDemands(demands);
+      } else {
+        const lowercasedSearch = searchTerm.toLowerCase();
+        const filtered = demands.filter(demand =>
+          demand.nome_servico.toLowerCase().includes(lowercasedSearch) ||
+          demand.status.toLowerCase().includes(lowercasedSearch) ||
+          demand.nome_setor.toLowerCase().includes(lowercasedSearch)
+        );
+        setFilteredDemands(filtered);
+      }
+    }
+  }, [searchTerm, demands]);
+
+  //const isLoading = isLoadingClient || isLoadingDemands;
+
+  return (
+    <BaseScreen>
+      <BackButton onClick={() => navigate(location.state?.from || "/clientes")} />
+      <PageTitle
+        marginTop="mt-4"
+        icon="fa-solid fa-user-tie"
+        title={`Cliente: ${client?.nome_empresa || "Carregando..."}`}
+      />
+      
+      <Motion>
+        <Box
+          width="w-full"
           height="h-fit"
+          title="Informações do Cliente"
+          subtitle="Detalhes de contato e contrato."
         >
-          <div></div>
-          {/* <InputTitle title="Cliente"></InputTitle>
-          <div className="flex gap-6 flex-row w-full">
-            <InputString
-              title="NOME DO CLIENTE"
-              isReadOnly={true}
-              width="w-2/3"
-              isMandatory={true}
-              placeholder="Lorem Ipsum"
-              height="h-[40px]"
-            />
-            <div className="mt-auto mb-3 w-1/3">
-              <PlainButton
-                title="NOVA EQUIPE"
-                color="bg-customYellow"
-                height="h-10"
-                width="w-full"
-              />
-            </div>
-          </div>
-          <div className="mt-6">
-            <InputTitle title="Serviço"></InputTitle>
-            <div className="flex gap-6 flex-row w-full">
-              <Select
-                options={[{ id: 1, name: "Banner" }]}
-                title="TIPO DE SERVIÇO"
-                isMandatory={true}
-                onChange={(selectedOption) => console.log(selectedOption)}
-                width="w-1/3"
-                height="h-[40px]"
-              />
-              <div className="flex items-center w-1/3">
-                <PlainButton
-                  title="NOVO SERVIÇO"
-                  color="bg-customYellow"
-                  height="h-10"
-                  width="w-full"
-                />
-              </div>
-              <div className="mt-auto mb-3 w-1/3">
-                <InputDate
-                  title="PRAZO"
-                  isMandatory={false}
-                  onChange={(date) => console.log(date)}
-                />
-              </div>
-            </div>
-            <TextArea
-              title="DESCRIÇÃO DO SERVIÇO"
-              placeholder="Digite detalhes sobre o serviço..."
-              isMandatory={true}
-              width="w-full"
-              height="h-[100px]"
-              rounded="rounded-[20px]"
-            />
-            <div className="flex flex-row gap-6">
-              <InputString
-                title="LINK DO DRIVE"
-                width="w-2/3"
-                isMandatory={true}
-                placeholder="Insira o link para o Drive do serviço..."
-                height="h-[40px]"
-              />
-              <InputQuantity
-                title="QUANTIDADE"
-                height="h-[40px]"
-                width="w-1/3"
-                isMandatory={true}
-                value={1}
-                min={1}
-                max={100}
-                onChange={(value) => console.log(value)}
-              />
-            </div>
-          </div>
-          <div className="mt-6">
-            <InputTitle title="Atribuição"></InputTitle>
-            <Select
-              options={[{ id: 1, name: "Design" }]}
-              title="SETOR RESPONSÁVEL"
-              isMandatory={true}
-              onChange={(selectedOption) => console.log(selectedOption)}
-              width="w-1/3"
-              height="h-[40px]"
-            />
-          </div> */}
+          <StatusView isLoading={isLoadingClient} isError={isErrorClient}>
+            <>
+              {client && (
+                <>
+                  <InputTitle title="Dados de Contato" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <InputString title="NOME DA EMPRESA" placeholder={client.nome_empresa} isReadOnly height="h-8" />
+                    <InputString title="NOME DO RESPONSÁVEL" placeholder={client.nome_responsavel} isReadOnly height="h-8" />
+                    <InputString title="E-MAIL" placeholder={client.email} isReadOnly height="h-8" />
+                    <InputString title="TELEFONE" placeholder={client.telefone} isReadOnly height="h-8" />
+                    <InputString title="CLASSIFICAÇÃO" placeholder={client.classificacao} isReadOnly height="h-8" />
+                  </div>
+
+                  <InputTitle title="Detalhes do Contrato" marginTop="mt-6" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <InputString title="DATA DE ENTRADA" placeholder={client.data_entrada} isReadOnly height="h-8" />
+                    <InputString title="FIM DO CONTRATO" placeholder={client.data_fim_contrato} isReadOnly height="h-8" />
+                  </div>
+                  <div className="mt-4">
+                      <p className="text-zinc-400 font-bold text-sm mb-1">DESCRIÇÃO</p>
+                      <p className="text-white bg-zinc-800 p-3 rounded-md min-h-[80px]">{client.desc_contrato || "N/A"}</p>
+                  </div>
+                </>
+              )}
+            </>
+          </StatusView>
         </Box>
-      </BaseScreen>
-    </>
+      </Motion>
+      
+      <Motion>
+        <Box
+          width="w-full"
+          height="h-fit"
+          title="Demandas Associadas"
+          subtitle="Lista de todas as demandas solicitadas por este cliente."
+        >
+           <SearchBar
+              placeholder="Pesquise por serviço, status ou setor..."
+              value={searchTerm}
+              onChange={(value: string) => setSearchTerm(value)}
+            />
+            
+           <TableItem
+              columns={[
+                { width: "25%", content: "SERVIÇO" },
+                { width: "20%", content: "SETOR" },
+                { width: "20%", content: "PRAZO" },
+                { width: "20%", content: "STATUS" },
+                { width: "15%", content: "AÇÕES" },
+              ]}
+              isTableHeader={true}
+              itemHeight="h-12"
+            />
+
+            <div className="h-[300px] overflow-y-auto">
+              <ResourceListView
+                isLoading={isLoadingDemands}
+                isError={isErrorDemands}
+                items={filteredDemands}
+                emptyMessage="Nenhuma demanda encontrada para este cliente."
+                errorMessage="Erro ao carregar as demandas."
+                renderItem={(demand) => (
+                  <TableItem
+                    key={demand.id_demanda}
+                    columns={[
+                      { width: "25%", content: demand.nome_servico },
+                      { width: "20%", content: <SectorTag sectorName={demand.nome_setor} /> },
+                      { width: "20%", content: <DeadlineDisplay prazo={demand.prazo} /> },
+                      { width: "20%", content: <StatusTag status={demand.status} /> },
+                      {
+                        width: "15%",
+                        content: (
+                          <button
+                          onClick={() =>
+                            navigate(`/demandas/${demand.id_demanda}`, {
+                              state: { from: "/demandas/lista" },
+                            })
+                          }
+                          className="bg-customYellow text-zinc-900 font-bold py-1 px-3 rounded-lg text-sm hover:bg-yellow-400 transition-colors"
+                        >
+                          <i className="fa-solid fa-eye mr-2"></i>
+                          Ver Demanda
+                        </button>
+                        ),
+                      },
+                    ]}
+                    itemHeight="h-12"
+                  />
+                )}
+              />
+            </div>
+        </Box>
+      </Motion>
+
+    </BaseScreen>
   );
 };
 

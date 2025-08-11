@@ -14,7 +14,7 @@ const PlainButton = (props: PlainButtonProps) => {
       props.color ? `${props.color}` : ""
     }`}>
     
-      <span className={`font-bold text-customTextGray ${props.titleStyle}`}>{props.title}</span>
+      <span className={`font-bold text-zinc-900 ${props.titleStyle}`}>{props.title}</span>
     </button>
   );
 };

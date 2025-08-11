@@ -56,7 +56,7 @@ const Modal = (props: PropsModal) => {
               width="w-[50%]"
             ></PlainButton>
             {props.buttonTitle2 && props.onClick2 && props.buttonColor2 && (
-              <PlainButton
+              <PlainButton 
                 onClick={props.onClick2}
                 titleStyle="text-lg font-bold"
                 title={props.buttonTitle2}

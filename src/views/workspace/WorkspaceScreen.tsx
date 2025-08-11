@@ -73,7 +73,7 @@ const WorkspaceScreen = () => {
         <div className="w-full flex items-center justify-between cursor-default mt-4">
           <PageTitle title="Área de Trabalho" icon="fa-solid fa-desktop" />
 
-          <div className="flex items-center hover:bg-zinc-900 hover:cursor-pointer gap-4 bg-black/20 backdrop-blur-sm rounded-[20px] p-2 pr-6 shadow-md">
+          <div onClick={() => navigate("/configuracoes")} className="flex items-center hover:bg-zinc-900 hover:cursor-pointer gap-4 bg-black/20 backdrop-blur-sm rounded-[20px] p-2 pr-6 shadow-md">
             <div className="w-20 h-20 flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
               <img
                 className="rounded-full w-16 h-16" 
@@ -168,7 +168,6 @@ const WorkspaceScreen = () => {
               </div>
             </div>
 
-            {/* --- SEÇÃO DE FILTROS ADICIONADA AQUI --- */}
             <div className="mt-12">
               <InputTitle title="Filtrar por período"></InputTitle>
               <div className="flex flex-wrap gap-4 mt-2">

@@ -117,6 +117,12 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
         isModalVisible={true}
         onClick1={onClose}
         buttonTitle1="CANCELAR"
+        buttonColor1="bg-customRedAlert"
+        buttonColor2="bg-customYellow"
+        buttonTitle2="SALVAR ATIVIDADE"
+        iconName="fa-solid fa-pen-to-square"
+        onClick2={handleSubmit(onSubmit)}
+
        // hasSubmitButton={false}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 h-[450px] overflow-y-auto">
@@ -148,9 +154,9 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
           )} />
 
           <div className="flex justify-end mt-4">
-            <button type="submit" disabled={isPending} className="bg-customYellow text-black font-bold py-2 px-4 rounded disabled:bg-gray-400">
+            {/* <button type="submit" disabled={isPending} className="bg-customYellow text-black font-bold py-2 px-4 rounded disabled:bg-gray-400">
               {isPending ? 'SALVANDO...' : 'SALVAR ATIVIDADE'}
-            </button>
+            </button> */}
           </div>
         </form>
       </Modal>

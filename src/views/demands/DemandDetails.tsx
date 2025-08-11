@@ -152,7 +152,7 @@ const DemandDetails = () => {
       {isModalOpen && demand && (
         <CreateActivityModal
           demandId={demandId}
-          activityType={inferActivityType("design")} // SÓ PARA TESTE
+          activityType={inferActivityType("design")} // SÓ PARA TESTE - MUDAR
           onClose={() => setIsModalOpen(false)}
         />
       )}

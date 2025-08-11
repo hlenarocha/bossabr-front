@@ -141,6 +141,16 @@ export interface DemandHistoryResponse {
   atividades_social_media: AtividadeSocialMediaHistoryItem[];
 }
 
+export interface DemandByClientItem {
+  nome_empresa: string;
+  nome_servico: string;
+  status: string;
+  nome_setor: string;
+  descricao: string;
+  prazo: string;
+  // Adicione um ID para a key do React, a API precisa retornar isso
+  id_demanda: number; 
+}
 
 export const getDemandFormData = async (): Promise<DemandFormDataResponse> => {
   try {
@@ -230,5 +240,23 @@ export const readDemandHistory = async (id: number): Promise<DemandHistoryRespon
     throw error;
   }
 };
+
+export const readDemandsByClientId = async (clientId: number): Promise<DemandByClientItem[]> => {
+  try {
+    // A API que você mencionou é /demanda/historico/:id, mas o nome da rota no seu
+    // controller de demanda é /demanda/cliente/:id. Estou usando a segunda opção.
+    const response = await api.get(`/demanda/cliente/${clientId}`);
+    // O seu JSON de exemplo não tem a chave "data" aninhada, então acessamos direto.
+    // Se a API real tiver, mude para: return response.data.data;
+    // O nome da empresa é a chave principal no seu JSON, então precisamos extrair o array de dentro dela.
+    const clientName = Object.keys(response.data).find(key => key !== 'success');
+    return clientName ? response.data[clientName] : [];
+
+  } catch (error) {
+    console.error(`Erro ao buscar demandas para o cliente ${clientId}:`, error);
+    throw error;
+  }
+};
+
 
 export { readDemands, getDemands, createDemand, readDemandById, updateDemandById, deleteDemandById };

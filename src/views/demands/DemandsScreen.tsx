@@ -13,7 +13,6 @@ import { useDragDrop } from "@/hooks/useDragDrop";
 import { Calendar } from "@/components/ui/calendar";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
-import CreateActivityModal from "@/views/activities/CreateActivityModal";
 
 const DemandsScreen = () => {
   const navigate = useNavigate();
@@ -49,7 +48,7 @@ const DemandsScreen = () => {
     onDrop,
   } = useDragDrop(initialTasks);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  //const [isModalOpen, setIsModalOpen] = useState(false);
   // const [selectedDemandId, setSelectedDemandId] = useState<number | null>(null);
 
   // const handleOpenActivityModal = (demandId: number) => {
