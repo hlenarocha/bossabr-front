@@ -1,7 +1,7 @@
 // hooks e bibliotecas
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { format, parseISO, isSameDay, addDays, isWithinInterval } from "date-fns";
+import { format, parseISO, isSameDay, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 // Componentes
@@ -88,7 +88,7 @@ const DemandsScreen = () => {
 
       <div className="flex flex-col w-full">
         <Motion>
-          <Box title="Calendário de Prazos" subtitle="Clique em uma data para ver as demandas com prazo no dia." width="w-full" height="h-fit">
+          <Box title="Calendário" subtitle="Clique em uma data para ver as demandas com prazo no dia." width="w-full" height="h-fit">
             <div className="flex flex-col md:flex-row gap-8">
               <div className="w-full md:w-auto">
                 <Calendar
