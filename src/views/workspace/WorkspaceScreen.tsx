@@ -168,9 +168,14 @@ const WorkspaceScreen = () => {
               </div>
             </div>
 
-            <div className="mt-12">
+            {/* <div className="mt-12">
               <InputTitle title="Filtrar por período"></InputTitle>
-              <div className="flex flex-wrap gap-4 mt-2">
+             
+            </div> */}
+
+            <div className="mt-12 flex flex-col gap-4">
+              <InputTitle title="Progresso das demandas"></InputTitle>
+              <div className="flex flex-wrap gap-4 mt-2 mb-4">
                 {filterOptions.map(option => (
                   <button 
                     key={option.value}
@@ -182,10 +187,6 @@ const WorkspaceScreen = () => {
                   </button>
                 ))}
               </div>
-            </div>
-
-            <div className="mt-12 flex flex-col gap-4">
-              <InputTitle title="Progresso das demandas"></InputTitle>
               <div className="flex flex-row justify-between w-full gap-4">
                 <TaskColumn
                   title="NÃO INICIADAS"
