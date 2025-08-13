@@ -15,6 +15,7 @@ import StatusTag from "@/components/shared/StatusTag";
 
 // Hook para buscar a lista de diários
 import { useReadDailyReportsList } from "@/hooks/reports/useReadDailyReportsList";
+import SectorTag from "@/components/shared/SectorTag";
 
 const AdminReportList = () => {
   const navigate = useNavigate();
@@ -63,11 +64,13 @@ const AdminReportList = () => {
         >
           <TableItem
             columns={[
-              { width: "25%", content: "NOME" },
-              { width: "25%", content: "CARGO" },
-              { width: "20%", content: "EQUIPE" },
+              { width: "15%", content: "NOME" },
+              { width: "15%", content: "CARGO" },
+              { width: "10%", content: "EQUIPE" },
+              { width: "15%", content: "SETOR" },
+              { width: "10%", content: "DEMANDAS" },
               { width: "15%", content: "PROGRESSO GERAL" },
-              { width: "15%", content: "AÇÕES" },
+              { width: "10%", content: "AÇÕES" },
             ]}
             isTableHeader={true}
             itemHeight="h-12"
@@ -85,22 +88,45 @@ const AdminReportList = () => {
                   key={person.id_pessoa}
                   columns={[
                     {
-                      width: "25%",
+                      width: "15%",
                       content: `${person.first_name} ${person.last_name}`,
                     },
-                    { width: "25%", content: person.cargo },
-                    { width: "20%", content: person.nome_equipe },
+                    { width: "15%", content: person.cargo },
+                    { width: "10%", content: person.nome_equipe },
+                    {
+                      width: "15%",
+                      content: <SectorTag sectorName={person.nome_setor} />,
+                    },
+                    {
+                      width: "10%",
+                      content: (
+                        <div
+                          className="
+                        
+                        w-10 h-10
+                        rounded-full
+                        bg-zinc-800
+                        text-white
+                        flex items-center justify-center
+                        font-bold text-sm
+                        shadow-md
+                      "
+                        >
+                          {String(person.total_demandas)}
+                        </div>
+                      ),
+                    },
                     {
                       width: "15%",
                       content: <StatusTag status={person.progresso} />,
                     },
                     {
-                      width: "15%",
+                      width: "10%",
                       content: (
                         <button
                           onClick={() =>
                             navigate(`/diarios/${person.id_pessoa}`, {
-                              state: { from: "/diarios/admin" },
+                              state: { from: "/diarios/admin" }, // MODIFICAR
                             })
                           }
                           className="bg-customYellow text-zinc-900 font-bold py-1 px-3 rounded-lg text-sm hover:bg-yellow-400 transition-colors"

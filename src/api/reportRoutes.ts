@@ -1,6 +1,5 @@
 import api from "@/api/axiosInstance";
 
-// Interface para um item individual da lista de diários
 export interface DailyReportListItem {
   id_pessoa: number;
   first_name: string;
@@ -35,7 +34,7 @@ export const readDailyReportsList = async (page: number, search: string): Promis
         por_pagina: 10 // Mantendo o padrão de 10 por página
       }
     });
-    // A API aninha os dados de paginação dentro de um campo 'data'
+    console.log(response);
     return response.data.data;
   } catch (error) {
     console.error("Erro ao buscar lista de diários:", error);

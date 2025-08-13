@@ -42,7 +42,7 @@ const DailyReportScreen = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex flex-col gap-4">
           {cameFromAdminList && (
-            <BackButton onClick={() => navigate("/diarios/admin")} />
+            <BackButton onClick={() => navigate("/diarios")} />
           )}
           <PageTitle
             icon="fa-solid fa-book"
@@ -133,7 +133,7 @@ const DailyReportScreen = () => {
                     <i
                       className="fa-solid fa-eye text-lg text-customYellow hover:cursor-pointer"
                       title="Visualizar Detalhes"
-                      onClick={() => navigate("/reports/details")}
+                      onClick={() => navigate("/reports/details")} // MODIFICAR
                     ></i>
                   ),
                 },
