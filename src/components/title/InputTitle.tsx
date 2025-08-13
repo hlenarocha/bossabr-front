@@ -1,5 +1,5 @@
 interface InputTitleProps {
-  title: string;
+  title: React.ReactNode;
   marginTop?: string;
 }
 

@@ -1,3 +1,10 @@
+// hooks e bibliotecas
+import { useState, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
+// Componentes
 import PageTitle from "@/components/title/PageTitle";
 import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
@@ -5,11 +12,12 @@ import InputString from "@/components/shared/InputString";
 import InputTitle from "@/components/title/InputTitle";
 import TableItem from "@/components/table/TableItem";
 import ColoredButton from "@/components/shared/ColoredButton";
-import { useNavigate, useLocation } from "react-router-dom";
 import { Motion } from "@/components/animation/Motion";
-import { useContext } from "react";
-import { UserContext } from "@/contexts/UserContext";
 import BackButton from "@/components/shared/BackButton";
+import InputDate from "@/components/shared/InputDate";
+
+// Contexto
+import { UserContext } from "@/contexts/UserContext";
 
 const DailyReportScreen = () => {
   const navigate = useNavigate();
@@ -17,82 +25,91 @@ const DailyReportScreen = () => {
   const location = useLocation();
   const cameFromAdminList = location.state?.from === "/diarios/admin";
 
+  const [reportDate, setReportDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
+
+  const handleGenerateReport = () => {
+    if (!user) return;
+    console.log(
+      `Gerando relatório para o usuário ID: ${user.id_pessoa} na data: ${reportDate}`
+    );
+    // Futuramente, aqui virá a chamada para a API
+  };
+
   return (
     <BaseScreen>
-      <div className="flex flex-col items-center lg:justify-between lg:flex-row">
-        <div>
-          {cameFromAdminList ? (
-            <BackButton onClick={() => navigate("/diarios")} />
-          ) : (
-            // Opcional: Deixe um espaço vazio para manter o alinhamento
-            <div></div>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex flex-col gap-4">
+          {cameFromAdminList && (
+            <BackButton onClick={() => navigate("/diarios/admin")} />
           )}
-
           <PageTitle
             icon="fa-solid fa-book"
-            marginTop="mt-4"
-            title={
-              "Diário de " +
-              (user?.first_name || "Usuário") +
-              " " +
-              (user?.last_name || "")
-            }
-          ></PageTitle>
+            title={`Diário de ${user?.first_name || ""} ${
+              user?.last_name || ""
+            }`}
+          />
         </div>
         <ColoredButton
-          onClick={() => {
-            navigate("/reports");
-          }}
-          width="w-fit"
-          title="BAIXAR RELATÓRIO DIÁRIO"
-          icon="fa-solid fa-download"
-          marginTop="mt-6"
+          onClick={handleGenerateReport}
+          width="w-full sm:w-fit"
+          title="BAIXAR RELATÓRIO"
+          icon="fa-solid fa-file-arrow-down"
           color="customYellow"
           justify="justify-center"
-        ></ColoredButton>
+        />
       </div>
+
       <Motion>
         <Box
           title="Diário de Atividades"
-          subtitle="Visualize as atividades realizadas no dia {dd / mm / YYYY}"
+          subtitle="Selecione um dia para visualizar as atividades registradas ou preencher um novo relatório."
           width="w-full"
           height="h-fit"
         >
-          <div className="flex flex-row gap-2 w-full mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <InputDate
+              isMandatory={false}
+              title="DATA SELECIONADA"
+              value={reportDate}
+              onChange={(value: string) => setReportDate(value)}
+              height="h-10"
+            />
             <InputString
               title="NOME"
-              placeholder={user?.first_name || ""}
-              isMandatory={false}
-              height="h-8"
-              width="w-1/3"
-              isReadOnly={true}
-            ></InputString>
+              placeholder={`${user?.first_name || ""} ${user?.last_name || ""}`}
+              isReadOnly
+              height="h-10"
+            />
             <InputString
-              title="EQUIPE"
-              placeholder={user?.nome_equipe || ""}
-              isMandatory={false}
-              height="h-8"
-              width="w-1/3"
-              isReadOnly={true}
-            ></InputString>
-
-            <InputString
-              title="SETOR"
-              placeholder={user?.nome_setor || ""}
-              isMandatory={false}
-              height="h-8"
-              width="w-1/3"
-              isReadOnly={true}
+              title="EQUIPE - SETOR"
+              placeholder={`${user?.nome_equipe || "N/A"} - ${
+                user?.nome_setor || "N/A"
+              }`}
+              isReadOnly
+              height="h-10"
             />
           </div>
 
-          <InputTitle title="Atividades do dia" />
+          {/* --- TABELA DE ATIVIDADES --- */}
+          <InputTitle
+            title={
+              <div className="flex items-center gap-4">
+                <span>Atividades do dia</span>
+                <div className="bg-zinc-800 text-customYellow font-bold py-1 px-3 rounded-lg inline-flex items-center gap-2 text-sm">
+                  <i className="fa-solid fa-calendar-day"></i>
+                  {format(
+                    new Date(reportDate + "T12:00:00"),
+                    "dd 'de' MMMM 'de' yyyy",
+                    { locale: ptBR }
+                  )}
+                </div>
+              </div>
+            }
+          />
           <TableItem
             columns={[
-              // {
-              //   width: "10%",
-              //   content: "ID REGISTRO",
-              // },
               { width: "20%", content: "EQUIPE" },
               { width: "20%", content: "SETOR" },
               { width: "30%", content: "OBSERVAÇÃO" },
@@ -121,11 +138,9 @@ const DailyReportScreen = () => {
                   ),
                 },
               ]}
-              isTableHeader={false}
               itemHeight="h-12"
             />
           </div>
-          <div className="flex w-full mt-10 justify-center"></div>
         </Box>
       </Motion>
     </BaseScreen>

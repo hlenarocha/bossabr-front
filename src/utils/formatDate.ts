@@ -3,6 +3,7 @@
  * @param dateString A data em formato YYYY-MM-DD.
  * @returns A data formatada ou "N/A" se a entrada for inválida.
  */
+
 export const formatDateToBR = (dateString: string | null | undefined): string => {
   // Retorna "N/A" se a data for nula, indefinida ou uma string vazia.
   if (!dateString) {
@@ -28,3 +29,4 @@ export const formatDateToBR = (dateString: string | null | undefined): string =>
     return "Data inválida";
   }
 };
+
