@@ -4,12 +4,11 @@ import StatusTag from './StatusTag';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-// 1. ADICIONE A PROPRIEDADE 'teamName' À INTERFACE
 export interface TimelineItemProps {
   id: string | number;
   type: 'Design' | 'Social Media' | string;
   author: string;
-  teamName?: string; // Nome da equipe (opcional)
+  teamName?: string; 
   date: string;
   status: string;
   observation?: string | null;
@@ -23,7 +22,7 @@ interface TimelineProps {
 const Timeline: React.FC<TimelineProps> = ({ items, emptyMessage = "Nenhum item no histórico." }) => {
   return (
     <div className="relative pl-6 py-4">
-      <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-zinc-700"></div>
+      <div className="absolute left-7 top-0 bottom-0 w-1 bg-zinc-700"></div>
 
       {items.length > 0 ? (
         items.map((item) => (
@@ -34,7 +33,7 @@ const Timeline: React.FC<TimelineProps> = ({ items, emptyMessage = "Nenhum item 
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center gap-4">
                   <SectorTag sectorName={item.type} />
-                  {/* 2. EXIBA O NOME DO AUTOR E DA EQUIPE */}
+                  {/* NOME DA PESSOA E DA EQUIPE */}
                   <div className="flex items-center divide-x-2 divide-zinc-600">
                     <p className="font-bold text-white text-lg pr-3">{item.author}</p>
                     {item.teamName && <p className="text-zinc-400 text-sm pl-3">{item.teamName}</p>}
