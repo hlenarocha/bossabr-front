@@ -1,3 +1,4 @@
+
 export interface TaskCardProps {
   title: string;
   status: string;
@@ -17,9 +18,9 @@ const statusColor = {
 const TaskCard = (props: TaskCardProps) => {
   return (
     <div
-      draggable={!!props.setActiveCard}
-      onDragStart={() => props.setActiveCard?.(props.indexCard)}
-      onDragEnd={() => props.setActiveCard?.(null)}
+      // draggable={!!props.setActiveCard}
+      // onDragStart={() => props.setActiveCard?.(props.indexCard)}
+      // onDragEnd={() => props.setActiveCard?.(null)}
       title="Ver detalhes"
       onClick={props.onClick}
       className={`
@@ -36,6 +37,36 @@ const TaskCard = (props: TaskCardProps) => {
         <p className="text-white font-medium text-sm">{props.title}</p>
         <p className="text-xs text-gray-400 mt-1">Prazo: 15/08/2025</p> 
       </div>
+        {/* select para mudar status */}
+        {/* <select
+          onChange={(e) => console.log(e.target.value)}
+          className="bg-zinc-700 text-white text-sm rounded-md px-2 py-1"
+          value={props.status}
+        >
+          <option value="não iniciada">Não Iniciada</option>
+          <option value="em andamento">Em Andamento</option>
+          <option value="concluída">Concluída</option>
+          <option value="atrasada">Atrasada</option>
+        </select> */}
+      {/* Botão de ação */}
+      
+      <button
+      className={`bg-zinc-700 text-white text-sm rounded-md px-2 py-1
+      ${props.status === "não iniciada" ? "hover:bg-[#F6BC0A]" : "hover:bg-zinc-600"}
+      `}
+      onClick={() => console.log("Clicou no botão")}
+      >
+      {props.status === "não iniciada" ? (
+        <i className="fa-solid fa-play"></i>
+      ) : props.status === "em andamento" ? (
+        <i className="fa-solid fa-edit"></i>
+      ) : props.status === "concluída" ? (
+        <i className="fa-solid fa-flag-checkered"></i>
+      ) : (
+        <i className="fa-solid fa-exclamation-triangle"></i>
+      )}
+
+      </button>
     </div>
   );
 };
