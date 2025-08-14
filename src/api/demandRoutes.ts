@@ -39,6 +39,7 @@ interface TipoServico {
 interface Pessoa {
   id_pessoa: number;
   first_name: string;
+  last_name: string;
 }
 
 interface ResponsavelSetor {

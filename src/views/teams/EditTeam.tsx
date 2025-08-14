@@ -65,7 +65,6 @@ const EditTeam = () => {
   const [isDeleteConfirmModalVisible, setDeleteConfirmModalVisible] =
     useState(false);
 
-
   const {
     control,
     handleSubmit,
@@ -73,7 +72,6 @@ const EditTeam = () => {
     formState: { errors },
   } = useForm<TeamFormData>({
     resolver: zodResolver(teamSchema),
-    
   });
 
   useEffect(() => {
@@ -116,33 +114,40 @@ const EditTeam = () => {
   console.log("DADOS FORM:", formData?.pessoas);
 
   const sectorOptions =
-  
-        formData?.setores?.map((s) => ({
-            value: s.id_setor,
-            label: s.nome_setor,
-        })) || [];
+    formData?.setores?.map((s) => ({
+      value: s.id_setor,
+      label: s.nome_setor,
+    })) || [];
 
-    const responsibleOptions =
-        formData?.pessoas?.map((p) => ({
-            value: p.id_pessoa,
-            // Combina nome e sobrenome se houver
-            label: `${p.first_name} ${p.last_name || ''}`.trim(),
-        })) || [];
+  const responsibleOptions =
+    formData?.pessoas?.map((p) => ({
+      value: p.id_pessoa,
+      // Combina nome e sobrenome se houver
+      label: p.first_name + (p.last_name ? ` ${p.last_name}` : ""),
+    })) || [];
 
-    // LÓGICA DE SEGURANÇA: Garante que o valor atual esteja na lista de opções
-    if (teamData?.id_setor && !sectorOptions.some(opt => opt.value === teamData.id_setor)) {
-        sectorOptions.push({
-            value: teamData.id_setor,
-            label: teamData.nome_setor || `Setor ID: ${teamData.id_setor}`
-        });
-    }
+  // LÓGICA DE SEGURANÇA: Garante que o valor atual esteja na lista de opções
+  if (
+    teamData?.id_setor &&
+    !sectorOptions.some((opt) => opt.value === teamData.id_setor)
+  ) {
+    sectorOptions.push({
+      value: teamData.id_setor,
+      label: teamData.nome_setor || `Setor ID: ${teamData.id_setor}`,
+    });
+  }
 
-    if (teamData?.responsavel_equipe && !responsibleOptions.some(opt => opt.value === teamData.responsavel_equipe)) {
-        responsibleOptions.push({
-            value: teamData.responsavel_equipe,
-            label: `${teamData.first_name || ''} ${teamData.last_name || ''}`.trim() || `Responsável ID: ${teamData.responsavel_equipe}`
-        });
-    }
+  if (
+    teamData?.responsavel_equipe &&
+    !responsibleOptions.some((opt) => opt.value === teamData.responsavel_equipe)
+  ) {
+    responsibleOptions.push({
+      value: teamData.responsavel_equipe,
+      label:
+        `${teamData.first_name || ""} ${teamData.last_name || ""}`.trim() ||
+        `Responsável ID: ${teamData.responsavel_equipe}`,
+    });
+  }
 
   const isLoading = isLoadingData || isLoadingFormData;
 
@@ -294,7 +299,6 @@ const EditTeam = () => {
                     width="w-full sm:w-auto"
                     justify="justify-center"
                     borderColor="border-customRedAlert"
-
                   />
                   <ColoredButton
                     type="submit"
@@ -303,7 +307,6 @@ const EditTeam = () => {
                     icon="fa-solid fa-floppy-disk"
                     width="w-full sm:w-auto"
                     justify="justify-center"
-                    
                   />
                 </div>
               </form>

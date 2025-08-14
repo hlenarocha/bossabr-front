@@ -83,7 +83,7 @@ const CreateTeam = () => {
   const responsibleOptions =
     formData?.pessoas?.map((pessoa) => ({
       value: pessoa.id_pessoa,
-      label: pessoa.first_name,
+      label: pessoa.first_name + (pessoa.last_name ? ` ${pessoa.last_name}` : ""),
     })) || [];
 
   return (
