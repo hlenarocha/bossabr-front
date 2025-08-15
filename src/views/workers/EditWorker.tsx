@@ -68,7 +68,6 @@ const EditWorker = () => {
   const [isDeleteConfirmModalVisible, setDeleteConfirmModalVisible] =
     useState(false);
 
-  // --- LÓGICA DO FORMULÁRIO ---
   const {
     control,
     handleSubmit,
@@ -83,7 +82,7 @@ const EditWorker = () => {
 
 
     if (workerData) {
-      console.log("DADOS DO BACK: ", workerData);
+     // console.log("DADOS DO BACK: ", workerData);
 
       reset({
         firstName: workerData.first_name,

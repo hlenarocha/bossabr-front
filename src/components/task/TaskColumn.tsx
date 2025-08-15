@@ -6,9 +6,9 @@ interface TaskColumnProps {
   title: string;
   tasks: TaskCardProps[];
   status: string;
-  setActiveCard: React.Dispatch<React.SetStateAction<number | null>>;
-  activeCard: number | null;
-  onDrop: (status: string, position: number) => void;
+  //setActiveCard: React.Dispatch<React.SetStateAction<number | null>>;
+  //activeCard: number | null;
+  //onDrop: (status: string, position: number) => void;
 }
 
 const TaskColumn = (props: TaskColumnProps) => {
@@ -100,9 +100,9 @@ const TaskColumn = (props: TaskColumnProps) => {
             <TaskCard
               title={task.title}
               status={task.status}
-              setActiveCard={props.setActiveCard}
+              // setActiveCard={props.setActiveCard}
               indexCard={task.indexCard}
-              activeCard={props.activeCard}
+              // activeCard={props.activeCard}
             />
 
             {/* <DropArea

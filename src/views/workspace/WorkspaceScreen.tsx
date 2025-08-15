@@ -2,7 +2,7 @@ import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import { greetingFunction } from "@/utils/greetingFunction";
-import { useContext, useState } from "react"; // Adicionado useState
+import { useContext, useEffect, useState } from "react"; // Adicionado useState
 import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
@@ -11,56 +11,130 @@ import ColoredButton from "@/components/shared/ColoredButton";
 import ScoreBar from "@/components/shared/ScoreBar";
 import TaskColumn from "@/components/task/TaskColumn";
 import { useNavigate } from "react-router-dom";
-import { useDragDrop } from "@/hooks/useDragDrop";
+//import { useDragDrop } from "@/hooks/useDragDrop";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
+import { useReadWorkerDemands } from "@/hooks/worker/useReadWorkerDemands";
+import { WorkerDemand } from "@/api/workerRoutes";
+import { StatusView } from "@/components/shared/StatusView";
+
+type Task = {
+  title: string;
+  status: "não iniciada" | "em andamento" | "concluída" | "atrasada";
+  indexCard: number;
+};
+
+const mapStatus = (backendStatus: string): Task["status"] => {
+  const status = backendStatus.toLowerCase();
+  switch (status) {
+    case "novo":
+    case "em aprovação":
+      return "não iniciada";
+    case "em andamento":
+      return "em andamento";
+    case "concluído":
+      return "concluída";
+    case "atrasado":
+      return "atrasada";
+    default:
+      return "não iniciada";
+  }
+};
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // Estado para controlar o filtro de tempo ativo
-  const [timeFilter, setTimeFilter] = useState('semana'); // 'semana' como padrão
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const {
+    data: workerDemands,
+    isLoading,
+    isError,
+  } = useReadWorkerDemands(user?.id_pessoa);
 
-  const initialTasks = [
-    { title: "Banner", status: "não iniciada" },
-    { title: "Post Rosa", status: "em andamento" },
-    { title: "Post Azul", status: "concluída" },
-    { title: "Vídeo Legal", status: "atrasada" },
-    { title: "Cartão", status: "não iniciada" },
-    { title: "Cartão Rosa", status: "em andamento" },
-    { title: "Post Lilás", status: "concluída" },
-    { title: "Post Legal", status: "atrasada" },
-    { title: "Post Marrom", status: "não iniciada" },
-    { title: "Banner Legal", status: "em andamento" },
-    { title: "Outdoor Arte", status: "concluída" },
-    { title: "Post De Novo", status: "atrasada" },
-    { title: "Banner De Novo", status: "não iniciada" },
-    { title: "Banner Legal", status: "em andamento" },
-    { title: "Banner Legal", status: "em andamento" },
-    { title: "Banner Legal", status: "em andamento" },
-    { title: "Banner Legal", status: "em andamento" },
-  ];
+  // Estado para controlar o filtro de tempo ativo
+  const [timeFilter, setTimeFilter] = useState("semana"); // 'semana' como padrão
+
+  useEffect(() => {
+    if (workerDemands) {
+      const formattedTasks = workerDemands.map((demand: WorkerDemand) => ({
+        title: demand.nome_servico,
+        status: mapStatus(demand.status),
+        indexCard: demand.id_demanda,
+      }));
+      setTasks(formattedTasks);
+    }
+  }, [workerDemands]);
+
+  // const initialTasks = [
+  //   { title: "Banner", status: "não iniciada" },
+  //   { title: "Post Rosa", status: "em andamento" },
+  //   { title: "Post Azul", status: "concluída" },
+  //   { title: "Vídeo Legal", status: "atrasada" },
+  //   { title: "Cartão", status: "não iniciada" },
+  //   { title: "Cartão Rosa", status: "em andamento" },
+  //   { title: "Post Lilás", status: "concluída" },
+  //   { title: "Post Legal", status: "atrasada" },
+  //   { title: "Post Marrom", status: "não iniciada" },
+  //   { title: "Banner Legal", status: "em andamento" },
+  //   { title: "Outdoor Arte", status: "concluída" },
+  //   { title: "Post De Novo", status: "atrasada" },
+  //   { title: "Banner De Novo", status: "não iniciada" },
+  //   { title: "Banner Legal", status: "em andamento" },
+  //   { title: "Banner Legal", status: "em andamento" },
+  //   { title: "Banner Legal", status: "em andamento" },
+  //   { title: "Banner Legal", status: "em andamento" },
+  // ];
 
   // Usando o hook que gerencia todo o estado de drag and drop
-  const {
-    tasks,
-    activeCard,
-    setActiveCard,
-    onDrop,
-  } = useDragDrop(initialTasks);
+  // const {
+  //   tasks,
+  //   activeCard,
+  //   setActiveCard,
+  //   onDrop,
+  // } = useDragDrop(initialTasks);
 
   // Opções e estilos para os botões de filtro
   const filterOptions = [
-    { value: 'hoje', label: 'Hoje', icon: 'fa-solid fa-triangle-exclamation', baseColor: 'bg-red-500', textColor: 'text-white' },
-    { value: 'semana', label: 'Esta Semana', icon: 'fa-solid fa-hourglass-half', baseColor: 'bg-yellow-500', textColor: 'text-zinc-900' },
-    { value: 'mes', label: 'Este Mês', icon: 'fa-solid fa-calendar-days', baseColor: 'bg-blue-500', textColor: 'text-white' },
-    { value: 'geral', label: 'Geral', icon: 'fa-solid fa-globe', baseColor: 'bg-zinc-700', textColor: 'text-white' },
+    {
+      value: "hoje",
+      label: "Hoje",
+      icon: "fa-solid fa-triangle-exclamation",
+      baseColor: "bg-red-500",
+      textColor: "text-white",
+    },
+    {
+      value: "semana",
+      label: "Esta Semana",
+      icon: "fa-solid fa-hourglass-half",
+      baseColor: "bg-yellow-500",
+      textColor: "text-zinc-900",
+    },
+    {
+      value: "mes",
+      label: "Este Mês",
+      icon: "fa-solid fa-calendar-days",
+      baseColor: "bg-blue-500",
+      textColor: "text-white",
+    },
+    {
+      value: "geral",
+      label: "Geral",
+      icon: "fa-solid fa-globe",
+      baseColor: "bg-zinc-700",
+      textColor: "text-white",
+    },
   ];
-  
-  const getButtonClass = (value: string, baseColor: string, textColor: string) => {
-    const baseClass = "font-bold py-2 px-4 rounded-lg transition-all duration-200 flex items-center gap-2";
+
+  // estilos para botão de filtro
+  const getButtonClass = (
+    value: string,
+    baseColor: string,
+    textColor: string
+  ) => {
+    const baseClass =
+      "font-bold py-2 px-4 rounded-lg transition-all duration-200 flex items-center gap-2";
     if (timeFilter === value) {
       return `${baseClass} ${baseColor} ${textColor} ring-2 ring-offset-2 ring-offset-zinc-900 ring-white`; // Estilo ativo
     }
@@ -73,16 +147,21 @@ const WorkspaceScreen = () => {
         <div className="w-full flex items-center justify-between cursor-default mt-4">
           <PageTitle title="Área de Trabalho" icon="fa-solid fa-desktop" />
 
-          <div onClick={() => navigate("/configuracoes")} className="flex items-center hover:bg-zinc-900 hover:cursor-pointer gap-4 bg-black/20 backdrop-blur-sm rounded-[20px] p-2 pr-6 shadow-md">
+          <div
+            onClick={() => navigate("/configuracoes")}
+            className="flex items-center hover:bg-zinc-900 hover:cursor-pointer gap-4 bg-black/20 backdrop-blur-sm rounded-[20px] p-2 pr-6 shadow-md"
+          >
             <div className="w-20 h-20 flex justify-center items-center bg-white bg-opacity-50 rounded-full shadow-[inset_-4px_-4px_5px_0px_rgba(255,255,255,0.25),inset_4px_4px_5px_0px_rgba(255,255,255,0.25)]">
               <img
-                className="rounded-full w-16 h-16" 
+                className="rounded-full w-16 h-16"
                 src={user?.url_avatar}
                 alt={`Avatar de ${user?.first_name}`}
               />
             </div>
 
-            <p className="text-white font-bold text-2xl">{user?.first_name} {user?.last_name}</p>
+            <p className="text-white font-bold text-2xl">
+              {user?.first_name} {user?.last_name}
+            </p>
           </div>
         </div>
         <Motion>
@@ -176,11 +255,15 @@ const WorkspaceScreen = () => {
             <div className="mt-12 flex flex-col gap-4">
               <InputTitle title="Progresso das demandas"></InputTitle>
               <div className="flex flex-wrap gap-4 mt-2 mb-4">
-                {filterOptions.map(option => (
-                  <button 
+                {filterOptions.map((option) => (
+                  <button
                     key={option.value}
                     onClick={() => setTimeFilter(option.value)}
-                    className={getButtonClass(option.value, option.baseColor, option.textColor)}
+                    className={getButtonClass(
+                      option.value,
+                      option.baseColor,
+                      option.textColor
+                    )}
                   >
                     <i className={option.icon}></i>
                     {option.label}
@@ -188,44 +271,41 @@ const WorkspaceScreen = () => {
                 ))}
               </div>
               <div className="flex flex-row justify-between w-full gap-4">
-                <TaskColumn
-                  title="NÃO INICIADAS"
-                  tasks={tasks}
-                  status="não iniciada"
-                  setActiveCard={setActiveCard}
-                  activeCard={activeCard}
-                  onDrop={onDrop}
-                />
-                <TaskColumn
-                  title="EM ANDAMENTO"
-                  tasks={tasks}
-                  status="em andamento"
-                  setActiveCard={setActiveCard}
-                  activeCard={activeCard}
-                  onDrop={onDrop}
-                />
-                <TaskColumn
-                  title="CONCLUÍDAS"
-                  tasks={tasks}
-                  status="concluída"
-                  setActiveCard={setActiveCard}
-                  activeCard={activeCard}
-                  onDrop={onDrop}
-                />
-                <TaskColumn
-                  title="ATRASADAS"
-                  tasks={tasks}
-                  status="atrasada"
-                  setActiveCard={setActiveCard}
-                  activeCard={activeCard}
-                  onDrop={onDrop}
-                />
+                <StatusView
+                  isLoading={isLoading}
+                  isError={isError}
+                  errorMessage="Não foi possível carregar suas demandas."
+                >
+                  <div className="flex flex-col lg:flex-row justify-between w-full gap-4">
+                    {/* drag-and-drop removidas das TaskColumns */}
+                    <TaskColumn
+                      title="NÃO INICIADAS"
+                      tasks={tasks}
+                      status="não iniciada"
+                    />
+                    <TaskColumn
+                      title="EM ANDAMENTO"
+                      tasks={tasks}
+                      status="em andamento"
+                    />
+                    <TaskColumn
+                      title="CONCLUÍDAS"
+                      tasks={tasks}
+                      status="concluída"
+                    />
+                    <TaskColumn
+                      title="ATRASADAS"
+                      tasks={tasks}
+                      status="atrasada"
+                    />
+                  </div>
+                </StatusView>
               </div>
             </div>
             <div className="flex w-full mt-10 justify-center">
               <ColoredButton
                 onClick={() => {
-                  navigate("/diarios");
+                  navigate(`/diario/${user?.id_pessoa}`);
                 }}
                 title="VISUALIZAR DIÁRIO"
                 width="w-[60%]"

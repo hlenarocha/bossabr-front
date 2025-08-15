@@ -55,6 +55,13 @@ export interface PaginatedWorkersResponse {
 }
 
 
+export interface WorkerDemand {
+  id_demanda: number;
+  id_pessoa: number;
+  nome_servico: string;
+  status: string; // Ex: "Novo", "Em andamento", etc.
+}
+
 // FORM
 export const getWorkerFormData = async (): Promise<WorkerFormDataResponse> => {
   try {
@@ -90,7 +97,7 @@ const getWorkers = async () => {
 
 const readWorkers = async (page: number, search: string): Promise<PaginatedWorkersResponse> => {
   try {
-    const response = await api.get("/pessoa", { 
+    const response = await api.get("/pessoa", {
       params: {
         page: page,
         search: search,
@@ -100,7 +107,7 @@ const readWorkers = async (page: number, search: string): Promise<PaginatedWorke
     console.log(response);
 
     return response.data.data;
-    
+
   } catch (error) {
     console.error("Erro ao buscar colaboradores:", error);
     throw error;
@@ -112,7 +119,7 @@ const readWorkerById = async (id: number): Promise<WorkerItem> => {
     const response = await api.get(`/pessoa/${id}`);
     console.log(response);
     return response.data.data;
-    
+
   } catch (error) {
     console.error(error);
     throw error;
@@ -142,5 +149,18 @@ const deleteWorkerById = async (id: number) => {
   }
 };
 
-export { createWorker, readWorkers, getWorkers, readWorkerById, updateWorkerById, deleteWorkerById };
+const readWorkerDemands = async (personId: number): Promise<WorkerDemand[]> => {
+  try {
+    const response = await api.get(`/pessoa/${personId}/demandas`);
+    // A API retorna um objeto com uma chave "demandas" contendo o array
+    return response.data.demandas || [];
+  } catch (error) {
+    console.error(`Erro ao buscar demandas para a pessoa ${personId}:`, error);
+    throw error;
+  }
+};
+
+
+
+export { createWorker, readWorkers, getWorkers, readWorkerById, updateWorkerById, deleteWorkerById, readWorkerDemands };
 
