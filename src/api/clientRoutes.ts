@@ -59,6 +59,13 @@ export interface PaginatedClientsResponse {
   total: number;
 }
 
+export interface PaginatedClientsListResponse {
+  current_page: number;
+  data: ClientListItem[];
+  last_page: number;
+  total: number;
+}
+
 // FORM
 export const getClientFormData = async (): Promise<ClientFormDataResponse> => {
   try {
@@ -98,16 +105,22 @@ const readClients = async (page: number, search: string): Promise<PaginatedClien
   }
 };
 
-// NÃO ESTÁ PAGINADA!!
-const readClientList = async (): Promise<ClientListItem[]> => {
+const readClientList = async (page: number, search: string): Promise<PaginatedClientsListResponse> => { 
   try {
-    const response = await api.get("/cliente/list");
-    return response.data.data || []; // A API retorna um array direto em 'data'
+    const response = await api.get("/cliente/list", {
+      params: {
+        page: page,
+        search: search,
+        por_pagina: 10
+      }
+    });
+    return response.data; 
   } catch (error) {
     console.error("Erro ao buscar a lista de clientes:", error);
     throw error;
   }
 };
+
 
 
 // CREATE
