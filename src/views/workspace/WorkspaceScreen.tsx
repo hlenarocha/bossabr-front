@@ -22,6 +22,7 @@ type Task = {
   title: string;
   status: "não iniciada" | "em andamento" | "concluída" | "atrasada";
   indexCard: number;
+  prazo: string;
 };
 
 const mapStatus = (backendStatus: string): Task["status"] => {
@@ -62,6 +63,7 @@ const WorkspaceScreen = () => {
         title: demand.nome_servico,
         status: mapStatus(demand.status),
         indexCard: demand.id_demanda,
+        prazo: demand.prazo,
       }));
       setTasks(formattedTasks);
     }

@@ -60,6 +60,7 @@ export interface WorkerDemand {
   id_pessoa: number;
   nome_servico: string;
   status: string; // Ex: "Novo", "Em andamento", etc.
+  prazo: string;
 }
 
 // FORM
@@ -152,7 +153,6 @@ const deleteWorkerById = async (id: number) => {
 const readWorkerDemands = async (personId: number): Promise<WorkerDemand[]> => {
   try {
     const response = await api.get(`/pessoa/${personId}/demandas`);
-    // A API retorna um objeto com uma chave "demandas" contendo o array
     return response.data.demandas || [];
   } catch (error) {
     console.error(`Erro ao buscar demandas para a pessoa ${personId}:`, error);

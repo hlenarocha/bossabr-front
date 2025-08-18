@@ -102,6 +102,7 @@ const TaskColumn = (props: TaskColumnProps) => {
               status={task.status}
               // setActiveCard={props.setActiveCard}
               indexCard={task.indexCard}
+              prazo={task.prazo}
               // activeCard={props.activeCard}
             />
 

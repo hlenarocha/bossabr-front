@@ -1,3 +1,4 @@
+import { formatDateToBR } from "@/utils/formatDate";
 
 export interface TaskCardProps {
   title: string;
@@ -6,6 +7,7 @@ export interface TaskCardProps {
   indexCard: number;
   activeCard?: number | null;
   onClick?: () => void; // Optional click handler for additional functionality
+  prazo: string;
 }
 
 const statusColor = {
@@ -35,7 +37,7 @@ const TaskCard = (props: TaskCardProps) => {
       {/* Conteúdo principal */}
       <div className="flex-1">
         <p className="text-white font-medium text-sm">{props.title}</p>
-        <p className="text-xs text-gray-400 mt-1">Prazo: 15/08/2025</p> 
+        <p className="text-xs text-gray-400 mt-1">Prazo: {formatDateToBR(props.prazo)}</p> 
       </div>
         {/* select para mudar status */}
         {/* <select
