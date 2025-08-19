@@ -2,6 +2,14 @@ import { useState } from "react";
 import DropArea from "./DropArea";
 import TaskCard, { TaskCardProps } from "./TaskCard";
 
+interface Task {
+  title: string;
+  status: "não iniciada" | "em andamento" | "concluída" | "atrasada";
+  indexCard: number;
+  prazo: string;
+}
+
+
 interface TaskColumnProps {
   title: string;
   tasks: TaskCardProps[];
@@ -9,6 +17,8 @@ interface TaskColumnProps {
   //setActiveCard: React.Dispatch<React.SetStateAction<number | null>>;
   //activeCard: number | null;
   //onDrop: (status: string, position: number) => void;
+  onCardActionClick?: (event: React.MouseEvent, task: Task) => void;
+
 }
 
 const TaskColumn = (props: TaskColumnProps) => {
@@ -103,6 +113,8 @@ const TaskColumn = (props: TaskColumnProps) => {
               // setActiveCard={props.setActiveCard}
               indexCard={task.indexCard}
               prazo={task.prazo}
+              onActionClick={(e) => props.onCardActionClick && props.onCardActionClick(e, task)}
+
               // activeCard={props.activeCard}
             />
 

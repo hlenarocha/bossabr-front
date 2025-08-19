@@ -2,14 +2,14 @@ import { formatDateToBR } from "@/utils/formatDate";
 
 export interface TaskCardProps {
   title: string;
-  status: string;
-  setActiveCard?: React.Dispatch<React.SetStateAction<number | null>>;
+  status: "não iniciada" | "em andamento" | "concluída" | "atrasada";
   indexCard: number;
-  activeCard?: number | null;
-  onClick?: () => void; // Optional click handler for additional functionality
   prazo: string;
+  onClick?: () => void;
+  onActionClick?: (event: React.MouseEvent) => void; 
 }
 
+// Mapeamento de cores para a bolinha de status
 const statusColor = {
   "não iniciada": "bg-gray-500",
   "em andamento": "bg-blue-500",
@@ -17,57 +17,48 @@ const statusColor = {
   "atrasada": "bg-red-500",
 };
 
+// Mapeamento de estilos para o botão de ação à direita
+const actionStyles = {
+  "não iniciada": { icon: "fa-solid fa-play", hover: "hover:bg-yellow-500", title: "Iniciar Demanda" },
+  "em andamento": { icon: "fa-solid fa-plus", hover: "hover:bg-blue-500", title: "Registrar Atividade" },
+  "concluída": { icon: "fa-solid fa-flag-checkered", hover: "hover:bg-green-500", title: "Ver Entrega" },
+  "atrasada": { icon: "fa-solid fa-exclamation-triangle", hover: "hover:bg-red-500", title: "Resolver Pendência" },
+};
+
 const TaskCard = (props: TaskCardProps) => {
+  const currentAction = actionStyles[props.status];
+
+  const handleActionClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (props.onActionClick) {
+      props.onActionClick(e);
+    }
+  };
+
   return (
     <div
-      // draggable={!!props.setActiveCard}
-      // onDragStart={() => props.setActiveCard?.(props.indexCard)}
-      // onDragEnd={() => props.setActiveCard?.(null)}
-      title="Ver detalhes"
       onClick={props.onClick}
-      className={`
-        ${props.activeCard === props.indexCard ? "border-2 border-[#F6BC0A]" : "border border-[#2d2d2d]"}
-        bg-customBlackBackground rounded-xl px-4 py-3 mb-3 hover:bg-zinc-700 cursor-pointer shadow-md flex items-center gap-4 transition-transform
-        ${props.setActiveCard ? "cursor-grab" : "cursor-default"}
-      `}
+      className="bg-zinc-800 rounded-xl px-4 py-3 mb-3 hover:bg-zinc-700 cursor-pointer shadow-md flex items-center gap-4 transition-colors"
     >
-      {/* Bolinha de status */}
-      <div className={`w-3 h-3 rounded-full ${statusColor[props.status as keyof typeof statusColor]}`}></div>
+      {/* Bolinha de status à esquerda */}
+      <div 
+        className={`w-3 h-3 rounded-full flex-shrink-0 ${statusColor[props.status]}`}
+        title={`Status: ${props.status}`}
+      ></div>
 
-      {/* Conteúdo principal */}
+      {/* Conteúdo principal (ocupa o espaço restante) */}
       <div className="flex-1">
         <p className="text-white font-medium text-sm">{props.title}</p>
         <p className="text-xs text-gray-400 mt-1">Prazo: {formatDateToBR(props.prazo)}</p> 
       </div>
-        {/* select para mudar status */}
-        {/* <select
-          onChange={(e) => console.log(e.target.value)}
-          className="bg-zinc-700 text-white text-sm rounded-md px-2 py-1"
-          value={props.status}
-        >
-          <option value="não iniciada">Não Iniciada</option>
-          <option value="em andamento">Em Andamento</option>
-          <option value="concluída">Concluída</option>
-          <option value="atrasada">Atrasada</option>
-        </select> */}
-      {/* Botão de ação */}
       
+      {/* Botão de ação à direita */}
       <button
-      className={`bg-zinc-700 text-white text-sm rounded-md px-2 py-1
-      ${props.status === "não iniciada" ? "hover:bg-[#F6BC0A]" : "hover:bg-zinc-600"}
-      `}
-      onClick={() => console.log("Clicou no botão")}
+        className={`w-10 h-10 flex items-center justify-center bg-zinc-700 text-white text-lg rounded-full transition-colors flex-shrink-0 ${currentAction.hover}`}
+        title={currentAction.title}
+        onClick={handleActionClick}
       >
-      {props.status === "não iniciada" ? (
-        <i className="fa-solid fa-play"></i>
-      ) : props.status === "em andamento" ? (
-        <i className="fa-solid fa-edit"></i>
-      ) : props.status === "concluída" ? (
-        <i className="fa-solid fa-flag-checkered"></i>
-      ) : (
-        <i className="fa-solid fa-exclamation-triangle"></i>
-      )}
-
+        <i className={currentAction.icon}></i>
       </button>
     </div>
   );

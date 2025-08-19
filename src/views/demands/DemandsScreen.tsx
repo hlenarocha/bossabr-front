@@ -20,6 +20,7 @@ import { StatusView } from "@/components/shared/StatusView";
 import { UserContext } from "@/contexts/UserContext";
 import { useReadWorkerDemands } from "@/hooks/worker/useReadWorkerDemands"; // Usando o mesmo hook da Workspace
 import { WorkerDemand } from "@/api/workerRoutes";
+import CreateActivityModal from "../activities/CreateActivityModal";
 
 // Interface para as tarefas do Kanban
 interface Task {
@@ -58,6 +59,28 @@ const DemandsScreen = () => {
     isError 
   } = useReadWorkerDemands(user?.id_pessoa);
 
+    // --- ESTADO PARA O MODAL E TAREFAS ---
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [selectedDemand, setSelectedDemand] = useState<Task | null>(null);
+
+
+    const handleActionClick = (event: React.MouseEvent, task: Task) => {
+      event.stopPropagation();
+      if (task.status === "em andamento" || task.status === "não iniciada") {
+        setSelectedDemand(task);
+        setIsModalOpen(true);
+      } else {
+        navigate(`/demandas/${task.indexCard}`);
+      }
+    };
+  
+    const inferActivityType = (sectorName: string): 'design' | 'social_media' => {
+      return sectorName.toLowerCase().includes('design') ? 'design' : 'social_media';
+    };
+    
+
+    
   // --- ESTADO PARA AS TAREFAS DO KANBAN ---
   const [tasks, setTasks] = useState<Task[]>([]);
 
@@ -238,18 +261,28 @@ const DemandsScreen = () => {
             >
               <div className="w-full overflow-x-auto">
                 <div className="flex flex-col lg:flex-row justify-between w-full gap-4 lg:min-w-0 min-w-[800px]">
-                  <TaskColumn title="NÃO INICIADAS" tasks={tasks} status="não iniciada" />
-                  <TaskColumn title="EM ANDAMENTO" tasks={tasks} status="em andamento" />
-                  <TaskColumn title="CONCLUÍDAS" tasks={tasks} status="concluída" />
-                  <TaskColumn title="ATRASADAS" tasks={tasks} status="atrasada" />
-                </div>
+                <TaskColumn title="NÃO INICIADAS" tasks={tasks} status="não iniciada" onCardActionClick={handleActionClick} />
+                    <TaskColumn title="EM ANDAMENTO" tasks={tasks} status="em andamento" onCardActionClick={handleActionClick} />
+                    <TaskColumn title="CONCLUÍDAS" tasks={tasks} status="concluída" onCardActionClick={handleActionClick} />
+                    <TaskColumn title="ATRASADAS" tasks={tasks} status="atrasada" onCardActionClick={handleActionClick} />
+                  </div>
               </div>
             </StatusView>
           </Box>
         </Motion>
       </div>
       <ScrollToEndArrow />
+
+      {isModalOpen && selectedDemand && (
+        <CreateActivityModal
+          demandId={selectedDemand.indexCard}
+          activityType={inferActivityType("design")}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </BaseScreen>
+
+
   );
 };
 

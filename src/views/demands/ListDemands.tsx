@@ -76,7 +76,7 @@ const ListDemands = () => {
         <Box
           width="w-full"
           height="h-[640px]"
-          title="Todas as Demandas"
+          title="Todas as demandas"
           subtitle="Visualização de todas as demandas cadastradas na agência."
         >
           <TableItem
