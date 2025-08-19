@@ -17,6 +17,7 @@ import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
 import { useReadWorkerDemands } from "@/hooks/worker/useReadWorkerDemands";
 import { WorkerDemand } from "@/api/workerRoutes";
 import { StatusView } from "@/components/shared/StatusView";
+import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
 
 type Task = {
   title: string;
@@ -46,6 +47,23 @@ const WorkspaceScreen = () => {
   const greeting = greetingFunction();
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+
+  const [workerDetails, setWorkerDetails] = useState<WorkerItem | null>(null);
+
+  useEffect(() => {
+    const fetchWorkerData = async () => {
+      if (user?.id_pessoa) {
+        try {
+          const data = await readWorkerById(user.id_pessoa);
+          setWorkerDetails(data);
+        } catch (error) {
+          console.error("Erro ao buscar detalhes do colaborador na Workspace:", error);
+        }
+      }
+    };
+    fetchWorkerData();
+  }, [user?.id_pessoa]);
+
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const {
@@ -175,6 +193,7 @@ const WorkspaceScreen = () => {
           >
             <div className="flex w-full flex-row gap-8 mt-8 ">
               <div className="flex flex-col w-2/3 gap-2">
+              {/* Dados atualizados (workerDetails com fallback para contexto (user)) */}
                 <InputTitle title="Informações básicas"></InputTitle>
                 <div className="flex flex-row gap-2 w-full flex-wrap">
                   <InputString
@@ -187,7 +206,7 @@ const WorkspaceScreen = () => {
                   ></InputString>
                   <InputString
                     title="EQUIPE"
-                    placeholder={user?.nome_equipe || ""}
+                    placeholder={workerDetails?.nome_equipe || user?.nome_equipe || "Carregando..."}
                     isMandatory={false}
                     height="h-8"
                     width="w-fit"
@@ -197,7 +216,7 @@ const WorkspaceScreen = () => {
                 <div className="flex flex-row gap-2 w-full flex-wrap">
                   <InputString
                     title="SETOR"
-                    placeholder={user?.nome_setor || ""}
+                    placeholder={workerDetails?.nome_setor || user?.nome_setor || "Carregando..."}
                     isMandatory={false}
                     height="h-8"
                     width="w-fit"
@@ -205,8 +224,7 @@ const WorkspaceScreen = () => {
                   ></InputString>
                   <InputString
                     title="CARGO"
-                    placeholder={user?.role || ""}
-                    isMandatory={false}
+                    placeholder={workerDetails?.cargo || user?.role || "Carregando..."}                    isMandatory={false}
                     height="h-8"
                     width="w-fit"
                     isReadOnly={true}
