@@ -30,6 +30,8 @@ const ManageTeams = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
+
+  // SEARCH = nome_equipe, first_name, last_name, nome_setor
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -72,7 +74,6 @@ const ManageTeams = () => {
   return (
     <>
       <BaseScreen>
-        {/* ... Código do topo da página (botões e título) ... */}
         <div className="flex items-center justify-between">
           <BackButton onClick={() => navigate("/configuracoes")} />
           <ColoredButton
