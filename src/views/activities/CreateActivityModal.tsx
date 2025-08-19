@@ -13,22 +13,26 @@ import SearchableSelect from "@/components/shared/SearchableSelect";
 // API, schemas, hooks e assets
 import { activitySchema, ActivityFormData } from "@/schemas/activitySchema";
 import { getDemandFormData } from "@/api/demandRoutes";
-import { 
-  createDesignActivity, 
-  createSocialMediaActivity, 
-  DesignActivityDTO, 
-  SocialMediaActivityDTO 
+import {
+  createDesignActivity,
+  createSocialMediaActivity,
+  DesignActivityDTO,
+  SocialMediaActivityDTO,
 } from "@/api/activityRoutes";
 import { useResourceMutation } from "@/hooks/useResourceMutation";
 import IconSad from "@/assets/images/famicons_sad.png";
 
 interface CreateActivityModalProps {
   demandId: number;
-  activityType: 'design' | 'social_media';
+  activityType: "design" | "social_media";
   onClose: () => void;
 }
 
-const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivityModalProps) => {
+const CreateActivityModal = ({
+  demandId,
+  activityType,
+  onClose,
+}: CreateActivityModalProps) => {
   const queryClient = useQueryClient();
 
   const { data: formData, isLoading: isLoadingFormData } = useQuery({
@@ -38,30 +42,46 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
 
   // --- MUTAÇÕES ---
   // A propriedade 'successNavigationRoute' foi adicionada para satisfazer o tipo do hook.
-  const { mutate: saveDesignActivity, isPending: isSavingDesign, isErrorModalVisible: isDesignErrorVisible, errorModalMessage: designErrorMessage, closeErrorModal: closeDesignErrorModal } = useResourceMutation<DesignActivityDTO>({
+  const {
+    mutate: saveDesignActivity,
+    isPending: isSavingDesign,
+    isErrorModalVisible: isDesignErrorVisible,
+    errorModalMessage: designErrorMessage,
+    closeErrorModal: closeDesignErrorModal,
+  } = useResourceMutation<DesignActivityDTO>({
     mutationFn: ({ payload }) => createDesignActivity(payload),
     successToastMessage: "Atividade de Design registrada!",
     errorModalMessage: "Não foi possível registrar a atividade.",
     successNavigationRoute: "", // Adicionado para corrigir o erro de tipo
   });
 
-  const { mutate: saveSocialMediaActivity, isPending: isSavingSocialMedia, isErrorModalVisible: isSocialMediaErrorVisible, errorModalMessage: socialMediaErrorMessage, closeErrorModal: closeSocialMediaErrorModal } = useResourceMutation<SocialMediaActivityDTO>({
+  const {
+    mutate: saveSocialMediaActivity,
+    isPending: isSavingSocialMedia,
+    isErrorModalVisible: isSocialMediaErrorVisible,
+    errorModalMessage: socialMediaErrorMessage,
+    closeErrorModal: closeSocialMediaErrorModal,
+  } = useResourceMutation<SocialMediaActivityDTO>({
     mutationFn: ({ payload }) => createSocialMediaActivity(payload),
     successToastMessage: "Atividade de Social Media registrada!",
     errorModalMessage: "Não foi possível registrar a atividade.",
     successNavigationRoute: "", // Adicionado para corrigir o erro de tipo
   });
 
-  const { control, handleSubmit, formState: { errors } } = useForm<ActivityFormData>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ActivityFormData>({
     resolver: zodResolver(activitySchema),
     defaultValues: {
-      startDate: new Date().toISOString().split('T')[0],
+      startDate: new Date().toISOString().split("T")[0],
       statusId: undefined,
       driveLink: "",
       observations: "",
       text: "",
     },
-    mode: 'onBlur',
+    mode: "onChange",
   });
 
   const isPending = isSavingDesign || isSavingSocialMedia;
@@ -69,12 +89,12 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
   // A função onSubmit passa a lógica de sucesso como segundo argumento para o mutate.
   const onSubmit = (data: ActivityFormData) => {
     const onSuccess = () => {
-      queryClient.invalidateQueries({ queryKey: ['demands'] });
-      queryClient.invalidateQueries({ queryKey: ['demand', demandId] });
+      queryClient.invalidateQueries({ queryKey: ["demands"] });
+      queryClient.invalidateQueries({ queryKey: ["demand", demandId] });
       onClose();
     };
 
-    if (activityType === 'design') {
+    if (activityType === "design") {
       const payload: DesignActivityDTO = {
         id_demanda: demandId,
         id_status: data.statusId,
@@ -83,8 +103,7 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
         observacoes: data.observations,
       };
       saveDesignActivity({ payload }, { onSuccess });
-    } 
-    else if (activityType === 'social_media') {
+    } else if (activityType === "social_media") {
       const payload: SocialMediaActivityDTO = {
         id_demanda: demandId,
         id_status: data.statusId,
@@ -97,7 +116,9 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
     }
   };
 
-  const statusOptions = formData?.status?.map(s => ({ value: s.id_status, label: s.status })) || [];
+  const statusOptions =
+    formData?.status?.map((s) => ({ value: s.id_status, label: s.status })) ||
+    [];
 
   return (
     <>
@@ -105,7 +126,11 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
       <Modal
         title="Erro!"
         description={designErrorMessage || socialMediaErrorMessage}
-        onClick1={isDesignErrorVisible ? closeDesignErrorModal : closeSocialMediaErrorModal}
+        onClick1={
+          isDesignErrorVisible
+            ? closeDesignErrorModal
+            : closeSocialMediaErrorModal
+        }
         isModalVisible={isDesignErrorVisible || isSocialMediaErrorVisible}
         buttonTitle1="FECHAR"
         isError={true}
@@ -113,7 +138,9 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
       />
 
       <Modal
-        title={`Registrar Atividade de ${activityType === 'design' ? 'Design' : 'Social Media'}`}
+        title={`Registrar Atividade de ${
+          activityType === "design" ? "Design" : "Social Media"
+        }`}
         isModalVisible={true}
         onClick1={onClose}
         buttonTitle1="CANCELAR"
@@ -123,35 +150,109 @@ const CreateActivityModal = ({ demandId, activityType, onClose }: CreateActivity
         iconName="fa-solid fa-pen-to-square"
         onClick2={handleSubmit(onSubmit)}
 
-       // hasSubmitButton={false}
+        // hasSubmitButton={false}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 h-[450px] overflow-y-auto">
-          <Controller name="startDate" control={control} render={({ field }) => (
-            <InputDate {...field} title="DATA DE INÍCIO" isMandatory errorMessage={errors.startDate?.message} />
-          )} />
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 h-[450px] overflow-y-auto"
+        >
+          <Controller
+            name="startDate"
+            control={control}
+            render={({ field }) => (
+              <InputDate
+                {...field}
+                title="DATA DE INÍCIO"
+                isMandatory
+                errorMessage={errors.startDate?.message}
+                borderColor={errors.startDate ? "#EF4444" : "#F6BC0A"}
+                />
+            )}
+          />
 
-          <Controller name="statusId" control={control} render={({ field }) => (
-            <SearchableSelect title="ATUALIZAR STATUS PARA" isMandatory options={statusOptions}
-              value={statusOptions.find(s => s.value === field.value) || null}
-              onChange={option => field.onChange(option?.value)}
-              placeholder={isLoadingFormData ? "Carregando..." : "Selecione um status"}
-              errorMessage={errors.statusId?.message}
+          <Controller
+            name="statusId"
+            control={control}
+            render={({ field }) => (
+              <SearchableSelect
+                title="ATUALIZAR STATUS PARA"
+                isMandatory
+                options={statusOptions}
+                value={
+                  statusOptions.find((s) => s.value === field.value) || null
+                }
+                onChange={(option) => field.onChange(option?.value)}
+                placeholder={
+                  isLoadingFormData ? "Carregando..." : "Selecione um status"
+                }
+                errorMessage={errors.statusId?.message}
+                
+              />
+            )}
+          />
+
+          {activityType === "social_media" && (
+            <Controller
+              name="text"
+              control={control}
+              render={({ field }) => (
+                <TextArea
+                  isMandatory={false}
+                  {...field}
+                  title="TEXTO"
+                  placeholder="Digite o conteúdo aqui..."
+                  height="h-[150px]"
+                  errorMessage={errors.text?.message} 
+                  borderColor={
+                    errors.text
+                      ? "border-customRedAlert"
+                      : "border-customYellow"
+                  }
+
+                />
+              )}
             />
-          )}/>
-
-          {activityType === 'social_media' && (
-            <Controller name="text" control={control} render={({ field }) => (
-              <TextArea isMandatory={false} {...field} title="TEXTO" placeholder="Digite o conteúdo aqui..." height="h-[150px]" errorMessage={errors.text?.message} />
-            )} />
           )}
 
-          <Controller name="driveLink" control={control} render={({ field }) => (
-            <InputString isMandatory={false} height="h-[40px]" {...field} title="LINK DO DRIVE" placeholder="Cole o link aqui..." errorMessage={errors.driveLink?.message} />
-          )} />
-          
-          <Controller name="observations" control={control} render={({ field }) => (
-            <TextArea isMandatory={false} {...field} title="OBSERVAÇÕES" placeholder="Adicione comentários sobre a atividade..." height="h-[100px]" errorMessage={errors.observations?.message} />
-          )} />
+          <Controller
+            name="driveLink"
+            control={control}
+            render={({ field }) => (
+              <InputString
+                isMandatory={false}
+                height="h-[40px]"
+                {...field}
+                title="LINK DO DRIVE"
+                placeholder="Cole o link aqui..."
+                errorMessage={errors.driveLink?.message}
+                borderColor={
+                  errors.driveLink
+                    ? "border-customRedAlert"
+                    : "border-customYellow"
+                }
+              />
+            )}
+          />
+
+          <Controller
+            name="observations"
+            control={control}
+            render={({ field }) => (
+              <TextArea
+                isMandatory={false}
+                {...field}
+                title="OBSERVAÇÕES"
+                placeholder="Adicione comentários sobre a atividade..."
+                height="h-[100px]"
+                errorMessage={errors.observations?.message}
+                borderColor={
+                  errors.observations
+                    ? "border-customRedAlert"
+                    : "border-customYellow"
+                }
+              />
+            )}
+          />
 
           <div className="flex justify-end mt-4">
             {/* <button type="submit" disabled={isPending} className="bg-customYellow text-black font-bold py-2 px-4 rounded disabled:bg-gray-400">
