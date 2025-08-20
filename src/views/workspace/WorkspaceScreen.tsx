@@ -18,6 +18,7 @@ import { useReadWorkerDemands } from "@/hooks/worker/useReadWorkerDemands";
 import { WorkerDemand } from "@/api/workerRoutes";
 import { StatusView } from "@/components/shared/StatusView";
 import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
+import FilterButtonGroup from "@/components/shared/FilterButtonGroup";
 
 type Task = {
   title: string;
@@ -87,33 +88,6 @@ const WorkspaceScreen = () => {
     }
   }, [workerDemands]);
 
-  // const initialTasks = [
-  //   { title: "Banner", status: "não iniciada" },
-  //   { title: "Post Rosa", status: "em andamento" },
-  //   { title: "Post Azul", status: "concluída" },
-  //   { title: "Vídeo Legal", status: "atrasada" },
-  //   { title: "Cartão", status: "não iniciada" },
-  //   { title: "Cartão Rosa", status: "em andamento" },
-  //   { title: "Post Lilás", status: "concluída" },
-  //   { title: "Post Legal", status: "atrasada" },
-  //   { title: "Post Marrom", status: "não iniciada" },
-  //   { title: "Banner Legal", status: "em andamento" },
-  //   { title: "Outdoor Arte", status: "concluída" },
-  //   { title: "Post De Novo", status: "atrasada" },
-  //   { title: "Banner De Novo", status: "não iniciada" },
-  //   { title: "Banner Legal", status: "em andamento" },
-  //   { title: "Banner Legal", status: "em andamento" },
-  //   { title: "Banner Legal", status: "em andamento" },
-  //   { title: "Banner Legal", status: "em andamento" },
-  // ];
-
-  // Usando o hook que gerencia todo o estado de drag and drop
-  // const {
-  //   tasks,
-  //   activeCard,
-  //   setActiveCard,
-  //   onDrop,
-  // } = useDragDrop(initialTasks);
 
   // Opções e estilos para os botões de filtro
   const filterOptions = [
@@ -146,20 +120,6 @@ const WorkspaceScreen = () => {
       textColor: "text-white",
     },
   ];
-
-  // estilos para botão de filtro
-  const getButtonClass = (
-    value: string,
-    baseColor: string,
-    textColor: string
-  ) => {
-    const baseClass =
-      "font-bold py-2 px-4 rounded-lg transition-all duration-200 flex items-center gap-2";
-    if (timeFilter === value) {
-      return `${baseClass} ${baseColor} ${textColor} ring-2 ring-offset-2 ring-offset-zinc-900 ring-white`; // Estilo ativo
-    }
-    return `${baseClass} ${baseColor} ${textColor} opacity-60 hover:opacity-100`; // Estilo inativo
-  };
 
   return (
     <>
@@ -249,20 +209,13 @@ const WorkspaceScreen = () => {
                 </div>
                 <div className="flex flex-col gap-1 h-[200px] overflow-y-auto ">
                   <ActivityCard
-                    width="w-full"
-                    title="Pessoa X conclui atividade Y"
-                    details="Atividades realizadas nos últimos sete dias."
-                  />
-                  <ActivityCard
-                    width="w-full"
-                    title="Pessoa X conclui atividade Y"
-                    details="Atividades realizadas nos últimos sete dias."
-                  />
-                  <ActivityCard
-                    width="w-full"
-                    title="Pessoa X conclui atividade Y"
-                    details="Atividades realizadas nos últimos sete dias."
-                  />
+                    // width="w-full"
+                    event={"atualizou"}
+                    key={1}
+                    message={"Fulano atualizou cliente Superhipermercado"}
+                    user={"Fulano"}
+                    date={"20/02/2002"}
+                    />
                 </div>
               </div>
             </div>
@@ -274,22 +227,13 @@ const WorkspaceScreen = () => {
 
             <div className="mt-12 flex flex-col gap-4">
               <InputTitle title="Progresso das demandas"></InputTitle>
-              <div className="flex flex-wrap gap-4 mt-2 mb-4">
-                {filterOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => setTimeFilter(option.value)}
-                    className={getButtonClass(
-                      option.value,
-                      option.baseColor,
-                      option.textColor
-                    )}
-                  >
-                    <i className={option.icon}></i>
-                    {option.label}
-                  </button>
-                ))}
-              </div>
+              <div className="mb-6">
+              <FilterButtonGroup 
+                options={filterOptions}
+                selectedValue={timeFilter}
+                onFilterChange={setTimeFilter}
+              />
+            </div>
               <div className="flex flex-row justify-between w-full gap-4">
                 <StatusView
                   isLoading={isLoading}

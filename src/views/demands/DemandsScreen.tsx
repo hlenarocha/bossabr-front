@@ -21,6 +21,7 @@ import { UserContext } from "@/contexts/UserContext";
 import { useReadWorkerDemands } from "@/hooks/worker/useReadWorkerDemands"; // Usando o mesmo hook da Workspace
 import { WorkerDemand } from "@/api/workerRoutes";
 import CreateActivityModal from "../activities/CreateActivityModal";
+import FilterButtonGroup, { FilterOption } from "@/components/shared/FilterButtonGroup";
 
 // Interface para as tarefas do Kanban
 interface Task {
@@ -119,20 +120,12 @@ const DemandsScreen = () => {
   }, [selectedDate, tasks]);
 
   const [timeFilter, setTimeFilter] = useState("semana");
-  const filterOptions = [
+  const filterOptions: FilterOption[] = [
     { value: "hoje", label: "Hoje", icon: "fa-solid fa-triangle-exclamation", baseColor: "bg-red-500", textColor: "text-white" },
     { value: "semana", label: "Esta Semana", icon: "fa-solid fa-hourglass-half", baseColor: "bg-yellow-500", textColor: "text-zinc-900" },
     { value: "mes", label: "Este Mês", icon: "fa-solid fa-calendar-days", baseColor: "bg-blue-500", textColor: "text-white" },
     { value: "geral", label: "Geral", icon: "fa-solid fa-globe", baseColor: "bg-zinc-700", textColor: "text-white" },
   ];
-
-  const getButtonClass = (value: string, baseColor: string, textColor: string) => {
-    const baseClass = "font-bold py-2 px-4 rounded-lg transition-all duration-200 flex items-center gap-2";
-    if (timeFilter === value) {
-      return `${baseClass} ${baseColor} ${textColor} ring-2 ring-offset-2 ring-offset-zinc-900 ring-white`;
-    }
-    return `${baseClass} ${baseColor} ${textColor} opacity-60 hover:opacity-100`;
-  };
 
   return (
     <BaseScreen>
@@ -238,21 +231,12 @@ const DemandsScreen = () => {
             width="w-full"
             height="h-fit"
           >
-            <div className="flex flex-wrap gap-4 mb-6">
-              {filterOptions.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => setTimeFilter(option.value)}
-                  className={getButtonClass(
-                    option.value,
-                    option.baseColor,
-                    option.textColor
-                  )}
-                >
-                  <i className={option.icon}></i>
-                  {option.label}
-                </button>
-              ))}
+            <div className="mb-6">
+              <FilterButtonGroup 
+                options={filterOptions}
+                selectedValue={timeFilter}
+                onFilterChange={setTimeFilter}
+              />
             </div>
             <StatusView
               isLoading={isLoading}
@@ -276,7 +260,7 @@ const DemandsScreen = () => {
       {isModalOpen && selectedDemand && (
         <CreateActivityModal
           demandId={selectedDemand.indexCard}
-          activityType={inferActivityType("design")}
+          activityType={inferActivityType(user?.nome_setor?.toLowerCase() || 'social media')} // teste
           onClose={() => setIsModalOpen(false)}
         />
       )}

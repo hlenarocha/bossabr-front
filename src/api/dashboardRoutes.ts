@@ -40,6 +40,7 @@ export const getAuditorias = async (periodo: AuditPeriod): Promise<AuditoriaResp
         periodo: periodo,
       },
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(`Erro ao buscar auditorias para o período "${periodo}":`, error);

@@ -66,8 +66,7 @@ const DashboardScreen = () => {
               <Component />
             </Box>
 
-            <Box title="Atividades" subtitle="Auditoria da Agência" width="w-full" height="h-fit">
-              {/* 3. BOTÕES DE FILTRO PARA AS ATIVIDADES */}
+            <Box title="Atividades" subtitle="Auditoria da agência" width="w-full" height="h-fit">
               <div className="flex justify-end gap-2 mb-4">
                 {activityFilterOptions.map(opt => (
                   <button 
@@ -80,7 +79,6 @@ const DashboardScreen = () => {
                 ))}
               </div>
 
-              {/* 4. LISTA DINÂMICA DE ATIVIDADES */}
               <div className="flex flex-col gap-1 h-[330px] overflow-y-auto ">
                 <StatusView isLoading={isLoadingAuditorias} isError={isErrorAuditorias} errorMessage="Erro ao carregar atividades.">
                   {auditoriaData?.auditorias && auditoriaData.auditorias.length > 0 ? (
