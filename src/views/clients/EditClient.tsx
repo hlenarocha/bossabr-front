@@ -359,7 +359,7 @@ const EditClient = () => {
                   />
                 </div>
 
-                <InputTitle title="Responsável pelo Cliente" />
+                <InputTitle title="Responsável pelo cliente" />
                 <div className="flex flex-col gap-4">
                   <Controller
                     name="contactName"
@@ -388,10 +388,10 @@ const EditClient = () => {
                       render={({ field }) => (
                         <InputString
                           {...field}
-                          title="NÚMERO PARA CONTATO"
+                          title="TELEFONE"
                           width="w-1/2"
                           height="h-[40px]"
-                          isMandatory={false}
+                          isMandatory={true}
                           placeholder="(__) _____-____"
                           mask="(00) 00000-0000"
                           errorMessage={errors.contactPhone?.message}

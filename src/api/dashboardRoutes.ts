@@ -2,10 +2,9 @@ import api from "@/api/axiosInstance";
 
 export type AuditPeriod = 'dia' | 'semana' | '15dias';
 
-// Interface para um item individual da lista de auditoria
 export interface AuditoriaItem {
   mensagem: string;
-  data: string; // ex: "01/06/2024 14:30"
+  data: string; 
   usuario: string;
   evento: string;
   tabela: string;
@@ -13,7 +12,6 @@ export interface AuditoriaItem {
   dados_antigos: object;
 }
 
-// Interface para a resposta completa da API
 export interface AuditoriaResponse {
   success: boolean;
   auditorias: AuditoriaItem[];

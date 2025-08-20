@@ -39,9 +39,7 @@ const clientSchema = z.object({
         .optional(),
     contactPhone: z
         .string()
-        .min(11, "Telefone deve estar completo.")
-        .or(z.literal(""))
-        .optional(),
+        .min(11, "Telefone deve estar completo."),
     entryDate: z
         .string()
         .optional()
