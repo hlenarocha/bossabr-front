@@ -114,7 +114,7 @@ const readClientList = async (page: number, search: string): Promise<PaginatedCl
         por_pagina: 10
       }
     });
-    return response.data; 
+    return response.data.data; 
   } catch (error) {
     console.error("Erro ao buscar a lista de clientes:", error);
     throw error;

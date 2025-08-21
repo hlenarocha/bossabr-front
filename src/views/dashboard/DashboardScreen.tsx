@@ -92,7 +92,7 @@ const DashboardScreen = () => {
                       />
                     ))
                   ) : (
-                    <div className="flex items-center justify-center h-full text-zinc-500">
+                    <div className="flex items-center justify-center h-full text-zinc-300">
                       <p>Nenhuma atividade no período selecionado.</p>
                     </div>
                   )}

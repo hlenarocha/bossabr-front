@@ -19,35 +19,43 @@ const DemandHistory = () => {
   const { id } = useParams<{ id: string }>();
   const demandId = Number(id);
 
-  const { data: historyData, isLoading, isError } = useReadDemandHistory(demandId);
+  const {
+    data: historyData,
+    isLoading,
+    isError,
+  } = useReadDemandHistory(demandId);
 
   // Transforma os dados da API para o formato esperado pelo componente Timeline
   const timelineItems: TimelineItemProps[] = useMemo(() => {
     if (!historyData) return [];
 
-    const designerActivities = historyData.atividades_designer.map(act => ({
+    const designerActivities = historyData.atividades_designer.map((act) => ({
       id: `design-${act.id_ativ_designer}`,
-      type: 'Design' as const,
-      author: `${act.pessoa.first_name} ${act.pessoa.last_name || ''}`.trim(),
+      type: "Design" as const,
+      author: `${act.pessoa.first_name} ${act.pessoa.last_name || ""}`.trim(),
       teamName: act.equipe_pessoa.equipe.nome_equipe, // ADICIONADO
       date: act.data_inicio,
       status: act.status.status,
-      observation: act.observacoes
+      observation: act.observacoes,
     }));
 
-    const socialMediaActivities = historyData.atividades_social_media.map(act => ({
-      id: `sm-${act.id_ativ_social_media}`,
-      type: 'Social Media' as const,
-      author: `${act.pessoa.first_name} ${act.pessoa.last_name || ''}`.trim(),
-      teamName: act.equipe_pessoa.equipe.nome_equipe, // ADICIONADO
-      date: act.data_inicio,
-      status: act.status.status,
-      observation: act.observacoes
-    }));
-    
+    const socialMediaActivities = historyData.atividades_social_media.map(
+      (act) => ({
+        id: `sm-${act.id_ativ_social_media}`,
+        type: "Social Media" as const,
+        author: `${act.pessoa.first_name} ${act.pessoa.last_name || ""}`.trim(),
+        teamName: act.equipe_pessoa.equipe.nome_equipe, // ADICIONADO
+        date: act.data_inicio,
+        status: act.status.status,
+        observation: act.observacoes,
+      })
+    );
+
     const combined = [...designerActivities, ...socialMediaActivities];
-    
-    return combined.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    return combined.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
   }, [historyData]);
 
   return (
@@ -65,12 +73,14 @@ const DemandHistory = () => {
           title="Linha do Tempo de Atividades"
           subtitle="Visualize todos os registros de atividades para esta demanda, do mais recente ao mais antigo."
         >
-          <StatusView isLoading={isLoading} isError={isError}>
-            <Timeline 
-              items={timelineItems} 
-              emptyMessage="Nenhuma atividade registrada para esta demanda."
-            />
-          </StatusView>
+          <div className="h-[500px] overflow-y-auto">
+            <StatusView isLoading={isLoading} isError={isError}>
+              <Timeline
+                items={timelineItems}
+                emptyMessage="Nenhuma atividade registrada para esta demanda."
+              />
+            </StatusView>
+          </div>
         </Box>
       </Motion>
     </BaseScreen>

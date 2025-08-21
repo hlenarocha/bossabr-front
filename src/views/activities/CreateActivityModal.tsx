@@ -21,58 +21,50 @@ import {
 } from "@/api/activityRoutes";
 import { useResourceMutation } from "@/hooks/useResourceMutation";
 import IconSad from "@/assets/images/famicons_sad.png";
+import { UserContext } from "@/contexts/UserContext";
+import { useContext } from "react";
 
 interface CreateActivityModalProps {
   demandId: number;
   activityType: "design" | "social_media";
   onClose: () => void;
+  setToast: (message: string, type: 'success' | 'error') => void;
 }
 
 const CreateActivityModal = ({
   demandId,
   activityType,
   onClose,
+  setToast
 }: CreateActivityModalProps) => {
   const queryClient = useQueryClient();
+  const { user } = useContext(UserContext);
 
   const { data: formData, isLoading: isLoadingFormData } = useQuery({
     queryKey: ["demandFormData"],
     queryFn: getDemandFormData,
   });
 
-  // --- MUTAÇÕES ---
-  // A propriedade 'successNavigationRoute' foi adicionada para satisfazer o tipo do hook.
-  const {
-    mutate: saveDesignActivity,
-    isPending: isSavingDesign,
-    isErrorModalVisible: isDesignErrorVisible,
-    errorModalMessage: designErrorMessage,
-    closeErrorModal: closeDesignErrorModal,
-  } = useResourceMutation<DesignActivityDTO>({
-    mutationFn: ({ payload }) => createDesignActivity(payload),
-    successToastMessage: "Atividade de Design registrada!",
+  const mutationOptions = {
+    successToastMessage: "",
     errorModalMessage: "Não foi possível registrar a atividade.",
-    successNavigationRoute: "", // Adicionado para corrigir o erro de tipo
-  });
+    // A rota de navegação não será usada, pois onSuccess será sobrescrito
+    successNavigationRoute: "", 
+  };
 
-  const {
-    mutate: saveSocialMediaActivity,
-    isPending: isSavingSocialMedia,
-    isErrorModalVisible: isSocialMediaErrorVisible,
-    errorModalMessage: socialMediaErrorMessage,
-    closeErrorModal: closeSocialMediaErrorModal,
-  } = useResourceMutation<SocialMediaActivityDTO>({
-    mutationFn: ({ payload }) => createSocialMediaActivity(payload),
-    successToastMessage: "Atividade de Social Media registrada!",
-    errorModalMessage: "Não foi possível registrar a atividade.",
-    successNavigationRoute: "", // Adicionado para corrigir o erro de tipo
-  });
+  const { mutate: saveDesignActivity, isPending: isSavingDesign, ...designMutation } = 
+    useResourceMutation<DesignActivityDTO>({
+      ...mutationOptions,
+      mutationFn: ({ payload }) => createDesignActivity(payload),
+    });
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ActivityFormData>({
+  const { mutate: saveSocialMediaActivity, isPending: isSavingSocialMedia, ...socialMediaMutation } = 
+    useResourceMutation<SocialMediaActivityDTO>({
+      ...mutationOptions,
+      mutationFn: ({ payload }) => createSocialMediaActivity(payload),
+    });
+
+  const { control, handleSubmit, formState: { errors } } = useForm<ActivityFormData>({
     resolver: zodResolver(activitySchema),
     defaultValues: {
       startDate: new Date().toISOString().split("T")[0],
@@ -85,36 +77,41 @@ const CreateActivityModal = ({
   });
 
   const isPending = isSavingDesign || isSavingSocialMedia;
+  const mutationError = designMutation.errorModalMessage || socialMediaMutation.errorModalMessage;
+  const isErrorModalVisible = designMutation.isErrorModalVisible || socialMediaMutation.isErrorModalVisible;
+  const closeErrorModal = isSavingDesign ? designMutation.closeErrorModal : socialMediaMutation.closeErrorModal;
 
-  // A função onSubmit passa a lógica de sucesso como segundo argumento para o mutate.
   const onSubmit = (data: ActivityFormData) => {
+    
     const onSuccess = () => {
+      setToast("Atividade registrada com sucesso!", "success");
       queryClient.invalidateQueries({ queryKey: ["demands"] });
-      queryClient.invalidateQueries({ queryKey: ["demand", demandId] });
       onClose();
     };
 
+    const onError = () => {
+      setToast("Erro ao registrar atividade. Verifique os dados.", "error");
+      onClose(); // Fecha o modal
+    };
+
+
+    const payload = {
+      id_pessoa: user?.id_pessoa ?? 0,
+      id_demanda: demandId,
+      id_status: data.statusId,
+      data_inicio: data.startDate,
+      link_drive: data.driveLink,
+      observacoes: data.observations,
+      ...(activityType === 'social_media' && { texto: data.text }),
+    };
+
     if (activityType === "design") {
-      const payload: DesignActivityDTO = {
-        id_demanda: demandId,
-        id_status: data.statusId,
-        data_inicio: data.startDate,
-        link_drive: data.driveLink,
-        observacoes: data.observations,
-      };
-      saveDesignActivity({ payload }, { onSuccess });
-    } else if (activityType === "social_media") {
-      const payload: SocialMediaActivityDTO = {
-        id_demanda: demandId,
-        id_status: data.statusId,
-        data_inicio: data.startDate,
-        texto: data.text,
-        link_drive: data.driveLink,
-        observacoes: data.observations,
-      };
-      saveSocialMediaActivity({ payload }, { onSuccess });
+      saveDesignActivity({ payload }, { onSuccess, onError });
+    } else {
+      saveSocialMediaActivity({ payload }, { onSuccess, onError });
     }
   };
+
 
   const statusOptions =
     formData?.status?.map((s) => ({ value: s.id_status, label: s.status })) ||
@@ -122,35 +119,26 @@ const CreateActivityModal = ({
 
   return (
     <>
-      {/* Modal de Erro unificado */}
-      <Modal
+      {/* <Modal
         title="Erro!"
-        description={designErrorMessage || socialMediaErrorMessage}
-        onClick1={
-          isDesignErrorVisible
-            ? closeDesignErrorModal
-            : closeSocialMediaErrorModal
-        }
-        isModalVisible={isDesignErrorVisible || isSocialMediaErrorVisible}
+        description={mutationError}
+        onClick1={closeErrorModal}
+        isModalVisible={isErrorModalVisible}
         buttonTitle1="FECHAR"
         isError={true}
         iconImage={IconSad}
-      />
+      /> */}
 
       <Modal
-        title={`Registrar Atividade de ${
-          activityType === "design" ? "Design" : "Social Media"
-        }`}
+        title={`Registrar Atividade de ${activityType === "design" ? "Design" : "Social Media"}`}
         isModalVisible={true}
         onClick1={onClose}
         buttonTitle1="CANCELAR"
         buttonColor1="bg-customRedAlert"
+        buttonTitle2={isPending ? "SALVANDO..." : "SALVAR ATIVIDADE"}
         buttonColor2="bg-customYellow"
-        buttonTitle2="SALVAR ATIVIDADE"
         iconName="fa-solid fa-pen-to-square"
         onClick2={handleSubmit(onSubmit)}
-
-        // hasSubmitButton={false}
       >
         <form
           onSubmit={handleSubmit(onSubmit)}

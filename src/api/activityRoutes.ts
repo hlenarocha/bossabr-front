@@ -2,6 +2,7 @@ import api from "@/api/axiosInstance";
 
 // payload da atividade de Design
 export interface DesignActivityDTO {
+  id_pessoa: number;
   id_demanda: number;
   id_status: number;
   data_inicio: string;
@@ -11,6 +12,7 @@ export interface DesignActivityDTO {
 
 // payload da atividade de Social Media
 export interface SocialMediaActivityDTO {
+  id_pessoa: number;
   id_demanda: number;
   id_status: number;
   data_inicio: string;

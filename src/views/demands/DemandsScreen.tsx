@@ -21,7 +21,10 @@ import { UserContext } from "@/contexts/UserContext";
 import { useReadWorkerDemands } from "@/hooks/worker/useReadWorkerDemands"; // Usando o mesmo hook da Workspace
 import { WorkerDemand } from "@/api/workerRoutes";
 import CreateActivityModal from "../activities/CreateActivityModal";
-import FilterButtonGroup, { FilterOption } from "@/components/shared/FilterButtonGroup";
+import FilterButtonGroup, {
+  FilterOption,
+} from "@/components/shared/FilterButtonGroup";
+import Toast from "@/components/shared/Toast";
 
 // Interface para as tarefas do Kanban
 interface Task {
@@ -54,48 +57,53 @@ const DemandsScreen = () => {
   const { user } = useContext(UserContext); // Pega o usuário logado
 
   // --- BUSCA DE DADOS DA API (AGORA IGUAL À WORKSPACE) ---
-  const { 
-    data: workerDemands, 
-    isLoading, 
-    isError 
+  const {
+    data: workerDemands,
+    isLoading,
+    isError,
   } = useReadWorkerDemands(user?.id_pessoa);
 
-    // --- ESTADO PARA O MODAL E TAREFAS ---
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  // --- ESTADO PARA O MODAL E TAREFAS ---
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [selectedDemand, setSelectedDemand] = useState<Task | null>(null);
+  const [selectedDemand, setSelectedDemand] = useState<Task | null>(null);
 
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<"success" | "error">("success");
 
-    const handleActionClick = (event: React.MouseEvent, task: Task) => {
-      event.stopPropagation();
-      if (task.status === "em andamento" || task.status === "não iniciada") {
-        setSelectedDemand(task);
-        setIsModalOpen(true);
-      } else {
-        navigate(`/demandas/${task.indexCard}`);
-      }
-    };
-  
-    const inferActivityType = (sectorName: string): 'design' | 'social_media' => {
-      return sectorName.toLowerCase().includes('design') ? 'design' : 'social_media';
-    };
-    
+  const handleActionClick = (event: React.MouseEvent, task: Task) => {
+    event.stopPropagation();
+    if (task.status === "em andamento" || task.status === "não iniciada") {
+      setSelectedDemand(task);
+      setIsModalOpen(true);
+    } else {
+      navigate(`/demandas/${task.indexCard}`);
+    }
+  };
 
-    
+  const inferActivityType = (sectorName: string): "design" | "social_media" => {
+    return sectorName.toLowerCase().includes("design")
+      ? "design"
+      : "social_media";
+  };
+
+  const handleSetToast = (message: string, type: "success" | "error") => {
+    setToastMessage(message);
+    setToastType(type);
+  };
+
   // --- ESTADO PARA AS TAREFAS DO KANBAN ---
   const [tasks, setTasks] = useState<Task[]>([]);
 
   // Efeito que atualiza as tarefas quando os dados da API chegam
   useEffect(() => {
     if (workerDemands) {
-      const formattedTasks = workerDemands.map(
-        (demand: WorkerDemand) => ({
-          title: demand.nome_servico,
-          status: mapStatus(demand.status),
-          indexCard: demand.id_demanda,
-          prazo: demand.prazo || "",
-        })
-      );
+      const formattedTasks = workerDemands.map((demand: WorkerDemand) => ({
+        title: demand.nome_servico,
+        status: mapStatus(demand.status),
+        indexCard: demand.id_demanda,
+        prazo: demand.prazo || "",
+      }));
       setTasks(formattedTasks);
     }
   }, [workerDemands]);
@@ -105,7 +113,10 @@ const DemandsScreen = () => {
     new Date()
   );
   const [tasksForSelectedDay, setTasksForSelectedDay] = useState<Task[]>([]);
-  const deadlines = useMemo(() => tasks.map((task) => parseISO(task.prazo)), [tasks]);
+  const deadlines = useMemo(
+    () => tasks.map((task) => parseISO(task.prazo)),
+    [tasks]
+  );
   const modifiers = { hasDemands: deadlines };
 
   useEffect(() => {
@@ -121,10 +132,34 @@ const DemandsScreen = () => {
 
   const [timeFilter, setTimeFilter] = useState("semana");
   const filterOptions: FilterOption[] = [
-    { value: "hoje", label: "Hoje", icon: "fa-solid fa-triangle-exclamation", baseColor: "bg-red-500", textColor: "text-white" },
-    { value: "semana", label: "Esta Semana", icon: "fa-solid fa-hourglass-half", baseColor: "bg-yellow-500", textColor: "text-zinc-900" },
-    { value: "mes", label: "Este Mês", icon: "fa-solid fa-calendar-days", baseColor: "bg-blue-500", textColor: "text-white" },
-    { value: "geral", label: "Geral", icon: "fa-solid fa-globe", baseColor: "bg-zinc-700", textColor: "text-white" },
+    {
+      value: "hoje",
+      label: "Hoje",
+      icon: "fa-solid fa-triangle-exclamation",
+      baseColor: "bg-red-500",
+      textColor: "text-white",
+    },
+    {
+      value: "semana",
+      label: "Esta Semana",
+      icon: "fa-solid fa-hourglass-half",
+      baseColor: "bg-yellow-500",
+      textColor: "text-zinc-900",
+    },
+    {
+      value: "mes",
+      label: "Este Mês",
+      icon: "fa-solid fa-calendar-days",
+      baseColor: "bg-blue-500",
+      textColor: "text-white",
+    },
+    {
+      value: "geral",
+      label: "Geral",
+      icon: "fa-solid fa-globe",
+      baseColor: "bg-zinc-700",
+      textColor: "text-white",
+    },
   ];
 
   return (
@@ -232,7 +267,7 @@ const DemandsScreen = () => {
             height="h-fit"
           >
             <div className="mb-6">
-              <FilterButtonGroup 
+              <FilterButtonGroup
                 options={filterOptions}
                 selectedValue={timeFilter}
                 onFilterChange={setTimeFilter}
@@ -245,11 +280,31 @@ const DemandsScreen = () => {
             >
               <div className="w-full overflow-x-auto">
                 <div className="flex flex-col lg:flex-row justify-between w-full gap-4 lg:min-w-0 min-w-[800px]">
-                <TaskColumn title="NÃO INICIADAS" tasks={tasks} status="não iniciada" onCardActionClick={handleActionClick} />
-                    <TaskColumn title="EM ANDAMENTO" tasks={tasks} status="em andamento" onCardActionClick={handleActionClick} />
-                    <TaskColumn title="CONCLUÍDAS" tasks={tasks} status="concluída" onCardActionClick={handleActionClick} />
-                    <TaskColumn title="ATRASADAS" tasks={tasks} status="atrasada" onCardActionClick={handleActionClick} />
-                  </div>
+                  <TaskColumn
+                    title="NÃO INICIADAS"
+                    tasks={tasks}
+                    status="não iniciada"
+                    onCardActionClick={handleActionClick}
+                  />
+                  <TaskColumn
+                    title="EM ANDAMENTO"
+                    tasks={tasks}
+                    status="em andamento"
+                    onCardActionClick={handleActionClick}
+                  />
+                  <TaskColumn
+                    title="CONCLUÍDAS"
+                    tasks={tasks}
+                    status="concluída"
+                    onCardActionClick={handleActionClick}
+                  />
+                  <TaskColumn
+                    title="ATRASADAS"
+                    tasks={tasks}
+                    status="atrasada"
+                    onCardActionClick={handleActionClick}
+                  />
+                </div>
               </div>
             </StatusView>
           </Box>
@@ -260,13 +315,21 @@ const DemandsScreen = () => {
       {isModalOpen && selectedDemand && (
         <CreateActivityModal
           demandId={selectedDemand.indexCard}
-          activityType={inferActivityType(user?.nome_setor?.toLowerCase() || 'social media')} // teste
+          activityType={inferActivityType(
+            user?.nome_setor?.toLowerCase() || "social media"
+          )} // teste
           onClose={() => setIsModalOpen(false)}
+          setToast={handleSetToast}
+        />
+      )}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setToastMessage(null)}
         />
       )}
     </BaseScreen>
-
-
   );
 };
 

@@ -3,7 +3,8 @@ import { readWorkerDemands } from "@/api/workerRoutes";
 
 export const useReadWorkerDemands = (personId: number | undefined) => {
   return useQuery({
-    queryKey: ["workerDemands", personId],
+    // no estilo "endereços para dados", para facilitar atualização
+    queryKey: ["demands", "by-user",  personId],
     
     // A função que será executada para buscar os dados
     queryFn: () => readWorkerDemands(personId!), // O '!' garante que a função só rode se personId existir

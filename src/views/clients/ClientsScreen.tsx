@@ -14,10 +14,10 @@ import { ResourceListView } from "@/components/shared/ResourceListView";
 import StatusTag from "@/components/shared/StatusTag";
 import SectorTag from "@/components/shared/SectorTag";
 import TagList from "@/components/shared/TagList";
+import PaginationControls from "@/components/shared/PaginationControls";
 
 // Hook e tipos
 import { useReadClientList } from "@/hooks/client/useReadClientList";
-import PaginationControls from "@/components/shared/PaginationControls";
 
 const ClientsScreen = () => {
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const ClientsScreen = () => {
           marginTop="mt-6"
           placeholder="Pesquise um cliente aqui..."
           value={searchTerm}
-          onChange={(value: string) => setSearchTerm(value)}
+          onChange={setSearchTerm}
         />
       </div>
 
@@ -78,6 +78,7 @@ const ClientsScreen = () => {
             subtitle="Visualização da lista de clientes com base no progresso geral das tarefas."
             width="w-full"
             height="h-[640px]"
+            // A classe 'flex' foi removida para corresponder ao ManageTeams
           >
             <TableItem
               columns={[
@@ -90,8 +91,8 @@ const ClientsScreen = () => {
               isTableHeader={true}
               itemHeight="h-12"
             />
-            {/* 2. 'flex-grow' faz a lista ocupar o espaço disponível */}
-            <div className="flex-grow overflow-y-auto">
+            {/* A altura da lista agora é fixa, como em ManageTeams */}
+            <div className="h-[350px] overflow-y-auto">
               <ResourceListView
                 isLoading={isLoading}
                 isError={isError}
@@ -142,7 +143,6 @@ const ClientsScreen = () => {
                 )}
               />
             </div>
-            {/* 3. A paginação agora é empurrada para o final */}
             <PaginationControls
               currentPage={paginatedClients?.current_page ?? 1}
               totalPages={paginatedClients?.last_page ?? 1}
