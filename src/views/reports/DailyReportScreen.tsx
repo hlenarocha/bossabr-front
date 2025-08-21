@@ -1,5 +1,5 @@
 // hooks e bibliotecas
-import { useState, useContext } from "react";
+import { useState, useContext, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -15,9 +15,12 @@ import ColoredButton from "@/components/shared/ColoredButton";
 import { Motion } from "@/components/animation/Motion";
 import BackButton from "@/components/shared/BackButton";
 import InputDate from "@/components/shared/InputDate";
+import { ResourceListView } from "@/components/shared/ResourceListView";
+import StatusTag from "@/components/shared/StatusTag";
 
-// Contexto
+// Contexto, hooks e API
 import { UserContext } from "@/contexts/UserContext";
+import { useReadDailyReport } from "@/hooks/reports/useReadDailyReport";
 
 const DailyReportScreen = () => {
   const navigate = useNavigate();
@@ -29,30 +32,26 @@ const DailyReportScreen = () => {
     new Date().toISOString().split("T")[0]
   );
 
-  const handleGenerateReport = () => {
-    if (!user) return;
-    console.log(
-      `Gerando relatório para o usuário ID: ${user.id_pessoa} na data: ${reportDate}`
-    );
-    // Futuramente, aqui virá a chamada para a API
-  };
+  const { data: reportData, isLoading, isError } = useReadDailyReport(user?.id_pessoa, reportDate);
+
+  // Combina as atividades de design e social media em uma única lista
+  const allActivities = useMemo(() => {
+    if (!reportData) return [];
+    return [...reportData.ativ_design, ...reportData.ativ_social_media];
+  }, [reportData]);
 
   return (
     <BaseScreen>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex flex-col gap-4">
-          {cameFromAdminList && (
-            <BackButton onClick={() => navigate("/diarios")} />
-          )}
+          {cameFromAdminList && <BackButton onClick={() => navigate("/diarios/admin")} />}
           <PageTitle
             icon="fa-solid fa-book"
-            title={`Diário de ${user?.first_name || ""} ${
-              user?.last_name || ""
-            }`}
+            title={`Diário de ${user?.first_name || ""} ${user?.last_name || ""}`}
           />
         </div>
         <ColoredButton
-          onClick={handleGenerateReport}
+          onClick={() => { /* Lógica para baixar o relatório */ }}
           width="w-full sm:w-fit"
           title="BAIXAR RELATÓRIO"
           icon="fa-solid fa-file-arrow-down"
@@ -63,8 +62,8 @@ const DailyReportScreen = () => {
 
       <Motion>
         <Box
-          title="Diário de Atividades"
-          subtitle="Selecione um dia para visualizar as atividades registradas ou preencher um novo relatório."
+          title="Diário de atividades"
+          subtitle="Selecione um dia para visualizar as atividades registradas."
           width="w-full"
           height="h-fit"
         >
@@ -76,44 +75,27 @@ const DailyReportScreen = () => {
               onChange={(value: string) => setReportDate(value)}
               height="h-10"
             />
-            <InputString
-              title="NOME"
-              placeholder={`${user?.first_name || ""} ${user?.last_name || ""}`}
-              isReadOnly
-              height="h-10"
-            />
-            <InputString
-              title="EQUIPE - SETOR"
-              placeholder={`${user?.nome_equipe || "N/A"} - ${
-                user?.nome_setor || "N/A"
-              }`}
-              isReadOnly
-              height="h-10"
-            />
+            <InputString title="NOME" placeholder={`${user?.first_name || ''} ${user?.last_name || ''}`} isReadOnly height="h-10" />
+            <InputString title="EQUIPE / SETOR" placeholder={`${user?.nome_equipe || 'N/A'} - ${user?.nome_setor || 'N/A'}`} isReadOnly height="h-10" />
           </div>
 
-          {/* --- TABELA DE ATIVIDADES --- */}
-          <InputTitle
+          <InputTitle 
             title={
               <div className="flex items-center gap-4">
-                <span>Atividades do dia</span>
+                <span>Atividades Registradas</span>
                 <div className="bg-zinc-800 text-customYellow font-bold py-1 px-3 rounded-lg inline-flex items-center gap-2 text-sm">
                   <i className="fa-solid fa-calendar-day"></i>
-                  {format(
-                    new Date(reportDate + "T12:00:00"),
-                    "dd 'de' MMMM 'de' yyyy",
-                    { locale: ptBR }
-                  )}
+                  {format(new Date(reportDate + "T12:00:00"), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
                 </div>
               </div>
-            }
+            } 
           />
           <TableItem
             columns={[
-              { width: "20%", content: "EQUIPE" },
-              { width: "20%", content: "SETOR" },
-              { width: "30%", content: "OBSERVAÇÃO" },
-              { width: "20%", content: "STATUS" },
+              { width: "30%", content: "SERVIÇO" },
+              { width: "25%", content: "CLIENTE" },
+              { width: "25%", content: "OBSERVAÇÕES" },
+              { width: "10%", content: "STATUS" },
               { width: "10%", content: "AÇÕES" },
             ]}
             isTableHeader={true}
@@ -121,24 +103,35 @@ const DailyReportScreen = () => {
           />
 
           <div className="h-[350px] overflow-y-auto">
-            <TableItem
-              columns={[
-                { width: "20%", content: "Equipe A" },
-                { width: "20%", content: "Setor X" },
-                { width: "30%", content: "Atividade realizada com sucesso." },
-                { width: "20%", content: "Concluído" },
-                {
-                  width: "10%",
-                  content: (
-                    <i
-                      className="fa-solid fa-eye text-lg text-customYellow hover:cursor-pointer"
-                      title="Visualizar Detalhes"
-                      onClick={() => navigate("/reports/details")} // MODIFICAR
-                    ></i>
-                  ),
-                },
-              ]}
-              itemHeight="h-12"
+            <ResourceListView
+              isLoading={isLoading}
+              isError={isError}
+              items={allActivities}
+              showMessage="Selecione outra data."
+              emptyMessage="Nenhuma atividade registrada para este dia."
+              errorMessage="Erro ao carregar as atividades."
+              renderItem={(activity) => (
+                <TableItem
+                  key={activity.id_ativ_designer || activity.id_ativ_social_media}
+                  columns={[
+                    { width: "30%", content: activity.nome_servico },
+                    { width: "25%", content: activity.nome_empresa },
+                    { width: "25%", content: <div className="truncate" title={activity.observacoes || ""}>{activity.observacoes || "-"}</div> },
+                    { width: "10%", content: <StatusTag status={activity.status} /> },
+                    {
+                      width: "10%",
+                      content: (
+                        <i
+                          className="fa-solid fa-eye text-lg text-customYellow hover:cursor-pointer"
+                          title="Visualizar Detalhes da Demanda"
+                          onClick={() => navigate(`/demandas/${activity.id_demanda}`)}
+                        ></i>
+                      ),
+                    },
+                  ]}
+                  itemHeight="h-12"
+                />
+              )}
             />
           </div>
         </Box>
@@ -146,4 +139,5 @@ const DailyReportScreen = () => {
     </BaseScreen>
   );
 };
+
 export default DailyReportScreen;

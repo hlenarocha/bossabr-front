@@ -8,6 +8,7 @@ interface ResourceListViewProps<T extends { [key: string]: any }> {
   renderItem: (item: T) => React.ReactNode;
   errorMessage?: string;
   emptyMessage?: string;
+  showMessage?: string;
 }
 
 export function ResourceListView<T extends { [key:string]: any }>({
@@ -17,6 +18,7 @@ export function ResourceListView<T extends { [key:string]: any }>({
   renderItem,
   errorMessage = "Ocorreu um erro ao carregar os dados.",
   emptyMessage = "Nenhum dado foi encontrado.",
+  showMessage = "", // Default value added
 }: ResourceListViewProps<T>) {
 
   if (isLoading) {
@@ -38,7 +40,7 @@ export function ResourceListView<T extends { [key:string]: any }>({
       <div className="flex flex-col items-center justify-center text-center h-full p-4">
         <i className="fa-solid fa-magnifying-glass text-gray-300 text-5xl mb-4"></i>
         <p className="text-lg font-bold text-white">{emptyMessage}</p>
-        <p className="text-sm text-gray-400 mt-1">Tente uma busca com termos diferentes ou adicione um novo item.</p>
+        <p className="text-sm text-gray-400 mt-1">{showMessage? showMessage : "Tente uma busca com termos diferentes ou adicione um novo item."}</p>
       </div>
     );
   }
