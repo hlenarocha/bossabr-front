@@ -19,6 +19,7 @@ import { WorkerDemand } from "@/api/workerRoutes";
 import { StatusView } from "@/components/shared/StatusView";
 import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
 import FilterButtonGroup from "@/components/shared/FilterButtonGroup";
+import { useReadWorkerPontuations } from "@/hooks/worker/useReadWorkerPontuations";
 
 type Task = {
   title: string;
@@ -50,6 +51,8 @@ const WorkspaceScreen = () => {
   const navigate = useNavigate();
 
   const [workerDetails, setWorkerDetails] = useState<WorkerItem | null>(null);
+
+  const { data: pontuationsData } = useReadWorkerPontuations(user?.id_pessoa);
 
   useEffect(() => {
     const fetchWorkerData = async () => {
@@ -193,11 +196,11 @@ const WorkspaceScreen = () => {
                 <div className="flex w-full mt-4 gap-4">
                   <div className="w-1/2">
                     <InputTitle title="Pontuação semanal"></InputTitle>
-                    <ScoreBar score={20} />
+                    <ScoreBar score={pontuationsData?.pontuacaoSemanal ?? 0} maxScore={100}/>
                   </div>
                   <div className="w-1/2">
                     <InputTitle title="Pontuação mensal"></InputTitle>
-                    <ScoreBar score={10} />
+                    <ScoreBar score={pontuationsData?.pontuacaoMensal ?? 0} maxScore={100}/>
                   </div>
                 </div>
               </div>

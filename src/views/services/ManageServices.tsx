@@ -45,17 +45,6 @@ const ManageServices = () => {
     isError: isErrorServices,
   } = useReadServices(currentPage, debouncedSearchTerm);
 
-  // const { data: formData, isLoading: isLoadingFormData } = useQuery({
-  //   queryKey: ["serviceFormData"],
-  //   queryFn: getServiceFormData,
-  // });
-
-  // const sectorMap = useMemo(() => {
-  //   if (!formData?.setores) {
-  //     return new Map<number, string>();
-  //   }
-  //   return new Map(formData.setores.map((s) => [s.id_setor, s.nome_setor]));
-  // }, [formData]);
 
   useEffect(() => {
     if (location.state?.toastMessage) {

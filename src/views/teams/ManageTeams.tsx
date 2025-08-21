@@ -46,21 +46,6 @@ const ManageTeams = () => {
     isError: isErrorTeams,
   } = useReadTeams(currentPage, debouncedSearchTerm);
 
-  // const { data: formData, isLoading: isLoadingFormData } = useQuery({
-  //   queryKey: ["teamFormData"],
-  //   queryFn: getTeamFormData,
-  // });
-
-  // const responsibleMap = useMemo(() => {
-  //   if (!formData?.pessoas) return new Map<number, string>();
-  //   return new Map(formData.pessoas.map((p) => [p.id_pessoa, p.first_name]));
-  // }, [formData]);
-
-  // const sectorMap = useMemo(() => {
-  //   if (!formData?.setores) return new Map<number, string>();
-  //   return new Map(formData.setores.map((s) => [s.id_setor, s.nome_setor]));
-  // }, [formData]);
-
   useEffect(() => {
     if (location.state?.toastMessage) {
       setToastMessage(location.state.toastMessage);

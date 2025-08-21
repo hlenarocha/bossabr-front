@@ -31,6 +31,7 @@ export interface WorkerItem {
 }
 
 
+
 export interface WorkerFormDataResponse {
   cargos: {
     id_cargo: number;
@@ -63,6 +64,13 @@ export interface WorkerDemand {
   prazo: string;
 }
 
+export interface WorkerPontuations {
+  success: boolean;
+  pontuacaoSemanal: number;
+  pontuacaoMensal: number;
+}
+
+// FUNÇÕES P/ API ==================================================================
 // FORM
 export const getWorkerFormData = async (): Promise<WorkerFormDataResponse> => {
   try {
@@ -161,6 +169,19 @@ const readWorkerDemands = async (personId: number): Promise<WorkerDemand[]> => {
 };
 
 
+const readWorkerPontuationsById = async (personId: number): Promise<WorkerPontuations> => {
+  try {
+    const response = await api.get(`/pessoa/${personId}/pontuacao-pessoa`);
+    return response.data;
 
-export { createWorker, readWorkers, getWorkers, readWorkerById, updateWorkerById, deleteWorkerById, readWorkerDemands };
+  } catch (error) {
+    console.error(`Erro ao buscar pontuações da pessoa ${personId}:`, error);
+    throw error;
+  }
+
+
+}
+
+
+export { createWorker, readWorkers, getWorkers, readWorkerById, updateWorkerById, deleteWorkerById, readWorkerDemands, readWorkerPontuationsById };
 

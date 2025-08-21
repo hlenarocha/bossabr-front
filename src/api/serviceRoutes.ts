@@ -53,7 +53,7 @@ const readServices = async (page: number, search: string): Promise<PaginatedServ
       }
     });
 
-    return response.data?.data;
+    return response.data.data;
   } catch (error) {
     console.error("Erro ao buscar serviços:", error);
     throw error;
