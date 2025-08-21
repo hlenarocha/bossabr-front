@@ -59,7 +59,7 @@ const DemandDetails = () => {
             width="w-full"
             height="h-fit"
             title={demand?.nome_servico || "Carregando..."}
-            subtitle={`Cliente: ${demand?.nome_cliente || ""}`}
+            subtitle={`Cliente: ${demand?.nome_empresa || ""}`}
           >
             <StatusView isLoading={isLoading} isError={isError}>
               {demand && (
@@ -94,7 +94,7 @@ const DemandDetails = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                     <InputString
                       title="CLIENTE"
-                      placeholder={demand.nome_cliente}
+                      placeholder={demand.nome_empresa}
                       isReadOnly
                       height="h-8"
                     />
@@ -154,6 +154,9 @@ const DemandDetails = () => {
           demandId={demandId}
           activityType={inferActivityType("design")} // SÓ PARA TESTE - MUDAR
           onClose={() => setIsModalOpen(false)}
+          setToast={(message, type) => {
+            console.log(`Toast message: ${message}, Type: ${type}`);
+          }} // colocar um toast aqui!!!
         />
       )}
     </>

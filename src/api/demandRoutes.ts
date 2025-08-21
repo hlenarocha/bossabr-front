@@ -14,7 +14,7 @@ export interface DemandItem {
   last_name: string;
   status: string;
   nome_servico: string;
-  nome_cliente: string;
+  nome_empresa: string;
   nome_setor?: string;
 } 
 
@@ -244,12 +244,9 @@ export const readDemandHistory = async (id: number): Promise<DemandHistoryRespon
 
 export const readDemandsByClientId = async (clientId: number): Promise<DemandByClientItem[]> => {
   try {
-    // A API que você mencionou é /demanda/historico/:id, mas o nome da rota no seu
-    // controller de demanda é /demanda/cliente/:id. Estou usando a segunda opção.
+  
     const response = await api.get(`/demanda/cliente/${clientId}`);
-    // O seu JSON de exemplo não tem a chave "data" aninhada, então acessamos direto.
-    // Se a API real tiver, mude para: return response.data.data;
-    // O nome da empresa é a chave principal no seu JSON, então precisamos extrair o array de dentro dela.
+    
     const clientName = Object.keys(response.data).find(key => key !== 'success');
     return clientName ? response.data[clientName] : [];
 
