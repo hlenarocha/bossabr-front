@@ -23,6 +23,13 @@ export interface ProgressOfDemandsItem {
   total_demandas: number;
 }
 
+export interface BurnoutSensorItem {
+  id_pessoa: number;
+  first_name: string;
+  last_name: string;
+  pontuacao_total_mes: string; // A API retorna como string, converter para número no frontend
+}
+
 export const getProgressOfDemands = async (): Promise<ProgressOfDemandsItem[]> => {
   try {
     const response = await api.get(`/demanda/status`);
@@ -44,6 +51,17 @@ export const getAuditorias = async (periodo: AuditPeriod): Promise<AuditoriaResp
     return response.data;
   } catch (error) {
     console.error(`Erro ao buscar auditorias para o período "${periodo}":`, error);
+    throw error;
+  }
+};
+
+export const getBurnoutSensorData = async (): Promise<BurnoutSensorItem[]> => {
+  try {
+    const response = await api.get('/demanda/sensor_burnout');
+    // A API retorna o array de dados diretamente
+    return response.data;
+  } catch (error) {
+    console.error("Erro no fetch do sensor de burnout:", error);
     throw error;
   }
 };
