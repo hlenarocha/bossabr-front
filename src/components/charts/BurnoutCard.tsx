@@ -10,8 +10,9 @@ const BurnoutCard: React.FC<BurnoutCardProps> = ({ name, score }) => {
   const percentage = Math.min((score / MAX_SCORE) * 100, 100);
 
   let colorClass = 'text-green-500';
-  if (percentage > 50) colorClass = 'text-yellow-500';
-  if (percentage > 80) colorClass = 'text-red-500';
+  // classes de cor baseadas na porcentagem de carga
+  if (percentage > 20) colorClass = 'text-yellow-500';
+  if (percentage > 50) colorClass = 'text-red-500';
 
   return (
     <div className="bg-zinc-800 p-4 rounded-lg flex items-center gap-4 w-full sm:w-auto sm:min-w-[250px] flex-grow">

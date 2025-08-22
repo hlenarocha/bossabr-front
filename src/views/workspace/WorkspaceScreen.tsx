@@ -272,7 +272,7 @@ const WorkspaceScreen = () => {
             <div className="flex w-full mt-10 justify-center">
               <ColoredButton
                 onClick={() => {
-                  navigate(`/diario/${user?.id_pessoa}`);
+                  navigate(`/diarios/${user?.id_pessoa}`);
                 }}
                 title="VISUALIZAR DIÁRIO"
                 width="w-[60%]"
