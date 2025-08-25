@@ -3,13 +3,26 @@ import BackgroundImage from "@/assets/images/dark-background.png";
 import HeaderFull from "@/components/header/HeaderFull";
 import SideBar from "@/components/sidebar/SideBar";
 import { SideBarContext } from "@/contexts/SideBarContext";
+import { useSession } from "@/hooks/useSession";
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
 
 interface BaseScreenProps {
     children: ReactNode;
 }
 
 const BaseScreen = ({ children }: BaseScreenProps) => {
+    const { user, isSessionLoading } = useSession();
+    const token = Cookies.get("auth_token");
+
     const { isSideBarOpen, setIsSideBarOpen } = useContext(SideBarContext);
+    // Efeito que monitora o estado de autenticação
+
+      // Se o carregamento terminou e NÃO HÁ usuário nem token, redireciona IMEDIATAMENTE.
+      if (!user || !token) {
+        return <Navigate to="/" replace />; 
+    }
 
     return (
         <div

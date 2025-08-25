@@ -37,12 +37,10 @@ import CriarCliente from "@/views/clients/CreateClient";
 import GerenciarClientes from "@/views/clients/ManageClients";
 import EditarCliente from "@/views/clients/EditClient";
 
-
 // Telas de Colaboradores
 import GerenciarColaboradores from "@/views/workers/ManageWorkers";
 import CriarColaborador from "@/views/workers/CreateWorker";
-import EditarColaborador from "@/views/workers/EditWorker"
-
+import EditarColaborador from "@/views/workers/EditWorker";
 
 // Telas de Equipes
 import GerenciarEquipes from "@/views/teams/ManageTeams";
@@ -93,6 +91,7 @@ const AppContainer = () => {
 
   const router = createBrowserRouter([
     { path: "/", element: <LoginScreen /> },
+
     { path: "/area-trabalho", element: <AreaTrabalho /> },
     { path: "/dashboard", element: <Dashboard /> },
 

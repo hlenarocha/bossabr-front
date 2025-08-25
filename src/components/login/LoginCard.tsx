@@ -11,12 +11,12 @@ import IconSad from "@/assets/images/famicons_sad.png";
 
 const LoginCard = () => {
   // Hook para tentar restaurar a sessão a partir de um cookie
-  useSession();
+  const { isSessionLoading } = useSession();
 
   // Hook que contém toda a lógica de autenticação
   const {
     login,
-    loading,
+    loading: isLoginLoading,
     isModalErrorVisible,
     setIsModalErrorVisible,
     unauthorizedEmail,
@@ -80,7 +80,10 @@ const LoginCard = () => {
     }
   };
 
-  if (loading) {
+  if (isLoginLoading) {
+    return <LoadingScreen />;
+  }
+  if (isSessionLoading) {
     return <LoadingScreen />;
   }
 
@@ -163,7 +166,8 @@ const LoginCard = () => {
           Login
         </div>
         <div
-          onClick={() => login()}
+          // evita duplo clique
+          onClick={() => !isLoginLoading && login()}
           className="w-full max-w-[371px] h-[38px] hover:border-[4px] hover:border-[#F8BB49] hover:cursor-pointer flex items-center justify-center bg-white rounded-[10px] shadow-[28px_28px_50px_0px_rgba(17,17,17,0.25)] mt-5"
         >
           <div className="bg-white w-[30px] h-[30px] rounded-full flex items-center justify-center mr-[10px]">

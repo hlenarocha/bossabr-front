@@ -149,7 +149,6 @@ export interface DemandByClientItem {
   nome_setor: string;
   descricao: string;
   prazo: string;
-  // Adicione um ID para a key do React, a API precisa retornar isso
   id_demanda: number; 
 }
 

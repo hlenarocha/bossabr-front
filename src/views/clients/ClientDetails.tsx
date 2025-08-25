@@ -208,7 +208,7 @@ const ClientDetails = () => {
                         <button
                           onClick={() =>
                             navigate(`/demandas/${demand.id_demanda}`, {
-                              state: { from: "/demandas/lista" },
+                              state: { from: "/clientes/:id" },
                             })
                           }
                           className="bg-customYellow text-zinc-900 font-bold py-1 px-3 rounded-lg text-sm hover:bg-yellow-400 transition-colors"
