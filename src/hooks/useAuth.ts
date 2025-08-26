@@ -40,7 +40,8 @@ export const useAuth = () => {
         }
 
         if (response?.token && response.user) {
-          Cookies.set("auth_token", response.token, { expires: 5, secure: true, sameSite: "strict" });
+          // mudar secure para true com HTTPS!
+          Cookies.set("auth_token", response.token, { expires: 5, secure: false, sameSite: "strict" });
           setUser(response.user as UserInterface);
           navigate("/area-trabalho");
         }

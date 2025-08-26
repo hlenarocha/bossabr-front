@@ -28,22 +28,22 @@ type Task = {
   prazo: string;
 };
 
-const mapStatus = (backendStatus: string): Task["status"] => {
-  const status = backendStatus.toLowerCase();
-  switch (status) {
-    case "novo":
-    case "em aprovação":
-      return "não iniciada";
-    case "em andamento":
-      return "em andamento";
-    case "concluído":
-      return "concluída";
-    case "atrasado":
-      return "atrasada";
-    default:
-      return "não iniciada";
-  }
-};
+// const mapStatus = (backendStatus: string): Task["status"] => {
+//   const status = backendStatus.toLowerCase();
+//   switch (status) {
+//     case "novo":
+//     case "em aprovação":
+//       return "não iniciada";
+//     case "em andamento":
+//       return "em andamento";
+//     case "concluído":
+//       return "concluída";
+//     case "atrasado":
+//       return "atrasada";
+//     default:
+//       return "não iniciada";
+//   }
+// };
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
@@ -83,11 +83,11 @@ const WorkspaceScreen = () => {
     if (workerDemands) {
       const formattedTasks = workerDemands.map((demand: WorkerDemand) => ({
         title: demand.nome_servico,
-        status: mapStatus(demand.status),
+        // status: mapStatus(demand.status),
         indexCard: demand.id_demanda,
         prazo: demand.prazo,
       }));
-      setTasks(formattedTasks);
+      // setTasks(formattedTasks);
     }
   }, [workerDemands]);
 

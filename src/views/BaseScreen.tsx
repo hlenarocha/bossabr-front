@@ -6,6 +6,7 @@ import { SideBarContext } from "@/contexts/SideBarContext";
 import { useSession } from "@/hooks/useSession";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import LoadingScreen from "./auth/LoadingScreen";
 
 
 interface BaseScreenProps {
@@ -13,16 +14,22 @@ interface BaseScreenProps {
 }
 
 const BaseScreen = ({ children }: BaseScreenProps) => {
-    const { user, isSessionLoading } = useSession();
-    const token = Cookies.get("auth_token");
+    //const token = Cookies.get("auth_token");
 
     const { isSideBarOpen, setIsSideBarOpen } = useContext(SideBarContext);
     // Efeito que monitora o estado de autenticação
 
-      // Se o carregamento terminou e NÃO HÁ usuário nem token, redireciona IMEDIATAMENTE.
-      if (!user || !token) {
-        return <Navigate to="/" replace />; 
-    }
+    const { user, isSessionLoading } = useSession();
+
+    if (isSessionLoading) {
+        return <LoadingScreen />;
+      }
+      
+      if (!isSessionLoading && !user) {
+        return <Navigate to="/" replace />;
+      }
+  
+  
 
     return (
         <div

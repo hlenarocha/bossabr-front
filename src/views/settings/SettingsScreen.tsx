@@ -94,6 +94,7 @@ const SettingsScreen = () => {
         </Motion>
         <Motion>
           <div className="mt-4 flex flex-col gap-4 md:flex-row">
+            {/* { user?.role !== "Atendente" ? */}
             <Box
               title="Colaboradores"
               subtitle="Veja, altere ou exclua as informações pertinentes aos colaboradores."
@@ -119,7 +120,7 @@ const SettingsScreen = () => {
                 ></ColoredButton>
               </div>
             </Box>
-
+             {/* : "" } */}
             <Box
               title="Clientes"
               subtitle="Veja, altere ou exclua as informações pertinentes aos clientes."
@@ -148,6 +149,7 @@ const SettingsScreen = () => {
           </div>
         </Motion>
         <Motion>
+
           <Box
             title="Demandas"
             subtitle="Veja, altere ou exclua as informações pertinentes às demandas."

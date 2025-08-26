@@ -21,20 +21,20 @@ const HeaderFull = (props: HeaderFullProps) => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
-  useEffect(() => {
-    const authToken = Cookies.get("auth_token");
+  // useEffect(() => {
+  //   const authToken = Cookies.get("auth_token");
 
-    if (authToken) {
-      getUserByAuthToken(authToken, setUser);
-    }
-  }, []);
+  //   if (authToken) {
+  //     getUserByAuthToken(authToken, setUser);
+  //   }
+  // }, []);
 
   const handleLogout = () => {
     Cookies.remove("auth_token");
     Cookies.remove("user_data");
     setUser(null);
     navigate("/");
-    console.log("Dados removidos!");
+    console.log("LOGOUT: Dados removidos!");
   };
 
   return (
