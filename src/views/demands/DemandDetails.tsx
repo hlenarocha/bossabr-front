@@ -1,6 +1,6 @@
 // hooks e bibliotecas
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // Componentes
 import BaseScreen from "@/views/BaseScreen";
@@ -23,6 +23,9 @@ const DemandDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const demandId = Number(id);
+  const location = useLocation();
+
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: demand, isLoading, isError } = useReadDemandById(demandId);
@@ -36,10 +39,15 @@ const DemandDetails = () => {
     return "social_media"; // Padrão para Social Media ou outros
   };
 
+  // VER SE FUNCIONA
+  const previousRoute = location.state?.previousRoute + demand?.id_cliente;
+  console.log("ROTA ANTERIOR ", previousRoute);
+
   return (
     <>
+    
       <BaseScreen>
-        <BackButton onClick={() => navigate("/demandas")} />
+        <BackButton onClick={() => navigate(previousRoute)} />
         <div className="flex flex-row justify-between"> 
           <PageTitle
             marginTop="mt-4"

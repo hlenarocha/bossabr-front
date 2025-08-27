@@ -81,7 +81,7 @@ const SettingsScreen = () => {
                  
                     <InputString
                       title="TELEFONE"
-                      placeholder={workerDetails?.telefone || "Carregando..."}
+                      placeholder={workerDetails?.telefone || "N/A"}
                       isMandatory={false}
                       width="w-fit"
                       height="h-8"

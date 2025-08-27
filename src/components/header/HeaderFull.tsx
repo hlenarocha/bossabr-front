@@ -3,12 +3,11 @@ import LogoutButton from "@/components/header/LogoutButton";
 import SideMenu from "@/components/header/SideMenu";
 import Logo from "@/assets/images/mktflow_brand.svg";
 import Modal from "@/components/modal/Modal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
-import { getUserByAuthToken } from "@/api/oAuthRoutes";
 
 interface HeaderFullProps {
   toggleSideBar: () => void;

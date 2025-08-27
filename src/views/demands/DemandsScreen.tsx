@@ -36,7 +36,7 @@ interface Task {
 
 // Função para mapear o status do backend para o status do frontend
 const mapStatus = (backendStatus: string): Task["status"] => {
-  const status = backendStatus.toLowerCase();
+  // const status = backendStatus.toLowerCase();
   switch (status) {
     case "novo":
     case "em aprovação":

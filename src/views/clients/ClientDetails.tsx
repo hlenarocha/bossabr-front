@@ -206,10 +206,14 @@ const ClientDetails = () => {
                       width: "15%",
                       content: (
                         <button
-                          onClick={() =>
-                            navigate(`/demandas/${demand.id_demanda}`, {
-                              state: { from: "/clientes/:id" },
-                            })
+                        // console log id demanda
+                          onClick={() =>{
+                            navigate(`/clientes/cliente/demanda/${Number(demand.id_demanda)}`, {
+
+                              state: { previousRoute: "/clientes/" },
+                            });
+                            console.log(demand.id_demanda);
+                          }
                           }
                           className="bg-customYellow text-zinc-900 font-bold py-1 px-3 rounded-lg text-sm hover:bg-yellow-400 transition-colors"
                         >

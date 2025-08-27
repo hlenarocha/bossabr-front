@@ -111,8 +111,11 @@ const AppContainer = () => {
     { path: "/clientes/novo", element: <CriarCliente /> },
     { path: "/configuracoes/clientes/novo", element: <CriarCliente /> },
     { path: "/clientes/:id", element: <DetalhesCliente /> },
+    { path: "/clientes/cliente/demanda/:id", element: <DetalhesDemanda /> },
+
     { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
     { path: "configuracoes/clientes/:id", element: <EditarCliente /> },
+
 
     // Colaboradores
     {

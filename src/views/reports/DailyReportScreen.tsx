@@ -123,8 +123,9 @@ const DailyReportScreen = () => {
                       content: (
                         <i
                           className="fa-solid fa-eye text-lg text-customYellow hover:cursor-pointer"
-                          title="Visualizar Detalhes da Demanda"
-                          onClick={() => navigate(`/demandas/${activity.id_demanda}`)}
+                          title="Visualizar detalhes da atividade"
+                          // mudar depois o id
+                          onClick={() => navigate(`/demandas/${activity.id_ativ_designer}`)}
                         ></i>
                       ),
                     },
