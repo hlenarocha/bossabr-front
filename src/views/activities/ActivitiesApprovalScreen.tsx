@@ -180,13 +180,13 @@ const ActivitiesApproval = () => {
                       </div>
                       <div className="flex justify-end gap-3 mt-2">
                         <ColoredButton
-                          title="Reprovar / Ajustes"
+                          title="Reprovar atividade"
                           icon="fa-solid fa-times"
                           color="customRed"
                           onClick={() => handleReprove(activity.activityId)}
                         />
                         <ColoredButton
-                          title="Aprovar Atividade"
+                          title="Aprovar atividade"
                           icon="fa-solid fa-check"
                           color="customGreen"
                           onClick={() => handleApprove(activity.activityId)}
