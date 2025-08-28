@@ -20,6 +20,7 @@ import { useReadDemands } from "@/hooks/demands/useReadDemands";
 const ListDemands = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const previousRoute = location.state?.previousRoute;
 
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -55,7 +56,7 @@ const ListDemands = () => {
   return (
     <BaseScreen>
       <div className="flex items-center justify-between">
-        <BackButton onClick={() => navigate("/demandas")} />
+        <BackButton onClick={() => navigate(previousRoute)} />
         {/* O botão de adicionar pode ser removido ou apontar para a rota correta se necessário */}
       </div>
 

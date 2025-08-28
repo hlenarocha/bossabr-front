@@ -29,6 +29,7 @@ import ListarDemandas from "@/views/demands/ListDemands";
 import GerenciarDemandas from "@/views/demands/ManageDemands";
 import EditarDemanda from "@/views/demands/EditDemand";
 import HistoricoDemanda from "@/views/demands/DemandHistory";
+import AprovacaoAtividades from "@/views/activities/ActivitiesApprovalScreen";
 
 // Telas de Clientes
 import Clientes from "@/views/clients/ClientsScreen";
@@ -101,6 +102,8 @@ const AppContainer = () => {
     { path: "/configuracoes/demandas/nova", element: <CriarDemanda /> },
     { path: "/demandas/:id", element: <DetalhesDemanda /> },
     { path: "/demandas/:id/historico", element: <HistoricoDemanda /> },
+    { path: "/demandas/atendente/aprovacao", element: <AprovacaoAtividades /> },
+
 
     { path: "/demandas/lista", element: <ListarDemandas /> },
     { path: "/configuracoes/demandas", element: <GerenciarDemandas /> },

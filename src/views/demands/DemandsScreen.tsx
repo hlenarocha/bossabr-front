@@ -108,6 +108,7 @@ const DemandsScreen = () => {
     }
   }, [workerDemands]);
 
+
   // Lógica calendário e filtros
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
@@ -173,7 +174,11 @@ const DemandsScreen = () => {
             width="w-full sm:w-fit"
             title="LISTA DE DEMANDAS"
             icon="fa-solid fa-eye"
-            onClick={() => navigate("/demandas/lista")}
+            onClick={() =>
+              navigate("/demandas/lista", {
+                state: { previousRoute: "/demandas" },
+              })
+            }
           />
           <ColoredButton
             justify="justify-center"
