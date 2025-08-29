@@ -17,6 +17,7 @@ interface PropsModal {
   isError?: boolean;
   width?: string;
   height?: string;
+  section?: boolean;
 }
 
 const Modal = (props: PropsModal) => {
@@ -28,7 +29,11 @@ const Modal = (props: PropsModal) => {
         } fixed top-0 left-0 right-0 bottom-0 backdrop-blur-sm bg-black bg-opacity-5 z-50 flex items-center justify-center p-4`}
       >
         <div
-          className={`p-8 gap-4 justify-center relative text-white shadow-[10px_10px_30px_0px_rgba(0,0,0,0.30)] ${props.width ? props.width : "w-[600px]"} ${props.height ? props.height : "h-auto max-h-[95vh]"} flex flex-col rounded-[20px] bg-zinc-800 border-[5px] ${
+          className={`p-8 gap-4 justify-center relative text-white shadow-[10px_10px_30px_0px_rgba(0,0,0,0.30)] ${
+            props.width ? props.width : "w-[600px]"
+          } ${
+            props.height ? props.height : "h-auto max-h-[95vh]"
+          } flex flex-col rounded-[20px] bg-zinc-800 border-[5px] ${
             props.isError ? "border-customRedTask" : "border-customYellow"
           }`}
         >
@@ -45,14 +50,21 @@ const Modal = (props: PropsModal) => {
               )}
               <p className="text-2xl font-bold">{props.title}</p>
             </div>
-            {props.description && <p className="mt-2 text-wrap">{props.description}</p>}
-            <hr className="mt-4 mb-2 border-zinc-700"></hr>
+            {props.description && (
+              <p className="mt-2 text-wrap">{props.description}</p>
+            )}
+            {/* <hr className="mt-4 mb-2 border-zinc-700"></hr> */}
           </div>
 
           {/* SEÇÃO DO CONTEÚDO (ROLÁVEL) */}
-          <div className="flex-grow overflow-y-auto pr-2 -mr-2"> {/* Margem negativa para alinhar a scrollbar */}
-            {props.children}
-          </div>
+
+          {/* {props.section ? ( */}
+            <div className="flex-grow overflow-y-auto pr-2 -mr-2">
+              {" "}
+              {/* Margem negativa para alinhar a scrollbar */}
+              {props.children}
+            </div>
+          {/* ) : null} */}
 
           {/* SEÇÃO DO RODAPÉ (FIXA) */}
           <div className="flex-shrink-0 pt-4 mt-2 border-t border-zinc-700">
@@ -65,7 +77,7 @@ const Modal = (props: PropsModal) => {
                 width="w-[50%]"
               ></PlainButton>
               {props.buttonTitle2 && props.onClick2 && (
-                <PlainButton 
+                <PlainButton
                   onClick={props.onClick2}
                   titleStyle="text-lg font-bold"
                   title={props.buttonTitle2}
