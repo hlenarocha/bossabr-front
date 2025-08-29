@@ -4,7 +4,7 @@ import TaskCard, { TaskCardProps } from "./TaskCard";
 
 interface Task {
   title: string;
-  status: "não iniciada" | "em andamento" | "concluída" | "atrasada";
+  status: "não iniciada" | "em andamento" | "concluída" | "em aprovação" | "atrasada";
   indexCard: number;
   prazo: string;
 }
@@ -32,7 +32,9 @@ const TaskColumn = (props: TaskColumnProps) => {
     "não iniciada": "bg-gray-500",
     "em andamento": "bg-blue-500",
     "concluída": "bg-green-500",
+    "em aprovação": "bg-purple-500",
     "atrasada": "bg-red-500",
+
   };
 
   // const handleDragOver = (e: React.DragEvent, index: number) => {
@@ -65,7 +67,7 @@ const TaskColumn = (props: TaskColumnProps) => {
         <h2 className="font-bold text-md text-white">{props.title}</h2>
       </div>
       <div
-        className="overflow-y-auto relative min-h-[100px]"
+        className="overflow-y-auto relative min-h-[200px]"
         // onDragOver={handleColumnDragOver}
       >
         {/* Área de drop permanente para colunas vazias */}

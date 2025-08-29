@@ -59,9 +59,17 @@ export interface PaginatedWorkersResponse {
 export interface WorkerDemand {
   id_demanda: number;
   id_pessoa: number;
+  id_setor: number;
   nome_servico: string;
-  status: string; // Ex: "Novo", "Em andamento", etc.
+  status_demanda: string; // Ex: "Novo", "Em andamento", etc.
   prazo: string;
+  id_ativ_designer: number;
+  id_status_design: number;
+  status_designer: string;
+  id_ativ_social_media: number;
+  status_social: string;
+  atividade_ativa: boolean;
+
 }
 
 export interface WorkerPontuations {

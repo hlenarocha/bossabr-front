@@ -29,21 +29,26 @@ import Toast from "@/components/shared/Toast";
 // Interface para as tarefas do Kanban
 interface Task {
   title: string;
-  status: "não iniciada" | "em andamento" | "concluída" | "atrasada";
+  status:
+    | "não iniciada"
+    | "em andamento"
+    | "concluída"
+    | "em aprovação"
+    | "atrasada";
   indexCard: number;
   prazo: string;
 }
 
 // Função para mapear o status do backend para o status do frontend
 const mapStatus = (backendStatus: string): Task["status"] => {
-  // const status = backendStatus.toLowerCase();
-  switch (status) {
-    case "novo":
-    case "em aprovação":
+  switch (backendStatus.toLowerCase()) {
+    case "não iniciada":
       return "não iniciada";
+    case "em aprovação":
+      return "em aprovação";
     case "em andamento":
       return "em andamento";
-    case "concluído":
+    case "concluída":
       return "concluída";
     case "atrasado":
       return "atrasada";
@@ -56,7 +61,6 @@ const DemandsScreen = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext); // Pega o usuário logado
 
-  // --- BUSCA DE DADOS DA API (AGORA IGUAL À WORKSPACE) ---
   const {
     data: workerDemands,
     isLoading,
@@ -100,14 +104,13 @@ const DemandsScreen = () => {
     if (workerDemands) {
       const formattedTasks = workerDemands.map((demand: WorkerDemand) => ({
         title: demand.nome_servico,
-        status: mapStatus(demand.status),
+        status: mapStatus(demand.status_demanda),
         indexCard: demand.id_demanda,
         prazo: demand.prazo || "",
       }));
       setTasks(formattedTasks);
     }
   }, [workerDemands]);
-
 
   // Lógica calendário e filtros
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -240,7 +243,7 @@ const DemandsScreen = () => {
                     Selecione uma data
                   </div>
                 )}
-                <div className="max-h-[390px] overflow-y-auto pr-2">
+                <div className="max-h-[300px] overflow-y-auto pr-2">
                   {tasksForSelectedDay.length > 0 ? (
                     tasksForSelectedDay.map((task) => (
                       <TaskCard
@@ -249,7 +252,11 @@ const DemandsScreen = () => {
                         status={task.status}
                         prazo={task.prazo}
                         indexCard={task.indexCard}
-                        onClick={() => navigate(`/demandas/${task.indexCard}`)}
+                        onClick={() =>
+                          navigate(`/demandas/${task.indexCard}`, {
+                            state: { previousRoute: "/demandas" },
+                          })
+                        }
                       />
                     ))
                   ) : (
@@ -269,7 +276,7 @@ const DemandsScreen = () => {
             title="Progresso das demandas"
             subtitle="Verifique o progresso e modifique o status das suas tarefas."
             width="w-full"
-            height="h-fit"
+            height="h-[500px]"
           >
             <div className="mb-6">
               <FilterButtonGroup
@@ -283,7 +290,7 @@ const DemandsScreen = () => {
               isError={isError}
               errorMessage="Não foi possível carregar as demandas."
             >
-              <div className="w-full overflow-x-auto">
+              <div className="w-full overflow-x-auto ">
                 <div className="flex flex-col lg:flex-row justify-between w-full gap-4 lg:min-w-0 min-w-[800px]">
                   <TaskColumn
                     title="NÃO INICIADAS"
@@ -301,6 +308,12 @@ const DemandsScreen = () => {
                     title="CONCLUÍDAS"
                     tasks={tasks}
                     status="concluída"
+                    onCardActionClick={handleActionClick}
+                  />
+                  <TaskColumn
+                    title="EM APROVAÇÃO"
+                    tasks={tasks}
+                    status="em aprovação"
                     onCardActionClick={handleActionClick}
                   />
                   <TaskColumn

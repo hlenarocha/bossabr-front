@@ -40,7 +40,7 @@ const DemandDetails = () => {
   };
 
   // VER SE FUNCIONA
-  const previousRoute = location.state?.previousRoute + demand?.id_cliente;
+  const previousRoute = location.state?.previousRoute;
   console.log("ROTA ANTERIOR ", previousRoute);
 
   return (

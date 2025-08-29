@@ -23,27 +23,27 @@ import { useReadWorkerPontuations } from "@/hooks/worker/useReadWorkerPontuation
 
 type Task = {
   title: string;
-  status: "não iniciada" | "em andamento" | "concluída" | "atrasada";
+  status: "não iniciada" | "em andamento" | "concluída" | "em aprovação" | "atrasada";
   indexCard: number;
   prazo: string;
 };
 
 const mapStatus = (backendStatus: string): Task["status"] => {
-   //const status = backendStatus.toLowerCase();
-   switch (status) {
-     case "novo":
-     case "em aprovação":
+  switch (backendStatus.toLowerCase()) {
+    case "não iniciada":
       return "não iniciada";
+    case "em aprovação":
+      return "em aprovação";
     case "em andamento":
-       return "em andamento";
-     case "concluído":
-       return "concluída";
+      return "em andamento";
+    case "concluída":
+      return "concluída";
     case "atrasado":
-       return "atrasada";
+      return "atrasada";
     default:
-       return "não iniciada";
-   }
- };
+      return "não iniciada";
+  }
+};
 
 const WorkspaceScreen = () => {
   const greeting = greetingFunction();
@@ -61,13 +61,15 @@ const WorkspaceScreen = () => {
           const data = await readWorkerById(user.id_pessoa);
           setWorkerDetails(data);
         } catch (error) {
-          console.error("Erro ao buscar detalhes do colaborador na Workspace:", error);
+          console.error(
+            "Erro ao buscar detalhes do colaborador na Workspace:",
+            error
+          );
         }
       }
     };
     fetchWorkerData();
   }, [user?.id_pessoa]);
-
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const {
@@ -83,7 +85,7 @@ const WorkspaceScreen = () => {
     if (workerDemands) {
       const formattedTasks = workerDemands.map((demand: WorkerDemand) => ({
         title: demand.nome_servico,
-        status: mapStatus(demand.status),
+        status: mapStatus(demand.status_demanda),
         indexCard: demand.id_demanda,
         prazo: demand.prazo,
       }));
@@ -91,8 +93,7 @@ const WorkspaceScreen = () => {
     }
   }, [workerDemands]);
 
-
-  console.log(workerDemands)
+  console.log(workerDemands);
   // Opções e estilos para os botões de filtro
   const filterOptions = [
     {
@@ -129,7 +130,7 @@ const WorkspaceScreen = () => {
     <>
       <BaseScreen>
         <div className="w-full flex items-center justify-between cursor-default mt-4">
-          <PageTitle title="Área de Trabalho" icon="fa-solid fa-desktop" />
+          <PageTitle title="Área de trabalho" icon="fa-solid fa-desktop" />
 
           <div
             onClick={() => navigate("/configuracoes")}
@@ -156,52 +157,68 @@ const WorkspaceScreen = () => {
             height="h-fit"
           >
             <div className="flex w-full flex-row gap-8 mt-8 ">
-              <div className="flex flex-col w-2/3 gap-2">
-              {/* Dados atualizados (workerDetails com fallback para contexto (user)) */}
+              <div className="flex flex-col w-full gap-2 mr-4">
+                {/* Dados atualizados (workerDetails com fallback para contexto (user)) */}
                 <InputTitle title="Informações básicas"></InputTitle>
-                <div className="flex flex-row gap-2 w-full flex-wrap">
+                <div className="flex flex-row gap-2 w-full">
                   <InputString
                     title="NOME"
                     placeholder={`${user?.first_name} ${user?.last_name}` || ""}
                     isMandatory={false}
                     height="h-8"
-                    width="w-fit"
+                    width="w-1/4"
                     isReadOnly={true}
                   ></InputString>
                   <InputString
                     title="EQUIPE"
-                    placeholder={workerDetails?.nome_equipe || user?.nome_equipe || "Carregando..."}
+                    placeholder={
+                      workerDetails?.nome_equipe ||
+                      user?.nome_equipe ||
+                      "Carregando..."
+                    }
                     isMandatory={false}
                     height="h-8"
-                    width="w-fit"
+                    width="w-1/4"
                     isReadOnly={true}
                   ></InputString>
-                </div>
-                <div className="flex flex-row gap-2 w-full flex-wrap">
                   <InputString
                     title="SETOR"
-                    placeholder={workerDetails?.nome_setor || user?.nome_setor || "Carregando..."}
+                    placeholder={
+                      workerDetails?.nome_setor ||
+                      user?.nome_setor ||
+                      "Carregando..."
+                    }
                     isMandatory={false}
                     height="h-8"
-                    width="w-fit"
+                    width="w-1/4"
                     isReadOnly={true}
                   ></InputString>
                   <InputString
                     title="CARGO"
-                    placeholder={workerDetails?.cargo || user?.role || "Carregando..."}                    isMandatory={false}
+                    placeholder={
+                      workerDetails?.cargo || user?.role || "Carregando..."
+                    }
+                    isMandatory={false}
                     height="h-8"
-                    width="w-fit"
+                    width="w-1/4"
                     isReadOnly={true}
                   ></InputString>
                 </div>
+
                 <div className="flex w-full mt-4 gap-4">
                   <div className="w-1/2">
                     <InputTitle title="Pontuação semanal"></InputTitle>
-                    <ScoreBar score={pontuationsData?.pontuacaoSemanal ?? 0} maxScore={100}/>
+                    <ScoreBar
+                      score={pontuationsData?.pontuacaoSemanal ?? 0}
+                      maxScore={100}
+                    />
                   </div>
                   <div className="w-1/2">
                     <InputTitle title="Pontuação mensal"></InputTitle>
-                    <ScoreBar score={pontuationsData?.pontuacaoMensal ?? 0} maxScore={100}/>
+                    <ScoreBar
+                      score={pontuationsData?.pontuacaoMensal ?? 0}
+                      maxScore={100}
+                    />
                   </div>
                 </div>
               </div>
@@ -219,7 +236,7 @@ const WorkspaceScreen = () => {
                     message={"Fulano atualizou cliente Superhipermercado"}
                     user={"Fulano"}
                     date={"20/02/2002"}
-                    />
+                  />
                 </div>
               </div>
             </div>
@@ -229,15 +246,15 @@ const WorkspaceScreen = () => {
              
             </div> */}
 
-            <div className="mt-12 flex flex-col gap-4">
+            <div className="mt-4 flex flex-col gap-4">
               <InputTitle title="Progresso das demandas"></InputTitle>
-              <div className="mb-6">
-              <FilterButtonGroup 
-                options={filterOptions}
-                selectedValue={timeFilter}
-                onFilterChange={setTimeFilter}
-              />
-            </div>
+              <div className="mb-4">
+                <FilterButtonGroup
+                  options={filterOptions}
+                  selectedValue={timeFilter}
+                  onFilterChange={setTimeFilter}
+                />
+              </div>
               <div className="flex flex-row justify-between w-full gap-4">
                 <StatusView
                   isLoading={isLoading}
@@ -260,6 +277,11 @@ const WorkspaceScreen = () => {
                       title="CONCLUÍDAS"
                       tasks={tasks}
                       status="concluída"
+                    />
+                     <TaskColumn
+                      title="EM APROVAÇÃO"
+                      tasks={tasks}
+                      status="em aprovação"
                     />
                     <TaskColumn
                       title="ATRASADAS"

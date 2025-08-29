@@ -17,11 +17,12 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
 
   // Define a cor do ícone com base no status
   switch (status.toLowerCase()) {
-    case "atrasado":
+    // 9 STATUS
+    case "atrasada":
       iconColorClass = "text-red-500"; // Cor aplicada apenas ao ícone
       iconClass = "fa-solid fa-clock-rotate-left";
       break;
-    case "concluído":
+    case "concluída":
       iconColorClass = "text-green-500";
       iconClass = "fa-solid fa-check-circle";
       break;
@@ -29,12 +30,32 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
       iconColorClass = "text-blue-500";
       iconClass = "fa-solid fa-palette";
       break;
-    case "novo":
-      iconColorClass = "text-purple-500";
-      iconClass = "fa-solid fa-star";
+    case "em execução":
+      iconColorClass = "text-cyan-500";
+      iconClass = "fa-solid fa-spinner";
+      break;
+    // case "novo":
+    //   iconColorClass = "text-purple-500";
+    //   iconClass = "fa-solid fa-star";
+    //   break;
+    case "não iniciada":
+      iconColorClass = "text-gray-500";
+      iconClass = "fa-solid fa-play";
+      break;
+    case "reprovada":
+      iconColorClass = "text-rose-500";
+      iconClass = "fa-solid fa-xmark-circle";
+      break;
+    case "aprovada":
+      iconColorClass = "text-green-500";
+      iconClass = "fa-solid fa-thumbs-up";
+      break;
+    case "enviada para aprovação":
+      iconColorClass = "text-orange-500";
+      iconClass = "fa-solid fa-paper-plane";
       break;
     case "em aprovação":
-      iconColorClass = "text-yellow-500";
+      iconColorClass = "text-purple-500";
       iconClass = "fa-solid fa-hourglass-half";
       break;
     default:
