@@ -241,7 +241,7 @@ const DashboardScreen = () => {
                         </p>
                         <ScoreBar
                           score={person.pontuacao_mensal}
-                          maxScore={400}
+                          maxScore={70}
                         />
                       </div>
                     ))

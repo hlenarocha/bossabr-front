@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"; // 1. Importe o Outlet
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useContext, useEffect } from "react";
@@ -10,18 +10,17 @@ import { SideBarProvider } from "@/contexts/SideBarContext";
 // Lógica da API e Interfaces
 import readWorkspace from "@/api/workspaceRoutes";
 
-// Telas Principais
+// Telas Principais e de Erro
 import LoginScreen from "@/views/auth/LoginScreen";
 import Dashboard from "@/views/dashboard/DashboardScreen";
 import AreaTrabalho from "@/views/workspace/WorkspaceScreen";
 import Configuracoes from "@/views/settings/SettingsScreen";
 import NotFound from "@/views/errors/NotFound";
+import LoadingScreen from "@/views/auth/LoadingScreen"; // Importe sua tela de Loading
 
-// Telas de Diario
+// ... (Todos os outros imports de tela)
 import Diario from "@/views/reports/DailyReportScreen";
 import ListaDiariosAdmin from "@/views/reports/AdminReportList";
-
-// Telas de Demandas
 import Demandas from "@/views/demands/DemandsScreen";
 import DetalhesDemanda from "@/views/demands/DemandDetails";
 import CriarDemanda from "@/views/demands/CreateDemand";
@@ -30,39 +29,42 @@ import GerenciarDemandas from "@/views/demands/ManageDemands";
 import EditarDemanda from "@/views/demands/EditDemand";
 import HistoricoDemanda from "@/views/demands/DemandHistory";
 import AprovacaoAtividades from "@/views/activities/ActivitiesApprovalScreen";
-
-// Telas de Clientes
 import Clientes from "@/views/clients/ClientsScreen";
 import DetalhesCliente from "@/views/clients/ClientDetails";
 import CriarCliente from "@/views/clients/CreateClient";
 import GerenciarClientes from "@/views/clients/ManageClients";
 import EditarCliente from "@/views/clients/EditClient";
-
-// Telas de Colaboradores
 import GerenciarColaboradores from "@/views/workers/ManageWorkers";
 import CriarColaborador from "@/views/workers/CreateWorker";
 import EditarColaborador from "@/views/workers/EditWorker";
-
-// Telas de Equipes
 import GerenciarEquipes from "@/views/teams/ManageTeams";
 import CriarEquipe from "@/views/teams/CreateTeam";
 import EditarEquipe from "@/views/teams/EditTeam";
-
-// Telas de Setores
 import GerenciarSetores from "@/views/sectors/ManageSectors";
 import CriarSetor from "@/views/sectors/CreateSector";
-
-// Telas de Setores de Negócio
 import GerenciarNegocios from "@/views/business/ManageBusiness";
 import CriarNegocio from "@/views/business/CreateBusiness";
 import EditarNegocio from "@/views/business/EditBusiness";
-
-// Telas de Serviços
 import GerenciarServicos from "@/views/services/ManageServices";
 import CriarServico from "@/views/services/CreateService";
 import EditarServico from "@/views/services/EditService";
 
+
 const queryClient = new QueryClient();
+
+// "PORTEIRO" 
+const ConfiguracoesLayout = () => {
+  const { user } = useContext(UserContext);
+
+  if (user === undefined) { 
+    return <LoadingScreen />; 
+  }
+
+  const isAuthorized = user && ["Gerente", "Administrador"].includes(user.role);
+
+  return isAuthorized ? <Outlet /> : <NotFound />;
+};
+
 
 const AppContainer = () => {
   const { user, setUser } = useContext(UserContext);
@@ -96,67 +98,68 @@ const AppContainer = () => {
     { path: "/area-trabalho", element: <AreaTrabalho /> },
     { path: "/dashboard", element: <Dashboard /> },
 
-    // Demandas
-    { path: "/demandas", element: <Demandas /> },
+    // Rota de Demandas condicional
+    {
+      path: "/demandas",
+      element:
+        user && ["Atendente", "Gerente", "Administrador"].includes(user.role) ? (
+          <AprovacaoAtividades />
+        ) : (
+          <Demandas />
+        ),
+    },
+    // ... (rotas de demandas)
     { path: "/demandas/nova", element: <CriarDemanda /> },
-    { path: "/configuracoes/demandas/nova", element: <CriarDemanda /> },
     { path: "/demandas/:id", element: <DetalhesDemanda /> },
     { path: "/demandas/:id/historico", element: <HistoricoDemanda /> },
-    { path: "/demandas/atendente/aprovacao", element: <AprovacaoAtividades /> },
-
-
     { path: "/demandas/lista", element: <ListarDemandas /> },
-    { path: "/configuracoes/demandas", element: <GerenciarDemandas /> },
-    { path: "/configuracoes/demandas/:id", element: <EditarDemanda /> },
 
-    // Clientes
+    // ... (rotas de clientes)
     { path: "/clientes", element: <Clientes /> },
     { path: "/clientes/novo", element: <CriarCliente /> },
-    { path: "/configuracoes/clientes/novo", element: <CriarCliente /> },
     { path: "/clientes/:id", element: <DetalhesCliente /> },
     { path: "/clientes/cliente/demanda/:id", element: <DetalhesDemanda /> },
 
-    { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
-    { path: "configuracoes/clientes/:id", element: <EditarCliente /> },
-
-
-    // Colaboradores
-    {
-      path: "/configuracoes/colaboradores",
-      element: <GerenciarColaboradores />,
-    },
-    {
-      path: "/configuracoes/colaboradores/novo",
-      element: <CriarColaborador />,
-    },
-    {
-      path: "/configuracoes/colaboradores/:id",
-      element: <EditarColaborador />,
-    },
-
-    // Equipes
-    { path: "/configuracoes/equipes", element: <GerenciarEquipes /> },
-    { path: "/configuracoes/equipes/novo", element: <CriarEquipe /> },
-    { path: "/configuracoes/equipes/:id", element: <EditarEquipe /> },
-
-    // Setores
-    { path: "/configuracoes/setores", element: <GerenciarSetores /> },
-    { path: "/configuracoes/setores/novo", element: <CriarSetor /> },
-
-    // Setores de Negócio
-    { path: "/configuracoes/negocios", element: <GerenciarNegocios /> },
-    { path: "/configuracoes/negocios/novo", element: <CriarNegocio /> },
-    { path: "/configuracoes/negocios/:id", element: <EditarNegocio /> },
-
-    // Serviços
-    { path: "/configuracoes/servicos", element: <GerenciarServicos /> },
-    { path: "/configuracoes/servicos/novo", element: <CriarServico /> },
-    { path: "/configuracoes/servicos/:id", element: <EditarServico /> },
-
-    // Relatórios e Configurações gerais
-    { path: "/diarios/:id", element: <Diario /> },
-    { path: "/diarios", element: <ListaDiariosAdmin /> },
     { path: "/configuracoes", element: <Configuracoes /> },
+
+    
+    {
+      element: <ConfiguracoesLayout />, // O porteiro protege todas as rotas filhas
+      children: [
+        { path: "/configuracoes/demandas", element: <GerenciarDemandas /> },
+        { path: "/configuracoes/demandas/nova", element: <CriarDemanda /> },
+        { path: "/configuracoes/demandas/:id", element: <EditarDemanda /> },
+        { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
+        { path: "/configuracoes/clientes/novo", element: <CriarCliente /> },
+        { path: "/configuracoes/clientes/:id", element: <EditarCliente /> },
+        { path: "/configuracoes/colaboradores", element: <GerenciarColaboradores />},
+        { path: "/configuracoes/colaboradores/novo", element: <CriarColaborador />},
+        { path: "/configuracoes/colaboradores/:id", element: <EditarColaborador />},
+        { path: "/configuracoes/equipes", element: <GerenciarEquipes /> },
+        { path: "/configuracoes/equipes/novo", element: <CriarEquipe /> },
+        { path: "/configuracoes/equipes/:id", element: <EditarEquipe /> },
+        { path: "/configuracoes/setores", element: <GerenciarSetores /> },
+        { path: "/configuracoes/setores/novo", element: <CriarSetor /> },
+        { path: "/configuracoes/negocios", element: <GerenciarNegocios /> },
+        { path: "/configuracoes/negocios/novo", element: <CriarNegocio /> },
+        { path: "/configuracoes/negocios/:id", element: <EditarNegocio /> },
+        { path: "/configuracoes/servicos", element: <GerenciarServicos /> },
+        { path: "/configuracoes/servicos/novo", element: <CriarServico /> },
+        { path: "/configuracoes/servicos/:id", element: <EditarServico /> },
+      ]
+    },
+
+
+    { path: "/diarios/:id", element: <Diario /> },
+    {
+      path: "/diarios",
+      element:
+        user && ["Atendente", "Gerente", "Administrador"].includes(user.role) ? (
+          <ListaDiariosAdmin />
+        ) : (
+          <Diario /> // Redireciona para o diário do próprio usuário se não for admin
+        ),
+    },
 
     // Rota para página não encontrada (404)
     { path: "*", element: <NotFound /> },
@@ -170,25 +173,14 @@ const App = () => {
 
   if (!googleClientId) {
     return (
-      <div
-        style={{
-          padding: "2rem",
-          fontFamily: "sans-serif",
-          color: "red",
-          textAlign: "center",
-        }}
-      >
+      <div style={{ padding: "2rem", fontFamily: "sans-serif", color: "red", textAlign: "center" }}>
         <h1>Erro de Configuração</h1>
-        <p>
-          A variável VITE_GOOGLE_CLIENT_ID não foi encontrada. Verifique seu
-          arquivo .env
-        </p>
+        <p>A variável VITE_GOOGLE_CLIENT_ID não foi encontrada. Verifique seu arquivo .env</p>
       </div>
     );
   }
 
   return (
-    // provedores que fornecerão contexto para toda a aplicação
     <QueryClientProvider client={queryClient}>
       <GoogleOAuthProvider clientId={googleClientId}>
         <UserProvider>
