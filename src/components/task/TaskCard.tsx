@@ -18,9 +18,9 @@ export interface TaskCardProps {
 const statusColor = {
   "não iniciada": "bg-gray-500",
   "em andamento": "bg-blue-500",
-  concluída: "bg-green-500",
+  "concluída": "bg-green-500",
   "em aprovação": "bg-purple-500",
-  atrasada: "bg-red-500",
+  "atrasada": "bg-red-500",
 };
 
 // Mapeamento de estilos para o botão de ação à direita
@@ -35,7 +35,7 @@ const actionStyles = {
     hover: "hover:bg-blue-500",
     title: "Registrar Atividade",
   },
-  concluída: {
+  "concluída": {
     icon: "fa-solid fa-flag-checkered",
     hover: "hover:bg-green-500",
     title: "Ver Entrega",
@@ -45,7 +45,7 @@ const actionStyles = {
     hover: "hover:bg-purple-500",
     title: "Aguardando Aprovação",
   },
-  atrasada: {
+  "atrasada": {
     icon: "fa-solid fa-exclamation-triangle",
     hover: "hover:bg-red-500",
     title: "Resolver Pendência",

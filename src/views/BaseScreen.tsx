@@ -34,7 +34,6 @@ const RoleSwitcher = () => {
         <option value="Designer">Designer</option>
         <option value="Social Media">Social Media</option>
 
-        {/* Adicione outros cargos que você precisa testar */}
       </select>
     </div>
   );

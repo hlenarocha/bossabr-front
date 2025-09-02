@@ -50,14 +50,7 @@ const DailyReportScreen = () => {
             title={`Diário de ${user?.first_name || ""} ${user?.last_name || ""}`}
           />
         </div>
-        <ColoredButton
-          onClick={() => { /* Lógica para baixar o relatório */ }}
-          width="w-full sm:w-fit"
-          title="BAIXAR RELATÓRIO"
-          icon="fa-solid fa-file-arrow-down"
-          color="customYellow"
-          justify="justify-center"
-        />
+       
       </div>
 
       <Motion>
