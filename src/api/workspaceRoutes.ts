@@ -23,15 +23,40 @@ export interface WorkspaceResponse {
   pontuacao_pessoa_mensal: number;
 }
 
+export type PeriodOptions = 'hoje' | '7dias_uteis' | '15dias_uteis' | '30dias_uteis';
+
+export type DemandsByStatus = {
+  [status: string]: { 
+    id_demanda: number;
+    descricao: string;
+    prazo: string;
+    setor: string;
+  }[]; 
+};
+
+export const readDemandsByPeriod = async (
+  id_pessoa: number,
+  dias: PeriodOptions
+): Promise<DemandsByStatus> => {
+  try {
+    const response = await api.get<{ success: boolean; data: DemandsByStatus }>('/demanda/proximos-dias-uteis', {
+      params: {
+        id_pessoa,
+        dias,
+      },
+    });
+    return response.data.data; // A função retorna apenas o objeto 'data'
+  } catch (error) {
+    console.error("Erro ao buscar demandas por período:", error);
+    throw error;
+  }
+};
+
 
 const readWorkspace = async (id_pessoa: number): Promise<WorkspaceResponse> => {
   try {
     const response = await api.get(`/pessoa/${id_pessoa}/workspace`);
-    //   , {
-    //   headers: {
-    //     Authorization: `Bearer ${authToken}`,
-    //   },
-    // });
+
     console.log(response.data);
 
     return response.data;

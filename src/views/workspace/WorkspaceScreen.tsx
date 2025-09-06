@@ -2,7 +2,7 @@ import BaseScreen from "@/views/BaseScreen";
 import Box from "@/components/box/BoxContent";
 import PageTitle from "@/components/title/PageTitle";
 import { greetingFunction } from "@/utils/greetingFunction";
-import { useContext, useEffect, useState } from "react"; // Adicionado useState
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import InputTitle from "@/components/title/InputTitle";
 import InputString from "@/components/shared/InputString";
@@ -11,14 +11,13 @@ import ColoredButton from "@/components/shared/ColoredButton";
 import ScoreBar from "@/components/shared/ScoreBar";
 import TaskColumn from "@/components/task/TaskColumn";
 import { useNavigate } from "react-router-dom";
-//import { useDragDrop } from "@/hooks/useDragDrop";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
-import { useReadWorkerDemands } from "@/hooks/worker/useReadWorkerDemands";
-import { WorkerDemand } from "@/api/workerRoutes";
+import { useReadDemandsByPeriod } from "@/hooks/demands/useReadDemandsByPeriod"; // Hook atualizado
+import { PeriodOptions } from "@/api/workspaceRoutes"; // Tipos simplificados
 import { StatusView } from "@/components/shared/StatusView";
 import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
-import FilterButtonGroup from "@/components/shared/FilterButtonGroup";
+import FilterButtonGroup, { FilterOption } from "@/components/shared/FilterButtonGroup";
 import { useReadWorkerPontuations } from "@/hooks/worker/useReadWorkerPontuations";
 
 type Task = {
@@ -38,7 +37,7 @@ const mapStatus = (backendStatus: string): Task["status"] => {
       return "em andamento";
     case "concluída":
       return "concluída";
-    case "atrasado":
+    case "atrasada":
       return "atrasada";
     default:
       return "não iniciada";
@@ -72,58 +71,43 @@ const WorkspaceScreen = () => {
   }, [user?.id_pessoa]);
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const {
-    data: workerDemands,
+  const [timeFilter, setTimeFilter] = useState<PeriodOptions>("7dias_uteis");
+
+   const {
+    data: filteredDemandsData,
     isLoading,
     isError,
-  } = useReadWorkerDemands(user?.id_pessoa);
+  } = useReadDemandsByPeriod(user?.id_pessoa, timeFilter);
 
-  // Estado para controlar o filtro de tempo ativo
-  const [timeFilter, setTimeFilter] = useState("semana"); // 'semana' como padrão
-
+  // useEffect para processar e achatar os dados da nova API
   useEffect(() => {
-    if (workerDemands) {
-      const formattedTasks = workerDemands.map((demand: WorkerDemand) => ({
-        title: demand.nome_servico,
-        status: mapStatus(demand.status_demanda),
-        indexCard: demand.id_demanda,
-        prazo: demand.prazo,
-      }));
-      setTasks(formattedTasks);
+    if (filteredDemandsData) {
+      const allTasks: Task[] = [];
+      
+      for (const status in filteredDemandsData) {
+        const demandsForStatus = filteredDemandsData[status];
+        
+        const formattedTasks = demandsForStatus.map((demand) => ({
+          title: demand.descricao,
+          status: mapStatus(status),
+          indexCard: demand.id_demanda,
+          prazo: demand.prazo,
+        }));
+        
+        allTasks.push(...formattedTasks);
+      }
+      setTasks(allTasks);
+    } else {
+      setTasks([]);
     }
-  }, [workerDemands]);
+  }, [filteredDemandsData]);
 
-  console.log(workerDemands);
   // Opções e estilos para os botões de filtro
-  const filterOptions = [
-    {
-      value: "hoje",
-      label: "Hoje",
-      icon: "fa-solid fa-triangle-exclamation",
-      baseColor: "bg-red-500",
-      textColor: "text-white",
-    },
-    {
-      value: "semana",
-      label: "Esta Semana",
-      icon: "fa-solid fa-hourglass-half",
-      baseColor: "bg-yellow-500",
-      textColor: "text-zinc-900",
-    },
-    {
-      value: "mes",
-      label: "Este Mês",
-      icon: "fa-solid fa-calendar-days",
-      baseColor: "bg-blue-500",
-      textColor: "text-white",
-    },
-    {
-      value: "geral",
-      label: "Geral",
-      icon: "fa-solid fa-globe",
-      baseColor: "bg-zinc-700",
-      textColor: "text-white",
-    },
+  const filterOptions: FilterOption[] = [
+    { value: "hoje", label: "Hoje", icon: "fa-solid fa-triangle-exclamation", baseColor: "bg-red-500", textColor: "text-white" },
+    { value: "7dias_uteis", label: "7 Dias", icon: "fa-solid fa-hourglass-half", baseColor: "bg-yellow-500", textColor: "text-zinc-900" },
+    { value: "15dias_uteis", label: "15 Dias", icon: "fa-solid fa-calendar-check", baseColor: "bg-blue-500", textColor: "text-white" },
+    { value: "30dias_uteis", label: "30 Dias", icon: "fa-solid fa-binoculars", baseColor: "bg-zinc-700", textColor: "text-white" },
   ];
 
   return (
@@ -252,8 +236,7 @@ const WorkspaceScreen = () => {
                 <FilterButtonGroup
                   options={filterOptions}
                   selectedValue={timeFilter}
-                  onFilterChange={setTimeFilter}
-                />
+                  onFilterChange={(value) => setTimeFilter(value as PeriodOptions)}                />
               </div>
               <div className="flex flex-row justify-between w-full gap-4">
                 <StatusView

@@ -68,66 +68,22 @@ const TaskColumn = (props: TaskColumnProps) => {
       </div>
       <div
         className="overflow-y-auto relative min-h-[200px]"
-        // onDragOver={handleColumnDragOver}
       >
-        {/* Área de drop permanente para colunas vazias */}
-        {/* {isEmpty && (
-          <div
-            className="absolute inset-0"
-            onDragOver={(e) => {
-              e.preventDefault();
-              setActiveDropIndex(0);
-            }}
-          >
-            <DropArea
-              status={props.status}
-              onDrop={() => {
-                props.onDrop(props.status, 0);
-                setActiveDropIndex(null);
-                setIsDraggingOverColumn(false);
-              }}
-              isActive={isDraggingOverColumn}
-            />
-          </div>
-        )} */}
-
-        {/* Área no topo para colunas não vazias */}
-        {/* {!isEmpty && (
-          <DropArea
-            status={props.status}
-            onDrop={() => {
-              props.onDrop(props.status, 0);
-              setActiveDropIndex(null);
-            }}
-            isActive={activeDropIndex === -1}
-          />
-        )} */}
+      
 
         {filteredTasks.map((task, index) => (
           <div
             key={task.indexCard}
             className="relative"
-            // onDragOver={(e) => handleDragOver(e, index)}
           >
             <TaskCard
               title={task.title}
               status={task.status}
-              // setActiveCard={props.setActiveCard}
               indexCard={task.indexCard}
               prazo={task.prazo}
               onActionClick={(e) => props.onCardActionClick && props.onCardActionClick(e, task)}
-
-              // activeCard={props.activeCard}
             />
 
-            {/* <DropArea
-              status={props.status}
-              onDrop={() => {
-                props.onDrop(props.status, index + 1);
-                setActiveDropIndex(null);
-              }} */}
-              {/* // isActive={activeDropIndex === index}
-            /> */}
           </div>
         ))}
       </div>

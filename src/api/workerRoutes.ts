@@ -59,6 +59,7 @@ export interface PaginatedWorkersResponse {
 export interface WorkerDemand {
   id_demanda: number;
   id_pessoa: number;
+  descricao: string;
   id_setor: number;
   nome_servico: string;
   status_demanda: string; // Ex: "Novo", "Em andamento", etc.

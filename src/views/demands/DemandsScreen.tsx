@@ -18,7 +18,8 @@ import { StatusView } from "@/components/shared/StatusView";
 
 // API, hooks e tipos
 import { UserContext } from "@/contexts/UserContext";
-import { useReadWorkerDemands } from "@/hooks/worker/useReadWorkerDemands"; // Usando o mesmo hook da Workspace
+import { useReadDemandsByPeriod } from "@/hooks/demands/useReadDemandsByPeriod";
+import { PeriodOptions } from "@/api/workspaceRoutes";
 import { WorkerDemand } from "@/api/workerRoutes";
 import CreateActivityModal from "../activities/CreateActivityModal";
 import FilterButtonGroup, {
@@ -50,7 +51,7 @@ const mapStatus = (backendStatus: string): Task["status"] => {
       return "em andamento";
     case "concluída":
       return "concluída";
-    case "atrasado":
+    case "atrasada":
       return "atrasada";
     default:
       return "não iniciada";
@@ -61,17 +62,17 @@ const DemandsScreen = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext); // Pega o usuário logado
 
+  const [timeFilter, setTimeFilter] = useState<PeriodOptions>("7dias_uteis");
+
   const {
-    data: workerDemands,
+    data: filteredDemandsData,
     isLoading,
     isError,
-  } = useReadWorkerDemands(user?.id_pessoa);
+  } = useReadDemandsByPeriod(user?.id_pessoa, timeFilter);
 
   // --- ESTADO PARA O MODAL E TAREFAS ---
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [selectedDemand, setSelectedDemand] = useState<Task | null>(null);
-
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
@@ -101,16 +102,24 @@ const DemandsScreen = () => {
 
   // Efeito que atualiza as tarefas quando os dados da API chegam
   useEffect(() => {
-    if (workerDemands) {
-      const formattedTasks = workerDemands.map((demand: WorkerDemand) => ({
-        title: demand.nome_servico,
-        status: mapStatus(demand.status_demanda),
-        indexCard: demand.id_demanda,
-        prazo: demand.prazo || "",
-      }));
-      setTasks(formattedTasks);
+    if (filteredDemandsData) {
+      const allTasks: Task[] = [];
+      for (const status in filteredDemandsData) {
+        const demandsForStatus = filteredDemandsData[status];
+        const formattedTasks = demandsForStatus.map((demand) => ({
+          title: demand.descricao, // API agora envia 'descricao'
+          status: mapStatus(status),
+          indexCard: demand.id_demanda,
+          prazo: demand.prazo || "",
+        }));
+        allTasks.push(...formattedTasks);
+      }
+      setTasks(allTasks);
+    } else {
+      setTasks([]);
     }
-  }, [workerDemands]);
+  }, [filteredDemandsData]);
+
 
   // Lógica calendário e filtros
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -134,37 +143,13 @@ const DemandsScreen = () => {
     }
   }, [selectedDate, tasks]);
 
-  const [timeFilter, setTimeFilter] = useState("semana");
   const filterOptions: FilterOption[] = [
-    {
-      value: "hoje",
-      label: "Hoje",
-      icon: "fa-solid fa-triangle-exclamation",
-      baseColor: "bg-red-500",
-      textColor: "text-white",
-    },
-    {
-      value: "semana",
-      label: "Esta Semana",
-      icon: "fa-solid fa-hourglass-half",
-      baseColor: "bg-yellow-500",
-      textColor: "text-zinc-900",
-    },
-    {
-      value: "mes",
-      label: "Este Mês",
-      icon: "fa-solid fa-calendar-days",
-      baseColor: "bg-blue-500",
-      textColor: "text-white",
-    },
-    {
-      value: "geral",
-      label: "Geral",
-      icon: "fa-solid fa-globe",
-      baseColor: "bg-zinc-700",
-      textColor: "text-white",
-    },
+    { value: "hoje", label: "Hoje", icon: "fa-solid fa-triangle-exclamation", baseColor: "bg-red-500", textColor: "text-white" },
+    { value: "7dias_uteis", label: "7 Dias", icon: "fa-solid fa-hourglass-half", baseColor: "bg-yellow-500", textColor: "text-zinc-900" },
+    { value: "15dias_uteis", label: "15 Dias", icon: "fa-solid fa-calendar-check", baseColor: "bg-blue-500", textColor: "text-white" },
+    { value: "30dias_uteis", label: "30 Dias", icon: "fa-solid fa-binoculars", baseColor: "bg-zinc-700", textColor: "text-white" },
   ];
+
 
   return (
     <BaseScreen>
@@ -282,8 +267,7 @@ const DemandsScreen = () => {
               <FilterButtonGroup
                 options={filterOptions}
                 selectedValue={timeFilter}
-                onFilterChange={setTimeFilter}
-              />
+                onFilterChange={(value) => setTimeFilter(value as PeriodOptions)}              />
             </div>
             <StatusView
               isLoading={isLoading}

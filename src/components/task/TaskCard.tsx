@@ -75,9 +75,13 @@ const TaskCard = (props: TaskCardProps) => {
         title={`Status: ${props.status}`}
       ></div>
 
-      {/* Conteúdo principal (ocupa o espaço restante) */}
-      <div className="flex-1">
-        <p className="text-white font-medium text-sm">{props.title}</p>
+      <div className="flex-1 min-w-0">
+        {/*
+         'line-clamp-2'.
+        */}
+        <p title={props.title} className="text-white font-medium text-sm line-clamp-2">
+          {props.title}
+        </p>
         <p className="text-xs text-gray-400 mt-1">
           Prazo: {formatDateToBR(props.prazo)}
         </p>
