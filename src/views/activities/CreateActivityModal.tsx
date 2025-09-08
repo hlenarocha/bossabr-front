@@ -28,6 +28,7 @@ import { useReadDemandHistory } from "@/hooks/demands/useReadDemandHistory";
 
 interface CreateActivityModalProps {
   demandId: number;
+  navigateToOnSuccess: string;
   activityType: "design" | "social_media";
   onClose: () => void;
   setToast: (message: string, type: "success" | "error") => void;
@@ -38,6 +39,7 @@ const CreateActivityModal = ({
   activityType,
   onClose,
   setToast,
+  navigateToOnSuccess,
 }: CreateActivityModalProps) => {
   const queryClient = useQueryClient();
   const { user } = useContext(UserContext);
@@ -59,7 +61,7 @@ const CreateActivityModal = ({
     useResourceMutation<DesignActivityDTO>({
       mutationFn: ({ payload }) => createDesignActivity(payload),
       successToastMessage: "Atividade de design criada com sucesso!",
-      successNavigationRoute: "/demandas",
+      successNavigationRoute: navigateToOnSuccess,
       errorModalMessage:
         "Não foi possível criar a atividade de design. Verifique os dados e tente novamente.",
     });
@@ -68,7 +70,7 @@ const CreateActivityModal = ({
     useResourceMutation<SocialMediaActivityDTO>({
       mutationFn: ({ payload }) => createSocialMediaActivity(payload),
       successToastMessage: "Atividade de social media criada com sucesso!",
-      successNavigationRoute: "/demandas",
+      successNavigationRoute: navigateToOnSuccess,
       errorModalMessage:
         "Não foi possível criar a atividade de social media. Verifique os dados e tente novamente.",
     });

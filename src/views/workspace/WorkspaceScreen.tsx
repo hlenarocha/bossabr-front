@@ -17,12 +17,21 @@ import { useReadDemandsByPeriod } from "@/hooks/demands/useReadDemandsByPeriod";
 import { PeriodOptions } from "@/api/workspaceRoutes"; // Tipos simplificados
 import { StatusView } from "@/components/shared/StatusView";
 import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
-import FilterButtonGroup, { FilterOption } from "@/components/shared/FilterButtonGroup";
+import FilterButtonGroup, {
+  FilterOption,
+} from "@/components/shared/FilterButtonGroup";
 import { useReadWorkerPontuations } from "@/hooks/worker/useReadWorkerPontuations";
+import Toast from "@/components/shared/Toast";
+import CreateActivityModal from "../activities/CreateActivityModal";
 
 type Task = {
   title: string;
-  status: "não iniciada" | "em andamento" | "concluída" | "em aprovação" | "atrasada";
+  status:
+    | "não iniciada"
+    | "em andamento"
+    | "concluída"
+    | "em aprovação"
+    | "atrasada";
   indexCard: number;
   prazo: string;
 };
@@ -53,6 +62,32 @@ const WorkspaceScreen = () => {
 
   const { data: pontuationsData } = useReadWorkerPontuations(user?.id_pessoa);
 
+  const [selectedDemand, setSelectedDemand] = useState<Task | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleActionClick = (event: React.MouseEvent, task: Task) => {
+    event.stopPropagation();
+    if (task.status !== "concluída") {
+      setSelectedDemand(task);
+      setIsModalOpen(true);
+    } else {
+      navigate(`/demandas/${task.indexCard}`);
+    }
+  };
+
+  const inferActivityType = (sectorName: string): "design" | "social_media" => {
+    return sectorName.toLowerCase().includes("design")
+      ? "design"
+      : "social_media";
+  };
+
+  const handleSetToast = (message: string, type: "success" | "error") => {
+    setToastMessage(message);
+    setToastType(type);
+  };
+
   useEffect(() => {
     const fetchWorkerData = async () => {
       if (user?.id_pessoa) {
@@ -73,7 +108,7 @@ const WorkspaceScreen = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [timeFilter, setTimeFilter] = useState<PeriodOptions>("7dias_uteis");
 
-   const {
+  const {
     data: filteredDemandsData,
     isLoading,
     isError,
@@ -83,17 +118,17 @@ const WorkspaceScreen = () => {
   useEffect(() => {
     if (filteredDemandsData) {
       const allTasks: Task[] = [];
-      
+
       for (const status in filteredDemandsData) {
         const demandsForStatus = filteredDemandsData[status];
-        
+
         const formattedTasks = demandsForStatus.map((demand) => ({
           title: demand.descricao,
           status: mapStatus(status),
           indexCard: demand.id_demanda,
           prazo: demand.prazo,
         }));
-        
+
         allTasks.push(...formattedTasks);
       }
       setTasks(allTasks);
@@ -102,12 +137,35 @@ const WorkspaceScreen = () => {
     }
   }, [filteredDemandsData]);
 
-  // Opções e estilos para os botões de filtro
   const filterOptions: FilterOption[] = [
-    { value: "hoje", label: "Hoje", icon: "fa-solid fa-triangle-exclamation", baseColor: "bg-red-500", textColor: "text-white" },
-    { value: "7dias_uteis", label: "7 Dias", icon: "fa-solid fa-hourglass-half", baseColor: "bg-yellow-500", textColor: "text-zinc-900" },
-    { value: "15dias_uteis", label: "15 Dias", icon: "fa-solid fa-calendar-check", baseColor: "bg-blue-500", textColor: "text-white" },
-    { value: "30dias_uteis", label: "30 Dias", icon: "fa-solid fa-binoculars", baseColor: "bg-zinc-700", textColor: "text-white" },
+    {
+      value: "hoje",
+      label: "Hoje",
+      icon: "fa-solid fa-triangle-exclamation",
+      baseColor: "bg-red-500",
+      textColor: "text-white",
+    },
+    {
+      value: "7dias_uteis",
+      label: "7 Dias",
+      icon: "fa-solid fa-hourglass-half",
+      baseColor: "bg-yellow-500",
+      textColor: "text-zinc-900",
+    },
+    {
+      value: "15dias_uteis",
+      label: "15 Dias",
+      icon: "fa-solid fa-calendar-check",
+      baseColor: "bg-blue-500",
+      textColor: "text-white",
+    },
+    {
+      value: "30dias_uteis",
+      label: "30 Dias",
+      icon: "fa-solid fa-binoculars",
+      baseColor: "bg-zinc-700",
+      textColor: "text-white",
+    },
   ];
 
   return (
@@ -236,7 +294,10 @@ const WorkspaceScreen = () => {
                 <FilterButtonGroup
                   options={filterOptions}
                   selectedValue={timeFilter}
-                  onFilterChange={(value) => setTimeFilter(value as PeriodOptions)}                />
+                  onFilterChange={(value) =>
+                    setTimeFilter(value as PeriodOptions)
+                  }
+                />
               </div>
               <div className="flex flex-row justify-between w-full gap-4">
                 <StatusView
@@ -245,31 +306,35 @@ const WorkspaceScreen = () => {
                   errorMessage="Não foi possível carregar suas demandas."
                 >
                   <div className="flex flex-col lg:flex-row justify-between w-full gap-4">
-                    {/* drag-and-drop removidas das TaskColumns */}
                     <TaskColumn
                       title="NÃO INICIADAS"
                       tasks={tasks}
                       status="não iniciada"
+                      onCardActionClick={handleActionClick}
                     />
                     <TaskColumn
                       title="EM ANDAMENTO"
                       tasks={tasks}
                       status="em andamento"
+                      onCardActionClick={handleActionClick}
+                    />
+                    <TaskColumn
+                      title="EM APROVAÇÃO"
+                      tasks={tasks}
+                      status="em aprovação"
+                      onCardActionClick={handleActionClick}
                     />
                     <TaskColumn
                       title="CONCLUÍDAS"
                       tasks={tasks}
                       status="concluída"
-                    />
-                     <TaskColumn
-                      title="EM APROVAÇÃO"
-                      tasks={tasks}
-                      status="em aprovação"
+                      onCardActionClick={handleActionClick}
                     />
                     <TaskColumn
                       title="ATRASADAS"
                       tasks={tasks}
                       status="atrasada"
+                      onCardActionClick={handleActionClick}
                     />
                   </div>
                 </StatusView>
@@ -290,6 +355,22 @@ const WorkspaceScreen = () => {
           </Box>
         </Motion>
         <ScrollToEndArrow />
+        {isModalOpen && selectedDemand && (
+          <CreateActivityModal
+            navigateToOnSuccess="/area-trabalho"
+            demandId={selectedDemand.indexCard}
+            activityType={inferActivityType(user?.nome_setor || "")}
+            onClose={() => setIsModalOpen(false)}
+            setToast={handleSetToast}
+          />
+        )}
+        {toastMessage && (
+          <Toast
+            message={toastMessage}
+            type={toastType}
+            onClose={() => setToastMessage(null)}
+          />
+        )}
       </BaseScreen>
     </>
   );

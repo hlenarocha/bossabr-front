@@ -62,7 +62,7 @@ const TaskColumn = (props: TaskColumnProps) => {
       className="flex flex-col w-full h-[250px]"
       // onDragLeave={handleDragLeave}
     >
-      <div className="flex items-center just gap-2 mb-4 px-4">
+      <div className="flex bg-zinc-900 p-2 rounded-md items-center just gap-2 mb-4 px-4">
         <span className={`w-3 h-3 rounded-full ${statusColor[props.status as keyof typeof statusColor]}`} />
         <h2 className="font-bold text-md text-white">{props.title}</h2>
       </div>
