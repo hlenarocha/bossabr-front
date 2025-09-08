@@ -48,23 +48,22 @@ import EditarNegocio from "@/views/business/EditBusiness";
 import GerenciarServicos from "@/views/services/ManageServices";
 import CriarServico from "@/views/services/CreateService";
 import EditarServico from "@/views/services/EditService";
-
+import ActivityDetailsScreen from "@/views/activities/ActivityDetails";
 
 const queryClient = new QueryClient();
 
-// "PORTEIRO" 
+// "PORTEIRO"
 const ConfiguracoesLayout = () => {
   const { user } = useContext(UserContext);
 
-  if (user === undefined) { 
-    return <LoadingScreen />; 
+  if (user === undefined) {
+    return <LoadingScreen />;
   }
 
   const isAuthorized = user && ["Gerente", "Administrador"].includes(user.role);
 
   return isAuthorized ? <Outlet /> : <NotFound />;
 };
-
 
 const AppContainer = () => {
   const { user, setUser } = useContext(UserContext);
@@ -102,7 +101,8 @@ const AppContainer = () => {
     {
       path: "/demandas",
       element:
-        user && ["Atendente", "Gerente", "Administrador"].includes(user.role) ? (
+        user &&
+        ["Atendente", "Gerente", "Administrador"].includes(user.role) ? (
           <AprovacaoAtividades />
         ) : (
           <Demandas />
@@ -114,6 +114,9 @@ const AppContainer = () => {
     { path: "/demandas/:id/historico", element: <HistoricoDemanda /> },
     { path: "/demandas/lista", element: <ListarDemandas /> },
 
+    // Rota para Detalhes da Atividade a depender do tipo Setor
+    { path: "/diarios/:type/:id", element: <ActivityDetailsScreen /> },
+
     // ... (rotas de clientes)
     { path: "/clientes", element: <Clientes /> },
     { path: "/clientes/novo", element: <CriarCliente /> },
@@ -122,7 +125,6 @@ const AppContainer = () => {
 
     { path: "/configuracoes", element: <Configuracoes /> },
 
-    
     {
       element: <ConfiguracoesLayout />, // O porteiro protege todas as rotas filhas
       children: [
@@ -132,9 +134,18 @@ const AppContainer = () => {
         { path: "/configuracoes/clientes", element: <GerenciarClientes /> },
         { path: "/configuracoes/clientes/novo", element: <CriarCliente /> },
         { path: "/configuracoes/clientes/:id", element: <EditarCliente /> },
-        { path: "/configuracoes/colaboradores", element: <GerenciarColaboradores />},
-        { path: "/configuracoes/colaboradores/novo", element: <CriarColaborador />},
-        { path: "/configuracoes/colaboradores/:id", element: <EditarColaborador />},
+        {
+          path: "/configuracoes/colaboradores",
+          element: <GerenciarColaboradores />,
+        },
+        {
+          path: "/configuracoes/colaboradores/novo",
+          element: <CriarColaborador />,
+        },
+        {
+          path: "/configuracoes/colaboradores/:id",
+          element: <EditarColaborador />,
+        },
         { path: "/configuracoes/equipes", element: <GerenciarEquipes /> },
         { path: "/configuracoes/equipes/novo", element: <CriarEquipe /> },
         { path: "/configuracoes/equipes/:id", element: <EditarEquipe /> },
@@ -146,15 +157,15 @@ const AppContainer = () => {
         { path: "/configuracoes/servicos", element: <GerenciarServicos /> },
         { path: "/configuracoes/servicos/novo", element: <CriarServico /> },
         { path: "/configuracoes/servicos/:id", element: <EditarServico /> },
-      ]
+      ],
     },
-
 
     { path: "/diarios/:id", element: <Diario /> },
     {
       path: "/diarios",
       element:
-        user && ["Atendente", "Gerente", "Administrador"].includes(user.role) ? (
+        user &&
+        ["Atendente", "Gerente", "Administrador"].includes(user.role) ? (
           <ListaDiariosAdmin />
         ) : (
           <Diario /> // Redireciona para o diário do próprio usuário se não for admin
@@ -173,9 +184,19 @@ const App = () => {
 
   if (!googleClientId) {
     return (
-      <div style={{ padding: "2rem", fontFamily: "sans-serif", color: "red", textAlign: "center" }}>
+      <div
+        style={{
+          padding: "2rem",
+          fontFamily: "sans-serif",
+          color: "red",
+          textAlign: "center",
+        }}
+      >
         <h1>Erro de Configuração</h1>
-        <p>A variável VITE_GOOGLE_CLIENT_ID não foi encontrada. Verifique seu arquivo .env</p>
+        <p>
+          A variável VITE_GOOGLE_CLIENT_ID não foi encontrada. Verifique seu
+          arquivo .env
+        </p>
       </div>
     );
   }

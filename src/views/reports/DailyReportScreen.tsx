@@ -33,6 +33,7 @@ const DailyReportScreen = () => {
   );
 
   const { data: reportData, isLoading, isError } = useReadDailyReport(user?.id_pessoa, reportDate);
+  console.log(reportData);
 
   // Combina as atividades de design e social media em uma única lista
   const allActivities = useMemo(() => {
@@ -103,9 +104,14 @@ const DailyReportScreen = () => {
               showMessage="Selecione outra data."
               emptyMessage="Nenhuma atividade registrada para este dia."
               errorMessage="Erro ao carregar as atividades."
-              renderItem={(activity) => (
+              renderItem={(activity: any) => {
+                const isDesign = !!activity.id_ativ_designer;
+                const activityType = isDesign ? 'design' : 'social_media';
+                const activityId = isDesign ? activity.id_ativ_designer : activity.id_ativ_social_media;
+
+                return (
                 <TableItem
-                  key={activity.id_ativ_designer || activity.id_ativ_social_media}
+                  key={activityId}
                   columns={[
                     { width: "30%", content: activity.nome_servico },
                     { width: "25%", content: activity.nome_empresa },
@@ -118,14 +124,14 @@ const DailyReportScreen = () => {
                           className="fa-solid fa-eye text-lg text-customYellow hover:cursor-pointer"
                           title="Visualizar detalhes da atividade"
                           // mudar depois o id
-                          onClick={() => navigate(`/demandas/${activity.id_ativ_designer}`)}
-                        ></i>
+                          onClick={() => navigate(`/diarios/${activityType}/${activityId}`, { state: { from: '/diarios' } })}                        ></i>
                       ),
                     },
                   ]}
                   itemHeight="h-12"
                 />
-              )}
+              );
+            }}
             />
           </div>
         </Box>
