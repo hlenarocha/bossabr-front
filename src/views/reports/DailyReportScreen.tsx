@@ -11,7 +11,6 @@ import Box from "@/components/box/BoxContent";
 import InputString from "@/components/shared/InputString";
 import InputTitle from "@/components/title/InputTitle";
 import TableItem from "@/components/table/TableItem";
-import ColoredButton from "@/components/shared/ColoredButton";
 import { Motion } from "@/components/animation/Motion";
 import BackButton from "@/components/shared/BackButton";
 import InputDate from "@/components/shared/InputDate";
