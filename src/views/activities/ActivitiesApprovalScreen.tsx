@@ -182,13 +182,14 @@ const ActivitiesApproval = () => {
                         <ColoredButton
                           title="Reprovar atividade"
                           icon="fa-solid fa-times"
-                          color="customRed"
+                          borderColor="border-customRedTask"
                           onClick={() => handleReprove(activity.activityId)}
                         />
                         <ColoredButton
                           title="Aprovar atividade"
                           icon="fa-solid fa-check"
-                          color="customGreen"
+                          borderColor="border-customGreenTask"
+                          
                           onClick={() => handleApprove(activity.activityId)}
                         />
                       </div>

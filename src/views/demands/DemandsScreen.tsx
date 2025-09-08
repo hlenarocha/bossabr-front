@@ -87,10 +87,13 @@ const DemandsScreen = () => {
   };
 
   const inferActivityType = (sectorName: string): "design" | "social_media" => {
+    console.log("NOME SETOR: ", sectorName);
     return sectorName.toLowerCase().includes("design")
       ? "design"
       : "social_media";
   };
+
+  console.log(inferActivityType(user?.nome_setor || ""))
 
   const handleSetToast = (message: string, type: "success" | "error") => {
     setToastMessage(message);
@@ -318,7 +321,7 @@ const DemandsScreen = () => {
         <CreateActivityModal
           demandId={selectedDemand.indexCard}
           activityType={inferActivityType(
-            user?.nome_setor?.toLowerCase() || "social media"
+            user?.nome_setor || ""
           )} // teste
           onClose={() => setIsModalOpen(false)}
           setToast={handleSetToast}
