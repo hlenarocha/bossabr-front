@@ -160,11 +160,11 @@ const DemandsScreen = () => {
             width="w-full sm:w-fit"
             title="LISTA DE DEMANDAS"
             icon="fa-solid fa-eye"
-            onClick={() => navigate("/demandas/lista")}
+            onClick={() => navigate("/demandas/lista", { state: { previousRoute: "/demandas" } })}
           />
           <ColoredButton
             justify="justify-center"
-            onClick={() => navigate("/demandas/nova")}
+            onClick={() => navigate("/demandas/nova", { state: { previousRoute: "/demandas" } })}
             color="customYellow"
             width="w-full sm:w-fit"
             title="ADICIONAR DEMANDA"

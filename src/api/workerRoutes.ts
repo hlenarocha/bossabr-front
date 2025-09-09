@@ -16,13 +16,14 @@ export interface WorkerDTO {
 export interface WorkerItem {
   id_pessoa: number;
   first_name: string;
+  id_setor: number;
   last_name?: string;
   cnpj?: string;
   email: string;
   telefone?: string;
   data_entrada: string;
   data_nascimento: string;
-  //avatar?: string;
+  url_avatar?: string;
   id_equipe: number;
   id_cargo: number;
   cargo: string;
@@ -181,6 +182,7 @@ const readWorkerDemands = async (personId: number): Promise<WorkerDemand[]> => {
 const readWorkerPontuationsById = async (personId: number): Promise<WorkerPontuations> => {
   try {
     const response = await api.get(`/pessoa/${personId}/pontuacao-pessoa`);
+    console.log("PONTUACAO: ", response);
     return response.data;
 
   } catch (error) {

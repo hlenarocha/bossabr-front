@@ -5,7 +5,6 @@ import SideBar from "@/components/sidebar/SideBar";
 import { SideBarContext } from "@/contexts/SideBarContext";
 import { useSession } from "@/hooks/useSession";
 import { Navigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import LoadingScreen from "./auth/LoadingScreen";
 import { UserContext } from "@/contexts/UserContext";
 
@@ -97,7 +96,7 @@ const BaseScreen = ({ children }: BaseScreenProps) => {
         >
           {children}
         </main>
-        <RoleSwitcher />
+         <RoleSwitcher /> 
       </div>
     </div>
   );

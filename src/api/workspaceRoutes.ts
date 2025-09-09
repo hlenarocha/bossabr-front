@@ -23,6 +23,19 @@ export interface WorkspaceResponse {
   pontuacao_pessoa_mensal: number;
 }
 
+export interface AuditItem {
+  evento: string;
+  mensagem: string;
+  usuario: string;
+  data: string;
+}
+
+// Interface para a resposta da API de auditoria
+export interface AuditResponse {
+  auditorias: AuditItem[];
+}
+
+
 export type PeriodOptions = 'hoje' | '7dias_uteis' | '15dias_uteis' | '30dias_uteis';
 
 export type DemandsByStatus = {
@@ -32,6 +45,19 @@ export type DemandsByStatus = {
     prazo: string;
     setor: string;
   }[]; 
+};
+
+export const readAuditsBySector = async (
+  sectorId: number
+): Promise<AuditResponse> => {
+  try {
+    // Alterado: Removidos os parâmetros de query da chamada
+    const response = await api.get(`/auditorias/setor/${sectorId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erro ao buscar auditorias para o setor ${sectorId}:`, error);
+    throw error;
+  }
 };
 
 export const readDemandsByPeriod = async (

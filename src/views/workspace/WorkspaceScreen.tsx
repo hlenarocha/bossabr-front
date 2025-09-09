@@ -23,6 +23,7 @@ import FilterButtonGroup, {
 import { useReadWorkerPontuations } from "@/hooks/worker/useReadWorkerPontuations";
 import Toast from "@/components/shared/Toast";
 import CreateActivityModal from "../activities/CreateActivityModal";
+import { useReadAuditsBySector } from "@/hooks/workspace/useReadAuditsBySector";
 
 type Task = {
   title: string;
@@ -76,6 +77,16 @@ const WorkspaceScreen = () => {
       navigate(`/demandas/${task.indexCard}`);
     }
   };
+
+  const { 
+    data: auditoriaData, 
+    isLoading: isLoadingAuditorias, 
+    isError: isErrorAuditorias 
+  } = useReadAuditsBySector(workerDetails?.id_setor);
+
+  
+  
+
 
   const inferActivityType = (sectorName: string): "design" | "social_media" => {
     return sectorName.toLowerCase().includes("design")
@@ -266,19 +277,19 @@ const WorkspaceScreen = () => {
               </div>
 
               <div className="flex flex-col w-1/3">
-                <InputTitle title="Atividades"></InputTitle>
-                <div className="text-sm mt-2 mb-2">
-                  Auditoria da Equipe - Hoje
-                </div>
-                <div className="flex flex-col gap-1 h-[200px] overflow-y-auto ">
-                  <ActivityCard
-                    // width="w-full"
-                    event={"atualizou"}
-                    key={1}
-                    message={"Fulano atualizou cliente Superhipermercado"}
-                    user={"Fulano"}
-                    date={"20/02/2002"}
-                  />
+              <InputTitle title="Atividades recentes - Setor" />
+                <div className="flex flex-col gap-1 h-[220px] overflow-y-auto pr-1 mt-2">
+                  <StatusView isLoading={isLoadingAuditorias} isError={isErrorAuditorias} errorMessage="Erro ao carregar atividades.">
+                    {auditoriaData?.auditorias && auditoriaData.auditorias.length > 0 ? (
+                      auditoriaData.auditorias.map((audit, index) => (
+                        <ActivityCard event={audit.evento} key={index} message={audit.mensagem} user={audit.usuario} date={audit.data} />
+                      ))
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-zinc-200">
+                        <p>Nenhuma atividade recente.</p>
+                      </div>
+                    )}
+                  </StatusView>
                 </div>
               </div>
             </div>
