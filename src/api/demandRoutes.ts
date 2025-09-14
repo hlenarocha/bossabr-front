@@ -40,6 +40,7 @@ interface Pessoa {
   id_pessoa: number;
   first_name: string;
   last_name: string;
+  cargo: string;
 }
 
 interface ResponsavelSetor {
