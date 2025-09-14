@@ -1,5 +1,5 @@
 // hooks e bibliotecas
-import { useState } from "react";
+import { useState, useMemo } from "react"; // Adicionado useMemo
 import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -14,117 +14,74 @@ import FilterButtonGroup, {
   FilterOption,
 } from "@/components/shared/FilterButtonGroup";
 import ColoredButton from "@/components/shared/ColoredButton";
-import ApprovalModal from "@/views/activities/ApprovalModal";
+import ApprovalModal from "./ApprovalModal"; // Corrigido o caminho do import
 
-interface Activity {
-  activityId: number;
-  demandId: number;
-  demandTitle: string;
-  collaboratorName: string;
-  collaboratorTeam: string;
-  submissionDate: Date;
-  observation: string;
-  links: { label: string; url: string }[];
-}
-
-// Em um cenário real, isso viria de um hook (ex: useReadApprovalQueue)
-const mockActivities = [
-  {
-    activityId: 101,
-    demandId: 25,
-    demandTitle: "Criação de 3 artes para post do Dia do Cliente",
-    collaboratorName: "Ana Silva",
-    collaboratorTeam: "Design Alpha",
-    submissionDate: new Date(2025, 7, 28, 10, 30, 0), // Mês 7 = Agosto
-    observation:
-      "Artes finalizadas conforme o briefing. Seguem os links para aprovação e para o drive com os arquivos abertos.",
-    links: [{ label: "Acessar pasta no Drive", url: "#" }],
-  },
-  {
-    activityId: 102,
-    demandId: 32,
-    demandTitle: "Revisão de texto para blogpost sobre Marketing Digital",
-    collaboratorName: "Carlos Pereira",
-    collaboratorTeam: "Social Media",
-    submissionDate: new Date(2025, 7, 28, 9, 0, 0),
-    observation:
-      "Texto revisado e ajustado. Por favor, verificar se o tom de voz está adequado. A referência está no link abaixo.",
-    links: [{ label: "Documento de referência.docx", url: "#" }],
-  },
-  {
-    activityId: 103,
-    demandId: 18,
-    demandTitle: "Legendas para posts da semana - Cliente Y",
-    collaboratorName: "Juliana Costa",
-    collaboratorTeam: "Social Media",
-    submissionDate: new Date(2025, 7, 27, 16, 45, 0),
-    observation:
-      "Legendas criadas para os 5 posts da semana. Não há links para esta atividade.",
-    links: [],
-  },
-];
-// --- FIM DOS DADOS ESTÁTICOS ---
+// API e Hooks
+import { useReadPendingApprovals } from "@/hooks/activity/useReadPendingApprovals";
+import { PendingActivity } from "@/api/approvalRoutes";
 
 const ActivitiesApproval = () => {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState("recentes");
+  // Alterado: O filtro padrão agora é 'todos'
+  const [filter, setFilter] = useState("todos");
 
+  // --- BUSCA DE DADOS REAIS DA API ---
+  const { data: allActivities, isLoading, isError } = useReadPendingApprovals();
+
+  // --- LÓGICA DE FILTRAGEM ---
+  const filteredActivities = useMemo(() => {
+    if (!allActivities) return [];
+    if (filter === "todos") return allActivities;
+    if (filter === "design")
+      return allActivities.filter((act) => act.tipo === "Design");
+    if (filter === "social")
+      return allActivities.filter((act) => act.tipo === "Social Media");
+    // Adicione mais filtros se necessário, como 'recentes' e 'antigas'
+    return allActivities;
+  }, [allActivities, filter]);
+
+  // --- LÓGICA DO MODAL (sem alterações) ---
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
-    null
-  );
+  const [selectedActivity, setSelectedActivity] =
+    useState<PendingActivity | null>(null);
   const [approvalAction, setApprovalAction] = useState<
     "approve" | "reprove" | null
   >(null);
 
-  const handleApproveClick = (activity: Activity) => {
+  const handleApproveClick = (activity: PendingActivity) => {
     setSelectedActivity(activity);
     setApprovalAction("approve");
     setIsApprovalModalOpen(true);
   };
-
-  const handleReproveClick = (activity: Activity) => {
+  const handleReproveClick = (activity: PendingActivity) => {
     setSelectedActivity(activity);
     setApprovalAction("reprove");
     setIsApprovalModalOpen(true);
   };
-
-  // Adicionado: Função que será chamada quando o modal for confirmado
   const handleConfirmAction = (reason?: string) => {
     if (!selectedActivity) return;
-
     if (approvalAction === "approve") {
-      // Aqui você chamaria a sua API para APROVAR
       alert(
-        `Atividade #${selectedActivity.activityId} APROVADA! (Ação simulada)`
+        `Atividade #${selectedActivity.id_atividade} APROVADA! (Ação simulada)`
       );
     } else if (approvalAction === "reprove") {
-      // Aqui você chamaria a sua API para REPROVAR, enviando o 'reason'
       alert(
-        `Atividade #${selectedActivity.activityId} REPROVADA! (Ação simulada)\nMotivo: ${reason}`
+        `Atividade #${selectedActivity.id_atividade} REPROVADA! (Ação simulada)\nMotivo: ${reason}`
       );
     }
-
-    // Fecha e reseta o modal
     setIsApprovalModalOpen(false);
     setSelectedActivity(null);
     setApprovalAction(null);
   };
 
+  // Alterado: Opções de filtro ajustadas
   const filterOptions: FilterOption[] = [
     {
-      value: "recentes",
-      label: "Mais Recentes",
-      icon: "fa-solid fa-clock-rotate-left",
+      value: "todos",
+      label: "Todos",
+      icon: "fa-solid fa-layer-group",
       baseColor: "bg-blue-500",
       textColor: "text-white",
-    },
-    {
-      value: "antigas",
-      label: "Mais Antigas",
-      icon: "fa-solid fa-hourglass-end",
-      baseColor: "bg-yellow-500",
-      textColor: "text-zinc-900",
     },
     {
       value: "design",
@@ -142,9 +99,6 @@ const ActivitiesApproval = () => {
     },
   ];
 
-  const isLoading = false;
-  const isError = false;
-
   return (
     <>
       <BaseScreen>
@@ -160,19 +114,11 @@ const ActivitiesApproval = () => {
               width="w-full sm:w-fit"
               title="LISTA DE DEMANDAS"
               icon="fa-solid fa-eye"
-              onClick={() =>
-                navigate("/demandas/lista", {
-                  state: { previousRoute: "/demandas/atendente/aprovacao" },
-                })
-              }
+              onClick={() => navigate("/demandas/lista")}
             />
             <ColoredButton
               justify="justify-center"
-              onClick={() =>
-                navigate("/demandas/nova", {
-                  state: { previousRoute: "/demandas/atendente/aprovacao" },
-                })
-              }
+              onClick={() => navigate("/demandas/nova")}
               color="customYellow"
               width="w-full sm:w-fit"
               title="ADICIONAR DEMANDA"
@@ -197,60 +143,62 @@ const ActivitiesApproval = () => {
             </div>
 
             <div className="max-h-[600px] overflow-y-auto pr-2">
-              <StatusView isLoading={isLoading} isError={isError}>
+              <StatusView
+                isLoading={isLoading}
+                isError={isError}
+                errorMessage="Não foi possível carregar as atividades."
+              >
                 <div className="flex flex-col gap-4">
-                  {mockActivities.length > 0 ? (
-                    mockActivities.map((activity) => (
+                  {filteredActivities && filteredActivities.length > 0 ? (
+                    filteredActivities.map((activity) => (
                       <div
-                        key={activity.activityId}
+                        key={activity.id_atividade}
                         className="bg-zinc-800 border border-zinc-700 rounded-lg p-4 flex flex-col gap-3 transition-all hover:border-customYellow"
                       >
                         <div className="flex justify-between items-center">
                           <h3
                             className="font-bold text-white text-lg cursor-pointer hover:underline"
                             onClick={() =>
-                              navigate(`/demandas/${activity.demandId}`)
+                              navigate(`/demandas/${activity.id_demanda}`)
                             }
                           >
-                            Demanda #{activity.demandId}: {activity.demandTitle}
+                            Demanda #{activity.id_demanda}:{" "}
+                            {activity.nome_servico || "Serviço não informado"}
                           </h3>
                           <span className="text-xs text-zinc-400">
-                            {formatDistanceToNow(activity.submissionDate, {
-                              addSuffix: true,
-                              locale: ptBR,
-                            })}
+                            {formatDistanceToNow(
+                              new Date(activity.data_inicio),
+                              { addSuffix: true, locale: ptBR }
+                            )}
                           </span>
                         </div>
                         <div className="text-sm text-zinc-300">
                           Enviado por:{" "}
                           <span className="font-semibold text-white">
-                            {activity.collaboratorName}
+                            {activity.nome_colaborador || "N/A"}
                           </span>
                           {" | "}
-                          Equipe:{" "}
+                          Setor:{" "}
                           <span className="font-semibold text-white">
-                            {activity.collaboratorTeam}
+                            {activity.nome_setor}
                           </span>
                         </div>
                         <div className="bg-zinc-900 p-3 rounded-md text-sm">
                           <p className="text-zinc-400 mb-2">
                             <i className="fa-solid fa-comment-dots mr-2"></i>
-                            {activity.observation}
+                            {activity.observacoes}
                           </p>
-                          {activity.links.length > 0 && (
+                          {activity.link_drive && (
                             <div className="flex flex-col gap-1 pt-2 border-t border-zinc-700">
-                              {activity.links.map((link) => (
-                                <a
-                                  key={link.url}
-                                  href={link.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-400 hover:text-blue-30ȧ0 hover:underline text-xs"
-                                >
-                                  <i className="fa-solid fa-link mr-2"></i>
-                                  {link.label}
-                                </a>
-                              ))}
+                              <a
+                                href={activity.link_drive}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-400 hover:text-blue-300 hover:underline text-xs"
+                              >
+                                <i className="fa-solid fa-link mr-2"></i>{" "}
+                               {activity.link_drive}
+                              </a>
                             </div>
                           )}
                         </div>
@@ -258,13 +206,13 @@ const ActivitiesApproval = () => {
                           <ColoredButton
                             title="Reprovar atividade"
                             icon="fa-solid fa-times"
-                            borderColor="border-customRedTask" // Adicionado para borda
+                            borderColor="border-customRedTask"
                             onClick={() => handleReproveClick(activity)}
                           />
                           <ColoredButton
                             title="Aprovar atividade"
                             icon="fa-solid fa-check"
-                            borderColor="border-customGreenTask" // Adicionado para borda
+                            borderColor="border-customGreenTask"
                             onClick={() => handleApproveClick(activity)}
                           />
                         </div>
@@ -291,7 +239,10 @@ const ActivitiesApproval = () => {
           onClose={() => setIsApprovalModalOpen(false)}
           onConfirm={handleConfirmAction}
           action={approvalAction}
-          activityTitle={selectedActivity.demandTitle}
+          activityTitle={
+            selectedActivity.nome_servico ||
+            `Atividade #${selectedActivity.id_atividade}`
+          }
         />
       )}
     </>
