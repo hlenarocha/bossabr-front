@@ -15,11 +15,12 @@ import { StatusView } from "@/components/shared/StatusView";
 
 // API, schemas, hooks e assets
 import { activitySchema, ActivityFormData } from "@/schemas/activitySchema";
-import { getDemandFormData } from "@/api/demandRoutes";
 import {
   createDesignActivity,
   createSocialMediaActivity,
   DesignActivityDTO,
+  getDesignActivityFormData,
+  getSocialMediaActivityFormData,
   SocialMediaActivityDTO,
 } from "@/api/activityRoutes";
 import { useResourceMutation } from "@/hooks/useResourceMutation";
@@ -46,8 +47,20 @@ const CreateActivityModal = ({
 
   // --- BUSCA DE DADOS PARA O FORMULÁRIO (ESQUERDA) ---
   const { data: formData, isLoading: isLoadingFormData } = useQuery({
-    queryKey: ["demandFormData"],
-    queryFn: getDemandFormData,
+    // A chave da query agora inclui o 'activityType'.
+    // Isso faz com que o React Query armazene em cache os dados para 'design'
+    // e 'social_media' separadamente.
+    queryKey: ["activityFormData", activityType],
+    
+    // A função de busca agora decide qual rota chamar com base no 'activityType'.
+    queryFn: () => activityType === 'design' 
+      ? getDesignActivityFormData() 
+      : getSocialMediaActivityFormData(),
+    
+    
+    // Garante que a busca só aconteça se 'activityType' for válido.
+    enabled: !!activityType,
+
   });
 
   // --- BUSCA DE DADOS PARA O HISTÓRICO (DIREITA) ---
@@ -128,6 +141,7 @@ const CreateActivityModal = ({
     const onSuccess = () => {
       setToast("Atividade registrada com sucesso!", "success");
       queryClient.invalidateQueries({ queryKey: ["demands"] });
+      queryClient.invalidateQueries({ queryKey: ['unifiedDemands'] });
       queryClient.invalidateQueries({ queryKey: ["demandHistory", demandId] });
       onClose();
     };

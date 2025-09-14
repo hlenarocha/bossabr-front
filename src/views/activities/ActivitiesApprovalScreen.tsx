@@ -52,6 +52,12 @@ const ActivitiesApproval = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
+  // Adicionado: Função de apoio para o Toast, para definir a mensagem e o tipo juntos
+  const handleSetToast = (message: string, type: "success" | "error") => {
+    setToastMessage(message);
+    setToastType(type);
+  };
+
   const handleApproveClick = (activity: PendingActivity) => {
     setSelectedActivity(activity);
     setApprovalAction("approve");
@@ -73,12 +79,12 @@ const ActivitiesApproval = () => {
       reason: reason,
     }, {
       onSuccess: () => {
-        setToastMessage(`Atividade ${approvalAction === 'approve' ? 'aprovada' : 'reprovada'} com sucesso!`);
-        setIsApprovalModalOpen(false); // Fecha o modal no sucesso
+        handleSetToast(`Atividade ${approvalAction === 'approve' ? 'aprovada' : 'reprovada'} com sucesso!`, "success");
+        setIsApprovalModalOpen(false);
       },
       onError: () => {
-        setToastMessage("Ocorreu um erro ao processar a ação.");
-      }
+        handleSetToast("Ocorreu um erro ao processar a ação.", "error");
+        setIsApprovalModalOpen(false);       }
     });
   };
 
@@ -226,7 +232,7 @@ const ActivitiesApproval = () => {
                       </div>
                     ))
                   ) : (
-                    <div className="text-center text-zinc-500 py-16">
+                    <div className="text-center text-zinc-400 py-16">
                       <i className="fa-solid fa-check-double text-4xl mb-4"></i>
                       <p className="font-bold">Caixa de entrada limpa!</p>
                       <p>

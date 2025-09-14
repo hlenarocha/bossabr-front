@@ -43,6 +43,37 @@ interface ActivityApiResponse {
 }
 
 
+interface StatusOption {
+  id_status: number;
+  status: string;
+}
+
+export interface ActivityFormDataResponse {
+  status: StatusOption[];
+}
+
+export const getDesignActivityFormData = async (): Promise<ActivityFormDataResponse> => {
+  try {
+    const response = await api.get("/atividade_design/form");
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar dados do formulário de atividade de Design:", error);
+    throw error;
+  }
+};
+
+// Nova função para buscar dados do formulário de Social Media
+export const getSocialMediaActivityFormData = async (): Promise<ActivityFormDataResponse> => {
+  try {
+    const response = await api.get("/atividade_social_media/form");
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar dados do formulário de atividade de Social Media:", error);
+    throw error;
+  }
+};
+
 export const createDesignActivity = async (payload: DesignActivityDTO) => {
   try {
     const response = await api.post("/atividade", payload);

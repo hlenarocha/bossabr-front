@@ -40,9 +40,8 @@ const DemandDetails = () => {
     return "social_media"; // Padrão para Social Media ou outros
   };
 
-  // VER SE FUNCIONA
-  const previousRoute = location.state?.previousRoute;
-  console.log("ROTA ANTERIOR ", previousRoute);
+  // com fallback
+  const previousRoute = location.state?.previousRoute || "/demandas";
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");

@@ -126,7 +126,6 @@ const DemandsScreen = () => {
     }
   }, [unifiedDemandData]);
 
-  // --- LÓGICA DO CALENDÁRIO (Usa 'calendarTasks', agora independente) ---
   const deadlines = useMemo(
     () => calendarTasks.map((task) => parseISO(task.prazo)),
     [calendarTasks]
