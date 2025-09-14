@@ -99,7 +99,9 @@ const CreateDemand = () => {
   const personOptions =
     formData?.pessoas?.map((p) => ({
       value: p.id_pessoa,
-      label: p.first_name + (p.last_name ? ` ${p.last_name}` : ""),
+      label:
+        (p.first_name + (p.last_name ? ` ${p.last_name}` : "")) +
+        (p.cargo ? ` - ${p.cargo}` : ""),
     })) || [];
   const statusOptions =
     formData?.status?.map((s) => ({ value: s.id_status, label: s.status })) ||
