@@ -42,9 +42,11 @@ const ClientsScreen = () => {
 
   console.log("Dados de paginação recebidos:", paginatedClients);
 
- // ALTERAÇÃO PRINCIPAL: Convertendo o objeto de dados em um array com Object.values()
+  // ALTERAÇÃO PRINCIPAL: Convertendo o objeto de dados em um array com Object.values()
   // Isso garante que 'clientList' seja sempre um array, corrigindo o erro.
-    const clientList = paginatedClients?.data ? Object.values(paginatedClients.data) : [];
+  const clientList = paginatedClients?.data
+    ? Object.values(paginatedClients.data)
+    : [];
 
   return (
     <BaseScreen>
@@ -109,7 +111,17 @@ const ClientsScreen = () => {
                     key={client.id_cliente}
                     columns={[
                       { width: "25%", content: client.nome_empresa },
-                      { width: "30%", content: <div className="truncate" title={client.servicos.join(', ')}>{client.servicos.join(', ')}</div> },
+                      {
+                        width: "30%",
+                        content: (
+                          <div
+                            className="truncate"
+                            title={client.servicos.join(", ")}
+                          >
+                            {client.servicos.join(", ")}
+                          </div>
+                        ),
+                      },
                       {
                         width: "20%",
                         content: (

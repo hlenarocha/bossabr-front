@@ -1,5 +1,5 @@
 // hooks e bibliotecas
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // Componentes
@@ -18,14 +18,15 @@ import CreateActivityModal from "@/views/activities/CreateActivityModal";
 
 // API, hooks e tipos
 import { useReadDemandById } from "@/hooks/demands/useReadDemandById";
+import { UserContext } from "@/contexts/UserContext";
+import Toast from "@/components/shared/Toast";
 
 const DemandDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const demandId = Number(id);
   const location = useLocation();
-
-
+  const { user } = useContext(UserContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: demand, isLoading, isError } = useReadDemandById(demandId);
@@ -43,12 +44,19 @@ const DemandDetails = () => {
   const previousRoute = location.state?.previousRoute;
   console.log("ROTA ANTERIOR ", previousRoute);
 
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  const handleSetToast = (message: string, type: "success" | "error") => {
+    setToastMessage(message);
+    setToastType(type);
+  };
+
   return (
     <>
-    
       <BaseScreen>
         <BackButton onClick={() => navigate(previousRoute)} />
-        <div className="flex flex-row justify-between"> 
+        <div className="flex flex-row justify-between">
           <PageTitle
             marginTop="mt-4"
             icon="fa-solid fa-file-invoice"
@@ -159,12 +167,18 @@ const DemandDetails = () => {
 
       {isModalOpen && demand && (
         <CreateActivityModal
+          navigateToOnSuccess={location.pathname}
           demandId={demandId}
-          activityType={inferActivityType("design")} // SÓ PARA TESTE - MUDAR
+          activityType={inferActivityType(user?.nome_setor || "")}
           onClose={() => setIsModalOpen(false)}
-          setToast={(message, type) => {
-            console.log(`Toast message: ${message}, Type: ${type}`);
-          }} // colocar um toast aqui!!!
+          setToast={handleSetToast}
+        />
+      )}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setToastMessage(null)}
         />
       )}
     </>
