@@ -40,6 +40,12 @@ const ClientsScreen = () => {
     isError,
   } = useReadClientList(currentPage, debouncedSearchTerm);
 
+  console.log("Dados de paginação recebidos:", paginatedClients);
+
+ // ALTERAÇÃO PRINCIPAL: Convertendo o objeto de dados em um array com Object.values()
+  // Isso garante que 'clientList' seja sempre um array, corrigindo o erro.
+    const clientList = paginatedClients?.data ? Object.values(paginatedClients.data) : [];
+
   return (
     <BaseScreen>
       <div className="flex w-full justify-end">
@@ -91,12 +97,11 @@ const ClientsScreen = () => {
               isTableHeader={true}
               itemHeight="h-12"
             />
-            {/* A altura da lista agora é fixa, como em ManageTeams */}
             <div className="h-[350px] overflow-y-auto">
               <ResourceListView
                 isLoading={isLoading}
                 isError={isError}
-                items={paginatedClients?.data ?? []}
+                items={clientList}
                 emptyMessage="Nenhum cliente encontrado."
                 errorMessage="Erro ao carregar os clientes."
                 renderItem={(client) => (

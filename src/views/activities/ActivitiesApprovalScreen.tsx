@@ -1,5 +1,5 @@
 // hooks e bibliotecas
-import { useState, useMemo } from "react"; // Adicionado useMemo
+import { useState, useMemo } from "react"; 
 import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -14,7 +14,7 @@ import FilterButtonGroup, {
   FilterOption,
 } from "@/components/shared/FilterButtonGroup";
 import ColoredButton from "@/components/shared/ColoredButton";
-import ApprovalModal from "@/views/activities/ApprovalModal"; // Corrigido o caminho do import
+import ApprovalModal from "@/views/activities/ApprovalModal"; 
 
 // API e Hooks
 import { useReadPendingApprovals } from "@/hooks/activity/useReadPendingApprovals";
@@ -82,7 +82,6 @@ const ActivitiesApproval = () => {
     });
   };
 
-  // Alterado: Opções de filtro ajustadas
   const filterOptions: FilterOption[] = [
     {
       value: "todos",
