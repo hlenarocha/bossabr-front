@@ -13,6 +13,7 @@ interface TaskColumnProps {
   tasks: TaskCardProps[];
   status: string;
   onCardActionClick?: (event: React.MouseEvent, task: Task) => void;
+  onCardClick?: (task: Task) => void; // Adicionada: Nova prop para o clique no card
 
 }
 
@@ -51,6 +52,7 @@ const TaskColumn = (props: TaskColumnProps) => {
               status={task.status}
               indexCard={task.indexCard}
               prazo={task.prazo}
+              onClick={() => props.onCardClick && props.onCardClick(task)}
               onActionClick={(e) => props.onCardActionClick && props.onCardActionClick(e, task)}
             />
 

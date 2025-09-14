@@ -153,8 +153,18 @@ const DemandsScreen = () => {
       setSelectedDemand(task);
       setIsModalOpen(true);
     } else {
-      navigate(`/demandas/${task.indexCard}`);
+      navigate(`/demandas/${task.indexCard}`,
+        {
+          state: { previousRoute: "/demandas" },
+        }
+      );
     }
+  };
+
+  const handleCardClick = (task: Task) => {
+    navigate(`/demandas/${task.indexCard}`, {
+      state: { previousRoute: "/demandas" },
+    });
   };
 
   const inferActivityType = (sectorName: string): "design" | "social_media" => {
@@ -218,9 +228,11 @@ const DemandsScreen = () => {
           />
           <ColoredButton
             justify="justify-center"
-            onClick={() => navigate("/demandas/nova", {
-              state: { previousRoute: "/demandas" },
-            })}
+            onClick={() =>
+              navigate("/demandas/nova", {
+                state: { previousRoute: "/demandas" },
+              })
+            }
             color="customYellow"
             width="w-full sm:w-fit"
             title="ADICIONAR DEMANDA"
@@ -334,31 +346,35 @@ const DemandsScreen = () => {
                     tasks={kanbanTasks}
                     status="não iniciada"
                     onCardActionClick={handleActionClick}
+                    onCardClick={handleCardClick}
                   />
                   <TaskColumn
                     title="EM ANDAMENTO"
                     tasks={kanbanTasks}
                     status="em andamento"
                     onCardActionClick={handleActionClick}
+                    onCardClick={handleCardClick}
                   />
                   <TaskColumn
                     title="EM APROVAÇÃO"
                     tasks={kanbanTasks}
                     status="em aprovação"
                     onCardActionClick={handleActionClick}
+                    onCardClick={handleCardClick}
                   />
                   <TaskColumn
                     title="CONCLUÍDAS"
                     tasks={kanbanTasks}
                     status="concluída"
                     onCardActionClick={handleActionClick}
+                    onCardClick={handleCardClick}
                   />
                   <TaskColumn
                     title="ATRASADAS"
                     tasks={kanbanTasks}
                     status="atrasada"
                     onCardActionClick={handleActionClick}
-                    
+                    onCardClick={handleCardClick}
                   />
                 </div>
               </div>
