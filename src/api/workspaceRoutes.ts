@@ -18,7 +18,7 @@ export interface DemandaInterface {
 
 export interface WorkspaceResponse {
   dadosEssenciais: DadosEssenciaisInterface;
-  demandas: DemandaInterface[]; 
+  demandas: DemandaInterface[];
   pontuacao_pessoa_semanal: number;
   pontuacao_pessoa_mensal: number;
 }
@@ -28,30 +28,40 @@ export interface AuditItem {
   mensagem: string;
   usuario: string;
   data: string;
+  tabela: string;
+  dados_novos: object;
+  dados_antigos: object;
 }
 
-// Interface para a resposta da API de auditoria
 export interface AuditResponse {
   auditorias: AuditItem[];
 }
 
-
 export type PeriodOptions = 'hoje' | '7dias_uteis' | '15dias_uteis' | '30dias_uteis';
 
+export interface DemandItem {
+  id_demanda: number;
+  descricao: string;
+  prazo: string;
+  setor: string;
+  status_demanda: string; // Importante para o mapeamento de status do calendário
+  nome_empresa?: string; // Opcional, mas útil
+}
+
+
 export type DemandsByStatus = {
-  [status: string]: { 
-    id_demanda: number;
-    descricao: string;
-    prazo: string;
-    setor: string;
-  }[]; 
+  [status: string]: DemandItem[];
 };
+
+export interface UnifiedDemandResponseData {
+  demandasFiltradas: DemandsByStatus;
+  demandasCalendario: DemandsByStatus;
+}
 
 export const readAuditsBySector = async (
   sectorId: number
 ): Promise<AuditResponse> => {
   try {
-    // Alterado: Removidos os parâmetros de query da chamada
     const response = await api.get(`/auditorias/setor/${sectorId}`);
     return response.data;
   } catch (error) {
@@ -62,16 +72,20 @@ export const readAuditsBySector = async (
 
 export const readDemandsByPeriod = async (
   id_pessoa: number,
-  dias: PeriodOptions
-): Promise<DemandsByStatus> => {
+  dias: PeriodOptions,
+  mes_calendario: string | undefined // Aceita ser opcional
+): Promise<UnifiedDemandResponseData> => {
   try {
-    const response = await api.get<{ success: boolean; data: DemandsByStatus }>('/demanda/proximos-dias-uteis', {
-      params: {
-        id_pessoa,
-        dias,
-      },
-    });
-    return response.data.data; // A função retorna apenas o objeto 'data'
+    // ALTERAÇÃO: Monta o objeto de parâmetros garantindo que todos sejam incluídos
+    const params = {
+      id_pessoa,
+      dias,
+      mes_calendario,
+    };
+
+    const response = await api.get<{ success: boolean; data: UnifiedDemandResponseData }>('/demanda/proximos-dias-uteis', { params });
+    
+    return response.data.data;
   } catch (error) {
     console.error("Erro ao buscar demandas por período:", error);
     throw error;
@@ -88,7 +102,7 @@ const readWorkspace = async (id_pessoa: number): Promise<WorkspaceResponse> => {
     return response.data;
   } catch (error) {
     console.error(error);
-    throw error; // Re-throw the error to ensure the function always returns or throws
+    throw error;
   }
 }
 

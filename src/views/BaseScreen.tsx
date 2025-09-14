@@ -96,7 +96,7 @@ const BaseScreen = ({ children }: BaseScreenProps) => {
         >
           {children}
         </main>
-         <RoleSwitcher /> 
+          <RoleSwitcher />    
       </div>
     </div>
   );

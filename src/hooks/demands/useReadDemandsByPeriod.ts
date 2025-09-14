@@ -1,11 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-// Alterado: Importa o novo tipo DemandsByStatus em vez de FilteredData
-import { readDemandsByPeriod, PeriodOptions, DemandsByStatus } from '@/api/workspaceRoutes';
+import { readDemandsByPeriod, PeriodOptions, UnifiedDemandResponseData } from '@/api/workspaceRoutes';
+import { format } from 'date-fns';
 
-export const useReadDemandsByPeriod = (id_pessoa: number | undefined, dias: PeriodOptions) => {
-  return useQuery<DemandsByStatus>({
-    queryKey: ['demandsByPeriod', id_pessoa, dias],
-    queryFn: () => readDemandsByPeriod(id_pessoa!, dias),
+export const useReadDemandsByPeriod = (
+  id_pessoa: number | undefined,
+  dias: PeriodOptions,
+  mes?: Date // O mês é opcional
+) => {
+  const mesCalendario = mes ? format(mes, 'yyyy-MM') : undefined;
+
+  return useQuery<UnifiedDemandResponseData>({
+    queryKey: ['unifiedDemands', id_pessoa, dias, mesCalendario],
+    queryFn: () => readDemandsByPeriod(id_pessoa!, dias, mesCalendario),
     enabled: !!id_pessoa,
   });
 };

@@ -37,7 +37,7 @@ const NotFound = () => {
               icon="fa-solid fa-desktop"
               onClick={() => navigate("/area-trabalho")}
               color="customYellow"
-              width="w-[250px]"
+              width="w-[300px]"
               justify="justify-center"
             />
           </div>

@@ -13,8 +13,8 @@ import TaskColumn from "@/components/task/TaskColumn";
 import { useNavigate } from "react-router-dom";
 import { Motion } from "@/components/animation/Motion";
 import ScrollToEndArrow from "@/components/shared/ScrollToEndArrow";
-import { useReadDemandsByPeriod } from "@/hooks/demands/useReadDemandsByPeriod"; // Hook atualizado
-import { PeriodOptions } from "@/api/workspaceRoutes"; // Tipos simplificados
+import { useReadDemandsByPeriod } from "@/hooks/demands/useReadDemandsByPeriod"; 
+import { DemandItem, PeriodOptions } from "@/api/workspaceRoutes"; 
 import { StatusView } from "@/components/shared/StatusView";
 import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
 import FilterButtonGroup, {
@@ -38,6 +38,10 @@ type Task = {
 };
 
 const mapStatus = (backendStatus: string): Task["status"] => {
+  if (!backendStatus) {
+    return "não iniciada";
+  }
+
   switch (backendStatus.toLowerCase()) {
     case "não iniciada":
       return "não iniciada";
@@ -78,15 +82,11 @@ const WorkspaceScreen = () => {
     }
   };
 
-  const { 
-    data: auditoriaData, 
-    isLoading: isLoadingAuditorias, 
-    isError: isErrorAuditorias 
+  const {
+    data: auditoriaData,
+    isLoading: isLoadingAuditorias,
+    isError: isErrorAuditorias,
   } = useReadAuditsBySector(workerDetails?.id_setor);
-
-  
-  
-
 
   const inferActivityType = (sectorName: string): "design" | "social_media" => {
     return sectorName.toLowerCase().includes("design")
@@ -120,33 +120,33 @@ const WorkspaceScreen = () => {
   const [timeFilter, setTimeFilter] = useState<PeriodOptions>("7dias_uteis");
 
   const {
-    data: filteredDemandsData,
+    data: unifiedDemandData,
     isLoading,
     isError,
   } = useReadDemandsByPeriod(user?.id_pessoa, timeFilter);
 
   // useEffect para processar e achatar os dados da nova API
   useEffect(() => {
-    if (filteredDemandsData) {
-      const allTasks: Task[] = [];
-
-      for (const status in filteredDemandsData) {
-        const demandsForStatus = filteredDemandsData[status];
-
-        const formattedTasks = demandsForStatus.map((demand) => ({
-          title: demand.descricao,
-          status: mapStatus(status),
-          indexCard: demand.id_demanda,
-          prazo: demand.prazo,
-        }));
-
-        allTasks.push(...formattedTasks);
+    if (unifiedDemandData && unifiedDemandData.demandasFiltradas) {
+      const filteredData = unifiedDemandData.demandasFiltradas;
+      const allKanbanTasks: Task[] = [];
+      for (const status in filteredData) {
+        const demandsForStatus = filteredData[status];
+        if (Array.isArray(demandsForStatus)) {
+            const formatted = demandsForStatus.map((demand: DemandItem) => ({
+              title: demand.descricao,
+              status: mapStatus(status),
+              indexCard: demand.id_demanda,
+              prazo: demand.prazo || "",
+            }));
+            allKanbanTasks.push(...formatted);
+        }
       }
-      setTasks(allTasks);
+      setTasks(allKanbanTasks); // Popula o estado 'tasks' que o Kanban usa
     } else {
       setTasks([]);
     }
-  }, [filteredDemandsData]);
+  }, [unifiedDemandData]);
 
   const filterOptions: FilterOption[] = [
     {
@@ -211,7 +211,6 @@ const WorkspaceScreen = () => {
           >
             <div className="flex w-full flex-row gap-8 mt-8 ">
               <div className="flex flex-col w-full gap-2 mr-4">
-                {/* Dados atualizados (workerDetails com fallback para contexto (user)) */}
                 <InputTitle title="Informações básicas"></InputTitle>
                 <div className="flex flex-row gap-2 w-full">
                   <InputString
@@ -277,12 +276,23 @@ const WorkspaceScreen = () => {
               </div>
 
               <div className="flex flex-col w-1/3">
-              <InputTitle title="Atividades recentes - Setor" />
+                <InputTitle title="Atividades recentes - Setor" />
                 <div className="flex flex-col gap-1 h-[220px] overflow-y-auto pr-1 mt-2">
-                  <StatusView isLoading={isLoadingAuditorias} isError={isErrorAuditorias} errorMessage="Erro ao carregar atividades.">
-                    {auditoriaData?.auditorias && auditoriaData.auditorias.length > 0 ? (
+                  <StatusView
+                    isLoading={isLoadingAuditorias}
+                    isError={isErrorAuditorias}
+                    errorMessage="Erro ao carregar atividades."
+                  >
+                    {auditoriaData?.auditorias &&
+                    auditoriaData.auditorias.length > 0 ? (
                       auditoriaData.auditorias.map((audit, index) => (
-                        <ActivityCard event={audit.evento} key={index} message={audit.mensagem} user={audit.usuario} date={audit.data} />
+                        <ActivityCard
+                          event={audit.evento}
+                          key={index}
+                          message={audit.mensagem}
+                          user={audit.usuario}
+                          date={audit.data}
+                        />
                       ))
                     ) : (
                       <div className="flex items-center justify-center h-full text-zinc-200">

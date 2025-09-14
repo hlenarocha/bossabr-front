@@ -70,7 +70,7 @@ const DemandHistory = () => {
         <Box
           width="w-full"
           height="h-fit"
-          title="Linha do Tempo de Atividades"
+          title="Linha do tempo - Atividades"
           subtitle="Visualize todos os registros de atividades para esta demanda, do mais recente ao mais antigo."
         >
           <div className="h-[500px] overflow-y-auto">
