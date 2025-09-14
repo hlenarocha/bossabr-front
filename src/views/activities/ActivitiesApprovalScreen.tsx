@@ -14,21 +14,23 @@ import FilterButtonGroup, {
   FilterOption,
 } from "@/components/shared/FilterButtonGroup";
 import ColoredButton from "@/components/shared/ColoredButton";
-import ApprovalModal from "./ApprovalModal"; // Corrigido o caminho do import
+import ApprovalModal from "@/views/activities/ApprovalModal"; // Corrigido o caminho do import
 
 // API e Hooks
 import { useReadPendingApprovals } from "@/hooks/activity/useReadPendingApprovals";
 import { PendingActivity } from "@/api/approvalRoutes";
+import { useApprovalAction } from "@/hooks/activity/useApprovalAction";
+import Toast from "@/components/shared/Toast";
 
 const ActivitiesApproval = () => {
   const navigate = useNavigate();
-  // Alterado: O filtro padrão agora é 'todos'
   const [filter, setFilter] = useState("todos");
 
-  // --- BUSCA DE DADOS REAIS DA API ---
   const { data: allActivities, isLoading, isError } = useReadPendingApprovals();
 
-  // --- LÓGICA DE FILTRAGEM ---
+  const { mutate: performApprovalAction, isPending: isUpdating } =
+    useApprovalAction();
+
   const filteredActivities = useMemo(() => {
     if (!allActivities) return [];
     if (filter === "todos") return allActivities;
@@ -36,17 +38,19 @@ const ActivitiesApproval = () => {
       return allActivities.filter((act) => act.tipo === "Design");
     if (filter === "social")
       return allActivities.filter((act) => act.tipo === "Social Media");
-    // Adicione mais filtros se necessário, como 'recentes' e 'antigas'
+    // Adicionar mais filtros se necessário, como 'recentes' e 'antigas'
     return allActivities;
   }, [allActivities, filter]);
 
-  // --- LÓGICA DO MODAL (sem alterações) ---
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] =
     useState<PendingActivity | null>(null);
   const [approvalAction, setApprovalAction] = useState<
     "approve" | "reprove" | null
   >(null);
+
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<"success" | "error">("success");
 
   const handleApproveClick = (activity: PendingActivity) => {
     setSelectedActivity(activity);
@@ -59,19 +63,23 @@ const ActivitiesApproval = () => {
     setIsApprovalModalOpen(true);
   };
   const handleConfirmAction = (reason?: string) => {
-    if (!selectedActivity) return;
-    if (approvalAction === "approve") {
-      alert(
-        `Atividade #${selectedActivity.id_atividade} APROVADA! (Ação simulada)`
-      );
-    } else if (approvalAction === "reprove") {
-      alert(
-        `Atividade #${selectedActivity.id_atividade} REPROVADA! (Ação simulada)\nMotivo: ${reason}`
-      );
-    }
-    setIsApprovalModalOpen(false);
-    setSelectedActivity(null);
-    setApprovalAction(null);
+    if (!selectedActivity || !approvalAction) return;
+    const apiType = selectedActivity.tipo.toLowerCase().replace(' ', '_') as 'design' | 'social_media';
+
+    performApprovalAction({
+      action: approvalAction,
+      type: apiType,
+      activityId: selectedActivity.id_atividade,
+      reason: reason,
+    }, {
+      onSuccess: () => {
+        setToastMessage(`Atividade ${approvalAction === 'approve' ? 'aprovada' : 'reprovada'} com sucesso!`);
+        setIsApprovalModalOpen(false); // Fecha o modal no sucesso
+      },
+      onError: () => {
+        setToastMessage("Ocorreu um erro ao processar a ação.");
+      }
+    });
   };
 
   // Alterado: Opções de filtro ajustadas
@@ -197,7 +205,7 @@ const ActivitiesApproval = () => {
                                 className="text-blue-400 hover:text-blue-300 hover:underline text-xs"
                               >
                                 <i className="fa-solid fa-link mr-2"></i>{" "}
-                               {activity.link_drive}
+                                {activity.link_drive}
                               </a>
                             </div>
                           )}
@@ -243,6 +251,14 @@ const ActivitiesApproval = () => {
             selectedActivity.nome_servico ||
             `Atividade #${selectedActivity.id_atividade}`
           }
+        />
+        
+      )}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setToastMessage(null)}
         />
       )}
     </>
