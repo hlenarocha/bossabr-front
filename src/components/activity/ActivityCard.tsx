@@ -18,14 +18,14 @@ const ActivityCard = (props: ActivityCardProps) => {
   const style = eventStyles[props.event] || eventStyles.default;
 
   return (
-    <div className="w-full bg-zinc-800 p-3 rounded-lg flex items-center gap-4 shadow-sm mb-2">
+    <div className="w-full bg-zinc-800 hover:bg-zinc-700 p-3 rounded-lg flex items-center gap-4 shadow-sm mb-2">
       {/* Círculo com o ícone do evento */}
       <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center bg-zinc-900 ${style.color}`}>
         <i className={style.icon}></i>
       </div>
 
       {/* Conteúdo de texto */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden w-[300px]">
         <p className="text-white text-sm font-medium truncate" title={props.message}>
           {props.message}
         </p>
