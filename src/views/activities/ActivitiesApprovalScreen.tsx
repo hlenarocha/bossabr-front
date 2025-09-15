@@ -170,13 +170,13 @@ const ActivitiesApproval = () => {
                       >
                         <div className="flex justify-between items-center">
                           <h3
-                            className="font-bold text-white text-lg cursor-pointer hover:underline"
+                            className="font-bold text-white text-lg cursor-pointer line-clamp-2 hover:underline"
                             onClick={() =>
                               navigate(`/demandas/${activity.id_demanda}`)
                             }
                           >
                             Demanda #{activity.id_demanda}:{" "}
-                            {activity.nome_servico || "Serviço não informado"}
+                            {activity.nome_servico + ": " + activity.descricao_demanda || "Serviço não informado"}
                           </h3>
                           <span className="text-xs text-zinc-400">
                             {formatDistanceToNow(

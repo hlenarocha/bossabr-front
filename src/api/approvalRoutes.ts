@@ -14,6 +14,7 @@ export interface PendingActivity {
   link_drive: string | null;
   tipo: 'Design' | 'Social Media';
   nome_servico?: string;
+  descricao_demanda?: string;
 }
 
 interface ApprovalActionResponse {
