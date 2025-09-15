@@ -77,6 +77,7 @@ export const getSocialMediaActivityFormData = async (): Promise<ActivityFormData
 export const createDesignActivity = async (payload: DesignActivityDTO) => {
   try {
     const response = await api.post("/atividade", payload);
+    console.log(payload);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar atividade de Design:", error);

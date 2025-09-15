@@ -156,6 +156,7 @@ const CreateActivityModal = ({
       link_drive: data.driveLink,
       observacoes: data.observations,
       ...(activityType === "social_media" && { texto: data.text }),
+      activity_type: activityType
     };
     if (activityType === "design") {
       saveDesignActivity({ payload }, { onSuccess, onError });
