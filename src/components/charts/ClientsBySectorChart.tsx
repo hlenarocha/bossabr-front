@@ -44,7 +44,7 @@ const ClientsBySectorChart = () => {
                 {/* --- LÓGICA DE COR ATUALIZADA --- */}
                 {/* Agora, a cor é baseada na posição (index) do item na lista, */}
                 {/* garantindo uma distribuição visualmente distinta. */}
-                {chartData?.map((entry, index) => {
+                {chartData?.map((_, index) => {
                   const hue = (index * 137.5) % 360; // Usa o "ângulo de ouro" para espaçar as cores
                   const color = `hsl(${hue}, 70%, 55%)`;
                   return <Cell key={`cell-${index}`} fill={color} />;

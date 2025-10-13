@@ -1,6 +1,6 @@
 // hooks e bibliotecas
 import { useMemo } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Componentes
 import BaseScreen from "@/views/BaseScreen";

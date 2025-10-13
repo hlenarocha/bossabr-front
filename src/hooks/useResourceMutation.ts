@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation, UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 // TPayload: O formato dos dados que a API espera (ex: { nome_setor_negocio: '...' })
 // TResponse: O formato da resposta da API.
@@ -10,7 +10,7 @@ interface MutationVariables<TPayload> {
   id?: number; 
 }
 
-interface UseResourceMutationProps<TPayload, TResponse, TError> {
+interface UseResourceMutationProps<TPayload, TResponse> {
   // A função da API que será chamada (ex: createBusiness, updateBusiness)
   mutationFn: (vars: { payload: TPayload, id?: number }) => Promise<TResponse>;
   
@@ -33,7 +33,7 @@ export const useResourceMutation = <TPayload, TResponse = unknown, TError = Erro
   successToastMessage,
   successNavigationRoute,
   errorModalMessage,
-}: UseResourceMutationProps<TPayload, TResponse, TError>) => {
+}: UseResourceMutationProps<TPayload, TResponse>) => {
   const navigate = useNavigate();
   const [isErrorModalVisible, setErrorModalVisible] = useState(false);
 

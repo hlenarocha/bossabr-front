@@ -1,4 +1,3 @@
-import React from 'react';
 import { useHelp } from '@/contexts/HelpContext'; 
 
 interface PageTitleProps {

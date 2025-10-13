@@ -28,7 +28,7 @@ const ActivitiesApproval = () => {
 
   const { data: allActivities, isLoading, isError } = useReadPendingApprovals();
 
-  const { mutate: performApprovalAction, isPending: isUpdating } =
+  const { mutate: performApprovalAction } =
     useApprovalAction();
 
   const filteredActivities = useMemo(() => {
