@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"; // 1. Importe o Outlet
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"; 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useContext, useEffect } from "react";
@@ -16,9 +16,8 @@ import Dashboard from "@/views/dashboard/DashboardScreen";
 import AreaTrabalho from "@/views/workspace/WorkspaceScreen";
 import Configuracoes from "@/views/settings/SettingsScreen";
 import NotFound from "@/views/errors/NotFound";
-import LoadingScreen from "@/views/auth/LoadingScreen"; // Importe sua tela de Loading
+import LoadingScreen from "@/views/auth/LoadingScreen"; 
 
-// ... (Todos os outros imports de tela)
 import Diario from "@/views/reports/DailyReportScreen";
 import ListaDiariosAdmin from "@/views/reports/AdminReportList";
 import Demandas from "@/views/demands/DemandsScreen";
@@ -49,6 +48,7 @@ import GerenciarServicos from "@/views/services/ManageServices";
 import CriarServico from "@/views/services/CreateService";
 import EditarServico from "@/views/services/EditService";
 import ActivityDetailsScreen from "@/views/activities/ActivityDetails";
+import { HelpProvider } from "@/contexts/HelpContext";
 
 const queryClient = new QueryClient();
 
@@ -206,7 +206,9 @@ const App = () => {
       <GoogleOAuthProvider clientId={googleClientId}>
         <UserProvider>
           <SideBarProvider>
+            <HelpProvider>
             <AppContainer />
+            </HelpProvider>
           </SideBarProvider>
         </UserProvider>
       </GoogleOAuthProvider>

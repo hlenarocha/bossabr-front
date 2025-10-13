@@ -7,6 +7,7 @@ import { useSession } from "@/hooks/useSession";
 import { Navigate } from "react-router-dom";
 import LoadingScreen from "./auth/LoadingScreen";
 import { UserContext } from "@/contexts/UserContext";
+import HelpModal from "@/components/modal/HelpModal";
 
 const RoleSwitcher = () => {
   const { switchUserRoleForTesting, user } = useContext(UserContext);
@@ -97,7 +98,9 @@ const BaseScreen = ({ children }: BaseScreenProps) => {
           {children}
         </main>
           <RoleSwitcher />    
+          <HelpModal />
       </div>
+      
     </div>
   );
 };
