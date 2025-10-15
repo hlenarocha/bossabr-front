@@ -1,9 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
-import { getBurnoutSensorData } from "@/api/dashboardRoutes";
+import { useQuery } from '@tanstack/react-query';
+import { getBurnoutSensorData, BurnoutInterval } from '@/api/dashboardRoutes'; // Supondo que a função e o tipo estão em dashboardRoutes
 
-export const useReadBurnoutSensor = () => {
+export const useReadBurnoutSensor = (
+  sectorId: number | null, 
+  intervalo: BurnoutInterval
+) => {
   return useQuery({
-    queryKey: ["burnoutSensor"],
-    queryFn: getBurnoutSensorData,
+    queryKey: ['burnoutSensor', sectorId, intervalo],
+    queryFn: () => getBurnoutSensorData(sectorId, intervalo),
+    enabled: !!intervalo,
   });
 };

@@ -18,6 +18,7 @@ import { StatusView } from "@/components/shared/StatusView";
 import { useReadAuditorias } from "@/hooks/dashboard/useReadAuditorias";
 import {
   AuditPeriod,
+  BurnoutInterval,
   DemandProgressItem,
   DemandStatusInterval,
   SectorScoreItem,
@@ -33,7 +34,7 @@ import DemandListModal from "@/components/modal/DemandListModal";
 
 const DashboardScreen = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>("design");
-
+  const [burnoutPeriod, setBurnoutPeriod] = useState<BurnoutInterval>("mensal");
   const [activityPeriod, setActivityPeriod] = useState<AuditPeriod>("semana");
 
   const [demandProgressPeriod, setDemandProgressPeriod] =
@@ -63,7 +64,7 @@ const DashboardScreen = () => {
     data: burnoutData,
     isLoading: isLoadingBurnout,
     isError: isErrorBurnout,
-  } = useReadBurnoutSensor();
+  } = useReadBurnoutSensor(sectorId, burnoutPeriod);
   const {
     data: piecesData,
     isLoading: isLoadingPieces,
@@ -97,6 +98,14 @@ const DashboardScreen = () => {
 
   // Adicionado: Opções para os novos botões de filtro
   const demandProgressFilterOptions = [
+    { label: "Hoje", value: "hoje" },
+    { label: "Semanal", value: "semanal" },
+    { label: "Quinzenal", value: "quinzenal" },
+    { label: "Mensal", value: "mensal" },
+  ];
+
+
+  const burnoutFilterOptions = [
     { label: "Hoje", value: "hoje" },
     { label: "Semanal", value: "semanal" },
     { label: "Quinzenal", value: "quinzenal" },
@@ -263,12 +272,30 @@ const DashboardScreen = () => {
               </Box>
             </div>
             <div className="flex flex-col lg:flex-row w-full gap-4 mt-4">
-              <Box
-                title="Sensor de Burnout"
-                subtitle="Controle de carga prevista dos colaboradores no mês."
-                height="h-[400px] overflow-y-auto"
-                width="w-full lg:w-1/2"
-              >
+            <Box
+              title="Sensor de Burnout"
+              subtitle="Controle de carga prevista dos colaboradores."
+              width="w-full lg:w-1/2"
+            >
+              {/* Adicionado: Botões de filtro */}
+              <div className="flex justify-end gap-2 mb-4 flex-shrink-0">
+                {burnoutFilterOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setBurnoutPeriod(opt.value as BurnoutInterval)}
+                    className={`py-1 px-3 text-xs rounded-md transition-colors ${
+                      burnoutPeriod === opt.value
+                        ? "bg-customYellow text-black font-bold"
+                        : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Conteúdo do Box */}
+              <div className="flex-grow h-[300px] overflow-y-auto">
                 <StatusView
                   isLoading={isLoadingBurnout}
                   isError={isErrorBurnout}
@@ -279,12 +306,15 @@ const DashboardScreen = () => {
                       <BurnoutCard
                         key={person.id_pessoa}
                         name={`${person.first_name} ${person.last_name}`}
-                        score={Number(person.pontuacao_total_mes)}
+                        // Alterado: Usa a nova propriedade da API
+                        score={Number(person.pontuacao_total_intervalo) || 0}
                       />
                     ))}
                   </div>
                 </StatusView>
-              </Box>
+              </div>
+            </Box>
+            
               <Box
                 title="Pontuação Acumulada"
                 subtitle={

@@ -61,6 +61,17 @@ export interface DemandProgressItem {
 
 export type DemandStatusInterval = "mensal" | "quinzenal" | "semanal" | "hoje";
 
+
+export type BurnoutInterval = "mensal" | "quinzenal" | "semanal" | "hoje";
+
+// Interface para um item da resposta do Sensor de Burnout
+export interface BurnoutPerson {
+  id_pessoa: number;
+  first_name: string;
+  last_name: string;
+  pontuacao_total_intervalo: number; // A API retorna este nome agora
+}
+
 export const getProgressOfDemands = async (intervalo: DemandStatusInterval): Promise<DemandProgressItem[]> => {
   try {
     const response = await api.get(`/demanda/status`, {
@@ -89,13 +100,19 @@ export const getAuditorias = async (periodo: AuditPeriod): Promise<AuditoriaResp
   }
 };
 
-export const getBurnoutSensorData = async (): Promise<BurnoutSensorItem[]> => {
+export const getBurnoutSensorData = async ( sectorId: number | null,
+  intervalo: BurnoutInterval
+): Promise<BurnoutPerson[]> => {
   try {
-    const response = await api.get('/demanda/sensor_burnout');
-    // A API retorna o array de dados diretamente
-    return response.data;
+    const params: { id_setor?: number; intervalo: BurnoutInterval } = { intervalo };
+    if (sectorId) {
+      params.id_setor = sectorId;
+    }
+    
+    const response = await api.get('/demanda/sensor_burnout', { params });
+    return response.data || [];
   } catch (error) {
-    console.error("Erro no fetch do sensor de burnout:", error);
+    console.error("Erro ao buscar dados do sensor de burnout:", error);
     throw error;
   }
 };
