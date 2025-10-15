@@ -35,6 +35,7 @@ type Task = {
     | "atrasada";
   indexCard: number;
   prazo: string;
+  lastActivityStatus?: string | null; 
 };
 
 const mapStatus = (backendStatus: string): Task["status"] => {
@@ -82,6 +83,8 @@ const WorkspaceScreen = () => {
     }
   };
 
+  console.log("SETOR DO COLABORADOR:", user?.nome_setor);
+
   const {
     data: auditoriaData,
     isLoading: isLoadingAuditorias,
@@ -93,6 +96,8 @@ const WorkspaceScreen = () => {
       ? "design"
       : "social_media";
   };
+
+  console.log(inferActivityType(user?.nome_setor || "NÃO ENCONTRADO"));
 
   const handleSetToast = (message: string, type: "success" | "error") => {
     setToastMessage(message);
@@ -138,6 +143,7 @@ const WorkspaceScreen = () => {
               status: mapStatus(status),
               indexCard: demand.id_demanda,
               prazo: demand.prazo || "",
+              lastActivityStatus: demand.status_ultima_atividade
             }));
             allKanbanTasks.push(...formatted);
         }
@@ -380,7 +386,7 @@ const WorkspaceScreen = () => {
           <CreateActivityModal
             navigateToOnSuccess="/area-trabalho"
             demandId={selectedDemand.indexCard}
-            activityType={inferActivityType(user?.nome_setor || "")}
+            activityType={inferActivityType(workerDetails?.nome_setor || "design")}
             onClose={() => setIsModalOpen(false)}
             setToast={handleSetToast}
           />

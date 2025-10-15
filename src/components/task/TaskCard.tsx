@@ -1,4 +1,5 @@
 import { formatDateToBR } from "@/utils/formatDate";
+import { useMemo } from "react";
 
 export interface TaskCardProps {
   title: string;
@@ -10,6 +11,7 @@ export interface TaskCardProps {
     | "atrasada";
   indexCard: number;
   prazo: string;
+  lastActivityStatus?: string | null; 
   onClick?: () => void;
   onActionClick?: (event: React.MouseEvent) => void;
 }
@@ -55,6 +57,31 @@ const actionStyles = {
 const TaskCard = (props: TaskCardProps) => {
   const currentAction = actionStyles[props.status];
 
+
+   const feedbackIcon = useMemo(() => {
+    if (!props.lastActivityStatus) return null;
+
+    const lastStatus = props.lastActivityStatus.toLowerCase();
+
+    if (lastStatus === 'aprovada') {
+      return (
+        <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full h-6 w-6 flex items-center justify-center shadow-lg" title="Última atividade aprovada">
+          <i className="fa-solid fa-check text-xs"></i>
+        </div>
+      );
+    }
+    
+    if (lastStatus === 'reprovada') {
+      return (
+        <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center shadow-lg" title="Última atividade reprovada (requer ajustes)">
+          <i className="fa-solid fa-times text-xs"></i>
+        </div>
+      );
+    }
+
+    return null; // Não mostra ícone para outros status como "Em execução"
+  }, [props.lastActivityStatus]);
+
   const handleActionClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (props.onActionClick) {
@@ -65,8 +92,9 @@ const TaskCard = (props: TaskCardProps) => {
   return (
     <div
       onClick={props.onClick}
-      className="bg-zinc-800 rounded-xl px-4 py-3 mb-3 hover:bg-zinc-700 cursor-pointer shadow-md flex items-center gap-4 transition-colors"
+      className="bg-zinc-800 rounded-xl px-4 py-3 mb-3 hover:bg-zinc-700 cursor-pointer shadow-md flex items-center gap-4 transition-colors relative"
     >
+        {feedbackIcon}
       {/* Bolinha de status à esquerda */}
       <div
         className={`w-3 h-3 rounded-full flex-shrink-0 ${

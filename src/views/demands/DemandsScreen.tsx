@@ -25,6 +25,7 @@ import FilterButtonGroup, {
   FilterOption,
 } from "@/components/shared/FilterButtonGroup";
 import Toast from "@/components/shared/Toast";
+import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
 
 // Interface Task para uso local na tela
 interface Task {
@@ -37,6 +38,7 @@ interface Task {
     | "atrasada";
   indexCard: number;
   prazo: string;
+  lastActivityStatus?: string | null; 
 }
 
 const mapStatus = (
@@ -65,6 +67,22 @@ const DemandsScreen = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
+  const [workerDetails, setWorkerDetails] = useState<WorkerItem | null>(null);
+
+  // Adicionado: useEffect para buscar os detalhes do colaborador
+  useEffect(() => {
+    const fetchWorkerData = async () => {
+      if (user?.id_pessoa) {
+        try {
+          const data = await readWorkerById(user.id_pessoa);
+          setWorkerDetails(data);
+        } catch (error) {
+          console.error("Erro ao buscar detalhes do colaborador:", error);
+        }
+      }
+    };
+    fetchWorkerData();
+  }, [user?.id_pessoa]);
   // --- ESTADOS DE CONTROLE PARA A API ---
   const [timeFilter, setTimeFilter] = useState<PeriodOptions>("7dias_uteis");
   const [currentCalendarMonth, setCurrentCalendarMonth] = useState(new Date());
@@ -83,6 +101,7 @@ const DemandsScreen = () => {
   const [kanbanTasks, setKanbanTasks] = useState<Task[]>([]);
   const [calendarTasks, setCalendarTasks] = useState<Task[]>([]);
 
+
   // --- UM ÚNICO useEffect PARA PROCESSAR A RESPOSTA UNIFICADA ---
   useEffect(() => {
     if (unifiedDemandData) {
@@ -98,12 +117,13 @@ const DemandsScreen = () => {
             indexCard: demand.id_demanda,
             prazo: demand.prazo || "",
             sector: demand.setor || "",
+            lastActivityStatus: demand.status_ultima_atividade
           }));
           allKanbanTasks.push(...formatted);
         }
       }
       setKanbanTasks(allKanbanTasks);
-
+      console.log("Kanban Tasks:", allKanbanTasks);
       // Processa dados para o Calendário a partir de 'demandasCalendario'
       const calendarData = unifiedDemandData.demandasCalendario;
       const allCalendarTasks: Task[] = [];
@@ -118,6 +138,7 @@ const DemandsScreen = () => {
               indexCard: demand.id_demanda,
               prazo: demand.prazo,
               sector: demand.setor || "",
+              lastActivityStatus: demand.status_ultima_atividade,
             }));
           allCalendarTasks.push(...formatted);
         }
@@ -387,7 +408,7 @@ const DemandsScreen = () => {
         <CreateActivityModal
           navigateToOnSuccess="/demandas"
           demandId={selectedDemand.indexCard}
-          activityType={inferActivityType(user?.nome_setor || "")}
+          activityType={inferActivityType(workerDetails?.nome_setor || "")}
           onClose={() => setIsModalOpen(false)}
           setToast={handleSetToast}
         />

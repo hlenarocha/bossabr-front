@@ -45,6 +45,7 @@ export interface DemandItem {
   prazo: string;
   setor: string;
   status_demanda: string; // Importante para o mapeamento de status do calendário
+  status_ultima_atividade: string | null;
   nome_empresa?: string; // Opcional, mas útil
 }
 
