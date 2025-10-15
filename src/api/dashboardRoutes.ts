@@ -18,10 +18,6 @@ export interface AuditoriaResponse {
 }
 
 
-export interface ProgressOfDemandsItem {
-  status: string;
-  total_demandas: number;
-}
 
 export interface BurnoutSensorItem {
   id_pessoa: number;
@@ -49,10 +45,28 @@ export interface SectorScoreItem {
   pontuacao_semanal: number;
   pontuacao_mensal: number;
 }
+export interface DemandDetailItem {
+  id_demanda: number;
+  status: string;
+  nome_servico: string;
+  nome_empresa: string;
+  descricao: string;
+}
 
-export const getProgressOfDemands = async (): Promise<ProgressOfDemandsItem[]> => {
+export interface DemandProgressItem {
+  status: string;
+  total_demandas: number;
+  detalhamento: DemandDetailItem[];
+}
+
+export type DemandStatusInterval = "mensal" | "quinzenal" | "semanal" | "hoje";
+
+export const getProgressOfDemands = async (intervalo: DemandStatusInterval): Promise<DemandProgressItem[]> => {
   try {
-    const response = await api.get(`/demanda/status`);
+    const response = await api.get(`/demanda/status`, {
+      params: { intervalo, detalhado: true }
+    }
+    );
     return response.data.data;
   } catch (error) {
     console.error("Erro no fetch de progresso das demandas (dashboard):", error);

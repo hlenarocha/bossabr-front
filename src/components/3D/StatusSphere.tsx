@@ -1,13 +1,21 @@
-
 interface StatusSphereProps {
   status: string;
   count: number;
   gradient: string; 
+  onClick?: () => void;
+  hasDetails?: boolean; // 1. Adicionada nova propriedade
 }
 
-const StatusSphere = ({ status, count, gradient }: StatusSphereProps) => {
+const StatusSphere = ({ status, count, gradient, onClick, hasDetails }: StatusSphereProps) => {
   return (
-    <div className="flex flex-col items-center gap-2">
+    // 2. Adicionado cursor condicional com base em 'hasDetails'
+    <div 
+      onClick={onClick} 
+      className={`
+        flex flex-col items-center gap-2 
+        ${hasDetails ? 'cursor-pointer' : 'cursor-default'}
+      `}
+    >
       <div
         className={`
           relative 

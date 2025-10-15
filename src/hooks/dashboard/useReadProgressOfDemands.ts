@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProgressOfDemands } from "@/api/dashboardRoutes"; 
+import { getProgressOfDemands, DemandStatusInterval } from "@/api/dashboardRoutes"; 
 
-export const useProgressOfDemands = () => {
+export const useReadProgressOfDemands = (intervalo: DemandStatusInterval) => {
   return useQuery({
-    queryKey: ["progressOfDemands"],
-    queryFn: getProgressOfDemands,
-  });
+    queryKey: ["progressOfDemands", intervalo],
+    queryFn: () => getProgressOfDemands(intervalo),
+    });
 };
