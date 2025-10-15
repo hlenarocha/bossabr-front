@@ -21,6 +21,7 @@ import {
   BurnoutInterval,
   DemandProgressItem,
   DemandStatusInterval,
+  ScoreInterval,
   SectorScoreItem,
 } from "@/api/dashboardRoutes";
 import BurnoutCard from "@/components/charts/BurnoutCard";
@@ -39,6 +40,7 @@ const DashboardScreen = () => {
 
   const [demandProgressPeriod, setDemandProgressPeriod] =
     useState<DemandStatusInterval>("semanal");
+    const [scoresPeriod, setScoresPeriod] = useState<ScoreInterval>("mensal");
 
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedStatusDetails, setSelectedStatusDetails] =
@@ -54,7 +56,7 @@ const DashboardScreen = () => {
     data: scoresData,
     isLoading: isLoadingScores,
     isError: isErrorScores,
-  } = useReadScoresBySector(sectorId);
+  } = useReadScoresBySector(sectorId, scoresPeriod);
   const {
     data: auditoriaData,
     isLoading: isLoadingAuditorias,
@@ -106,6 +108,13 @@ const DashboardScreen = () => {
 
 
   const burnoutFilterOptions = [
+    { label: "Hoje", value: "hoje" },
+    { label: "Semanal", value: "semanal" },
+    { label: "Quinzenal", value: "quinzenal" },
+    { label: "Mensal", value: "mensal" },
+  ];
+
+  const scoreFilterOptions = [
     { label: "Hoje", value: "hoje" },
     { label: "Semanal", value: "semanal" },
     { label: "Quinzenal", value: "quinzenal" },
@@ -315,46 +324,54 @@ const DashboardScreen = () => {
               </div>
             </Box>
             
-              <Box
-                title="Pontuação Acumulada"
-                subtitle={
-                  selectedOption === "geral"
-                    ? "Selecione um setor para ver os dados"
-                    : "Pontuação mensal dos colaboradores do setor"
-                }
-                height="h-[400px] overflow-y-auto"
-                width="w-full lg:w-1/2"
-              >
+             <Box
+              title="Pontuação Acumulada"
+              subtitle={selectedOption === "geral" ? "Selecione um setor" : `Colaboradores do setor (${scoresPeriod})`}
+              width="w-full lg:w-1/2"
+            >
+              {/* Adicionado: Botões de filtro */}
+              <div className="flex justify-end gap-2 mb-4 flex-shrink-0">
+                {scoreFilterOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setScoresPeriod(opt.value as ScoreInterval)}
+                    className={`py-1 px-3 text-xs rounded-md transition-colors ${
+                      scoresPeriod === opt.value
+                        ? "bg-customYellow text-black font-bold"
+                        : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex-grow h-[300px] overflow-y-auto pr-2">
                 <StatusView
                   isLoading={isLoadingScores}
                   isError={isErrorScores}
                   errorMessage="Erro ao carregar pontuações."
                 >
-                  <div className="h-full flex flex-col overflow-y-auto pr-2">
-                    {scoresData && scoresData.length > 0 ? (
-                      scoresData.map((person: SectorScoreItem) => (
-                        <div key={person.id_pessoa} className="mb-3">
-                          <p className="text-white font-semibold text-sm mb-1">
-                            {person.first_name} {person.last_name}
-                          </p>
-                          <ScoreBar
-                            score={person.pontuacao_mensal}
-                            maxScore={70}
-                          />
-                        </div>
-                      ))
-                    ) : (
-                      <div className="flex items-center justify-center h-full text-zinc-500">
-                        <p>
-                          {selectedOption === "geral"
-                            ? "Selecione um dashboard setorial."
-                            : "Nenhuma pontuação encontrada."}
+                  {scoresData && scoresData.length > 0 ? (
+                    scoresData.map((person: SectorScoreItem) => (
+                      <div key={person.id_pessoa} className="mb-4">
+                        <p className="text-white font-semibold text-sm mb-1">
+                          {person.first_name} {person.last_name}
                         </p>
+                        <ScoreBar
+                          score={person.pontuacao}
+                          maxScore={100} // MUDAR PARA META
+                        />
                       </div>
-                    )}
-                  </div>
+                    ))
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-zinc-500">
+                      <p>{selectedOption === "geral" ? "Selecione um dashboard setorial." : "Nenhuma pontuação encontrada."}</p>
+                    </div>
+                  )}
                 </StatusView>
-              </Box>
+              </div>
+            </Box>
             </div>
           </Motion>
         </div>

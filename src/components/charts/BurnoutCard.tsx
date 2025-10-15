@@ -14,12 +14,12 @@ const BurnoutCard: React.FC<BurnoutCardProps> = ({ name, score }) => {
   // REMOVIDO: O cálculo de porcentagem que usava MAX_SCORE foi removido.
 
   // ALTERADO: A lógica de cor agora se baseia nos limites de carga definidos acima.
-  let colorClass = 'text-green-500'; // Padrão: Baixo Risco
+  let colorClass = 'text-green-500'; // Baixo risco
   if (score > BURNOUT_THRESHOLDS.MEDIO) {
-    colorClass = 'text-yellow-500'; // Médio Risco
+    colorClass = 'text-yellow-500'; // Médio risco
   }
   if (score > BURNOUT_THRESHOLDS.ALTO) {
-    colorClass = 'text-red-500'; // Alto Risco
+    colorClass = 'text-red-500'; // Alto risco
   }
 
   return (

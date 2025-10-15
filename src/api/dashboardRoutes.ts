@@ -23,7 +23,7 @@ export interface BurnoutSensorItem {
   id_pessoa: number;
   first_name: string;
   last_name: string;
-  pontuacao_total_mes: string; // A API retorna como string, converter para número no frontend
+  pontuacao_total_intervalo: string; // A API retorna como string, converter para número no frontend
 }
 
 export interface PiecesProducedResponse {
@@ -42,8 +42,8 @@ export interface SectorScoreItem {
   id_pessoa: number;
   first_name: string;
   last_name: string;
-  pontuacao_semanal: number;
-  pontuacao_mensal: number;
+  pontuacao: number;
+  pontuacao_meta: number;
 }
 export interface DemandDetailItem {
   id_demanda: number;
@@ -64,6 +64,7 @@ export type DemandStatusInterval = "mensal" | "quinzenal" | "semanal" | "hoje";
 
 export type BurnoutInterval = "mensal" | "quinzenal" | "semanal" | "hoje";
 
+export type ScoreInterval = "mensal" | "quinzenal" | "semanal" | "hoje";
 // Interface para um item da resposta do Sensor de Burnout
 export interface BurnoutPerson {
   id_pessoa: number;
@@ -139,9 +140,13 @@ export const getClientsByBusinessSector = async (): Promise<ClientsBySectorItem[
   }
 };
 
-export const getScoresBySector = async (sectorId: number): Promise<SectorScoreItem[]> => {
+export const getScoresBySector = async (sectorId: number, intervalo: ScoreInterval): Promise<SectorScoreItem[]> => {
   try {
-    const response = await api.get(`/pessoa/${sectorId}/pontuacao-setor`);
+    const response = await api.get(`/pessoa/${sectorId}/pontuacao-setor`,
+      {
+        params: { intervalo }
+      }
+    );
     // A API retorna um objeto { success: true, pontuacao: [...] }
     return response.data.pontuacao || [];
   } catch (error) {
