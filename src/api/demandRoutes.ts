@@ -242,10 +242,16 @@ export const readDemandHistory = async (id: number): Promise<DemandHistoryRespon
   }
 };
 
-export const readDemandsByClientId = async (clientId: number): Promise<DemandByClientItem[]> => {
+export const readDemandsByClientId = async (clientId: number, onlyUncompleted: boolean): Promise<DemandByClientItem[]> => {
   try {
   
-    const response = await api.get(`/demanda/cliente/${clientId}`);
+    const response = await api.get(`/demanda/cliente/${clientId}`, 
+      {
+        params: {
+          apenas_nao_concluidas: onlyUncompleted, 
+        }
+      }
+    );
     
     const clientName = Object.keys(response.data).find(key => key !== 'success');
     return clientName ? response.data[clientName] : [];

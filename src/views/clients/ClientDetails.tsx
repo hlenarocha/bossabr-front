@@ -29,6 +29,7 @@ const ClientDetails = () => {
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const clientId = Number(id);
+  const [showOnlyUncompleted, setShowOnlyUncompleted] = useState(false);
 
   // --- BUSCA DE DADOS ---
   const {
@@ -40,7 +41,7 @@ const ClientDetails = () => {
     data: demands,
     isLoading: isLoadingDemands,
     isError: isErrorDemands,
-  } = useReadDemandsByClientId(clientId);
+  } = useReadDemandsByClientId(clientId, showOnlyUncompleted);
 
   // --- LÓGICA DE FILTRO E BUSCA PARA A LISTA DE DEMANDAS ---
   const [searchTerm, setSearchTerm] = useState("");
@@ -160,11 +161,39 @@ const ClientDetails = () => {
           title="Demandas Associadas"
           subtitle="Lista de todas as demandas solicitadas por este cliente."
         >
-          <SearchBar
-            placeholder="Pesquise por serviço, status ou setor..."
-            value={searchTerm}
-            onChange={(value: string) => setSearchTerm(value)}
-          />
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+            <SearchBar
+              placeholder="Pesquise por serviço, status ou setor..."
+              value={searchTerm}
+              onChange={(value: string) => setSearchTerm(value)}
+            />
+            <div className="flex items-center gap-3">
+            {/* Texto da opção "Mostrar todas" */}
+            <span className={`text-md font-medium transition-colors ${
+                !showOnlyUncompleted ? 'text-white' : 'text-gray-400'
+            }`}>
+              Exibir todas
+            </span>
+
+            <label htmlFor="uncompleted-toggle" className="relative inline-flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                id="uncompleted-toggle" 
+                className="sr-only peer" 
+                checked={showOnlyUncompleted}
+                onChange={() => setShowOnlyUncompleted(!showOnlyUncompleted)}
+              />
+              <div className="w-11 h-6 bg-zinc-700 rounded-full peer peer-checked:bg-customYellow transition-colors"></div>
+              <div className="absolute top-[2px] left-[2px] bg-white border-gray-300 border rounded-full h-5 w-5 transition-transform peer-checked:translate-x-full"></div>
+            </label>
+
+            <span className={`text-md font-medium transition-colors ${
+                showOnlyUncompleted ? 'text-white font-bold' : 'text-gray-400'
+            }`}>
+              Apenas não concluídas
+            </span>
+          </div>
+          </div>
 
           <TableItem
             columns={[
@@ -206,15 +235,18 @@ const ClientDetails = () => {
                       width: "15%",
                       content: (
                         <button
-                        // console log id demanda
-                          onClick={() =>{
-                            navigate(`/clientes/cliente/demanda/${Number(demand.id_demanda)}`, {
-
-                              state: { previousRoute: "/clientes/" },
-                            });
+                          // console log id demanda
+                          onClick={() => {
+                            navigate(
+                              `/clientes/cliente/demanda/${Number(
+                                demand.id_demanda
+                              )}`,
+                              {
+                                state: { previousRoute: "/clientes/" },
+                              }
+                            );
                             console.log(demand.id_demanda);
-                          }
-                          }
+                          }}
                           className="bg-customYellow text-zinc-900 font-bold py-1 px-3 rounded-lg text-sm hover:bg-yellow-400 transition-colors"
                         >
                           <i className="fa-solid fa-eye mr-2"></i>
