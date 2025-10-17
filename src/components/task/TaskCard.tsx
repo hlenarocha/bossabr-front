@@ -11,7 +11,7 @@ export interface TaskCardProps {
     | "atrasada";
   indexCard: number;
   prazo: string;
-  lastActivityStatus?: string | null; 
+  lastActivityStatus?: string | null;
   onClick?: () => void;
   onActionClick?: (event: React.MouseEvent) => void;
 }
@@ -20,9 +20,9 @@ export interface TaskCardProps {
 const statusColor = {
   "não iniciada": "bg-gray-500",
   "em andamento": "bg-blue-500",
-  "concluída": "bg-green-500",
+  concluída: "bg-green-500",
   "em aprovação": "bg-purple-500",
-  "atrasada": "bg-red-500",
+  atrasada: "bg-red-500",
 };
 
 // Mapeamento de estilos para o botão de ação à direita
@@ -37,7 +37,7 @@ const actionStyles = {
     hover: "hover:bg-blue-500",
     title: "Registrar Atividade",
   },
-  "concluída": {
+  concluída: {
     icon: "fa-solid fa-flag-checkered",
     hover: "hover:bg-green-500",
     title: "Ver Entrega",
@@ -47,7 +47,7 @@ const actionStyles = {
     hover: "hover:bg-purple-500",
     title: "Aguardando Aprovação",
   },
-  "atrasada": {
+  atrasada: {
     icon: "fa-solid fa-exclamation-triangle",
     hover: "hover:bg-red-500",
     title: "Resolver Pendência",
@@ -57,23 +57,28 @@ const actionStyles = {
 const TaskCard = (props: TaskCardProps) => {
   const currentAction = actionStyles[props.status];
 
-
-   const feedbackIcon = useMemo(() => {
+  const feedbackIcon = useMemo(() => {
     if (!props.lastActivityStatus) return null;
 
     const lastStatus = props.lastActivityStatus.toLowerCase();
 
-    if (lastStatus === 'aprovada') {
+    if (lastStatus === "aprovada") {
       return (
-        <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full h-6 w-6 flex items-center justify-center shadow-lg" title="Última atividade aprovada">
+        <div
+          className=" bg-green-500 text-white rounded-full h-6 w-6 flex items-center justify-center shadow-lg"
+          title="Última atividade aprovada"
+        >
           <i className="fa-solid fa-check text-xs"></i>
         </div>
       );
     }
-    
-    if (lastStatus === 'reprovada') {
+
+    if (lastStatus === "reprovada") {
       return (
-        <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center shadow-lg" title="Última atividade reprovada (requer ajustes)">
+        <div
+          className=" bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center shadow-lg"
+          title="Última atividade reprovada (requer ajustes)"
+        >
           <i className="fa-solid fa-times text-xs"></i>
         </div>
       );
@@ -94,7 +99,6 @@ const TaskCard = (props: TaskCardProps) => {
       onClick={props.onClick}
       className="bg-zinc-800 rounded-xl px-4 py-3 mb-3 hover:bg-zinc-700 cursor-pointer shadow-md flex items-center gap-4 transition-colors relative"
     >
-        {feedbackIcon}
       {/* Bolinha de status à esquerda */}
       <div
         className={`w-3 h-3 rounded-full flex-shrink-0 ${
@@ -107,7 +111,10 @@ const TaskCard = (props: TaskCardProps) => {
         {/*
          'line-clamp-2'.
         */}
-        <p title={props.title} className="text-white font-medium text-sm line-clamp-2">
+        <p
+          title={props.title}
+          className="text-white font-medium text-sm line-clamp-2"
+        >
           {props.title}
         </p>
         <p className="text-xs text-gray-400 mt-1">
@@ -121,7 +128,7 @@ const TaskCard = (props: TaskCardProps) => {
         title={currentAction.title}
         onClick={handleActionClick}
       >
-        <i className={currentAction.icon}></i>
+        {feedbackIcon ? feedbackIcon : <i className={currentAction.icon}></i>}
       </button>
     </div>
   );

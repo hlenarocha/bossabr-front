@@ -85,7 +85,7 @@ export const readDemandsByPeriod = async (
     };
 
     const response = await api.get<{ success: boolean; data: UnifiedDemandResponseData }>('/demanda/proximos-dias-uteis', { params });
-    
+    console.log(response);
     return response.data.data;
   } catch (error) {
     console.error("Erro ao buscar demandas por período:", error);

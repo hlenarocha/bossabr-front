@@ -360,7 +360,7 @@ const DashboardScreen = () => {
                         </p>
                         <ScoreBar
                           score={person.pontuacao}
-                          maxScore={100} // MUDAR PARA META
+                          maxScore={person.pontuacao_meta || 100} // Ensure accessing the first item's meta score
                         />
                       </div>
                     ))

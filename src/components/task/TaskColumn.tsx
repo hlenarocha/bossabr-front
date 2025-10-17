@@ -4,6 +4,7 @@ interface Task {
   title: string;
   status: "não iniciada" | "em andamento" | "concluída" | "em aprovação" | "atrasada";
   indexCard: number;
+  lastActivityStatus?: string | null; 
   prazo: string;
 }
 
@@ -51,6 +52,7 @@ const TaskColumn = (props: TaskColumnProps) => {
               title={task.title}
               status={task.status}
               indexCard={task.indexCard}
+              lastActivityStatus={task.lastActivityStatus}
               prazo={task.prazo}
               onClick={() => props.onCardClick && props.onCardClick(task)}
               onActionClick={(e) => props.onCardActionClick && props.onCardActionClick(e, task)}
