@@ -1,10 +1,16 @@
+import { validateInput } from '@/utils/validateInput';
 import { z } from 'zod';
 
 export const activitySchema = z.object({
   
   startDate: z
     .string()
-    .min(1, "A data de início é obrigatória."),
+    .min(1, "A data de início é obrigatória.")
+    .refine(
+      (val) => !val || validateInput(val, "startDate"),
+      "Data de início inválida"
+    )
+    .or(z.literal("")),
 
   driveLink: z
     .string()

@@ -58,7 +58,41 @@ export const validateInput = (value: string, type: string) => {
 
     return dateRegex.test(value) && value.length > 0;
 
+
   }
+
+  if (type === "startDate") {
+    // 1. FORÇA a interpretação da data no fuso LOCAL, adicionando o tempo.
+    // Isso garante que a data seja 2025-10-28 00:00:00 no fuso LOCAL.
+    const dateStringLocal = `${value}T00:00:00`; 
+    const inputDate = new Date(dateStringLocal);
+    
+    // Fallback de segurança para Invalid Date
+    if (isNaN(inputDate.getTime())) {
+        return false;
+    }
+    
+    // 2. CRIA o 'today' (meia-noite de hoje)
+    const now = currentDate || new Date(); 
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    // 3. CRIA o 'inputDateStartOfDay' (meia-noite do dia escolhido)
+    // Usamos o construtor (Y, M, D) a partir de inputDate para garantir que
+    // as datas sejam limpas e no fuso local.
+    const inputDateStartOfDay = new Date(
+        inputDate.getFullYear(), 
+        inputDate.getMonth(), 
+        inputDate.getDate()
+    );
+
+    // A data de início (inputDateStartOfDay) deve ser >= hoje (today).
+    if (inputDateStartOfDay < today) {
+        return false; // Data no passado
+    }
+    
+    // Opcional, mas mantenha a verificação de formato da string
+    return dateRegex.test(value) && value.length > 0;
+}
 
   const maxContractEndDate = new Date();
   maxContractEndDate.setFullYear(currentDate.getFullYear() + 50);
