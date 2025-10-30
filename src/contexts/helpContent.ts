@@ -40,7 +40,7 @@ export const helpContentMap: Record<string, HelpContent> = {
     ],
   },
   '/dashboard': {
-    title: 'Ajuda: Dashboard Geral',
+    title: 'Ajuda: Dashboard',
     content: [
       'O Dashboard oferece uma visão macro da performance da agência.',
       'Use o seletor no topo da página para alternar entre a visão "Geral" e as visões específicas de cada setor (Design, Social Media, etc.).',
