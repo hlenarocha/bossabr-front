@@ -13,9 +13,9 @@ const RoleSwitcher = () => {
   const { switchUserRoleForTesting, user } = useContext(UserContext);
 
   // Se não estivermos em modo de desenvolvimento, o componente não renderiza nada.
-  if (import.meta.env.MODE !== "development") {
+ {/* if (import.meta.env.MODE !== "development") {
     return null;
-  }
+  } */}
 
   return (
     <div className="fixed bottom-4 right-4 z-50 text-white bg-zinc-900 rounded-md p-2">
