@@ -21,7 +21,6 @@ const ListDemands = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const previousRoute = location.state?.previousRoute;
-
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
