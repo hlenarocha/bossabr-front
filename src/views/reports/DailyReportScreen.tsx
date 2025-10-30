@@ -1,6 +1,6 @@
 // hooks e bibliotecas
-import { useState, useContext, useMemo } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useContext, useMemo, useEffect } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -20,19 +20,49 @@ import StatusTag from "@/components/shared/StatusTag";
 // Contexto, hooks e API
 import { UserContext } from "@/contexts/UserContext";
 import { useReadDailyReport } from "@/hooks/reports/useReadDailyReport";
+import { readWorkerById, WorkerItem } from "@/api/workerRoutes";
 
 const DailyReportScreen = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const location = useLocation();
-  const cameFromAdminList = location.state?.from === "/diarios/admin";
+  const { id: paramId } = useParams<{ id: string }>();
+  const cameFromAdminList = location.state?.from === "/diarios";
+
+  const personIdToFetch = Number(paramId) || user?.id_pessoa;
+  const [viewedPerson, setViewedPerson] = useState<WorkerItem | null>(null);
 
   const [reportDate, setReportDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
 
-  const { data: reportData, isLoading, isError } = useReadDailyReport(user?.id_pessoa, reportDate);
+
+
+  const { data: reportData, isLoading: isLoadingReport, isError: isErrorReport } = useReadDailyReport(user?.id_pessoa, reportDate);
   console.log(reportData);
+
+  useEffect(() => {
+    // Se não houver um ID para buscar (nem da URL, nem do usuário logado), não faz nada.
+    if (!personIdToFetch) {
+      setViewedPerson(null); // Garante que o estado esteja limpo
+      return;
+    }
+
+    // Lógica simplificada: SEMPRE busca os dados completos da pessoa.
+    // Isso garante que 'viewedPerson' SEMPRE terá o tipo 'WorkerItem' completo.
+    const fetchPersonData = async () => {
+      try {
+        const data = await readWorkerById(personIdToFetch);
+        setViewedPerson(data);
+      } catch (error) {
+        console.error("Erro ao buscar dados do colaborador", error);
+        setViewedPerson(null);
+      }
+    };
+
+    fetchPersonData();
+    
+  }, [personIdToFetch]); // A dependência 'user' não é mais necessária aqui
 
   // Combina as atividades de design e social media em uma única lista
   const allActivities = useMemo(() => {
@@ -44,11 +74,9 @@ const DailyReportScreen = () => {
     <BaseScreen>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex flex-col gap-4">
-          {cameFromAdminList && <BackButton onClick={() => navigate("/diarios/admin")} />}
-          <PageTitle
+        {cameFromAdminList && <BackButton onClick={() => navigate("/diarios")} />}          <PageTitle
             icon="fa-solid fa-book"
-            title={`Diário de ${user?.first_name || ""} ${user?.last_name || ""}`}
-          />
+            title={`Diário de ${viewedPerson?.first_name || ""} ${viewedPerson?.last_name || ""}`}          />
         </div>
        
       </div>
@@ -68,8 +96,8 @@ const DailyReportScreen = () => {
               onChange={(value: string) => setReportDate(value)}
               height="h-10"
             />
-            <InputString title="NOME" placeholder={`${user?.first_name || ''} ${user?.last_name || ''}`} isReadOnly height="h-10" />
-            <InputString title="EQUIPE / SETOR" placeholder={`${user?.nome_equipe || 'N/A'} - ${user?.nome_setor || 'N/A'}`} isReadOnly height="h-10" />
+           <InputString title="NOME" placeholder={`${viewedPerson?.first_name || ''} ${viewedPerson?.last_name || ''}`} isReadOnly height="h-10" />
+           <InputString title="EQUIPE / SETOR" placeholder={`${viewedPerson?.nome_equipe || 'N/A'} - ${viewedPerson?.nome_setor || 'N/A'}`} isReadOnly height="h-10" />
           </div>
 
           <InputTitle 
@@ -97,8 +125,8 @@ const DailyReportScreen = () => {
 
           <div className="h-[350px] overflow-y-auto">
             <ResourceListView
-              isLoading={isLoading}
-              isError={isError}
+              isLoading={isLoadingReport}
+              isError={isErrorReport}
               items={allActivities}
               showMessage="Selecione outra data."
               emptyMessage="Nenhuma atividade registrada para este dia."

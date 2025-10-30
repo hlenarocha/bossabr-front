@@ -126,7 +126,7 @@ const AdminReportList = () => {
                         <button
                           onClick={() =>
                             navigate(`/diarios/${person.id_pessoa}`, {
-                              state: { from: "/diarios/admin" }, // MODIFICAR
+                              state: { from: "/diarios" }, // MODIFICAR
                             })
                           }
                           className="bg-customYellow text-zinc-900 font-bold py-1 px-3 rounded-lg text-sm hover:bg-yellow-400 transition-colors"
