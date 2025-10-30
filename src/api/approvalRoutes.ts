@@ -1,9 +1,11 @@
 import api from "./axiosInstance";
+import { getDemandFormData } from "./demandRoutes";
 
 
 export interface PendingActivity {
   id_atividade: number;
   id_demanda: number;
+  id_pessoa: number;
   nome_colaborador: string | null;
   nome_setor: string;
   nome_equipe: string | null;
@@ -64,10 +66,12 @@ export const readPendingApprovals = async (): Promise<PendingActivity[]> => {
  */
 export const approveActivity = async (
   type: 'design' | 'social_media',
-  activityId: number
+  activityId: number,
+  newResponsibleId?: number // Parâmetro opcional
 ): Promise<ApprovalActionResponse> => {
   try {
-    const response = await api.put(`/atividades/${type}/${activityId}/aprovar`);
+    const payload = newResponsibleId ? { id_pessoa_responsavel: newResponsibleId } : {};
+    const response = await api.put(`/atividades/${type}/${activityId}/aprovar`, payload);
     return response.data;
   } catch (error) {
     console.error(`Erro ao aprovar a atividade #${activityId}:`, error);
@@ -93,3 +97,29 @@ export const reproveActivity = async (
     throw error;
   }
 };
+
+export const concludeActivity = async (
+  type: 'design' | 'social_media',
+  activityId: number
+): Promise<ApprovalActionResponse> => {
+  try {
+    const response = await api.put(`/atividades/${type}/${activityId}/concluir`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erro ao concluir a atividade #${activityId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Reutiliza a função de 'demandRoutes' para buscar a lista de pessoas.
+ */
+export const getPeopleListForApproval = async () => {
+  try {
+      const data = await getDemandFormData();
+      return data.pessoas || []; // Retorna apenas a lista de pessoas
+  } catch (error) {
+      console.error("Erro ao buscar lista de pessoas:", error);
+      throw error;
+  }
+}

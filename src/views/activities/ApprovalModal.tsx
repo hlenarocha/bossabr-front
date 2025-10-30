@@ -1,44 +1,68 @@
 import { useForm, Controller } from "react-hook-form";
 import Modal from "@/components/modal/Modal";
 import TextArea from "@/components/shared/TextArea";
+import SearchableSelect from "@/components/shared/SearchableSelect";
+import { useQuery } from "@tanstack/react-query";
+import { getPeopleListForApproval } from "@/api/approvalRoutes";
+import { useMemo } from "react";
 
+// Interface para os dados do formulário
 interface ApprovalFormData {
   reason: string;
+  responsibleId: number | null; 
 }
 
 interface ApprovalModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (reason?: string) => void; // A razão é opcional (só para reprovação)
+  onConfirm: (data: ApprovalFormData) => void;
   action: 'approve' | 'reprove';
   activityTitle: string;
+  currentResponsibleId: number; // ID do responsável atual
 }
 
-const ApprovalModal = ({ isOpen, onClose, onConfirm, action, activityTitle }: ApprovalModalProps) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<ApprovalFormData>();
+const ApprovalModal = ({ 
+  isOpen, onClose, onConfirm, action, currentResponsibleId 
+}: ApprovalModalProps) => {
+
+  // Busca os dados das pessoas (conforme sua solicitação de reuso)
+  const { data: people, isLoading: isLoadingPeople } = useQuery({
+    queryKey: ['peopleForSelect'],
+    queryFn: getPeopleListForApproval,
+    staleTime: 1000 * 60 * 10,
+  });
+
+  const { control, handleSubmit, formState: { errors } } = useForm<ApprovalFormData>({
+    defaultValues: {
+      reason: '',
+      responsibleId: currentResponsibleId // Define o valor padrão do select
+    }
+  });
 
   const isReproving = action === 'reprove';
 
+  const peopleOptions = useMemo(() => {
+    return people?.map((p: any) => ({ // 'any' aqui por vir de uma rota genérica
+      value: p.id_pessoa,
+      label: `${p.first_name} ${p.last_name || ''} (${p.cargo})`
+    })) || [];
+  }, [people]);
+  
   const modalTexts = {
     approve: {
       title: "Aprovar atividade",
-      description: `Você tem certeza que deseja aprovar a atividade "${activityTitle}"? Esta ação não poderá ser desfeita.`,
-      confirmButton: "Sim, aprovar",
+      description: "Deseja reatribuir o responsável por esta demanda antes de aprová-la?",
+      confirmButton: "Aprovar atividade",
       icon: "fa-solid fa-check-circle",
     },
     reprove: {
       title: "Reprovar atividade",
-      description: `Você está prestes a reprovar a atividade "${activityTitle}". Por favor, descreva os ajustes necessários abaixo.`,
-      confirmButton: "Confirmar reprovação",
+      description: "Por favor, descreva os ajustes necessários para o colaborador.",
+      confirmButton: "Reprovar atividade",
       icon: "fa-solid fa-times-circle",
     }
   };
-
   const currentTexts = modalTexts[action];
-
-  const onSubmit = (data: ApprovalFormData) => {
-    onConfirm(data.reason);
-  };
 
   return (
     <Modal
@@ -46,16 +70,17 @@ const ApprovalModal = ({ isOpen, onClose, onConfirm, action, activityTitle }: Ap
       title={currentTexts.title}
       description={currentTexts.description}
       iconName={currentTexts.icon}
-      iconColor={isReproving ? "text-customRedTask" : "text-customGreenTask"}
+      iconColor={isReproving ? "text-customRedAlert" : "text-customGreenTask"}
       onClick1={onClose}
       buttonTitle1="Cancelar"
-      // Se for aprovação, o onConfirm não precisa de dados. Se for reprovação, o formulário chama o onConfirm via handleSubmit.
-      onClick2={isReproving ? handleSubmit(onSubmit) : () => onConfirm()}
+      onClick2={handleSubmit(onConfirm)}
       buttonTitle2={currentTexts.confirmButton}
-      buttonColor2={isReproving ? "bg-customRedTask" : "bg-customGreenTask"}
+      buttonColor2={isReproving ? "bg-customRedAlert" : "bg-customGreenTask"}
+      width="w-11/12 max-w-xl"
     >
-      {isReproving && (
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onConfirm)} className="flex flex-col gap-4">
+        {isReproving ? (
+          // --- MODO REPROVAR ---
           <Controller
             name="reason"
             control={control}
@@ -65,15 +90,32 @@ const ApprovalModal = ({ isOpen, onClose, onConfirm, action, activityTitle }: Ap
                 {...field}
                 title="MOTIVO DA REPROVAÇÃO / AJUSTES NECESSÁRIOS"
                 isMandatory
-                placeholder="Ex: O cliente comunicou que a cor do logo está incorreta, por favor, use o pantone #123XYZ do manual da marca."
+                placeholder="Ex: A cor do logo está incorreta..."
                 height="h-[150px]"
                 borderColor={errors.reason ? "border-customRed" : "border-customYellow"}
                 errorMessage={errors.reason?.message}
               />
             )}
           />
-        </form>
-      )}
+        ) : (
+          // --- MODO APROVAR ---
+          <Controller
+            name="responsibleId"
+            control={control}
+            render={({ field }) => (
+              <SearchableSelect
+                title="REVISAR RESPONSÁVEL PELA DEMANDA"
+                isMandatory={false}
+                options={peopleOptions}
+                value={peopleOptions.find(p => p.value === field.value) || null}
+                onChange={(option) => field.onChange(option?.value)}
+                placeholder={isLoadingPeople ? "Carregando..." : "Manter responsável atual"}
+                errorMessage={errors.responsibleId?.message}
+              />
+            )}
+          />
+        )}
+      </form>
     </Modal>
   );
 };

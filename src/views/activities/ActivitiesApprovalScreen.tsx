@@ -21,15 +21,46 @@ import { useReadPendingApprovals } from "@/hooks/activity/useReadPendingApproval
 import { PendingActivity } from "@/api/approvalRoutes";
 import { useApprovalAction } from "@/hooks/activity/useApprovalAction";
 import Toast from "@/components/shared/Toast";
+import SimpleConfirmModal from "./SimpleConfirmModal";
 
 const ActivitiesApproval = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState("todos");
+  const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
+  const [isConcludeModalOpen, setIsConcludeModalOpen] = useState(false); // Estado para o novo modal
+  const [selectedActivity, setSelectedActivity] =
+    useState<PendingActivity | null>(null);
+  const [approvalAction, setApprovalAction] = useState<
+    "approve" | "reprove" | null
+  >(null);
+
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<"success" | "error">("success");
 
   const { data: allActivities, isLoading, isError } = useReadPendingApprovals();
 
-  const { mutate: performApprovalAction } =
-    useApprovalAction();
+  const handleMutationSuccess = (action: 'approve' | 'reprove' | 'conclude') => {
+    const successMessage = action === 'conclude' 
+      ? `Demanda #${selectedActivity?.id_demanda} concluída com sucesso!`
+      : `Atividade ${action === 'approve' ? 'aprovada' : 'reprovada'} com sucesso!`;
+      
+    handleSetToast(successMessage, "success");
+    setIsApprovalModalOpen(false);
+    setIsConcludeModalOpen(false);
+  };
+
+  const handleMutationError = (error: Error) => {
+    handleSetToast(error.message || "Ocorreu um erro ao processar a ação.", "error");
+    setIsApprovalModalOpen(false);
+    setIsConcludeModalOpen(false);
+  };
+
+  // 2. PASSE OS CALLBACKS AO INICIALIZAR O HOOK
+  const { mutate: performApprovalAction } = 
+    useApprovalAction({
+      onSuccessCallback: handleMutationSuccess,
+      onErrorCallback: handleMutationError
+    });
 
   const filteredActivities = useMemo(() => {
     if (!allActivities) return [];
@@ -42,16 +73,7 @@ const ActivitiesApproval = () => {
     return allActivities;
   }, [allActivities, filter]);
 
-  const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
-  const [selectedActivity, setSelectedActivity] =
-    useState<PendingActivity | null>(null);
-  const [approvalAction, setApprovalAction] = useState<
-    "approve" | "reprove" | null
-  >(null);
-
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [toastType, setToastType] = useState<"success" | "error">("success");
-
+ 
   // Adicionado: Função de apoio para o Toast, para definir a mensagem e o tipo juntos
   const handleSetToast = (message: string, type: "success" | "error") => {
     setToastMessage(message);
@@ -67,26 +89,45 @@ const ActivitiesApproval = () => {
     setSelectedActivity(activity);
     setApprovalAction("reprove");
     setIsApprovalModalOpen(true);
-  };
-  const handleConfirmAction = (reason?: string) => {
-    if (!selectedActivity || !approvalAction) return;
-    const apiType = selectedActivity.tipo.toLowerCase().replace(' ', '_') as 'design' | 'social_media';
 
-    performApprovalAction({
-      action: approvalAction,
-      type: apiType,
-      activityId: selectedActivity.id_atividade,
-      reason: reason,
-    }, {
-      onSuccess: () => {
-        handleSetToast(`Atividade ${approvalAction === 'approve' ? 'aprovada' : 'reprovada'} com sucesso!`, "success");
-        setIsApprovalModalOpen(false);
-      },
-      onError: () => {
-        handleSetToast("Ocorreu um erro ao processar a ação.", "error");
-        setIsApprovalModalOpen(false);       }
-    });
+    
   };
+
+  const handleConcludeClick = (activity: PendingActivity) => {
+    setSelectedActivity(activity);
+    setIsConcludeModalOpen(true);
+  };
+
+ // ATUALIZADA: Lógica de confirmação do Modal de Aprovação/Reprovação
+ const handleConfirmApprovalAction = (data: { reason?: string, responsibleId?: number | null }) => {
+  if (!selectedActivity || !approvalAction) return;
+  const apiType = selectedActivity.tipo.toLowerCase().replace(' ', '_') as 'design' | 'social_media';
+
+  // Chame 'performApprovalAction' apenas com as variáveis
+  performApprovalAction({
+    action: approvalAction,
+    type: apiType,
+    activityId: selectedActivity.id_atividade,
+    demandId: selectedActivity.id_demanda,
+    reason: data.reason,
+    newResponsibleId: data.responsibleId ?? undefined,
+  }); 
+  // REMOVA O SEGUNDO PARÂMETRO { onSuccess, onError } DAQUI
+};
+
+// 4. SIMPLIFIQUE O 'handleConfirmConcludeAction'
+const handleConfirmConcludeAction = () => {
+  if (!selectedActivity) return;
+  const apiType = selectedActivity.tipo.toLowerCase().replace(' ', '_') as 'design' | 'social_media';
+  
+  performApprovalAction({
+    action: 'conclude',
+    type: apiType,
+    activityId: selectedActivity.id_atividade,
+    demandId: selectedActivity.id_demanda,
+  });
+  // REMOVA O SEGUNDO PARÂMETRO { onSuccess, onError } DAQUI
+};
 
   const filterOptions: FilterOption[] = [
     {
@@ -228,6 +269,12 @@ const ActivitiesApproval = () => {
                             borderColor="border-customGreenTask"
                             onClick={() => handleApproveClick(activity)}
                           />
+                          <ColoredButton
+                            title="Concluir demanda"
+                            icon="fa-solid fa-flag-checkered"
+                            color="customYellow"
+                            onClick={() => handleConcludeClick(activity)}
+                          />
                         </div>
                       </div>
                     ))
@@ -250,14 +297,23 @@ const ActivitiesApproval = () => {
         <ApprovalModal
           isOpen={isApprovalModalOpen}
           onClose={() => setIsApprovalModalOpen(false)}
-          onConfirm={handleConfirmAction}
+          onConfirm={handleConfirmApprovalAction}
           action={approvalAction}
-          activityTitle={
-            selectedActivity.nome_servico ||
-            `Atividade #${selectedActivity.id_atividade}`
-          }
+          activityTitle={selectedActivity.nome_servico || `Atividade #${selectedActivity.id_atividade}`}
+          currentResponsibleId={selectedActivity.id_pessoa} // Passa o ID do responsável atual
         />
-        
+      )}
+      
+      {isConcludeModalOpen && selectedActivity && (
+        <SimpleConfirmModal
+            isOpen={isConcludeModalOpen}
+            onClose={() => setIsConcludeModalOpen(false)}
+            onConfirm={handleConfirmConcludeAction}
+            title="Concluir demanda"
+            description={`Tem certeza que deseja aprovar esta atividade E marcar a Demanda #${selectedActivity.id_demanda} como "Concluída"? Esta ação finalizará o fluxo desta demanda.`}
+            confirmButtonText="Sim, concluir"
+            confirmButtonColor="bg-customGreenTask"
+        />
       )}
       {toastMessage && (
         <Toast
