@@ -38,7 +38,7 @@ const DailyReportScreen = () => {
 
 
 
-  const { data: reportData, isLoading: isLoadingReport, isError: isErrorReport } = useReadDailyReport(user?.id_pessoa, reportDate);
+  const { data: reportData, isLoading: isLoadingReport, isError: isErrorReport } = useReadDailyReport(personIdToFetch, reportDate);
   console.log(reportData);
 
   useEffect(() => {
