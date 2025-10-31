@@ -51,7 +51,7 @@ const ApprovalModal = ({
   const modalTexts = {
     approve: {
       title: "Aprovar atividade",
-      description: "Deseja reatribuir o responsável por esta demanda antes de aprová-la?",
+      description: "Atribua o novo responsável por dar sequência à demanda antes de aprovar essa atividade!",
       confirmButton: "Aprovar atividade",
       icon: "fa-solid fa-check-circle",
     },
@@ -76,7 +76,8 @@ const ApprovalModal = ({
       onClick2={handleSubmit(onConfirm)}
       buttonTitle2={currentTexts.confirmButton}
       buttonColor2={isReproving ? "bg-customRedAlert" : "bg-customGreenTask"}
-      width="w-11/12 max-w-xl"
+      width={isReproving ? "w-11/12 max-w-xl" : "w-full max-w-3xl"}
+      height={isReproving ? undefined : "h-[700px] max-h-[90vh]"} // aumenta a altura do modal para aprovar
     >
       <form onSubmit={handleSubmit(onConfirm)} className="flex flex-col gap-4">
         {isReproving ? (
@@ -104,7 +105,7 @@ const ApprovalModal = ({
             control={control}
             render={({ field }) => (
               <SearchableSelect
-                title="REVISAR RESPONSÁVEL PELA DEMANDA"
+                title="NOVO RESPONSÁVEL PELA DEMANDA"
                 isMandatory={false}
                 options={peopleOptions}
                 value={peopleOptions.find(p => p.value === field.value) || null}
